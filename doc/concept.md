@@ -38,9 +38,9 @@ FLAG        MOVE     => instruction for moving over angles x in timespan dt
 SIZE        Content size in bytes 
 
 BODY:       (dependent on the flag)
-CONTENT     MOVE:    => list of 4 byte float angles -> last 4 bytes are the timespan as 4 byte float
-            STOP:    => empty
-            ORIGIN:  => empty
-            SLEEP:   => list of 1 byte integers for the stepper motors, can only be 0,1 or 2
-            WAKEUP:  => list of 1 byte integers for stepper motors that need to be woken up, can only be 0,1 or 2
+CONTENT     MOVE     => list of 4 byte float angles -> last 4 bytes are the timespan as 4 byte float
+            STOP     => empty
+            ORIGIN   => empty
+            SLEEP    => list of 1 byte integers for the stepper motors, can only be 0,1 or 2
+            WAKEUP   => list of 1 byte integers for stepper motors that need to be woken up, can only be 0,1 or 2
 ```
