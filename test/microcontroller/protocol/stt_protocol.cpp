@@ -112,10 +112,19 @@ int main(int argc, char** argv) {
 	transfer.push<int>(200, 1);
 	transfer.push<char>('a', 1);
 
-	int* ptr = reinterpret_cast<int*>(&transfer);
+	std::cout << transfer.size() << std::endl;
 
-	for (int i = 0; i < 5; i++) {
-		std::cout << ptr[i] << std::endl;
-	}
+	stt_protocol_bytes<BUFF_SIZE> buffer;
+	buffer.transfer = transfer;
+
+	/* Simulates communication with arduino by copying the buffer */
+	stt_protocol<BUFF_SIZE> micro;
+	stt_protocol_bytes<BUFF_SIZE> mbuffer;
+	memcpy(mbuffer.buff, buffer.buff, BUFF_SIZE);
+	micro = mbuffer.transfer;
+
+	/* Prints the same size as the original stt_protocol */
+	std::cout << micro.size() << std::endl;
+
 	return 0;
 }
