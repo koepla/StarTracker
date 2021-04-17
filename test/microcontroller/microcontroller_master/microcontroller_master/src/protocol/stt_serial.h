@@ -13,7 +13,7 @@ private:
 public:
 
 	stt_serial_exception(std::string&& message) noexcept : message(message) {
-			
+	
 	}
 
 	const char* what() const noexcept override {
@@ -84,6 +84,8 @@ public:
 		if (!this->is_open()) {
 			throw stt_serial_exception("Port is not open");
 		}
+
+		this->rx_available();
 
 		// Read operation
 		if (!ReadFile(this->hcomm, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwread, NULL)) {
