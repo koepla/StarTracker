@@ -25,6 +25,7 @@ class stt_serial {
 
 private:
 	HANDLE hcomm;
+	DWORD dweventmask;
 	bool isopen;
 
 public:
@@ -32,6 +33,7 @@ public:
 	stt_serial() {
 		this->hcomm = nullptr;
 		this->isopen = false;
+		this->dweventmask = EV_RXCHAR;
 	}
 
 	/*
@@ -41,7 +43,7 @@ public:
 	void open(const std::string& port, uint32_t baudrate) noexcept(false) {
 
 		std::string prefixed = this->prefix_port(port);
-		this->hcomm = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, 0);
+		this->hcomm = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
 		if (this->hcomm == INVALID_HANDLE_VALUE) {
 
@@ -53,14 +55,19 @@ public:
 		}
 
 		this->set_baudrate(baudrate);
+		this->init_recievemask();
+		this->init_commtimeout();
 	}
 
 	/*
 	*	Closes the currently open Port
 	*/
-	void close() noexcept {
+	void close() noexcept(false) {
 
-		CloseHandle(this->hcomm);
+		if (CloseHandle(this->hcomm) == 0) {
+
+			throw stt_serial_exception("Couldn't close Serial Port");
+		}
 		this->isopen = false;
 	}
 
@@ -84,6 +91,7 @@ public:
 			throw stt_serial_exception("Couldn't read from port");			
 		}
 		else {
+
 			return static_cast<uint32_t>(dwread);
 		}		
 	}
@@ -119,6 +127,11 @@ public:
 		return this->isopen;
 	}
 
+	bool rx_available() noexcept {
+		
+		return WaitCommEvent(this->hcomm, &this->dweventmask, NULL);
+	}
+
 private:
 
 	/*
@@ -149,10 +162,38 @@ private:
 			throw stt_serial_exception("Couldn't set baudrate");
 		}
 		dcb.BaudRate = baudrate;
+		dcb.ByteSize = 8;
+		dcb.StopBits = ONESTOPBIT;
+		dcb.Parity = NOPARITY;
 
 		if (!SetCommState(this->hcomm, &dcb)) {
 
 			throw stt_serial_exception("Couldn't set baudrate");
+		}
+	}
+
+	void init_recievemask() {
+
+		this->dweventmask = EV_RXCHAR;
+
+		if (!SetCommMask(this->hcomm, this->dweventmask)) {
+
+			throw stt_serial_exception("Couldn't set comm mask");
+		}
+	}
+
+	void init_commtimeout() {
+
+		COMMTIMEOUTS timeouts = { 0 };
+		timeouts.ReadIntervalTimeout = 1;
+		timeouts.ReadTotalTimeoutConstant = 1;
+		timeouts.ReadTotalTimeoutMultiplier = 1;
+		timeouts.WriteTotalTimeoutConstant = 1;
+		timeouts.WriteTotalTimeoutMultiplier = 1;
+
+		if (!SetCommTimeouts(this->hcomm, &timeouts)) {
+
+			throw stt_serial_exception("Couldn't set timeouts");
 		}
 	}
 };
