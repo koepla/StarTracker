@@ -1,6 +1,7 @@
 #pragma once
 #include <windows.h>
 #include <iostream>
+#include <string>
 
 /*
 *	For reference, see https://docs.microsoft.com/en-us/previous-versions/ff802693(v=msdn.10)?redirectedfrom=MSDN
@@ -30,9 +31,8 @@ private:
 
 public:
 
-	stt_serial() {
-		this->hcomm = nullptr;
-		this->isopen = false;
+	stt_serial() : hcomm(nullptr), isopen(false) {
+
 		this->dweventmask = EV_RXCHAR;
 	}
 
@@ -134,6 +134,30 @@ public:
 		return WaitCommEvent(this->hcomm, &this->dweventmask, NULL);
 	}
 
+	/*
+	*	Returns a list of all available ports
+	*/
+	static std::vector<std::string> get_ports() {
+
+		std::vector<std::string> ports;
+		char target[4096];
+
+		for (int i = 0; i < 255; i++) {
+
+			std::string p = "COM" + std::to_string(i);
+			if (QueryDosDeviceA(p.c_str(), target, 4096) != 0) {
+
+				ports.push_back(p);
+			}
+			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+
+				throw stt_serial_exception("Insufficient buffer size (programmer's fault)");
+			}
+		}
+
+		return ports;
+	}
+
 private:
 
 	/*
@@ -173,6 +197,7 @@ private:
 			case 115200: baud = CBR_115200; break;
 			case 128000: baud = CBR_128000; break;
 			case 256000: baud = CBR_256000; break;
+
 			default: {
 
 				throw stt_serial_exception("Invalid baudrate");
