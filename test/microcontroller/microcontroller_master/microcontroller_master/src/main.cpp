@@ -7,7 +7,7 @@ int main() {
 	stt_serial serial;
 
 	try {
-		serial.open("COM4");
+		serial.open("COM4", 9600);
 		serial.close();
 	}
 	catch (const stt_serial_exception& e) {
