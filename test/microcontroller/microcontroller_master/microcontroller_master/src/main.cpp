@@ -9,7 +9,7 @@ int main() {
 
 	try {
 
-		serial.open("COM4", 9600);
+		serial.open("COM4", 256000);
 		
 		while (serial.is_open()) {
 
