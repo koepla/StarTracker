@@ -156,6 +156,29 @@ private:
 	*/
 	void set_baudrate(uint32_t baudrate) {
 
+		DWORD baud = 0;
+
+		switch (baudrate) {
+			case 110: baud = CBR_110; break;
+			case 300: baud = CBR_300; break;
+			case 600: baud = CBR_600; break;
+			case 1200: baud = CBR_1200; break;
+			case 2400: baud = CBR_2400; break;
+			case 4800: baud = CBR_4800; break;
+			case 9600: baud = CBR_9600; break;
+			case 14400: baud = CBR_14400; break;
+			case 19200: baud = CBR_19200; break;
+			case 38400: baud = CBR_38400; break;
+			case 57600: baud = CBR_57600; break;
+			case 115200: baud = CBR_115200; break;
+			case 128000: baud = CBR_128000; break;
+			case 256000: baud = CBR_256000; break;
+			default: {
+
+				throw stt_serial_exception("Invalid baudrate");
+			}
+		}
+
 		DCB dcb = { 0 };
 
 		FillMemory(&dcb, sizeof(dcb), 0);
@@ -163,7 +186,7 @@ private:
 
 			throw stt_serial_exception("Couldn't set baudrate");
 		}
-		dcb.BaudRate = baudrate;
+		dcb.BaudRate = baud;
 		dcb.ByteSize = 8;
 		dcb.StopBits = ONESTOPBIT;
 		dcb.Parity = NOPARITY;
