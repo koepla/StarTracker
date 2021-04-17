@@ -79,6 +79,10 @@ struct stt_protocol {
 		return *this;
 	}
 
+
+	/*
+	*	Returns a pointer of type T to the buffer at the given index
+	*/
 	template <typename T>
 	T* read(uint32_t index) {
 
