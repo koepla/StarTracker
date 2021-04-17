@@ -4,6 +4,7 @@
 
 int main() {
 
+	/*
 	stt_serial serial;
 	uint8_t buff[8];
 
@@ -19,6 +20,7 @@ int main() {
 			for (int i = 0; i < 8; i++) {
 				std::cout << (int)buff[i] << " ";
 			}
+
 			std::cout << std::endl;
 		}
 
@@ -27,7 +29,12 @@ int main() {
 	catch (const stt_serial_exception& e) {
 		
 		std::cerr << e.what() << std::endl;
-	}
+	}*/
 
+	stt_protocol<8> p(stt_flag::MOVE);
+	p.push<float>(3.14, 1);
+	p.push<float>(2.17, 1);
+
+	std::cout << p.read<float>(0)[0] << std::endl;
 	return 0;
 }

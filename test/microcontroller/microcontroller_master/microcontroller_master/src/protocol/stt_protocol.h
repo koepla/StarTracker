@@ -79,6 +79,12 @@ struct stt_protocol {
 		return *this;
 	}
 
+	template <typename T>
+	T* read(uint32_t index) {
+
+		return reinterpret_cast<T*>(this->buff + index * sizeof(T));
+	}
+
 	/*
 	*	Returns the size in bytes of the whole struct
 	*/
