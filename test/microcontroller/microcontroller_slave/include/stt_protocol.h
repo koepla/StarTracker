@@ -6,32 +6,43 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+*	enumeration for protocol flags
+*/
 enum class stt_flag : int32_t {
 
-    NONE = -1,
-    WAKEUP = 0,
-    SLEEP = 1,
-    MOVE = 2,
-    STOP = 3,
-    ORIGIN = 4,
-    ACK = 5
+	NONE = -1,
+	WAKEUP = 0,
+	SLEEP = 1,
+	MOVE = 2,
+	STOP = 3,
+	ORIGIN = 4,
+	ACK = 5
 };
 
+/*
+*	header struct, contains flag and size in bytes
+*/
 struct stt_header {
 
-    stt_flag flag;
-    uint32_t size;
+	stt_flag flag;
+	uint32_t size;
 
-    stt_header(){
-        this->flag = stt_flag::NONE;
-        this->size = 0;
-    }
-    stt_header(stt_flag flag, uint32_t size){
-        this->flag = flag;
-        this->size = size;
-    }
+	stt_header() {
+
+		this->flag = stt_flag::NONE;
+		this->size = 0;
+	}
+	stt_header(stt_flag flag, uint32_t size) {
+
+		this->flag = flag;
+		this->size = size;
+	}
 };
 
+/*
+*	protocol struct, contains header and a byte buffer, which size can be specified by the template
+*/
 template <int n>
 struct stt_protocol {
 
@@ -63,22 +74,41 @@ struct stt_protocol {
 	*	Copes data into the buffer
 	*/
 	template <typename T>
-	stt_protocol& push(const T& data, uint32_t count) {
+	stt_protocol& push(const T& data) {
 
 		uint32_t osize = this->header.size;
-		memcpy(buff + osize, &data, count * sizeof(T));
+		memcpy(buff + osize, &data, sizeof(T));
+		this->header.size += sizeof(T);
+
+		return *this;
+	}
+
+	template <typename T>
+	stt_protocol& push_range(T* data, uint32_t count) {
+
+		uint32_t osize = this->header.size;
+		memcpy(buff + osize, data, count * sizeof(T));
 		this->header.size += count * sizeof(T);
 		return *this;
 	}
 
 
 	/*
-	*	Returns a pointer of type T to the buffer at the given index
+	*	Returns a value of type T at the given index 
 	*/
 	template <typename T>
-	T* read(uint32_t index) {
+	T read(uint32_t index) {
 
-		return reinterpret_cast<T*>(this->buff + index * sizeof(T));
+		return *reinterpret_cast<T*>(this->buff + index * sizeof(T));
+	}
+
+	/*
+	*	Returns a pointer of type T to the buffer at the given offset
+	*/
+	template <typename T>
+	T* read_range(uint32_t offset) {
+
+		return reinterpret_cast<T*>(this->buff + offset * sizeof(T));
 	}
 
 	/*
@@ -88,6 +118,5 @@ struct stt_protocol {
 		return sizeof(this->header) + this->header.size;
 	}
 };
-
 
 #endif

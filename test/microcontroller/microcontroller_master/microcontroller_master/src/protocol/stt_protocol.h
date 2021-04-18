@@ -13,7 +13,7 @@ enum class stt_flag : int32_t {
 	MOVE = 2,
 	STOP = 3,
 	ORIGIN = 4,
-	ACK
+	ACK = 5
 };
 
 /*
@@ -70,23 +70,43 @@ struct stt_protocol {
 	*	Copes data into the buffer
 	*/
 	template <typename T>
-	stt_protocol& push(const T& data, uint32_t count) {
+	stt_protocol& push(const T& data) {
 
+		static_assert(std::is_standard_layout<T>::value, "must be standard type");
 		uint32_t osize = this->header.size;
-		std::memcpy(buff + osize, &data, count * sizeof(T));
-		this->header.size += count * sizeof(T);
+		std::memcpy(buff + osize, &data, sizeof(T));
+		this->header.size += sizeof(T);
 
+		return *this;
+	}
+
+	template <typename T>
+	stt_protocol& push_range(T* data, uint32_t count) {
+
+		static_assert(std::is_standard_layout<T>::value, "must be standard type");
+		uint32_t osize = this->header.size;
+		std::memcpy(buff + osize, data, count * sizeof(T));
+		this->header.size += count * sizeof(T);
 		return *this;
 	}
 
 
 	/*
-	*	Returns a pointer of type T to the buffer at the given index
+	*	Returns a value of type T at the given index 
 	*/
 	template <typename T>
-	T* read(uint32_t index) {
+	T read(uint32_t index) {
 
-		return reinterpret_cast<T*>(this->buff + index * sizeof(T));
+		return *reinterpret_cast<T*>(this->buff + index * sizeof(T));
+	}
+
+	/*
+	*	Returns a pointer of type T to the buffer at the given offset
+	*/
+	template <typename T>
+	T* read_range(uint32_t offset) {
+
+		return reinterpret_cast<T*>(this->buff + offset * sizeof(T));
 	}
 
 	/*
@@ -94,23 +114,5 @@ struct stt_protocol {
 	*/
 	uint32_t size() const {
 		return sizeof(this->header) + this->header.size;
-	}
-};
-
-/*
-*	Helper union if a byte buffer for the stt_protocol struct is needed
-*/
-template <int n>
-union stt_protocol_bytes {
-
-	stt_protocol<n> transfer;
-	uint8_t buff[n + sizeof(stt_header)];
-
-	stt_protocol_bytes() {
-		this->transfer = stt_protocol<n>();
-	}
-
-	stt_protocol_bytes(stt_protocol<n> transfer) {
-		this->transfer = transfer;
 	}
 };
