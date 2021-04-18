@@ -27,3 +27,13 @@ Time spent:     6h
 Today I implemented a class for serial communication with the micro controller. I faced a few problems with synchronization, timeouts etc.. Altough I wasted a couple of hours, in the end I was successful and the class works just fine.
 
 ---
+
+## :memo: microcontroller serial communication
+
+```
+Date:           16.04.2020		
+Time spent:     4h 
+```
+Today I added a platform io project, and implemented the stt protocol for the arduino. I set up a small test environment, where the eight recieved floating point numbers are printed on a lcd  display. I detected a small error, because I had to specify the size for the header's stt_flag. It is a two byte integer by default, but we want 4 bytes because we want to avoid alignment issues in the memory. The communication works very well, altough i realised that the arduino's input buffer for serial communication is only 64 bytes. I've left a comment in the stt_protocol.h file in the master program, where I describe the issue in greater detail.
+
+---
