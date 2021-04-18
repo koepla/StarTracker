@@ -26,7 +26,7 @@ void loop(){
 
         for(int i = 0; i < 8; i++){
 
-            float x = prot.read<float>(0)[i];
+            float x = prot.read<float>(i);
             lcd.clear();
             lcd.setCursor(0, 0);
             lcd.print(i);

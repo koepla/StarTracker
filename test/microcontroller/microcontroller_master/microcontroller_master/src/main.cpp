@@ -4,12 +4,14 @@
 
 int main() {
 
+	
 	stt_serial serial;
 	stt_protocol<32> prot = stt_protocol<32>(stt_flag::MOVE);
 	
+	
 	for (int i = 0; i < 8; i++) {
 
-		prot.push<float>(i + 3.14, 1);
+		prot.push<float>(i + 3.14);
 	}
 
 	uint8_t* buff = reinterpret_cast<uint8_t*>(&prot);
