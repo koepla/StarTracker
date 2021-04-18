@@ -5,7 +5,7 @@
 /*
 *	enumeration for protocol flags
 */
-enum class stt_flag {
+enum class stt_flag : int32_t {
 
 	NONE = -1,
 	WAKEUP = 0,
