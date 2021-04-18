@@ -5,7 +5,14 @@
 int main() {
 
 	stt_serial serial;
-	uint8_t buff[8];
+	stt_protocol<32> prot = stt_protocol<32>(stt_flag::MOVE);
+	
+	for (int i = 0; i < 8; i++) {
+
+		prot.push<float>(i + 3.14, 1);
+	}
+
+	uint8_t* buff = reinterpret_cast<uint8_t*>(&prot);
 
 	try {
 
@@ -13,14 +20,10 @@ int main() {
 		
 		while (serial.is_open()) {
 
-			serial.write(new uint8_t[8]{ 0, 1, 2, 3, 4, 5, 6, 7 }, 8);
-			serial.read(buff, 8);
+			if (GetAsyncKeyState(VK_INSERT) & 1) {
 
-			for (int i = 0; i < 8; i++) {
-				std::cout << (int)buff[i] << " ";
+				serial.write(buff, 40);
 			}
-
-			std::cout << std::endl;
 		}
 
 		serial.close();
@@ -29,6 +32,8 @@ int main() {
 		
 		std::cerr << e.what() << std::endl;
 	}
+	
+	
 
 	return 0;
 }
