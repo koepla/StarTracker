@@ -11,13 +11,15 @@ class stt_serial_exception : public std::exception {
 
 private:
 	std::string message;
+
 public:
 
 	stt_serial_exception(std::string&& message) noexcept : message(message) {
-	
+		
 	}
 
 	const char* what() const noexcept override {
+
 		return this->message.c_str();
 	}
 };
@@ -36,6 +38,10 @@ public:
 		this->dweventmask = EV_RXCHAR;
 	}
 
+	~stt_serial() {
+
+		this->close();
+	}
 	/*
 	*	Opens the specified port
 	*	Arguments are portname and baudrate
