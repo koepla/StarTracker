@@ -36,3 +36,14 @@ Also I need to make slight modifications to the design do make the screws fit be
 
 ---
 
+## :memo: researching tmc2209 drivers
+
+```
+Date:           18.04.2020		
+Time spent:     3h 
+```
+
+Today I spent a few hours learning about the tmc2209 driver. We have now decided for a library we are going to use because implementing the advanced features of this driver in Arduino code ourselves is out of scope for now.
+
+---
+
