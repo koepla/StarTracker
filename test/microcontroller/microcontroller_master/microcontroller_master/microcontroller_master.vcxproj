@@ -82,11 +82,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\protocol\stt_serial.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\protocol\stt_protocol.h" />
-    <ClInclude Include="src\protocol\stt_serial.h" />
+    <ClInclude Include="src\app.hpp" />
+    <ClInclude Include="src\protocol\stt_serial.hpp" />
+    <ClInclude Include="src\protocol\stt_package.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

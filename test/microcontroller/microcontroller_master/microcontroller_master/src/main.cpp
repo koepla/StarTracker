@@ -1,6 +1,7 @@
 #include <iostream>
-#include "protocol/stt_protocol.h"
-#include "protocol/stt_serial.h"
+#include "protocol/stt_package.hpp"
+#include "protocol/stt_serial.hpp"
+#include "app.hpp"
 
 /*
 *	TODO: Figure out a solution for the following problem
@@ -12,7 +13,7 @@
 *	have zero payload other than the header. We also have to acount for the handling 
 *	on the microcontroller side, because if we have data larger than 52 / 56 bytes, 
 *	we have to send it in a series of packages, for which we would have to
-*	introduce a new flag, which would be dependent of the previous flag. One might argue that
+*	introduce a new flag, which would be dependent on the previous flag. One might argue that
 *	this new flag could only occur when sending data for the MOVE flag, which is true, but
 *	you never know. We also have to implement functions on the Arduino side for dealing with 
 *	incoming data. We could use a global data buffer, in which all of the payload is loaded.
@@ -20,39 +21,54 @@
 *	should start turning the stepper motors.
 */
 
-int main() {
+class test : public app {
 
-	stt_serial serial;
-	stt_protocol<32> prot = stt_protocol<32>(stt_flag::MOVE);
-	
-	
-	for (int i = 0; i < 8; i++) {
+private:
+	protocol::stt_serial serial;
+	protocol::stt_package<32> pack;
+	uint8_t* buff;
 
-		prot.push<float>(i + 3.14);
+public:
+
+	test() {
+		this->buff = nullptr;
 	}
 
-	uint8_t* buff = reinterpret_cast<uint8_t*>(&prot);
+	virtual void init() override {
 
-	try {
+		for (int i = 0; i < 8; i++) {
 
-		serial.open("COM4", 256000);
-		
-		while (serial.is_open()) {
+			pack.push<float>(i + 69.0f);
+		}
 
+		try {
+			serial.open("COM4", 256000);
+		}
+		catch (const protocol::stt_serial_exception& e) {
+
+			std::cerr << e.what() << std::endl;
+			running = false;
+		}
+
+		this->buff = reinterpret_cast<uint8_t*>(&pack);
+	}
+
+	virtual void update() override {
+
+		try {
+					
 			if (GetAsyncKeyState(VK_INSERT) & 1) {
-
+			
 				serial.write(buff, 40);
 			}
 		}
-
-		serial.close();
+		catch (const protocol::stt_serial_exception& e) {
+					
+			std::cerr << e.what() << std::endl;
+		}	
 	}
-	catch (const stt_serial_exception& e) {
-		
-		std::cerr << e.what() << std::endl;
-	}
-	
-	
+};
 
-	return 0;
+extern app* create() {
+	return new test();
 }
