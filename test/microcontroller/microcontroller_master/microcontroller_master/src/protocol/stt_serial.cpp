@@ -97,7 +97,7 @@ namespace protocol {
 
 	bool stt_serial::is_open() const noexcept
 	{
-		return this->isopen;
+		return this->isopen && (this->hcomm != INVALID_HANDLE_VALUE);
 	}
 
 	bool stt_serial::rx_available() noexcept
