@@ -2,6 +2,7 @@
 #include "protocol/stt_package.hpp"
 #include "protocol/stt_serial.hpp"
 #include "app.hpp"
+#include <conio.h>
 
 /*
 *	TODO: Figure out a solution for the following problem
@@ -21,7 +22,11 @@
 *	should start turning the stepper motors.
 */
 
-class test : public app {
+
+/*
+*	Inheriting class of app
+*/
+class serial_app : public app {
 
 private:
 	protocol::stt_serial serial;
@@ -30,7 +35,7 @@ private:
 
 public:
 
-	test() {
+	serial_app() {
 		this->buff = nullptr;
 	}
 
@@ -55,20 +60,30 @@ public:
 
 	virtual void update() override {
 
-		try {
-					
-			if (GetAsyncKeyState(VK_INSERT) & 1) {
+		if (_kbhit() != 0) {
 			
+			this->ehandler.call(sta::keybd_event(static_cast<int>(_getch())));
+		}
+	}
+
+	virtual void onevent(const sta::event& e) override {
+
+		auto& ke = dynamic_cast<const sta::keybd_event&>(e);
+
+		if (ke.keycode == (int)'s' && serial.is_open()) {
+
+			try {
 				serial.write(buff, 40);
+				std::cout << "sent 40 bytes of data" << std::endl;
+			}
+			catch (const protocol::stt_serial_exception& e) {
+
+				std::cerr << e.what() << std::endl;
 			}
 		}
-		catch (const protocol::stt_serial_exception& e) {
-					
-			std::cerr << e.what() << std::endl;
-		}	
 	}
 };
 
 extern app* create() {
-	return new test();
+	return new serial_app();
 }
