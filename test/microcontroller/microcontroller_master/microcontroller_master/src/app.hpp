@@ -1,4 +1,5 @@
 #pragma once
+#include "core.hpp"
 #include "event.hpp"
 
 /*
@@ -8,6 +9,9 @@
 *	event handler is used to set the onevent function for callbacks, will be used for OpenGL callbacks
 */
 class app {
+
+private:
+	inline static app* instance;
 
 protected:
 	bool running;
@@ -20,6 +24,10 @@ public:
 		ehandler.set_callback([this](const sta::event& e) {
 			this->onevent(e);
 		});
+
+		STA_ASSERT(!instance, "Instance already exists");
+
+		instance = this;
 	}
 
 	app(const app&) = delete;
@@ -37,6 +45,10 @@ public:
 	virtual void init() = 0;
 	virtual void update() = 0;
 	virtual void onevent(const sta::event& e) = 0;
+
+	inline static app* get() {
+		return instance;
+	}
 };
 
 /*

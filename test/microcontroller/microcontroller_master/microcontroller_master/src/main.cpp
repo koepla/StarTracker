@@ -62,7 +62,8 @@ public:
 
 		if (_kbhit() != 0) {
 			
-			this->ehandler.call(sta::keybd_event(static_cast<int>(_getch())));
+			int key = static_cast<int>(_getch());
+			this->ehandler.call(sta::keybd_event(key));
 		}
 	}
 
@@ -70,7 +71,7 @@ public:
 
 		auto& ke = dynamic_cast<const sta::keybd_event&>(e);
 
-		if (ke.keycode == (int)'s' && serial.is_open()) {
+		if (ke.keycode == 's' && serial.is_open()) {
 
 			try {
 				serial.write(buff, 40);
