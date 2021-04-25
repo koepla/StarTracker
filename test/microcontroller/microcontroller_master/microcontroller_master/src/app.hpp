@@ -15,13 +15,14 @@ private:
 
 protected:
 	bool running;
-	sta::event_handler ehandler;
+	events::event_handler ehandler;
 
 public:
 
 	app() { 
+
 		running = true; 
-		ehandler.set_callback([this](const sta::event& e) {
+		ehandler.set_callback([this](const events::event& e) {
 			this->onevent(e);
 		});
 
@@ -44,7 +45,7 @@ public:
 
 	virtual void init() = 0;
 	virtual void update() = 0;
-	virtual void onevent(const sta::event& e) = 0;
+	virtual void onevent(const events::event& e) = 0;
 
 	inline static app* get() {
 		return instance;

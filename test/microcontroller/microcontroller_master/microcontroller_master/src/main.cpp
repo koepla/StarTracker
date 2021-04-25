@@ -1,8 +1,8 @@
 #include <iostream>
+#include <conio.h>
 #include "protocol/stt_package.hpp"
 #include "protocol/stt_serial.hpp"
 #include "app.hpp"
-#include <conio.h>
 
 /*
 *	TODO: Figure out a solution for the following problem
@@ -21,7 +21,6 @@
 *	Such a design would not be good, because in theory, when the move flag is set, the arduino
 *	should start turning the stepper motors.
 */
-
 
 /*
 *	Inheriting class of app
@@ -63,13 +62,13 @@ public:
 		if (_kbhit() != 0) {
 			
 			int key = static_cast<int>(_getch());
-			this->ehandler.call(sta::keybd_event(key));
+			this->ehandler.call(events::keybd_event(key));
 		}
 	}
 
-	virtual void onevent(const sta::event& e) override {
+	virtual void onevent(const events::event& e) override {
 
-		auto& ke = dynamic_cast<const sta::keybd_event&>(e);
+		auto& ke = dynamic_cast<const events::keybd_event&>(e);
 
 		if (ke.keycode == 's' && serial.is_open()) {
 

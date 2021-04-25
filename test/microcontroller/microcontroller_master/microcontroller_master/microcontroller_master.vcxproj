@@ -16,6 +16,7 @@
     <ProjectGuid>{ad17c702-43ba-441d-8b1d-482ff8e15bb5}</ProjectGuid>
     <RootNamespace>microcontrollermaster</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>microcontroller</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

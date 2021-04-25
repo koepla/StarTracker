@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 
-namespace sta {
+namespace events {
 
 	/*
 	*	Enum for every possible event type
