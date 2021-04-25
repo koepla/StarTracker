@@ -47,3 +47,13 @@ Time spent:     3h
 Today I spent some time on refactoring the code a bit. I changed the is_open function to check  now for an invalid handle. I also added in a very basic event system with callbacks. I spent the majority of the time on implementing the app class.
 
 ---
+
+## :memo: planetary api
+
+```
+Date:           25.04.2020		
+Time spent:     4h 
+```
+Today I worked on implementing the planetary api.
+
+---
