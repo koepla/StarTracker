@@ -57,3 +57,13 @@ Time spent:     4h
 Today I worked on implementing the planetary api.
 
 ---
+
+## :memo: testing tmc2209 drivers
+
+```
+Date:           25.04.2020		
+Time spent:     5h 
+```
+Today we tested our new tmc2209 drivers with some simple code. At first we had some schlagerls but in the end everything worked.
+
+---
