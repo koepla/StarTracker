@@ -67,6 +67,14 @@ namespace protocol {
 			std::memset(buff, 0, N);
 		}
 
+		stt_package& clear() {
+			
+			std::memset(buff, 0, N);
+			this->header.size = 0;
+
+			return *this;
+		}
+
 		/*
 		*	Function for pushing data into the buffer,
 		*	Takes data and element count

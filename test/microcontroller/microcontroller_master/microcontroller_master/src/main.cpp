@@ -40,8 +40,6 @@ public:
 
 	virtual void init() override {
 
-		pack.push<double>(90);
-
 		try {
 			serial.open("COM5", 115200);
 		}
@@ -56,27 +54,25 @@ public:
 
 	virtual void update() override {
 
-		if (_kbhit() != 0) {
-			
-			int key = static_cast<int>(_getch());
-			this->ehandler.call(events::keybd_event(key));
-		}
+		float angle;
+
+		std::cout << "Enter angle: ";
+		std::cin >> angle;
+
+		pack.clear();
+		pack.push<float>(angle);
+		ehandler.call(events::keybd_event());
 	}
 
 	virtual void onevent(const events::event& e) override {
 
-		auto& ke = dynamic_cast<const events::keybd_event&>(e);
+		try {
+			serial.write(buff, 40);
+			std::cout << "sent 40 bytes of data" << std::endl;
+		}
+		catch (const protocol::stt_serial_exception& e) {
 
-		if (ke.keycode == 's' && serial.is_open()) {
-
-			try {
-				serial.write(buff, 40);
-				std::cout << "sent 40 bytes of data" << std::endl;
-			}
-			catch (const protocol::stt_serial_exception& e) {
-
-				std::cerr << e.what() << std::endl;
-			}
+			std::cerr << e.what() << std::endl;
 		}
 	}
 };
