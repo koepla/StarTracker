@@ -6,6 +6,8 @@ stt_package<32> pack;
 uint8_t* buff = reinterpret_cast<uint8_t*>(&pack);
 bool shaft = false;
 
+void turn(float angle);
+
 void setup(){
 
     pinMode(ENABLE_PIN_PITCH1, OUTPUT);
@@ -24,12 +26,22 @@ void setup(){
 
 void loop(){
 
-    for (uint16_t i = STEPS_PER_REV; i>0; i--) {
+    if(Serial.available() == 40){
+
+        Serial.readBytes(buff, 40);
+        float angle = pack.read<float>(0);
+        turn(angle);
+    }
+}
+
+void turn(float angle){
+
+    uint32_t steps = angle * STEPS_PER_REV / 360.0f;
+
+    for (uint16_t i = steps; i>0; i--) {
         digitalWrite(STEP_PIN_PITCH1, HIGH);
         delayMicroseconds(160);
         digitalWrite(STEP_PIN_PITCH1, LOW);
         delayMicroseconds(160);
     }
-    shaft = !shaft;
-    stepper_pitch1.shaft(shaft);
 }
