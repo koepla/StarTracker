@@ -44,7 +44,7 @@ struct stt_header {
 *	protocol struct, contains header and a byte buffer, which size can be specified by the template
 */
 template <int n>
-struct stt_protocol {
+struct stt_package {
 
 	stt_header header;
 	uint8_t buff[n];
@@ -53,7 +53,7 @@ struct stt_protocol {
 	*	Sets the header flag to NONE and the size to zero
 	*	Sets the whole buffer to 0
 	*/
-	stt_protocol() {
+	stt_package() {
 		this->header = stt_header(stt_flag::NONE, 0);
 		memset(buff, 0, n);
 	}
@@ -62,7 +62,7 @@ struct stt_protocol {
 	*	Sets the specified header flag
 	*	Sets size and buffer to zero
 	*/
-	stt_protocol(stt_flag flag) {
+	stt_package(stt_flag flag) {
 
 		this->header = stt_header(flag, 0);
 		memset(buff, 0, n);
@@ -74,7 +74,7 @@ struct stt_protocol {
 	*	Copes data into the buffer
 	*/
 	template <typename T>
-	stt_protocol& push(const T& data) {
+	stt_package& push(const T& data) {
 
 		uint32_t osize = this->header.size;
 		memcpy(buff + osize, &data, sizeof(T));
@@ -84,7 +84,7 @@ struct stt_protocol {
 	}
 
 	template <typename T>
-	stt_protocol& push_range(T* data, uint32_t count) {
+	stt_package& push_range(T* data, uint32_t count) {
 
 		uint32_t osize = this->header.size;
 		memcpy(buff + osize, data, count * sizeof(T));

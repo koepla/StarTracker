@@ -1,47 +1,35 @@
 #include <Arduino.h>
-#include "LiquidCrystal.h"
-#include "stt_protocol.h"
+#include "stt_package.h"
+#include "stt_tmc2209.h"
 
-const int rs = 12;
-const int en = 11;
-const int d4 = 5;
-const int d5 = 4;
-const int d6 = 3;
-const int d7 = 2;
-
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-stt_protocol<32> prot;
-uint8_t* buffer = reinterpret_cast<uint8_t*>(&prot);
+stt_package<32> pack;
+uint8_t* buff = reinterpret_cast<uint8_t*>(&pack);
+bool shaft = false;
 
 void setup(){
-    Serial.begin(256000);
-    lcd.begin(16, 2);
+
+    pinMode(ENABLE_PIN_PITCH1, OUTPUT);
+    pinMode(STEP_PIN_PITCH1, OUTPUT);
+    pinMode(DIRECTION_PIN_PITCH1, OUTPUT);
+    digitalWrite(ENABLE_PIN_PITCH1, LOW);      // Enable driver in hardware
+    stepper_pitch1.beginSerial(115200);     // SW UART drivers
+    stepper_pitch1.begin();                 //  SPI: Init CS pins and possible SW SPI pins
+    stepper_pitch1.toff(5);                 // Enables driver in software
+    stepper_pitch1.rms_current(600);        // Set motor RMS current
+    stepper_pitch1.microsteps(256);          // Set microsteps to 1/16th
+    stepper_pitch1.pwm_autoscale(true);     // Needed for stealthChop
+
+    Serial.begin(115200);
 }
 
 void loop(){
 
-    if(Serial.available() == 40){
-
-        Serial.readBytes(buffer, 40); 
-
-        for(int i = 0; i < 8; i++){
-
-            float x = prot.read<float>(i);
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print(i);
-            lcd.setCursor(0, 1);
-            lcd.print(x);
-
-            delay(100);
-        }
+    for (uint16_t i = STEPS_PER_REV; i>0; i--) {
+        digitalWrite(STEP_PIN_PITCH1, HIGH);
+        delayMicroseconds(160);
+        digitalWrite(STEP_PIN_PITCH1, LOW);
+        delayMicroseconds(160);
     }
-    else {
-        lcd.clear();
-        lcd.setCursor(0, 0);
-        lcd.print("available: ");
-        lcd.setCursor(0, 1);
-        lcd.print(Serial.available());
-        delay(100);
-    }
+    shaft = !shaft;
+    stepper_pitch1.shaft(shaft);
 }
