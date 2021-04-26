@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
 	ephemeris::elements_table table;
 
 	for (int i = 0; i < 10; i++) {
+
 		table.load_table("res/ephemeris_table.csv", date(2021, 4, 25, 3 + i, 0, 0));
 
 		try {

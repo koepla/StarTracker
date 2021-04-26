@@ -40,13 +40,10 @@ public:
 
 	virtual void init() override {
 
-		for (int i = 0; i < 8; i++) {
-
-			pack.push<float>(i + 69.0f);
-		}
+		pack.push<double>(90);
 
 		try {
-			serial.open("COM4", 256000);
+			serial.open("COM5", 115200);
 		}
 		catch (const protocol::stt_serial_exception& e) {
 
