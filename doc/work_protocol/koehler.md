@@ -47,3 +47,14 @@ Today I spent a few hours learning about the tmc2209 driver. We have now decided
 
 ---
 
+## :memo: testing tmc2209 drivers
+
+```
+Date:           26.04.2020		
+Time spent:     5h 
+```
+
+Today we tested our new tmc2209 drivers with some simple code. At first we had some schlagerls but in the end everything worked. 
+
+---
+
