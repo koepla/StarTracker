@@ -40,8 +40,8 @@ void turn(float angle){
 
     for (uint64_t i = steps; i>0; i--) {
         digitalWrite(STEP_PIN_PITCH1, HIGH);
-        delayMicroseconds(65000);
+        delayMicroseconds(160);
         digitalWrite(STEP_PIN_PITCH1, LOW);
-        delayMicroseconds(65000);
+        delayMicroseconds(160);
     }
 }
