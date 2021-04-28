@@ -61,10 +61,6 @@ public:
 
 		pack.clear();
 		pack.push<float>(angle);
-		ehandler.call(events::keybd_event());
-	}
-
-	virtual void onevent(const events::event& e) override {
 
 		try {
 			serial.write(buff, 40);
@@ -74,6 +70,11 @@ public:
 
 			std::cerr << e.what() << std::endl;
 		}
+	}
+
+	virtual void onevent(const events::event& e) override {
+
+
 	}
 };
 

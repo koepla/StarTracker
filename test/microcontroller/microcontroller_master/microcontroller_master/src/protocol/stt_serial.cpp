@@ -12,9 +12,9 @@ namespace protocol {
 		return this->message.c_str();
 	}
 
-	stt_serial::stt_serial() : hcomm(nullptr), isopen(false)
+	stt_serial::stt_serial() : hcomm(nullptr), isopen(false), dweventmask(EV_RXCHAR)
 	{
-
+		
 	}
 
 	stt_serial::~stt_serial()
