@@ -147,8 +147,15 @@
     <Text Include="res\ephemeris_table.csv" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ephemeris\coordinates\horizontal.hpp" />
+    <ClInclude Include="src\ephemeris\coordinates\rectangular.hpp" />
+    <ClInclude Include="src\ephemeris\coordinates\spherical.hpp" />
+    <ClInclude Include="src\ephemeris\coordinates\terrestial.hpp" />
+    <ClInclude Include="src\ephemeris\coordinates\coordinates.hpp" />
     <ClInclude Include="src\ephemeris\date.hpp" />
     <ClInclude Include="src\ephemeris\elements.hpp" />
+    <ClInclude Include="src\ephemeris\math.hpp" />
+    <ClInclude Include="src\ephemeris\vec3.hpp" />
     <ClInclude Include="src\util.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
