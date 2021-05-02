@@ -36,14 +36,18 @@ int main(int argc, char** argv) {
 	*/
 	
 	terrestial observer = terrestial(48.268552, 14.448328);
-	spherical venus = spherical(48.8958, 17.7656);
+	spherical venus = spherical(49.6917, 17.9944);
+	spherical neptune = spherical(353.2208, -4.1147);
+
+	std::cout.precision(10);
 
 	for (;;) {
 
-		horizontal coords = coordinates::transform::horizontal_position(venus, observer, date::now());
+		horizontal coords = coordinates::transform::horizontal_position(neptune, observer, date::now());
 
-		std::cout << "azimuth: " << coords.azimuth << " ";
+		std::cout << std::fixed << "azimuth: " << coords.azimuth << " ";
 		std::cout << "altitude: " << coords.altitude << " ";
+		std::cout << "gmst: " << date::gmst(date::now()) << std::endl;
 	}
 
 

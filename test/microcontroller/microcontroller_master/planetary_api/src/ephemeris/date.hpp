@@ -66,7 +66,7 @@ public:
 
 		double real_hour = (double)(mod.hour + mod.minute / 60.0L + mod.second / 3600.0L);
 
-		return (365L * mod.year - 679004L + b + int(30.6001 * (mod.month + 1)) + mod.day) + real_hour;
+		return (365L * mod.year - 679004L + b + int(30.6001 * (mod.month + 1)) + mod.day) + real_hour/24.0L;
 		
 	}
 
@@ -82,7 +82,7 @@ public:
 	}
 
 	/*
-	*	Greenwich mean sidereal time in radians
+	*	Greenwich mean sidereal time in degrees
 	*/
 	static double gmst(const date& d) {
 
