@@ -138,7 +138,7 @@ namespace ephemeris {
 				au = elements(sma, ecc, inc, m_long, long_peri, long_asc);
 				au_cent = elements(sma_cent, ecc_cent, inc_cent, m_long_cent, long_peri_cent, long_asc_cent);
 
-				table[name] = au + au_cent * _date.bessel_epoch();
+				table[name] = au + au_cent * date::julian_centuries(_date);
 			}
 		}
 
