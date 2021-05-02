@@ -25,6 +25,9 @@ public:
 
 public:
 
+	/*
+	*	returns the current date
+	*/
 	static date now() {
 
 		std::time_t time = std::time(0);
@@ -37,6 +40,9 @@ public:
 		return d;
 	}
 
+	/*
+	*	calculates the julian day number for a given date
+	*/
 	static double jdn(const date& d) {
 
 		return mjdn(d) + 2400000.5L;
@@ -70,12 +76,18 @@ public:
 		
 	}
 
+	/*
+	*	calculates the julian centuries via the julian day number
+	*/
 	static double julian_centuries(const date& d, bool floor = false) {
 
 		double jdn = floor ? std::floor(date::jdn(d)) : date::jdn(d);
 		return (jdn - 2451545.0L) / 36525.0L;
 	}
 
+	/*
+	*	returns the bessel epoch
+	*/
 	static double bessel_epoch(const date& d) {
 
 		return 1900 + (jdn(d) - 2415020.31352L) / 365.242198781L;
@@ -96,9 +108,27 @@ public:
 		
 		double gmst = 24110.54841L + 8640184.812866 * T_0 + 1.0027379093 * UT + (0.093104 - 6.2e-6 * T) * T * T;
 
-		return radians2deg((PI2 / secs) * mod(gmst, secs));
+		double gmst_deg = radians2deg((PI2 / secs) * mod(gmst, secs));
+
+		if (gmst_deg > 0.0) {
+			while (gmst_deg > 360.0) {
+
+				gmst_deg -= 360.0L;
+			}
+		}
+		else {
+			while (gmst_deg < 0.0) {
+
+				gmst_deg += 360.0L;
+			}
+		}
+
+		return gmst_deg;
  	}
 
+	/*
+	*	returns a nicely formatted string
+	*/
 	std::string to_string() const {
 
 		char buff[100];
