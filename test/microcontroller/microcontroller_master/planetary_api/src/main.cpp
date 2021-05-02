@@ -63,9 +63,7 @@ int main(int argc, char** argv) {
 	auto venus_coords = coordinates::transform::horizontal_position(venus, observer, date::now());
 	auto mars_coords = coordinates::transform::horizontal_position(mars, observer, date::now());
 
-	/*
-	*	venus output
-	*/
+	std::cout.precision(20);
 
 	/*
 	*	Sun
@@ -82,6 +80,12 @@ int main(int argc, char** argv) {
 	*	mars
 	*/
 	std::cout << mars_coords.to_string() << std::endl;
+	
+	for (;;) {
+
+		auto mars_coords = coordinates::transform::horizontal_position(mars, observer, date::now());
+		std::cout << mars_coords.to_string() << std::endl;
+	}
 	
 	return 0;
 }
