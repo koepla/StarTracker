@@ -8,8 +8,9 @@
 *	The running boolean's purpose is to give an inheriting class the ability to exit the program
 *	event handler is used to set the onevent function for callbacks, will be used for OpenGL callbacks
 */
-class app {
 
+class app {
+	
 private:
 	inline static app* instance;
 
