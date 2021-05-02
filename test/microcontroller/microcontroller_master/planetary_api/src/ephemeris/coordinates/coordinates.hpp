@@ -7,6 +7,11 @@
 #include "terrestial.hpp"
 #include "../date.hpp"
 
+/*
+*   Calculations are based on the pdf doc\references\astronomy_with_personal_computer.pdf
+*   For further reference, also see http://www.stjarnhimlen.se/comp/tutorial.html 
+*/
+
 namespace coordinates {
 
     class transform {
