@@ -47,5 +47,5 @@ double inline atan_deg(double angle) {
 }
 
 double inline atan2_deg(double x, double y) {
-    return radians2deg(atan2(y, x));
+    return radians2deg(atan2(x, y));
 }

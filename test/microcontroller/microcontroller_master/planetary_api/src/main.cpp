@@ -29,30 +29,49 @@ int main(int argc, char** argv) {
 		}
 	}*/
 
-	
 	/*
-	*	Does not work yet
-	*	The error is probably the gmst0
+	*	Venus testcase
+	*	right ascension:	3h 18m 47.7s
+	*	declination:		18° 2.8"
 	*/
+
+	/*
+	*	Mars testcase
+	*	right ascension:	6h 24m 25s
+	*	declination:		24° 45' 46.2"
+	*/
+
+	terrestial observer = terrestial(48.2667, -14.45);
+
+	spherical sun = spherical(26.658, 11.0084);
+	spherical venus = spherical(49.6958, 18.0500);
+	spherical mars = spherical(96.1042, 24.7628);
+
+	auto sun_coords = coordinates::transform::horizontal_position(sun, observer, date::now());
+	auto venus_coords = coordinates::transform::horizontal_position(venus, observer, date::now());
+	auto mars_coords = coordinates::transform::horizontal_position(mars, observer, date::now());
+
+	/*
+	*	venus output
+	*/
+
+	/*
+	*	Sun
+	*/
+	std::cout << std::fixed << "alt: " << sun_coords.altitude << std::endl;
+	std::cout << std::fixed << "azimuth: " << sun_coords.azimuth << std::endl;
+
+	/*
+	*	venus
+	*/
+	std::cout << std::fixed << "alt: " << venus_coords.altitude << std::endl;
+	std::cout << std::fixed << "azimuth: " << venus_coords.azimuth << std::endl;
+
+	/*
+	*	mars
+	*/
+	std::cout << std::fixed << "alt: " << mars_coords.altitude << std::endl;
+	std::cout << std::fixed << "azimuth: " << mars_coords.azimuth << std::endl;
 	
-	terrestial observer = terrestial(48.268552, 14.448328);
-	spherical venus = spherical(49.6917, 17.9944);
-	spherical neptune = spherical(353.2208, -4.1147);
-
-	std::cout.precision(10);
-
-	for (;;) {
-
-		horizontal coords = coordinates::transform::horizontal_position(neptune, observer, date::now());
-
-		std::cout << std::fixed << "azimuth: " << coords.azimuth << " ";
-		std::cout << "altitude: " << coords.altitude << " ";
-		std::cout << "gmst: " << date::gmst(date::now()) << std::endl;
-	}
-
-
-
-	
-
 	return 0;
 }
