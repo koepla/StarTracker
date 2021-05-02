@@ -6,6 +6,8 @@
 
 namespace util {
 
+#define OUT_FIXED(out) std::cout << std::fixed << out;
+
 	std::string read_file(const std::string& path) {
 
 		std::ifstream fin = std::ifstream(path, std::ios::in);

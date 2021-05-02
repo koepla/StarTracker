@@ -92,8 +92,6 @@ namespace coordinates {
         static horizontal horizontal_position(const spherical& coords, const terrestial& observer, const const date& d) {
     
             double hour_angle = date::gmst(d) + observer.longitude - coords.right_asc;
-            hour_angle += hour_angle < 0 ? 360 : 0;
-
             return equ2horizontal(coords.decl, hour_angle, observer.latitude);
         }
     };

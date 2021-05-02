@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 struct horizontal {
 
 	double azimuth;
@@ -15,5 +17,10 @@ struct horizontal {
 
 		this->azimuth = azimuth;
 		this->altitude = altitude;
+	}
+
+	std::string to_string() const {
+
+		return "[azimuth = " + std::to_string(this->azimuth) + " | altitude = " + std::to_string(this->altitude) + "]";
 	}
 };

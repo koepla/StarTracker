@@ -1,8 +1,13 @@
 #pragma once
 
+#include <string>
+
 struct terrestial {
 
+	// latitude positive in north, negative in south
 	double latitude;
+
+	// longitude positive in east, negative in west
 	double longitude;
 
 	terrestial() {
@@ -15,5 +20,10 @@ struct terrestial {
 
 		this->latitude = latitude;
 		this->longitude = longitude;
+	}
+
+	std::string to_string() const {
+
+		return "[latitude = " + std::to_string(latitude) + " | longitude = " + std::to_string(longitude) + "]";
 	}
 };

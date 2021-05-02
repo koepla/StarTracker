@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 struct spherical {
 
     double r;
@@ -17,5 +19,10 @@ struct spherical {
         this->right_asc = right_asc;
         this->decl = decl;
         this->r = r;
+    }
+
+    std::string to_string() {
+
+        return "[right_ascension = " + std::to_string(right_asc) + " | declination = " + std::to_string(decl) + " | r = " + std::to_string(r) + "]";
     }
 };
