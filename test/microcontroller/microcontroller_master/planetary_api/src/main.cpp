@@ -30,6 +30,18 @@ int main(int argc, char** argv) {
 	}*/
 
 	/*
+	*	From now on, we can calculate any stars position,
+	*	if the right ascension and declination of the star
+	*	is known.
+	*/
+
+	/*
+	*	Sun testcase
+	*	right ascension:	26.658°
+	*	declination:		11.0084°
+	*/
+
+	/*
 	*	Venus testcase
 	*	right ascension:	3h 18m 47.7s
 	*	declination:		18° 2.8"
@@ -58,20 +70,18 @@ int main(int argc, char** argv) {
 	/*
 	*	Sun
 	*/
-	std::cout << std::fixed << "alt: " << sun_coords.altitude << std::endl;
-	std::cout << std::fixed << "azimuth: " << sun_coords.azimuth << std::endl;
+	std::cout << sun_coords.to_string() << std::endl;
 
 	/*
 	*	venus
 	*/
-	std::cout << std::fixed << "alt: " << venus_coords.altitude << std::endl;
-	std::cout << std::fixed << "azimuth: " << venus_coords.azimuth << std::endl;
+	std::cout << venus_coords.to_string() << std::endl;
+
 
 	/*
 	*	mars
 	*/
-	std::cout << std::fixed << "alt: " << mars_coords.altitude << std::endl;
-	std::cout << std::fixed << "azimuth: " << mars_coords.azimuth << std::endl;
+	std::cout << mars_coords.to_string() << std::endl;
 	
 	return 0;
 }

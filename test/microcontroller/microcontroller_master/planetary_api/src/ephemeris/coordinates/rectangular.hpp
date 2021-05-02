@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 struct rectangular {
     double x;
     double y;
@@ -16,5 +18,10 @@ struct rectangular {
         this->x = x;
         this->y = y;
         this->z = z;
+    }
+
+    std::string to_string() const {
+
+        return "[x = " + std::to_string(x) + " | y = " + std::to_string(y) + " | z = " + std::to_string(z) + "]";
     }
 };
