@@ -38,6 +38,9 @@ namespace coordinates {
             input:
             &spherical_coord (spherical coordinates (reference)),
             x,y,z horizontal coordinates
+
+            routine:
+            transforms rectangular coordinates to spherical ones
         */
         static spherical rect2spherical(const rectangular& coords) {
 
@@ -60,6 +63,14 @@ namespace coordinates {
             return spherical_coord;
         }
 
+        /*
+        *   input: 
+        *   &rect_coord (rectangular coordinates (reference)),
+        *   angle       (angle of rotation)
+        * 
+        *   routine:
+        *   rotates the given rectangular coordinates around the y axis [angle] degrees
+        */
         static void rotate_y(rectangular& rect_coord, double angle) {
 
             double xn = rect_coord.x * sin_deg(angle) - rect_coord.z * cos_deg(angle);
@@ -71,6 +82,12 @@ namespace coordinates {
             rect_coord.z = zn;
         }
 
+        /*
+        *   input:
+        *   declination     (declination in the celestial system)
+        *   hour_angle      (hour angle (can be calculated by mean sidereal time and right ascension)
+        *   latitude        (latitude of the observer (is needed for the coordinate rotation)
+        */
         static horizontal equ2horizontal(double declination, double hour_angle, double latitude) {
 
             horizontal hor_coord;
@@ -87,7 +104,13 @@ namespace coordinates {
         }
 
         /*
-        *   all inputs and outputs in degrees
+        *   input:
+        *   &coords     (spherical coords of an in object in the sky)
+        *   &observer   (terrestial coordinates of an observer)
+        *   &d          (date for the calculation)
+        * 
+        *   routine:
+        *   calculates the horizontal coordinates for given spherical coordinates and an observer at a certain date
         */
         static horizontal horizontal_position(const spherical& coords, const terrestial& observer, const const date& d) {
     

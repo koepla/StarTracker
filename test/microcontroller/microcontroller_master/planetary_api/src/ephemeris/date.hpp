@@ -3,6 +3,9 @@
 #include "math.hpp"
 #include <ctime>
 
+/*
+*	date struct for simplification and convinience
+*/
 class date {
 
 public:
@@ -127,7 +130,7 @@ public:
  	}
 
 	/*
-	*	returns a nicely formatted string
+	*	returns the date as a formatted string
 	*/
 	std::string to_string() const {
 
