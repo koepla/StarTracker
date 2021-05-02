@@ -1,17 +1,13 @@
 #include <iostream>
 #include <iomanip>
-#include "ephemeris/elements.hpp"
 #include "util.hpp"
+#include "ephemeris/elements.hpp"
 #include "ephemeris/date.hpp"
-
-/*
-*	1. compute centuries since J2000
-*	2. compute argument of perihelion and mean anomaly
-*	3. 
-*/
+#include "ephemeris/coordinates/coordinates.hpp"
 
 int main(int argc, char** argv) {
 	
+	/*
 	ephemeris::elements_table table;
 
 	for (int i = 0; i < 10; i++) {
@@ -31,7 +27,28 @@ int main(int argc, char** argv) {
 		catch (const std::exception& e) {
 			std::cerr << e.what() << std::endl;
 		}
-	}
+	}*/
+
 	
+	/*
+	*	Does not work yet
+	*	The error is probably the gmst0
+	*/
+	
+	terrestial observer = terrestial(48.268552, 14.448328);
+	spherical venus = spherical(48.8958, 17.7656);
+
+	for (;;) {
+
+		horizontal coords = coordinates::transform::horizontal_position(venus, observer, date::now());
+
+		std::cout << "azimuth: " << coords.azimuth << " ";
+		std::cout << "altitude: " << coords.altitude << " ";
+	}
+
+
+
+	
+
 	return 0;
 }
