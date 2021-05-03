@@ -18,6 +18,7 @@ public:
 	int second;
 
 	date(int year, int month, int day, int hour, int minute, int second) {
+
 		this->year = year;
 		this->month = month;
 		this->day = day;
@@ -69,7 +70,7 @@ public:
 		}
 		else {
 
-			//gregorian calender
+			// gregorian calender
 			b = (mod.year / 400) - (mod.year / 100) + (mod.year / 4);
 		}
 

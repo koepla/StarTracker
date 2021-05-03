@@ -36,12 +36,6 @@ int main(int argc, char** argv) {
 	*/
 
 	/*
-	*	Sun testcase
-	*	right ascension:	26.658°
-	*	declination:		11.0084°
-	*/
-
-	/*
 	*	Venus testcase
 	*	right ascension:	3h 18m 47.7s
 	*	declination:		18° 2.8"
@@ -59,32 +53,22 @@ int main(int argc, char** argv) {
 	spherical venus = spherical(49.6958, 18.0500);
 	spherical mars = spherical(96.1042, 24.7628);
 
-	auto sun_coords = coordinates::transform::horizontal_position(sun, observer, date::now());
-	auto venus_coords = coordinates::transform::horizontal_position(venus, observer, date::now());
-	auto mars_coords = coordinates::transform::horizontal_position(mars, observer, date::now());
-
-	std::cout.precision(20);
-
-	/*
-	*	Sun
-	*/
-	std::cout << sun_coords.to_string() << std::endl;
-
-	/*
-	*	venus
-	*/
-	std::cout << venus_coords.to_string() << std::endl;
-
-
-	/*
-	*	mars
-	*/
-	std::cout << mars_coords.to_string() << std::endl;
+	std::cout.precision(10);
 	
-	for (;;) {
+	while(true) {
 
 		auto mars_coords = coordinates::transform::horizontal_position(mars, observer, date::now());
-		std::cout << mars_coords.to_string() << std::endl;
+		auto venus_coords = coordinates::transform::horizontal_position(venus, observer, date::now());
+
+		/*
+		*	venus
+		*/
+		std::cout << "venus " << venus_coords.to_string();
+
+		/*
+		*	mars
+		*/
+		std::cout << " mars " << mars_coords.to_string() << std::endl;
 	}
 	
 	return 0;
