@@ -49,3 +49,13 @@ double inline atan_deg(double angle) {
 double inline atan2_deg(double x, double y) {
     return radians2deg(atan2(x, y));
 }
+
+double inline real_degree(double degree, double arcmin, double arcsec) {
+
+    return (degree + arcmin / 60.0L + arcsec / 3600.0L);
+}
+
+double inline hour_degree(double hour, double minute, double sec) {
+
+    return 15.0L * (hour + minute / 60.0L + sec / 3600.0L);
+}

@@ -5,6 +5,8 @@
 #include "ephemeris/date.hpp"
 #include "ephemeris/coordinates/coordinates.hpp"
 
+
+
 int main(int argc, char** argv) {
 	
 	/*
@@ -37,21 +39,20 @@ int main(int argc, char** argv) {
 
 	/*
 	*	Venus testcase
-	*	right ascension:	3h 18m 47.7s
-	*	declination:		18° 2.8"
+	*	right ascension:	3h 25m 12s
+	*	declination:		18° 26' 50"
 	*/
 
 	/*
 	*	Mars testcase
-	*	right ascension:	6h 24m 25s
-	*	declination:		24° 45' 46.2"
+	*	right ascension:	6h 27m 14s
+	*	declination:		24° 43' 23"
 	*/
 
 	terrestial observer = terrestial(48.2667, -14.45);
 
-	spherical sun = spherical(26.658, 11.0084);
-	spherical venus = spherical(49.6958, 18.0500);
-	spherical mars = spherical(96.1042, 24.7628);
+	spherical venus = spherical(hour_degree(3, 25, 12), real_degree(18, 26, 50));
+	spherical mars = spherical(hour_degree(6, 27, 14), real_degree(24, 43, 23));
 
 	std::cout.precision(10);
 	
