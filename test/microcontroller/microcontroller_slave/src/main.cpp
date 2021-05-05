@@ -12,7 +12,6 @@ void setup(){
 
     pinMode(ENABLE_PIN_PITCH1, OUTPUT);
     pinMode(STEP_PIN_PITCH1, OUTPUT);
-    pinMode(DIRECTION_PIN_PITCH1, OUTPUT);
     digitalWrite(ENABLE_PIN_PITCH1, LOW);       // Enable driver in hardware
     stepper_pitch1.beginSerial(115200);         // SW UART drivers
     stepper_pitch1.begin();                     //  SPI: Init CS pins and possible SW SPI pins
@@ -30,18 +29,6 @@ void loop(){
 
         Serial.readBytes(buff, 40);
         float angle = pack.read<float>(0);
-        turn(angle);
-    }
-}
-
-void turn(float angle){
-
-    uint64_t steps = angle * STEPS_PER_REV / 360.0f;
-
-    for (uint64_t i = steps; i>0; i--) {
-        digitalWrite(STEP_PIN_PITCH1, HIGH);
-        delayMicroseconds(160);
-        digitalWrite(STEP_PIN_PITCH1, LOW);
-        delayMicroseconds(160);
+        move(angle);
     }
 }
