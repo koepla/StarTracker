@@ -2,28 +2,31 @@
 
 #include <string>
 
-struct terrestial {
+namespace coordinates {
 
-	// latitude positive in north, negative in south
-	double latitude;
+	struct terrestial {
 
-	// longitude positive in east, negative in west
-	double longitude;
+		// latitude positive in north, negative in south
+		double latitude;
 
-	terrestial() {
+		// longitude positive in east, negative in west
+		double longitude;
 
-		this->latitude = 0;
-		this->longitude = 0;
-	}
+		terrestial() {
 
-	terrestial(double latitude, double longitude) {
+			this->latitude = 0;
+			this->longitude = 0;
+		}
 
-		this->latitude = latitude;
-		this->longitude = longitude;
-	}
+		terrestial(double latitude, double longitude) {
 
-	std::string to_string() const {
+			this->latitude = latitude;
+			this->longitude = longitude;
+		}
 
-		return "[latitude = " + std::to_string(latitude) + " | longitude = " + std::to_string(longitude) + "]";
-	}
-};
+		std::string to_string() const {
+
+			return "[latitude = " + std::to_string(latitude) + " | longitude = " + std::to_string(longitude) + "]";
+		}
+	};
+}

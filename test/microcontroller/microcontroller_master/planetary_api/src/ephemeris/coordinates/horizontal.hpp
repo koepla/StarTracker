@@ -2,25 +2,28 @@
 
 #include <string>
 
-struct horizontal {
+namespace coordinates {
 
-	double azimuth;
-	double altitude;
+	struct horizontal {
 
-	horizontal() {
+		double azimuth;
+		double altitude;
 
-		this->azimuth = 0;
-		this->altitude = 0;
-	}
+		horizontal() {
 
-	horizontal(double azimuth, double altitude) {
+			this->azimuth = 0;
+			this->altitude = 0;
+		}
 
-		this->azimuth = azimuth;
-		this->altitude = altitude;
-	}
+		horizontal(double azimuth, double altitude) {
 
-	std::string to_string() const {
+			this->azimuth = azimuth;
+			this->altitude = altitude;
+		}
 
-		return "[azimuth = " + std::to_string(this->azimuth) + " | altitude = " + std::to_string(this->altitude) + "]";
-	}
-};
+		std::string to_string() const {
+
+			return "[azimuth = " + std::to_string(this->azimuth) + " | altitude = " + std::to_string(this->altitude) + "]";
+		}
+	};
+}
