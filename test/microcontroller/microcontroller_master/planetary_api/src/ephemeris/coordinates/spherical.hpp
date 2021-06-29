@@ -2,27 +2,30 @@
 
 #include <string>
 
-struct spherical {
+namespace coordinates {
 
-    double r;
-    double right_asc;
-    double decl;
+    struct spherical {
 
-    spherical() {
+        double r;
+        double right_asc;
+        double decl;
 
-        this->r = 1;
-        this->right_asc = 0;
-        this->decl = 0;
-    }
-    spherical(double right_asc, double decl, double r = 1) {
+        spherical() {
 
-        this->right_asc = right_asc;
-        this->decl = decl;
-        this->r = r;
-    }
+            this->r = 1;
+            this->right_asc = 0;
+            this->decl = 0;
+        }
+        spherical(double right_asc, double decl, double r = 1) {
 
-    std::string to_string() {
+            this->right_asc = right_asc;
+            this->decl = decl;
+            this->r = r;
+        }
 
-        return "[right_ascension = " + std::to_string(right_asc) + " | declination = " + std::to_string(decl) + " | r = " + std::to_string(r) + "]";
-    }
-};
+        std::string to_string() {
+
+            return "[right_ascension = " + std::to_string(right_asc) + " | declination = " + std::to_string(decl) + " | r = " + std::to_string(r) + "]";
+        }
+    };
+}

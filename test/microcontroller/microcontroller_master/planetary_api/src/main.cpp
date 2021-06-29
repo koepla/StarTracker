@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 		table.load_table("res/ephemeris_table.csv", date(2021, 4, 25, 3 + i, 0, 0));
 
 		try {
-			ephemeris::elements venus = table["Mars"];
+			ephemeris::elements venus = table["Venus"];
 
 			std::cout << std::setfill('0') << std::setw(10) << venus.a << " ";
 			std::cout << std::setfill('0') << std::setw(10) << venus.e << " ";
@@ -49,10 +49,9 @@ int main(int argc, char** argv) {
 	*	declination:		24° 43' 23"
 	*/
 
-	terrestial observer = terrestial(48.2667, -14.45);
-
-	spherical venus = spherical(hour_degree(3, 25, 12), real_degree(18, 26, 50));
-	spherical mars = spherical(hour_degree(6, 27, 14), real_degree(24, 43, 23));
+	auto observer = coordinates::terrestial(48.2667, -14.45);
+	auto venus = coordinates::spherical(hour_degree(3, 25, 12), real_degree(18, 26, 50));
+	auto mars = coordinates::spherical(hour_degree(6, 27, 14), real_degree(24, 43, 23));
 
 	std::cout.precision(10);
 	
