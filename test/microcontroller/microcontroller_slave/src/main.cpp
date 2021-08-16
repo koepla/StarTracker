@@ -16,7 +16,7 @@ void setup(){
     stepper_pitch1.beginSerial(115200);         
     stepper_pitch1.begin();                     
     stepper_pitch1.toff(5);                     
-    stepper_pitch1.rms_current(1100);            
+    stepper_pitch1.rms_current(1000);            
     stepper_pitch1.microsteps(MICROSTEPS);   
     stepper_pitch1.pwm_autoscale(true);      
 
@@ -26,7 +26,7 @@ void setup(){
     stepper_pitch2.beginSerial(115200);    
     stepper_pitch2.begin();                 
     stepper_pitch2.toff(5);                     
-    stepper_pitch2.rms_current(1100);          
+    stepper_pitch2.rms_current(1000);          
     stepper_pitch2.microsteps(MICROSTEPS);    
     stepper_pitch2.pwm_autoscale(true);
 
@@ -48,7 +48,7 @@ void loop(){
     if(Serial.available() == 40){
 
         Serial.readBytes(buff, 40);
-        float angle = pack.read<float>(0);
-        move(angle);
+        float pitch = pack.read<float>(0);
+        move(pitch, 0);
     }
 }
