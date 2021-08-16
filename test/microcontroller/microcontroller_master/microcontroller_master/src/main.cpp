@@ -41,7 +41,7 @@ public:
 	virtual void init() override {
 
 		try {
-			serial.open("COM8", 115200);
+			serial.open("COM4", 115200);
 		}
 		catch (const protocol::stt_serial_exception& e) {
 
