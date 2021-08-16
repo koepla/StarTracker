@@ -49,6 +49,7 @@ void loop(){
 
         Serial.readBytes(buff, 40);
         float pitch = pack.read<float>(0);
-        move(pitch, 0);
+        float yaw = pack.read<float>(1);
+        move(pitch, yaw);
     }
 }
