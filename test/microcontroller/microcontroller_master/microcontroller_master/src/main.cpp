@@ -54,13 +54,15 @@ public:
 
 	virtual void update() override {
 
-		float angle;
+		float pitch;
+		float yaw;
 
 		std::cout << "Enter angle: ";
-		std::cin >> angle;
+		std::cin >> pitch >> yaw;
 
 		pack.clear();
-		pack.push<float>(angle);
+		pack.push<float>(pitch);
+		pack.push<float>(yaw);
 
 		try {
 			serial.write(buff, 40);
