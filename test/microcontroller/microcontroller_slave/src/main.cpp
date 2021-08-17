@@ -1,55 +1,85 @@
-#include <Arduino.h>
-#include "stt_package.h"
-#include "stt_tmc2209.h"
+#include "package.hpp"
+#include "driver.hpp"
 
-stt_package<32> pack;
-uint8_t* buff = reinterpret_cast<uint8_t*>(&pack);
-bool shaft = false;
+DriverConfig pitchLeft = {
 
-void turn(float angle);
+    .microSteps = 256,
+    .enablePin = 3,
+    .stepPin = 2,
+    .rxPin = 5,
+    .txPin = 4
+};
 
-void setup(){
+DriverConfig pitchRight = {
 
-    pinMode(ENABLE_PIN_PITCH1, OUTPUT);
-    pinMode(STEP_PIN_PITCH1, OUTPUT);
-    digitalWrite(ENABLE_PIN_PITCH1, LOW);       
-    stepper_pitch1.beginSerial(115200);         
-    stepper_pitch1.begin();                     
-    stepper_pitch1.toff(5);                     
-    stepper_pitch1.rms_current(1000);            
-    stepper_pitch1.microsteps(MICROSTEPS);   
-    stepper_pitch1.pwm_autoscale(true);      
+    .microSteps = 256,
+    .enablePin = 7,
+    .stepPin = 6,
+    .rxPin = 9,
+    .txPin = 8
+};
 
-    pinMode(ENABLE_PIN_PITCH2, OUTPUT);
-    pinMode(STEP_PIN_PITCH2, OUTPUT);
-    digitalWrite(ENABLE_PIN_PITCH2, LOW);     
-    stepper_pitch2.beginSerial(115200);    
-    stepper_pitch2.begin();                 
-    stepper_pitch2.toff(5);                     
-    stepper_pitch2.rms_current(1000);          
-    stepper_pitch2.microsteps(MICROSTEPS);    
-    stepper_pitch2.pwm_autoscale(true);
+DriverConfig yaw = {
 
-    pinMode(ENABLE_PIN_YAW, OUTPUT);
-    pinMode(STEP_PIN_YAW, OUTPUT);
-    digitalWrite(ENABLE_PIN_YAW, LOW);     
-    stepper_yaw.beginSerial(115200);    
-    stepper_yaw.begin();                 
-    stepper_yaw.toff(5);                     
-    stepper_yaw.rms_current(600);          
-    stepper_yaw.microsteps(MICROSTEPS);    
-    stepper_yaw.pwm_autoscale(true);              
+    .microSteps = 256,
+    .enablePin = 11,
+    .stepPin = 10,
+    .rxPin = 13,
+    .txPin = 12
+};
 
+Driver driver(pitchLeft, pitchRight, yaw, 600 /* rms current */);
+Protocol::Pack64 package;
+
+void setup(){           
+
+    driver.Init();
     Serial.begin(115200);
 }
 
 void loop(){
 
-    if(Serial.available() == 40){
+    if(Serial.available() != sizeof(package)) {
 
-        Serial.readBytes(buff, 40);
-        float pitch = pack.read<float>(0);
-        float yaw = pack.read<float>(1);
-        move(pitch, yaw);
+        return;
     }
+
+    Serial.readBytes(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+        switch(package.header.flag) {
+
+        case Protocol::Command::NONE: {
+
+            break;
+        }
+        case Protocol::Command::WAKEUP: {
+
+            break;
+        }
+        case Protocol::Command::SLEEP: {
+
+            break;
+        }
+        case Protocol::Command::MOVE: {
+
+            float pitch = package.Read<float>(0);
+            float yaw = package.Read<float>(1);
+
+            driver.Move(pitch, yaw);
+
+            break;
+        }
+        case Protocol::Command::STOP: {
+
+            break;
+        }
+        case Protocol::Command::ORIGIN: {
+
+            break;
+        }
+        case Protocol::Command::ACK: {
+
+            break;
+        }
+    };  
 }
