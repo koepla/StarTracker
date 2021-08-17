@@ -20,13 +20,13 @@ class Driver {
 
 private:
 
-    TMC2209Stepper pitchLeft;
-    TMC2209Stepper pitchRight;
-    TMC2209Stepper yaw;
-
     DriverConfig pitchLeftConf;
     DriverConfig pitchRightConf;
     DriverConfig yawConf;
+
+    TMC2209Stepper pitchLeft;
+    TMC2209Stepper pitchRight;
+    TMC2209Stepper yaw;
 
     float rmsCurrent;
     float currentPitch;
@@ -37,16 +37,16 @@ public:
     : 
         pitchLeft(TMC2209Stepper(pitchLeftConfig.rxPin, pitchLeftConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
         pitchRight(TMC2209Stepper(pitchRightConfig.rxPin, pitchRightConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
-        yaw(TMC2209Stepper(yawConfig.rxPin, yawConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
+        yaw(TMC2209Stepper(yawConfig.rxPin, yawConfig.txPin, R_SENSE, DRIVER_ADDRESS))
+    { 
+        this->pitchLeftConf = pitchLeftConfig;
+        this->pitchRightConf = pitchRightConfig;
+        this->yawConf = yawConfig;
 
-        pitchLeftConf(pitchLeftConfig),
-        pitchRightConf(pitchRightConfig),
-        yawConf(yawConfig),
-        
-        rmsCurrent(rmsCurrent),
-        currentPitch(0),
-        currentYaw(0)
-    { }
+        this->rmsCurrent = rmsCurrent;
+        this->currentPitch = 0;
+        this->currentYaw = 0;
+    }
 
     void Init() {
 
@@ -79,8 +79,8 @@ public:
 
         for(uint64_t i = 0; i < pitchSteps; i++){
 
-            stepMotor(&pitchLeft, &pitchLeftConf);
-            stepMotor(&pitchRight, &pitchRightConf);
+            stepMotor(&pitchLeftConf);
+            stepMotor(&pitchRightConf);
         }
 
         if(yawAngle > currentYaw){
@@ -94,7 +94,7 @@ public:
 
         for(uint64_t i = 0; i < yawSteps; i++) {
 
-            stepMotor(&yaw, &yawConf);
+            stepMotor(&yawConf);
         }
 
         currentPitch = pitchAngle;
@@ -118,12 +118,12 @@ private:
         motor->pwm_autoscale(true);
     }
 
-    static void stepMotor(TMC2209Stepper* motor, DriverConfig* config, uint32_t delayMs = 160) {
+    static void stepMotor(DriverConfig* config, uint32_t delayUs = 160) {
 
         digitalWrite(config->stepPin, HIGH);
-        delayMicroseconds(delayMs);
+        delayMicroseconds(delayUs);
         digitalWrite(config->stepPin, LOW);
-        delayMicroseconds(delayMs);
+        delayMicroseconds(delayUs);
     }
 
 };
