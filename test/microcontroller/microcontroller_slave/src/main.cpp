@@ -28,7 +28,16 @@ DriverConfig yawConf = {
     .txPin = 12
 };
 
-Driver driver(pitchLeftConf, pitchRightConf, yawConf, 600 /* rms current */);
+DriverConfig singleConf = {
+
+    .microSteps = 256,
+    .enablePin = 4,
+    .stepPin = 2,
+    .rxPin = 5,
+    .txPin = 6
+};
+
+Driver driver = Driver(pitchLeftConf, pitchRightConf, singleConf, 600 /* rms current */);
 Protocol::Pack64 package;
 
 void setup(){           

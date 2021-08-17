@@ -83,6 +83,13 @@ namespace Protocol {
 			return *this;
 		}
 
+		Package& SetFlag(Command flag) {
+
+			header.flag = flag;
+
+			return *this;
+		}
+
 		/*
 		*	Function for pushing data into the buffer,
 		*	Takes data and element count
