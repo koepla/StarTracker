@@ -1,8 +1,6 @@
 #include <iostream>
-#include <conio.h>
-#include "protocol/stt_package.hpp"
-#include "protocol/stt_serial.hpp"
-#include "app.hpp"
+#include "protocol/Package.hpp"
+#include "protocol/Serial.hpp"
 
 /*
 *	TODO: Figure out a solution for the following problem
@@ -22,64 +20,64 @@
 *	should start turning the stepper motors.
 */
 
-/*
-*	Inheriting class of app
-*/
-class serial_app : public app {
+int main(int argc, char** argv) {
 
-private:
-	protocol::stt_serial serial;
-	protocol::stt_package<32> pack;
-	uint8_t* buff;
+	Protocol::Serial serialPort;
+	Protocol::Pack64 package;
 
-public:
+	try {
 
-	serial_app() {
-		this->buff = nullptr;
+		auto portNames = Protocol::Serial::GetPortNames();
+
+		if (portNames.size() == 0) {
+
+			std::cerr << "No Ports available!" << std::endl;
+			return -1;
+		}
+
+		std::cout << "Available Ports ----------" << std::endl;
+
+		for (int i = 0; i < portNames.size(); i++) {
+
+			std::cout << std::to_string(i + 1) << ". " << portNames[i] << std::endl;
+		}
+
+		std::cout << std::endl << "Select Port: ";
+
+		std::string port;
+		std::cin >> port;
+
+		serialPort.Open(port, 115200);
+	}
+	catch (const Protocol::SerialException& e) {
+
+		std::cerr << e.what() << std::endl;
+		return -1;
 	}
 
-	virtual void init() override {
+	while (true) {
+
+		float pitch = 0;
+		float yaw = 0;
+
+		std::cout << "Enter Pitch: ";
+		std::cin >> pitch;
+
+		std::cout << "Enter Yaw: ";
+		std::cin >> yaw;
+
+		package.Clear();
+		package.SetFlag(Protocol::Command::MOVE);
+		package.Push<float>(pitch);
+		package.Push<float>(yaw);
 
 		try {
-			serial.open("COM4", 115200);
+
+			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 		}
-		catch (const protocol::stt_serial_exception& e) {
-
-			std::cerr << e.what() << std::endl;
-			running = false;
-		}
-
-		this->buff = reinterpret_cast<uint8_t*>(&pack);
-	}
-
-	virtual void update() override {
-
-		float pitch;
-		float yaw;
-
-		std::cout << "Enter angle: ";
-		std::cin >> pitch >> yaw;
-
-		pack.clear();
-		pack.push<float>(pitch);
-		pack.push<float>(yaw);
-
-		try {
-			serial.write(buff, 40);
-			std::cout << "sent 40 bytes of data" << std::endl;
-		}
-		catch (const protocol::stt_serial_exception& e) {
+		catch (const Protocol::SerialException& e) {
 
 			std::cerr << e.what() << std::endl;
 		}
 	}
-
-	virtual void onevent(const events::event& e) override {
-
-
-	}
-};
-
-extern app* create() {
-	return new serial_app();
 }
