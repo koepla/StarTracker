@@ -159,7 +159,6 @@
     <ClInclude Include="src\ephemeris\date.hpp" />
     <ClInclude Include="src\ephemeris\elements.hpp" />
     <ClInclude Include="src\ephemeris\math.hpp" />
-    <ClInclude Include="src\ephemeris\vec3.hpp" />
     <ClInclude Include="src\util.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
