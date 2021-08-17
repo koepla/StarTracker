@@ -1,7 +1,7 @@
 #include "package.hpp"
 #include "driver.hpp"
 
-DriverConfig pitchLeft = {
+DriverConfig pitchLeftConf = {
 
     .microSteps = 256,
     .enablePin = 3,
@@ -10,7 +10,7 @@ DriverConfig pitchLeft = {
     .txPin = 4
 };
 
-DriverConfig pitchRight = {
+DriverConfig pitchRightConf = {
 
     .microSteps = 256,
     .enablePin = 7,
@@ -19,7 +19,7 @@ DriverConfig pitchRight = {
     .txPin = 8
 };
 
-DriverConfig yaw = {
+DriverConfig yawConf = {
 
     .microSteps = 256,
     .enablePin = 11,
@@ -28,7 +28,7 @@ DriverConfig yaw = {
     .txPin = 12
 };
 
-Driver driver(pitchLeft, pitchRight, yaw, 600 /* rms current */);
+Driver driver(pitchLeftConf, pitchRightConf, yawConf, 600 /* rms current */);
 Protocol::Pack64 package;
 
 void setup(){           
