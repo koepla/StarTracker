@@ -18,21 +18,15 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\protocol\stt_serial.cpp">
+    <ClCompile Include="src\protocol\Serial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\protocol\stt_package.hpp">
+    <ClInclude Include="src\protocol\Package.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\protocol\stt_serial.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\app.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\event.hpp">
+    <ClInclude Include="src\protocol\Serial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core.hpp">

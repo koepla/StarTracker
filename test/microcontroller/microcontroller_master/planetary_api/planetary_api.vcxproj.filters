@@ -38,9 +38,6 @@
     <ClInclude Include="src\ephemeris\coordinates\coordinates.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\vec3.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\ephemeris\coordinates\horizontal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
