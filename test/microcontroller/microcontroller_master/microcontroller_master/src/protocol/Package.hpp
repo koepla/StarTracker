@@ -1,7 +1,8 @@
-#pragma once
+#ifndef _PACKAGE_H_
+#define _PACKAGE_H_
+
 #include <iostream>
 #include <vector>
-
 
 namespace Protocol {
 
@@ -101,7 +102,7 @@ namespace Protocol {
 		}
 
 		template <typename T>
-		Package& PushRange(T* data, uint32_t count) {
+		Package& PushRange(const T* data, uint32_t count) {
 
 			uint8_t osize = header.size;
 			std::memcpy(buff + osize, data, count * sizeof(T));
@@ -134,6 +135,11 @@ namespace Protocol {
 
 			return static_cast<size_t>(header.size);
 		}
+
+		Command GetFlag() const {
+
+			return header.flag;
+		}
 	};
 
 	typedef Package<8>   Pack8;
@@ -142,3 +148,5 @@ namespace Protocol {
 	typedef Package<64>  Pack64;
 	typedef Package<128> Pack128;
 }
+
+#endif // _PACKAGE_H_
