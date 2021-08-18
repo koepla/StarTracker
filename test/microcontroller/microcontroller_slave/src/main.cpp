@@ -89,6 +89,9 @@ void loop(){
         }
         case Protocol::Command::ACK: {
 
+            // In this case the client expects the same package to be returned
+            Serial.write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
             break;
         }
     };  
