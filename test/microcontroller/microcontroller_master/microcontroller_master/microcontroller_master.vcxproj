@@ -85,10 +85,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\util\Hardware.cpp" />
     <ClCompile Include="src\protocol\Serial.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\util\Hardware.hpp" />
     <ClInclude Include="src\core.hpp" />
     <ClInclude Include="src\protocol\Serial.hpp" />
     <ClInclude Include="src\protocol\Package.hpp" />

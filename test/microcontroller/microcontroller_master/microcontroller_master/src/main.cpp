@@ -1,6 +1,7 @@
 #include <iostream>
 #include "protocol/Package.hpp"
 #include "protocol/Serial.hpp"
+#include "util/Hardware.hpp"
 
 /*
 *	TODO: Figure out a solution for the following problem
@@ -20,34 +21,45 @@
 *	should start turning the stepper motors.
 */
 
+std::string autoDetectPort(Protocol::Serial& port);
+
 int main(int argc, char** argv) {
 
 	Protocol::Serial serialPort;
 	Protocol::Pack64 package;
 
+	auto portName = autoDetectPort(serialPort);
+
 	try {
 
-		auto portNames = Protocol::Serial::GetPortNames();
+		if (!portName.empty()) {
 
-		if (portNames.size() == 0) {
-
-			std::cerr << "No Ports available!" << std::endl;
-			return -1;
+			serialPort.Open(portName, 115200);
 		}
+		else {
 
-		std::cout << "Available Ports ----------" << std::endl;
+			auto portNames = Protocol::Serial::GetPortNames();
 
-		for (int i = 0; i < portNames.size(); i++) {
+			if (portNames.size() == 0) {
 
-			std::cout << std::to_string(i + 1) << ". " << portNames[i] << std::endl;
+				std::cerr << "No Ports available!" << std::endl;
+				return -1;
+			}
+
+			std::cout << "Available Ports ----------" << std::endl;
+
+			for (int i = 0; i < portNames.size(); i++) {
+
+				std::cout << std::to_string(i + 1) << ". " << portNames[i] << std::endl;
+			}
+
+			std::cout << std::endl << "Select Port: ";
+
+			std::string port;
+			std::cin >> port;
+
+			serialPort.Open(port, 115200);
 		}
-
-		std::cout << std::endl << "Select Port: ";
-
-		std::string port;
-		std::cin >> port;
-
-		serialPort.Open(port, 115200);
 	}
 	catch (const Protocol::SerialException& e) {
 
@@ -80,4 +92,70 @@ int main(int argc, char** argv) {
 			std::cerr << e.what() << std::endl;
 		}
 	}
+}
+
+std::string autoDetectPort(Protocol::Serial& port) {
+
+	// Get the Hardware ID
+	auto hwid = Hardware::GetUID();
+
+	// Create new Package and Push the Hardware ID into it
+	auto package = Protocol::Pack64(Protocol::Command::ACK);
+	package.PushRange<char>(hwid.c_str(), hwid.size());
+
+	auto portNames = Protocol::Serial::GetPortNames();
+
+	for (auto& p : portNames) {
+
+		try {
+
+			std::cout << "Trying port " << p << "..." << std::endl;
+
+			port.Open(p, 115200);
+			
+			if (port.IsOpen()) {
+
+				port.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+				package.Clear();
+				port.Read(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+				if (package.GetFlag() == Protocol::Command::ACK) {
+
+					std::cout << "Acknowledge on port " << p << ". Checking Hardware ID..." << std::endl;
+					
+					if (strcmp(hwid.c_str(), std::string(package.ReadRange<char>(0)).c_str()) == 0) {
+
+						std::cout << "Hardware ID matches!" << std::endl;
+					}
+					else {
+
+						std::cerr << "Invalid Hardware ID!" << std::endl;
+
+						port.Close();
+						continue;
+					}
+
+					port.Close();
+					return p;
+				}
+				else {
+
+					std::cerr << "Invalid response on port " << p << "." << std::endl;
+
+					port.Close();
+					continue;
+				}
+			}
+			else {
+
+				std::cerr << "Failed to open port " << p << std::endl;
+			}
+		}
+		catch (const Protocol::SerialException& e) {
+
+			std::cerr << "Failed to open port " << p << std::endl;
+		}
+	}
+
+	return std::string();
 }
