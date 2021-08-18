@@ -1,4 +1,6 @@
-#pragma once
+#ifndef _SERIAL_H_
+#define _SERIAL_H_
+
 #include <iostream>
 #include <windows.h>
 #include <string>
@@ -87,3 +89,5 @@ namespace Protocol {
 
 	};
 }
+
+#endif // _SERIAL_H_
