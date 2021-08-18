@@ -78,3 +78,11 @@ For the last two days, I worked on the algorithm for computing a planet's or a s
 The time was really worth it because now, we can compute any star's or galaxy's or planet's position with only its right ascension and declination given. Of course we need the time for the computation and the observers position too. 
 
 ---
+
+## :memo: microcontroller driver code, protocol
+
+```
+Date:           17.08.2021		
+Time spent:     2h
+```
+Today I refactored the Protocol class on both microcontroller and client side. I also tried to write a driver for our TMC Stepper Drivers, which has some issues, but I think I isolated the problem to the Move function.
