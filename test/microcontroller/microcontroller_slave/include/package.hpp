@@ -106,7 +106,7 @@ namespace Protocol {
 		}
 
 		template <typename T>
-		Package& PushRange(T* data, uint8_t count) {
+		Package& PushRange(const T* data, uint8_t count) {
 
 			uint8_t osize = header.size;
 			memcpy(buff + osize, data, count * sizeof(T));
@@ -135,9 +135,14 @@ namespace Protocol {
 		/*
 		*	Returns how many bytes of the buffer are in use
 		*/
-		size_t Size() const {
+		size_t GetSize() const {
 
 			return static_cast<size_t>(header.size);
+		}
+
+		Command GetFlag() const {
+
+			return header.flag;
 		}
 	};
 
