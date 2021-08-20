@@ -15,40 +15,40 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="res\ephemeris_table.csv" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ephemeris\elements.hpp">
+    <ClInclude Include="src\Util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\util.hpp">
+    <ClInclude Include="src\coordinates\Coordinates.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\date.hpp">
+    <ClInclude Include="src\coordinates\Horizontal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\math.hpp">
+    <ClInclude Include="src\coordinates\Spherical.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\coordinates\coordinates.hpp">
+    <ClInclude Include="src\coordinates\Rectangular.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\coordinates\horizontal.hpp">
+    <ClInclude Include="src\coordinates\Terrestial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\coordinates\spherical.hpp">
+    <ClInclude Include="src\Date.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\coordinates\rectangular.hpp">
+    <ClInclude Include="src\Math.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ephemeris\coordinates\terrestial.hpp">
+    <ClInclude Include="src\Astro.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,10 +1,11 @@
-#pragma once
+#ifndef _ASTRO_TERRESTIAL_H_
+#define _ASTRO_TERRESTIAL_H_
 
 #include <string>
 
-namespace coordinates {
+namespace Astro::Coordinates {
 
-	struct terrestial {
+	struct Terrestial {
 
 		// latitude positive in north, negative in south
 		double latitude;
@@ -12,21 +13,23 @@ namespace coordinates {
 		// longitude positive in east, negative in west
 		double longitude;
 
-		terrestial() {
+		Terrestial() {
 
 			this->latitude = 0;
 			this->longitude = 0;
 		}
 
-		terrestial(double latitude, double longitude) {
+		Terrestial(double latitude, double longitude) {
 
 			this->latitude = latitude;
 			this->longitude = longitude;
 		}
 
-		std::string to_string() const {
+		std::string ToString() const {
 
 			return "[latitude = " + std::to_string(latitude) + " | longitude = " + std::to_string(longitude) + "]";
 		}
 	};
 }
+
+#endif // _ASTRO_TERRESTIAL_H_

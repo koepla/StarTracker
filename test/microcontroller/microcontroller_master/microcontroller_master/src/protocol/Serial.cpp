@@ -1,5 +1,7 @@
 #include "Serial.hpp"
 
+#include <chrono>
+
 namespace Protocol {
 
 	SerialException::SerialException(std::string&& message) noexcept : message(message) {
@@ -182,11 +184,11 @@ namespace Protocol {
 	void Serial::initTimeouts() {
 
 		COMMTIMEOUTS timeouts = { 0 };
-		timeouts.ReadIntervalTimeout = 1;
-		timeouts.ReadTotalTimeoutConstant = 1;
-		timeouts.ReadTotalTimeoutMultiplier = 1;
-		timeouts.WriteTotalTimeoutConstant = 1;
-		timeouts.WriteTotalTimeoutMultiplier = 1;
+		timeouts.ReadIntervalTimeout = 100;
+		timeouts.ReadTotalTimeoutConstant = 100;
+		timeouts.ReadTotalTimeoutMultiplier = 10;
+		timeouts.WriteTotalTimeoutConstant = 100;
+		timeouts.WriteTotalTimeoutMultiplier = 10;
 
 		if (!SetCommTimeouts(hCom, &timeouts)) {
 
