@@ -1,31 +1,35 @@
-#pragma once
+#ifndef _ASTRO_RECTANGULAR_H_
+#define _ASTRO_RECTANGULAR_H_
 
 #include <string>
 
-namespace coordinates {
+namespace Astro::Coordinates {
 
-    struct rectangular {
+    struct Rectangular {
+
         double x;
         double y;
         double z;
 
-        rectangular() {
+        Rectangular() {
 
             this->x = 0;
             this->y = 0;
             this->z = 0;
         }
-        rectangular(double x, double y, double z) {
+        Rectangular(double x, double y, double z) {
 
             this->x = x;
             this->y = y;
             this->z = z;
         }
 
-        std::string to_string() const {
+        std::string ToString() const {
 
             return "[x = " + std::to_string(x) + " | y = " + std::to_string(y) + " | z = " + std::to_string(z) + "]";
         }
     };
 }
+
+#endif // _ASTRO_RECTANGULAR_H_
 

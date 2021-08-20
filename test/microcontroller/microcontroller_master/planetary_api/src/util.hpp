@@ -1,14 +1,14 @@
-#pragma once
+#ifndef _ASTRO_UTIL_H_
+#define _ASTRO_UTIL_H_
+
 #include <string>
 #include <fstream>
 #include <vector>
 #include <sstream>
 
-namespace util {
+namespace Astro::Util {
 
-#define OUT_FIXED(out) std::cout << std::fixed << out;
-
-	std::string read_file(const std::string& path) {
+	static std::string ReadFile(const std::string& path) {
 
 		std::ifstream fin = std::ifstream(path, std::ios::in);
 		std::string content;
@@ -23,7 +23,7 @@ namespace util {
 		return content;
 	}
 
-	std::vector<std::string> split_str(const std::string& str, char delimiter) {
+	static std::vector<std::string> SplitString(const std::string& str, char delimiter) {
 
 		std::vector<std::string> result;
 		size_t last = 0;
@@ -38,3 +38,5 @@ namespace util {
 		return result;
 	}
 }
+
+#endif // _ASTRO_UTIL_H_
