@@ -32,7 +32,7 @@
     <ClInclude Include="src\protocol\Serial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core.hpp">
+    <ClInclude Include="src\Core.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\util\Hardware.hpp">

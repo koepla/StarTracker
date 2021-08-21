@@ -93,7 +93,7 @@
     <ClInclude Include="src\coordinates\Rectangular.hpp" />
     <ClInclude Include="src\coordinates\Spherical.hpp" />
     <ClInclude Include="src\coordinates\Terrestial.hpp" />
-    <ClInclude Include="src\coordinates\Coordinates.hpp" />
+    <ClInclude Include="src\coordinates\Transform.hpp" />
     <ClInclude Include="src\Date.hpp" />
     <ClInclude Include="src\Math.hpp" />
     <ClInclude Include="src\Util.hpp" />

@@ -1,7 +1,7 @@
 #ifndef _ASTRO_H_
 #define _ASTRO_H_
 
-#include "coordinates/Coordinates.hpp"
+#include "coordinates/Transform.hpp"
 #include "Date.hpp"
 #include "Math.hpp"
 #include "Util.hpp"
