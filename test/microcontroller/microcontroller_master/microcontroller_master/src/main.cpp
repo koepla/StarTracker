@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 std::string autoDetectPort(Protocol::Serial& port) {
 
 	// Get the Hardware ID
-	auto hwid = Hardware::GetUID();
+	const auto hwid = Hardware::GetUID();
 
 	// Create new Package and Push the Hardware ID into it
 	auto package = Protocol::Pack64(Protocol::Command::ACK);
@@ -91,8 +91,6 @@ std::string autoDetectPort(Protocol::Serial& port) {
 
 		try {
 
-			std::cout << "Trying port " << p << "..." << std::endl;
-
 			port.Open(p, 115200);
 			
 			if (port.IsOpen()) {
@@ -102,40 +100,35 @@ std::string autoDetectPort(Protocol::Serial& port) {
 				port.Read(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 
 				if (package.GetFlag() == Protocol::Command::ACK) {
-
-					std::cout << "Acknowledge on port " << p << ". Checking Hardware ID..." << std::endl;
 					
 					if (strcmp(hwid.c_str(), std::string(package.ReadRange<char>(0)).c_str()) == 0) {
 
-						std::cout << "Hardware ID matches!" << std::endl;
+						std::cout << "Found " << p << "!" << std::endl;
+						port.Close();
+						return p;
 					}
 					else {
 
-						std::cerr << "Invalid Hardware ID!" << std::endl;
-
+						std::cerr << "Failure on " << p << "!" << std::endl;
 						port.Close();
 						continue;
 					}
-
-					port.Close();
-					return p;
 				}
 				else {
 
-					std::cerr << "Invalid response on port " << p << "." << std::endl;
-
+					std::cerr << "Failure on " << p << "!" << std::endl;
 					port.Close();
 					continue;
 				}
 			}
 			else {
 
-				std::cerr << "Failed to open port " << p << std::endl;
+				std::cerr << "Failure on " << p << "!" << std::endl;
 			}
 		}
 		catch (const Protocol::SerialException& e) {
 
-			std::cerr << "Failed to open port " << p << std::endl;
+			std::cerr << "Failure on " << p << ": " << e.what() << std::endl;
 		}
 	}
 
