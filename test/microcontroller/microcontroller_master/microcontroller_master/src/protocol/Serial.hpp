@@ -64,7 +64,9 @@ namespace Protocol {
 		*/
 		bool IsOpen() const noexcept;
 
-		bool RxAvailable() noexcept;
+		void WaitComm() noexcept;
+
+		uint32_t Available() noexcept(false);
 
 	private:
 
@@ -78,7 +80,7 @@ namespace Protocol {
 		*/
 		void setBaudrate(uint32_t baudrate);
 		void initReceiveMask();
-		void initTimeouts();
+		void initTimeouts(uint32_t charCount);
 
 	public:
 
