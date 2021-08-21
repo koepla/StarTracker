@@ -7,7 +7,8 @@ DriverConfig pitchLeftConf = {
     .enablePin = 3,
     .stepPin = 2,
     .rxPin = 5,
-    .txPin = 4
+    .txPin = 4,
+    .rmsCurrent = 1000
 };
 
 DriverConfig pitchRightConf = {
@@ -16,7 +17,8 @@ DriverConfig pitchRightConf = {
     .enablePin = 7,
     .stepPin = 6,
     .rxPin = 9,
-    .txPin = 8
+    .txPin = 8,
+    .rmsCurrent = 1000
 };
 
 DriverConfig yawConf = {
@@ -25,7 +27,8 @@ DriverConfig yawConf = {
     .enablePin = 11,
     .stepPin = 10,
     .rxPin = 13,
-    .txPin = 12
+    .txPin = 12,
+    .rmsCurrent = 600
 };
 
 // only for plank
@@ -35,10 +38,11 @@ DriverConfig singleConf = {
     .enablePin = 4,
     .stepPin = 2,
     .rxPin = 5,
-    .txPin = 6
+    .txPin = 6,
+    .rmsCurrent = 600
 };
 
-Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf, 1000 /* rms current */);
+Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf);
 Protocol::Pack64 package;
 
 void setup(){           

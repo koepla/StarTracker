@@ -26,6 +26,7 @@ struct DriverConfig {
     uint16_t stepPin;
     uint16_t rxPin;
     uint16_t txPin;
+    float rmsCurrent;
 };
 
 class Driver {
@@ -40,12 +41,11 @@ private:
     TMC2209Stepper pitchRight;
     TMC2209Stepper yaw;
 
-    float rmsCurrent;
     float currentPitch;
     float currentYaw;
 
 public:
-    Driver(DriverConfig pitchLeftConfig, DriverConfig pitchRightConfig, DriverConfig yawConfig, float rmsCurrent = 600) 
+    Driver(DriverConfig pitchLeftConfig, DriverConfig pitchRightConfig, DriverConfig yawConfig) 
     : 
         pitchLeft(TMC2209Stepper(pitchLeftConfig.rxPin, pitchLeftConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
         pitchRight(TMC2209Stepper(pitchRightConfig.rxPin, pitchRightConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
@@ -55,16 +55,15 @@ public:
         this->pitchRightConf = pitchRightConfig;
         this->yawConf = yawConfig;
 
-        this->rmsCurrent = rmsCurrent;
         this->currentPitch = 0.0f;
         this->currentYaw = 0.0f;
     }
 
     void Init() {
 
-        initMotor(&pitchLeft, &pitchLeftConf, rmsCurrent);
-        initMotor(&pitchRight, &pitchRightConf, rmsCurrent);
-        initMotor(&yaw, &yawConf, rmsCurrent);
+        initMotor(&pitchLeft, &pitchLeftConf);
+        initMotor(&pitchRight, &pitchRightConf);
+        initMotor(&yaw, &yawConf);
     }
 
     void Move(float pitchAngle, float yawAngle) {
@@ -88,15 +87,14 @@ public:
 
         for(int64_t i = 0; i < abs(pitchSteps); i++) {
 
-            stepMotor(&pitchLeftConf);
-            stepMotor(&pitchRightConf);
+            stepMotor(&pitchLeftConf, &pitchRightConf);
         }
 
         yaw.shaft(yawSteps < 0 ? true : false);
 
         for(int64_t i = 0; i < abs(yawSteps); i++) {
 
-            stepMotor(&yawConf);
+            stepMotor(&yawConf, nullptr, 5000, 1000);
         }
 
         currentPitch = pitchAngle;
@@ -125,7 +123,7 @@ public:
 
 
 private:
-    static void initMotor(TMC2209Stepper* motor, DriverConfig* config, float rmsCurrent) {
+    static void initMotor(TMC2209Stepper* motor, DriverConfig* config) {
 
         pinMode(config->enablePin, OUTPUT);
         pinMode(config->stepPin, OUTPUT);
@@ -135,17 +133,30 @@ private:
         motor->beginSerial(115200);
         motor->begin();
         motor->toff(5); // enable driver in software
-        motor->rms_current(rmsCurrent);
+        motor->rms_current(config->rmsCurrent);
         motor->microsteps(config->microSteps);
         motor->pwm_autoscale(true);
     }
 
-    static void stepMotor(DriverConfig* config, uint32_t delayUs = 160) {
+    static void stepMotor(DriverConfig* config, DriverConfig* secondConfig = nullptr, uint32_t delayUsBeg = 1000, uint32_t delayUsEnd = 1000) {
 
         digitalWrite(config->stepPin, HIGH);
-        delayMicroseconds(delayUs);
+
+        if(secondConfig != nullptr) {
+
+            digitalWrite(secondConfig->stepPin, HIGH);
+        }
+
+        delayMicroseconds(delayUsBeg);
+
         digitalWrite(config->stepPin, LOW);
-        delayMicroseconds(delayUs);
+
+        if(secondConfig != nullptr) {
+
+            digitalWrite(secondConfig->stepPin, LOW);
+        }
+
+        delayMicroseconds(delayUsEnd);
     }
 
     static void enableMotor(DriverConfig* config, bool enable) {
