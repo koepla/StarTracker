@@ -5,7 +5,6 @@
 
 #define R_SENSE     		    0.11f
 #define DRIVER_ADDRESS          0b00
-#define DEFAULT_DIR true
 
 enum class MotorAxis : uint8_t {
 
