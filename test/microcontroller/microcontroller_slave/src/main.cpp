@@ -38,7 +38,7 @@ DriverConfig singleConf = {
     .txPin = 6
 };
 
-Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf, 600 /* rms current */);
+Driver driver = Driver(pitchLeftConf, pitchRightConf, singleConf, 600 /* rms current */);
 Protocol::Pack64 package;
 
 void setup(){           
@@ -60,13 +60,21 @@ void loop(){
 
         case Protocol::Command::NONE: {
 
+            package.Clear();
+            
             break;
         }
         case Protocol::Command::WAKEUP: {
 
+            MotorAxis axis = package.Read<MotorAxis>(0);
+            driver.SetMotorState(axis, MotorState::ON);
+
             break;
         }
         case Protocol::Command::SLEEP: {
+
+            MotorAxis axis = package.Read<MotorAxis>(0);
+            driver.SetMotorState(axis, MotorState::OFF);
 
             break;
         }
@@ -84,6 +92,8 @@ void loop(){
             break;
         }
         case Protocol::Command::ORIGIN: {
+
+            driver.Move(0.0f, 0.0f);
 
             break;
         }

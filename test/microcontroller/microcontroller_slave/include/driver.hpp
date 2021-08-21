@@ -7,6 +7,18 @@
 #define DRIVER_ADDRESS          0b00
 #define DEFAULT_DIR true
 
+enum class MotorAxis : uint8_t {
+
+    PITCH = (1 << 0),
+    YAW = (1 << 1)
+};
+
+enum class MotorState : uint8_t {
+
+    ON,
+    OFF
+};
+
 struct DriverConfig {
 
     uint16_t microSteps;
@@ -44,8 +56,8 @@ public:
         this->yawConf = yawConfig;
 
         this->rmsCurrent = rmsCurrent;
-        this->currentPitch = 0;
-        this->currentYaw = 0;
+        this->currentPitch = 0.0f;
+        this->currentYaw = 0.0f;
     }
 
     void Init() {
@@ -57,48 +69,58 @@ public:
 
     void Move(float pitchAngle, float yawAngle) {
 
+        if(pitchLeftConf.microSteps != pitchRightConf.microSteps) {
+
+            // In this case (Edge case because it would be the programmers fault) we don't want to move because otherwise 
+            // we would damage the 3D printed construction
+            return;
+        }
+
         float pitchBy = pitchAngle - currentPitch;
         float yawBy = yawAngle - currentYaw;
 
-        float stepsPerDegreePitch = pitchLeftConf.microSteps * (200.0 / 360.0);
-        float stepsPerDegreeYaw = yawConf.microSteps * (200.0 / 360.0);
+        int64_t pitchSteps = pitchBy * static_cast<float>(pitchLeftConf.microSteps) * (200.0f / 360.0f);
+        int64_t yawSteps = yawBy * static_cast<float>(yawConf.microSteps) * (200.0f / 360.0f);
 
-        uint64_t pitchSteps =  stepsPerDegreePitch * abs(pitchBy);
-        uint64_t yawSteps =  stepsPerDegreeYaw * abs(yawBy);
+        bool pitchShaft = pitchSteps > 0 ? true : false;
+        pitchLeft.shaft(pitchShaft);
+        pitchRight.shaft(!pitchShaft);
 
-        if(pitchAngle > currentPitch){
-
-            pitchLeft.shaft(!DEFAULT_DIR);
-            pitchRight.shaft(DEFAULT_DIR);
-        }
-        else if(pitchAngle < currentPitch) {
-
-            pitchLeft.shaft(DEFAULT_DIR);
-            pitchRight.shaft(!DEFAULT_DIR);
-        }
-
-        for(uint64_t i = 0; i < pitchSteps; i++){
+        for(int64_t i = 0; i < abs(pitchSteps); i++) {
 
             stepMotor(&pitchLeftConf);
             stepMotor(&pitchRightConf);
         }
 
-        if(yawAngle > currentYaw){
+        yaw.shaft(yawSteps < 0 ? true : false);
 
-            yaw.shaft(DEFAULT_DIR);
-        }
-        if(yawAngle < currentYaw){
-
-            yaw.shaft(DEFAULT_DIR);
-        }
-
-        for(uint64_t i = 0; i < yawSteps; i++) {
+        for(int64_t i = 0; i < abs(yawSteps); i++) {
 
             stepMotor(&yawConf);
         }
 
         currentPitch = pitchAngle;
         currentYaw = yawAngle;
+    }
+
+    void SetMotorState(MotorAxis axis, MotorState state) {
+
+        bool enable = state == MotorState::ON;
+
+        switch(axis) {
+
+            case MotorAxis::PITCH: {
+
+                enableMotor(&pitchLeftConf, enable);
+                enableMotor(&pitchRightConf, enable);
+                break;
+            }
+            case MotorAxis::YAW: {
+
+                enableMotor(&yawConf, enable);
+                break;
+            }
+        }
     }
 
 
@@ -126,6 +148,10 @@ private:
         delayMicroseconds(delayUs);
     }
 
+    static void enableMotor(DriverConfig* config, bool enable) {
+
+        digitalWrite(config->enablePin, enable ? LOW : HIGH); // enable driver in hardware
+    }
 };
 
 #endif // _DRIVER_H_
