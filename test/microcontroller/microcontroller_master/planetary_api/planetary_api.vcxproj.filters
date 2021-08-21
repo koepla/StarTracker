@@ -21,7 +21,7 @@
     <ClInclude Include="src\Util.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\coordinates\Coordinates.hpp">
+    <ClInclude Include="src\coordinates\Transform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\coordinates\Horizontal.hpp">
