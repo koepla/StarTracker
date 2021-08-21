@@ -14,9 +14,8 @@ namespace Protocol {
 		return this->message.c_str();
 	}
 
-	Serial::Serial() : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR) {
+	Serial::Serial() : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {
 
-		
 	}
 
 	Serial::~Serial() {
@@ -45,7 +44,7 @@ namespace Protocol {
 
 		setBaudrate(baudrate);
 		initReceiveMask();
-		initTimeouts();
+		initTimeouts(64);
 	}
 
 	void Serial::Close() noexcept(false) {
@@ -59,6 +58,8 @@ namespace Protocol {
 
 	uint32_t Serial::Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false) {
 
+		initTimeouts(bytes2read);
+
 		// Number of bytes read
 		DWORD dwread;
 
@@ -68,7 +69,7 @@ namespace Protocol {
 			throw SerialException("Port is not open");
 		}
 
-		RxAvailable();
+		WaitComm();
 
 		// Read operation
 		if (!ReadFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwread, NULL)) {
@@ -108,9 +109,27 @@ namespace Protocol {
 		return isOpen && (hCom != INVALID_HANDLE_VALUE);
 	}
 
-	bool Serial::RxAvailable() noexcept {
+	void Serial::WaitComm() noexcept {
 
-		return WaitCommEvent(hCom, &dwEventMask, NULL);
+		WaitCommEvent(hCom, &dwEventMask, NULL);
+	}
+
+	uint32_t Serial::Available() noexcept(false)
+	{
+		if (!IsOpen()) {
+
+			throw SerialException("Port is not open");
+			return 0;
+		}
+
+		COMSTAT stat;
+		if (!ClearCommError(hCom, NULL, &stat)) {
+
+			throw SerialException("Cannot check status of serial port.");
+			return 0;
+		}
+
+		return static_cast<uint32_t>(stat.cbInQue);
 	}
 
 	inline std::string Serial::prefixPort(const std::string& port) {
@@ -181,14 +200,14 @@ namespace Protocol {
 		}
 	}
 
-	void Serial::initTimeouts() {
+	void Serial::initTimeouts(uint32_t charCount) {
 
 		COMMTIMEOUTS timeouts = { 0 };
 		timeouts.ReadIntervalTimeout = 100;
 		timeouts.ReadTotalTimeoutConstant = 100;
-		timeouts.ReadTotalTimeoutMultiplier = 10;
+		timeouts.ReadTotalTimeoutMultiplier = charCount;
 		timeouts.WriteTotalTimeoutConstant = 100;
-		timeouts.WriteTotalTimeoutMultiplier = 10;
+		timeouts.WriteTotalTimeoutMultiplier = charCount;
 
 		if (!SetCommTimeouts(hCom, &timeouts)) {
 

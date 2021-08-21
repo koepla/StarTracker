@@ -2,6 +2,7 @@
 #include "protocol/Package.hpp"
 #include "protocol/Serial.hpp"
 #include "util/Hardware.hpp"
+#include <chrono>
 
 std::string autoDetectPort(Protocol::Serial& port);
 
@@ -91,13 +92,40 @@ std::string autoDetectPort(Protocol::Serial& port) {
 
 		try {
 
+			std::cout << "Trying " << p << "..." << std::endl;
+
 			port.Open(p, 115200);
 			
 			if (port.IsOpen()) {
 
 				port.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 				package.Clear();
-				port.Read(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+				auto begin = std::chrono::high_resolution_clock::now();
+
+				bool failure = false;
+
+				while (port.Available() != sizeof(package)) {
+
+					auto now = std::chrono::high_resolution_clock::now();
+
+					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - begin).count() >= 5000) {
+
+						failure = true;
+						break;
+					}
+				}
+
+				if (failure) {
+
+					std::cerr << "Failure on " << p << "!" << std::endl;
+					port.Close();
+					continue;
+				}
+				else {
+
+					port.Read(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+				}
 
 				if (package.GetFlag() == Protocol::Command::ACK) {
 					
