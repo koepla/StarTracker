@@ -31,17 +31,6 @@ DriverConfig yawConf = {
     .rmsCurrent = 600
 };
 
-// only for plank
-DriverConfig singleConf = {
-
-    .microSteps = 256,
-    .enablePin = 4,
-    .stepPin = 2,
-    .rxPin = 5,
-    .txPin = 6,
-    .rmsCurrent = 600
-};
-
 Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf);
 Protocol::Pack64 package;
 
