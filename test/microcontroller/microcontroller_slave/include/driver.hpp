@@ -92,11 +92,11 @@ public:
 
             if(i < aPitchSteps) {
 
-                stepMotor(&pitchLeftConf, &pitchRightConf, 500, 500);
+                stepMotor(&pitchLeftConf, &pitchRightConf, 1000, 1000);
             }
             if(i < aYawSteps) {
 
-                stepMotor(&yawConf, nullptr, 500, 500);
+                stepMotor(&yawConf, nullptr, 1000, 1000);
             }
         }
 
@@ -122,6 +122,12 @@ public:
                 break;
             }
         }
+    }
+
+    void SetCurrentPosition(float pitchAngle, float yawAngle) {
+
+        this->currentPitch = pitchAngle;
+        this->currentYaw = yawAngle;
     }
 
 

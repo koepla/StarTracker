@@ -71,16 +71,21 @@ void loop(){
 
             break;
         }
+        case Protocol::Command::CONF: {
+
+            float pitch = package.Read<float>(0);
+            float yaw = package.Read<float>(1);
+
+            driver.SetCurrentPosition(pitch, yaw);
+
+            break;
+        }
         case Protocol::Command::MOVE: {
 
             float pitch = package.Read<float>(0);
             float yaw = package.Read<float>(1);
 
             driver.Move(pitch, yaw);
-
-            break;
-        }
-        case Protocol::Command::STOP: {
 
             break;
         }

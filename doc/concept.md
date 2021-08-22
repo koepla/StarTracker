@@ -30,8 +30,8 @@ Protocol ideas:
 
 ```
 HEADER:     
-FLAG        MOVE     => instruction for moving over angles x in timespan dt
-            STOP     => instruction to stop the current movement
+FLAG        MOVE     => instruction to move to angles
+            CONF     => sets the current position
             ORIGIN   => stop current movement and return to angle 0, 0 
             SLEEP    => send stepper-motor x to sleep
             WAKEUP   => wake up stepper-motor x
