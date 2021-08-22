@@ -15,7 +15,7 @@ namespace Protocol {
 		WAKEUP = (1 << 1),
 		SLEEP  = (1 << 2),
 		MOVE   = (1 << 3),
-		STOP   = (1 << 4),
+		CONF   = (1 << 4),
 		ORIGIN = (1 << 5),
 		ACK    = (1 << 6)
 	};
