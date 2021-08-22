@@ -83,17 +83,21 @@ public:
         bool pitchShaft = pitchSteps > 0 ? true : false;
         pitchLeft.shaft(!pitchShaft);
         pitchRight.shaft(pitchShaft);
-
-        for(int64_t i = 0; i < abs(pitchSteps); i++) {
-
-            stepMotor(&pitchLeftConf, &pitchRightConf);
-        }
-
         yaw.shaft(yawSteps < 0 ? true : false);
 
-        for(int64_t i = 0; i < abs(yawSteps); i++) {
+        const int64_t aPitchSteps = abs(pitchSteps);
+        const int64_t aYawSteps = abs(yawSteps);
 
-            stepMotor(&yawConf, nullptr, 5000, 1000);
+        for(int64_t i = 0; i < max(aPitchSteps, aYawSteps); i++) {
+
+            if(i < aPitchSteps) {
+
+                stepMotor(&pitchLeftConf, &pitchRightConf, 500, 500);
+            }
+            if(i < aYawSteps) {
+
+                stepMotor(&yawConf, nullptr, 500, 500);
+            }
         }
 
         currentPitch = pitchAngle;
