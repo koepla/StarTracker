@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 
 		auto marsPos = Star::Coordinates::Transform::TerrestialObserverToHorizontal(mars, observer, Star::Date::Now());
 
-		std::cout << "Sending computed data " << marsPos.ToString() << " to microcontroller..." << std::endl;
+		std::cout << "Sending computed data " << marsPos.ToString() << " to micro controller..." << std::endl;
 
 		try {
 

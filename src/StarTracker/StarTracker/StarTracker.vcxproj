@@ -409,6 +409,7 @@
     <ClInclude Include="extern\KHR\khrplatform.h" />
     <ClInclude Include="extern\stb_image\stb_image.h" />
     <ClInclude Include="extern\stb_image\stb_image_write.h" />
+    <ClInclude Include="src\core\Core.hpp" />
     <ClInclude Include="src\core\serial\Package.hpp" />
     <ClInclude Include="src\core\serial\Serial.hpp" />
   </ItemGroup>
