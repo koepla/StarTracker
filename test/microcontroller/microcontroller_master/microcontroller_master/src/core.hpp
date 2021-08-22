@@ -3,6 +3,6 @@
 
 #include <cstdio>
 
-#define STA_ASSERT(condition, msg) if(!(condition)){ fprintf(stderr, "%s", msg); __debugbreak(); } 
+#define STR_ASSERT(condition, msg) if(!(condition)){ fprintf(stderr, "%s", msg); __debugbreak(); } 
 
 #endif // _CORE_H_
