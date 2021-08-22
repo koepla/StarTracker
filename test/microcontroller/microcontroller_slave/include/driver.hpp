@@ -81,8 +81,8 @@ public:
         int64_t yawSteps = yawBy * static_cast<float>(yawConf.microSteps) * (200.0f / 360.0f);
 
         bool pitchShaft = pitchSteps > 0 ? true : false;
-        pitchLeft.shaft(pitchShaft);
-        pitchRight.shaft(!pitchShaft);
+        pitchLeft.shaft(!pitchShaft);
+        pitchRight.shaft(pitchShaft);
 
         for(int64_t i = 0; i < abs(pitchSteps); i++) {
 
