@@ -2,9 +2,10 @@
 #define _DRIVER_H_
 
 #include <TMCStepper.h>
+#include <Arduino.h>
 
-#define R_SENSE     		    0.11f
-#define DRIVER_ADDRESS          0b00
+#define R_SENSE 0.11f
+#define DRIVER_ADDRESS 0x00
 
 enum class MotorAxis : uint8_t {
 
@@ -31,7 +32,6 @@ struct DriverConfig {
 class Driver {
 
 private:
-
     DriverConfig pitchLeftConf;
     DriverConfig pitchRightConf;
     DriverConfig yawConf;

@@ -1,48 +1,37 @@
 #include <iostream>
+#include <chrono>
 #include "protocol/Package.hpp"
 #include "protocol/Serial.hpp"
 #include "util/Hardware.hpp"
-#include <chrono>
-
-std::string autoDetectPort(Protocol::Serial& port);
 
 int main(int argc, char** argv) {
 
-	Protocol::Serial serialPort;
-	Protocol::Pack64 package;
-
-	auto portName = autoDetectPort(serialPort);
+	Protocol::Serial serialPort;                  
+	Protocol::Pack32 package;
 
 	try {
+		
+		auto portNames = Protocol::Serial::GetPortNames();
 
-		if (!portName.empty()) {
+		if (portNames.size() == 0) {
 
-			serialPort.Open(portName, 115200);
+			std::cerr << "No Ports available!" << std::endl;
+			return -1;
 		}
-		else {
 
-			auto portNames = Protocol::Serial::GetPortNames();
+		std::cout << "Available Ports ----------" << std::endl;
 
-			if (portNames.size() == 0) {
+		for (int i = 0; i < portNames.size(); i++) {
 
-				std::cerr << "No Ports available!" << std::endl;
-				return -1;
-			}
-
-			std::cout << "Available Ports ----------" << std::endl;
-
-			for (int i = 0; i < portNames.size(); i++) {
-
-				std::cout << std::to_string(i + 1) << ". " << portNames[i] << std::endl;
-			}
-
-			std::cout << std::endl << "Select Port: ";
-
-			std::string port;
-			std::cin >> port;
-
-			serialPort.Open(port, 115200);
+			std::cout << std::to_string(i + 1) << ". " << portNames[i] << std::endl;
 		}
+
+		std::cout << std::endl << "Select Port: ";
+
+		std::string port;
+		std::cin >> port;
+
+		serialPort.Open(port, 115200);
 	}
 	catch (const Protocol::SerialException& e) {
 
@@ -75,90 +64,4 @@ int main(int argc, char** argv) {
 			std::cerr << e.what() << std::endl;
 		}
 	}
-}
-
-std::string autoDetectPort(Protocol::Serial& port) {
-
-	// Get the Hardware ID
-	const auto hwid = Hardware::GetUID();
-
-	// Create new Package and Push the Hardware ID into it
-	auto package = Protocol::Pack64(Protocol::Command::ACK);
-	package.PushRange<char>(hwid.c_str(), hwid.size());
-
-	auto portNames = Protocol::Serial::GetPortNames();
-
-	for (auto& p : portNames) {
-
-		try {
-
-			std::cout << "Trying " << p << "..." << std::endl;
-
-			port.Open(p, 115200);
-			
-			if (port.IsOpen()) {
-
-				port.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
-				package.Clear();
-
-				auto begin = std::chrono::high_resolution_clock::now();
-
-				bool failure = false;
-
-				while (port.Available() != sizeof(package)) {
-
-					auto now = std::chrono::high_resolution_clock::now();
-
-					if (std::chrono::duration_cast<std::chrono::milliseconds>(now - begin).count() >= 5000) {
-
-						failure = true;
-						break;
-					}
-				}
-
-				if (failure) {
-
-					std::cerr << "Failure on " << p << "!" << std::endl;
-					port.Close();
-					continue;
-				}
-				else {
-
-					port.Read(reinterpret_cast<uint8_t*>(&package), sizeof(package));
-				}
-
-				if (package.GetFlag() == Protocol::Command::ACK) {
-					
-					if (strcmp(hwid.c_str(), std::string(package.ReadRange<char>(0)).c_str()) == 0) {
-
-						std::cout << "Found " << p << "!" << std::endl;
-						port.Close();
-						return p;
-					}
-					else {
-
-						std::cerr << "Failure on " << p << "!" << std::endl;
-						port.Close();
-						continue;
-					}
-				}
-				else {
-
-					std::cerr << "Failure on " << p << "!" << std::endl;
-					port.Close();
-					continue;
-				}
-			}
-			else {
-
-				std::cerr << "Failure on " << p << "!" << std::endl;
-			}
-		}
-		catch (const Protocol::SerialException& e) {
-
-			std::cerr << "Failure on " << p << ": " << e.what() << std::endl;
-		}
-	}
-
-	return std::string();
 }
