@@ -953,6 +953,9 @@
     <ClInclude Include="src\core\serial\Serial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\Core.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="extern\glm\detail\func_common.inl">
