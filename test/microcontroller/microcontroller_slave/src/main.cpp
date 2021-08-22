@@ -32,7 +32,7 @@ DriverConfig yawConf = {
 };
 
 Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf);
-Protocol::Pack64 package;
+Protocol::Pack32 package;
 
 void setup(){           
 
@@ -49,7 +49,7 @@ void loop(){
 
     Serial.readBytes(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 
-        switch(package.header.flag) {
+    switch(package.header.flag) {
 
         case Protocol::Command::NONE: {
 

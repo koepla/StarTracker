@@ -58,7 +58,7 @@ namespace Protocol {
 		*/
 		Package() : header(Header(Command::NONE, 0)) {
 
-			static_assert(BUFF_SIZE >= 0);
+			static_assert(BUFF_SIZE >= 0, "Buffer size must not be less than zero");
 
 			memset(buff, 0, BUFF_SIZE);
 		}
@@ -69,7 +69,7 @@ namespace Protocol {
 		*/
 		Package(Command flag) : header(Header(flag, 0)) {
 
-			static_assert(BUFF_SIZE >= 0);
+			static_assert(BUFF_SIZE >= 0, "Buffer size must not be less than zero");
 
 			memset(buff, 0, BUFF_SIZE);
 		}
