@@ -1,7 +1,7 @@
 ## :memo: git, concept, project structure
 
 ```
-Date:           16.04.2020		
+Date:           16.04.2021		
 Time spent:     2h 
 ```
 
@@ -12,7 +12,7 @@ Today we worked on creating a first draft of our concept and got a ruff idea on 
 ## :memo: Fusion 360
 
 ```
-Date:           17.04.2020		
+Date:           17.04.2021		
 Time spent:     3h 
 ```
 
@@ -23,7 +23,7 @@ Today I tested our first prototype and found that when a heavy camera is mounted
 ## :memo: troubleshooting stepper drivers and testing new camera bracket design
 
 ```
-Date:           18.04.2020		
+Date:           18.04.2021		
 Time spent:     6h 
 ```
 
@@ -39,7 +39,7 @@ Also I need to make slight modifications to the design do make the screws fit be
 ## :memo: researching tmc2209 drivers
 
 ```
-Date:           18.04.2020		
+Date:           18.04.2021		
 Time spent:     3h 
 ```
 
@@ -50,11 +50,33 @@ Today I spent a few hours learning about the tmc2209 driver. We have now decided
 ## :memo: testing tmc2209 drivers
 
 ```
-Date:           26.04.2020		
+Date:           26.04.2021		
 Time spent:     5h 
 ```
 
 Today we tested our new tmc2209 drivers with some simple code. At first we had some schlagerls but in the end everything worked. 
+
+---
+
+## :memo: creating 1st gen PCB
+
+```
+Date:           12-16.07.2021		
+Time spent:     30h 
+```
+
+In this week I learned myself how to use Autodesk Eagle and I also crated the first PCB prototype.
+
+---
+
+## :memo: crated mount for 1/4inch thread 
+
+```
+Date:           23.08.2021		
+Time spent:     5h 
+```
+
+Today I designed and printed a mount for standard 1/4ich threads witch you can find on almost every tripod.
 
 ---
 
