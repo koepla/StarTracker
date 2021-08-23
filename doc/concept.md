@@ -44,3 +44,8 @@ CONTENT     MOVE     => list of 4 byte float angles -> last 4 bytes are the time
             SLEEP    => list of 1 byte integers for the stepper motors, can only be 0,1 or 2
             WAKEUP   => list of 1 byte integers for stepper motors that need to be woken up, can only be 0,1 or 2
 ```
+
+### Random ideas
+
+Creating an step by step instruction on how to build and print StarTracker when you first start the program.
+
