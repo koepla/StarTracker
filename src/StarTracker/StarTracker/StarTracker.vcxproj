@@ -101,6 +101,7 @@
     <ClCompile Include="extern\imgui\imgui_widgets.cpp" />
     <ClCompile Include="extern\stb_image\stb_image.c" />
     <ClCompile Include="extern\stb_image\stb_image_write.c" />
+    <ClCompile Include="src\util\HTTPRequest.cpp" />
     <ClCompile Include="src\core\serial\Serial.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
@@ -409,6 +410,7 @@
     <ClInclude Include="extern\KHR\khrplatform.h" />
     <ClInclude Include="extern\stb_image\stb_image.h" />
     <ClInclude Include="extern\stb_image\stb_image_write.h" />
+    <ClInclude Include="src\util\HTTPRequest.hpp" />
     <ClInclude Include="src\core\Core.hpp" />
     <ClInclude Include="src\core\serial\Package.hpp" />
     <ClInclude Include="src\core\serial\Serial.hpp" />
