@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
 
 	Protocol::Serial serialPort;
 
-	auto observer = Star::Coordinates::Terrestrial(48.30694, -14.28583);
+	auto observer = Star::Coordinates::Observer(48.30694, -14.28583);
 
 	try {
 
@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
 			Star::Math::HourToDegrees(hour, minute, second), 
 			Star::Math::RealDegrees(degree, arcmin, arcsec));
 
-		auto marsPos = Star::Coordinates::Transform::TerrestialObserverToHorizontal(mars, observer, Star::Date::Now());
+		auto marsPos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(mars, observer, Star::Date::Now());
 
 		std::cout << "Sending computed data " << marsPos.ToString() << " to micro controller..." << std::endl;
 
