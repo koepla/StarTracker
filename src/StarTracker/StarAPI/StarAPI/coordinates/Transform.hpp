@@ -64,7 +64,7 @@ namespace Star::Coordinates {
         *   routine:
         *   calculates the horizontal coordinates for given spherical coordinates and an observer at a certain date
         */
-        static Horizontal TerrestialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const Date& date);
+        static Horizontal TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const Date& date);
     };
 }
 
