@@ -6,7 +6,7 @@
 #include "coordinates/Horizontal.hpp"
 #include "coordinates/Rectangular.hpp"
 #include "coordinates/Spherical.hpp"
-#include "coordinates/Terrestial.hpp"
+#include "coordinates/Terrestrial.hpp"
 #include "coordinates/Transform.hpp"
 
 #endif
