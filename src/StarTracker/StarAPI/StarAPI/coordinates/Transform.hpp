@@ -5,7 +5,7 @@
 #include "Horizontal.hpp"
 #include "Spherical.hpp"
 #include "Rectangular.hpp"
-#include "Terrestial.hpp"
+#include "Terrestrial.hpp"
 #include "../Date.hpp"
 
 /*
@@ -21,108 +21,50 @@ namespace Star::Coordinates {
 
         /*
             input:
-            &rect_cord  (rectangular coordinates (reference)),
-            right_asc   (Right Ascension)
-            decl        (Declination)
-            r           (Distance, set to 1 by default)
+            coords (by const reference)
 
             routine:
             transforms spherical coordinates to rectangular ones
         */
-        static Rectangular SphericalToRectangular(const Spherical& coords) {
-
-            Rectangular rectCoords;
-
-            rectCoords.x = coords.radius * Math::Cosine(coords.rightAscension) * Math::Cosine(coords.declination);
-            rectCoords.y = coords.radius * Math::Sine(coords.rightAscension) * Math::Cosine(coords.declination);
-            rectCoords.z = coords.radius * Math::Sine(coords.declination);
-
-            return rectCoords;
-        }
+        static Rectangular SphericalToRectangular(const Spherical& coords);
 
         /*
             input:
-            &spherical_coord (spherical coordinates (reference)),
-            x,y,z horizontal coordinates
+            coords (by const reference)
 
             routine:
             transforms rectangular coordinates to spherical ones
         */
-        static Spherical RectangularToSpherical(const Rectangular& coords) {
-
-            Spherical sphericalCoords;
-
-            double x = coords.x;
-            double y = coords.y;
-            double z = coords.z;
-
-            //celestial north and south pole
-            if (x == 0 && y == 0) {
-
-                sphericalCoords.rightAscension = 0;
-            }
-
-            sphericalCoords.radius = sqrt(x * x + y * y + z * z);
-            sphericalCoords.rightAscension = Math::ArcTangent2(y, x);
-            sphericalCoords.declination = Math::ArcTangent2(z , sqrt(x*x + y*y));
-
-            return sphericalCoords;
-        }
+        static Spherical RectangularToSpherical(const Rectangular& coords);
 
         /*
         *   input: 
-        *   &rect_coord (rectangular coordinates (reference)),
-        *   angle       (angle of rotation)
+        *   rectCoords (by reference),
+        *   angle      (angle of rotation)
         * 
         *   routine:
         *   rotates the given rectangular coordinates around the y axis [angle] degrees
         */
-        static void RotateY(Rectangular& rectCoords, double angle) {
-
-            double xn = rectCoords.x * Math::Sine(angle) - rectCoords.z * Math::Cosine(angle);
-            double yn = rectCoords.y;
-            double zn = rectCoords.x * Math::Cosine(angle) + rectCoords.z * Math::Sine(angle);
-
-            rectCoords.x = xn;
-            rectCoords.y = yn;
-            rectCoords.z = zn;
-        }
+        static void RotateY(Rectangular& rectCoords, double angle);
 
         /*
         *   input:
-        *   declination     (declination in the celestial system)
-        *   hour_angle      (hour angle (can be calculated by mean sidereal time and right ascension)
-        *   latitude        (latitude of the observer (is needed for the coordinate rotation)
+        *   declination (declination in the celestial system)
+        *   hourAngle   (hour angle (can be calculated by mean sidereal time and right ascension)
+        *   latitude    (latitude of the observer (is needed for the coordinate rotation)
         */
-        static Horizontal EquatorialToHorizontal(double declination, double hourAngle, double latitude) {
-
-            Horizontal horizontalCoords;
-
-            Rectangular re = SphericalToRectangular(Spherical(hourAngle, declination));
-
-            RotateY(re, latitude);
-
-            // add 180 to get the angle from north to east to south and so on
-            horizontalCoords.azimuth = Math::ArcTangent2(re.y, re.x) + 180;
-            horizontalCoords.altitude = Math::ArcSine(re.z);
-
-            return horizontalCoords;
-        }
+        static Horizontal EquatorialToHorizontal(double declination, double hourAngle, double latitude);
 
         /*
         *   input:
-        *   &coords     (spherical coords of an in object in the sky)
-        *   &observer   (terrestial coordinates of an observer)
-        *   &d          (date for the calculation)
+        *   sphericalCoords (spherical coords of a celestial body, by const reference)
+        *   observer        (terrestrial coordinates of an observer, by const reference)
+        *   date            (date for the calculation, by const reference)
         * 
         *   routine:
         *   calculates the horizontal coordinates for given spherical coordinates and an observer at a certain date
         */
-        static Horizontal TerrestialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestial& observer, const Date& d) {
-    
-            double hourAngle = Date::Gmst(d) + observer.longitude - sphericalCoords.rightAscension;
-            return EquatorialToHorizontal(sphericalCoords.declination, hourAngle, observer.latitude);
-        }
+        static Horizontal TerrestialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const Date& date);
     };
 }
 
