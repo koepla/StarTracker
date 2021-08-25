@@ -7,27 +7,14 @@ namespace Star::Coordinates {
 
     struct Rectangular {
 
-        double x;
-        double y;
-        double z;
+        double X;
+        double Y;
+        double Z;
 
-        Rectangular() {
+        Rectangular();
+        Rectangular(double x, double y, double z);
 
-            this->x = 0;
-            this->y = 0;
-            this->z = 0;
-        }
-        Rectangular(double x, double y, double z) {
-
-            this->x = x;
-            this->y = y;
-            this->z = z;
-        }
-
-        std::string ToString() const {
-
-            return "[x = " + std::to_string(x) + " | y = " + std::to_string(y) + " | z = " + std::to_string(z) + "]";
-        }
+        std::string ToString() const;
     };
 }
 
