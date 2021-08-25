@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
 
 	Protocol::Serial serialPort;
 
-	auto observer = Star::Coordinates::Terrestial(48.30694, -14.28583);
+	auto observer = Star::Coordinates::Terrestrial(48.30694, -14.28583);
 
 	try {
 
@@ -59,8 +59,8 @@ int main(int argc, char** argv) {
 		try {
 
 			Protocol::Pack32 package = Protocol::Pack32(Protocol::Command::MOVE);
-			package.Push<float>(static_cast<float>(marsPos.altitude));
-			package.Push<float>(static_cast<float>(marsPos.azimuth));
+			package.Push<float>(static_cast<float>(marsPos.Altitude));
+			package.Push<float>(static_cast<float>(marsPos.Azimuth));
 
 			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 		}
