@@ -18,6 +18,8 @@ namespace Star::Coordinates {
 
 		std::string ToString() const;
 	};
+
+	typedef Terrestrial Observer;
 }
 
 #endif // _STARAPI_TERRESTIAL_H_
