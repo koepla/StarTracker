@@ -1,5 +1,5 @@
-#ifndef _STAR_CORE_H_
-#define _STAR_CORE_H_
+#ifndef _CORE_H_
+#define _CORE_H_
 
 #include <cstdio>
 
@@ -22,4 +22,4 @@
 
 #endif
 
-#endif // _STAR_CORE_H_
+#endif // _CORE_H_
