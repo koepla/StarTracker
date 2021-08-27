@@ -4,6 +4,7 @@ namespace Utils::Http {
 
 	HttpRequestException::HttpRequestException(std::string&& message) : message(std::move(message)) {
 	
+		
 	}
 
 	const char* HttpRequestException::what() const noexcept {
@@ -39,7 +40,7 @@ namespace Utils::Http {
 		const char* szHeaders = "Content-Type: text/html\r\n";
 		char szRequest[1024] = { 0 };
 
-		if (!HttpSendRequestA(hHttpRequest, szHeaders, strlen(szHeaders), szRequest, strlen(szRequest))) {
+		if (!HttpSendRequestA(hHttpRequest, szHeaders, static_cast<DWORD>(strlen(szHeaders)), szRequest, static_cast<DWORD>(strlen(szRequest)))) {
 
 			throw HttpRequestException("Couldn't send HTTP Request");
 		}
@@ -49,7 +50,7 @@ namespace Utils::Http {
 
 		while (InternetReadFile(hHttpRequest, szBuffer, sizeof(szBuffer) - 1, &dwRead) && dwRead) {
 
-			requestData.append(szBuffer, dwRead);
+			requestData.append(szBuffer, static_cast<size_t>(dwRead));
 		}
 
 		InternetCloseHandle(hHttpRequest);
