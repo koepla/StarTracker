@@ -21,7 +21,7 @@ namespace Protocol {
 
 		SerialException(std::string&& message) noexcept;
 
-		const char* what() const noexcept override;
+		[[nodiscard]] virtual const char* what() const noexcept override;
 	};
 
 	class Serial
