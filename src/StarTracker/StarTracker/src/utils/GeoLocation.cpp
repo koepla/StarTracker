@@ -33,9 +33,9 @@ namespace Utils::LocationService {
 		nlohmann::json jObject = nlohmann::json::parse(responseData);
 
 		// Check if the json object contains the correct key-value pairs
-		if (jObject.contains("city") && jObject.contains("lat") && jObject.contains("lon")) {
+		if (jObject.contains("country") && jObject.contains("regionName") && jObject.contains("city") && jObject.contains("lat") && jObject.contains("lon")) {
 
-			return Location({ jObject["city"].get<std::string>(), jObject["lat"].get<double>(), jObject["lon"].get<double>() });
+			return Location({ jObject["country"].get<std::string>(), jObject["regionName"].get<std::string>(), jObject["city"].get<std::string>(), jObject["lat"].get<double>(), jObject["lon"].get<double>() });
 		}
 		else {
 
