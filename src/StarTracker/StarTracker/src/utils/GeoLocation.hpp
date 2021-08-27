@@ -7,7 +7,9 @@ namespace Utils::LocationService {
 
 	struct Location {
 
-		std::string Name;
+		std::string Country;
+		std::string RegionName;
+		std::string City;
 		double Latitude;
 		double Longitude;
 	};
