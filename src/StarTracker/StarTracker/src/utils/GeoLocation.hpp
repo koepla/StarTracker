@@ -14,7 +14,7 @@ namespace Utils::LocationService {
 		double Longitude;
 	};
 
-	class GeoLocationException : std::exception {
+	class GeoLocationException : public std::exception {
 
 	private:
 		std::string message;

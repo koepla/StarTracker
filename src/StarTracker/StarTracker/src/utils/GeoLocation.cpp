@@ -23,7 +23,7 @@ namespace Utils::LocationService {
 			// Send request to ""https://ip-api.com/json/"
 			responseData = Http::HttpRequest::Get("ip-api.com", "json");
 		}
-		catch (const Http::HttpRequestException& e) {
+		catch (const Http::HttpRequestException&) {
 
 			// If the request fails, throw Exception
 			throw GeoLocationException("Couldn't get location data [Utils::Http::HttpRequest failed]");
