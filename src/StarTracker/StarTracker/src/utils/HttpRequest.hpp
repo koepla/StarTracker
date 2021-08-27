@@ -6,11 +6,9 @@
 #include <WinInet.h>
 #include <string>
 
-#pragma comment(lib, "wininet.lib")
-
 namespace Utils::Http {
 
-	class HttpRequestException : std::exception {
+	class HttpRequestException : public std::exception {
 
 	private:
 		std::string message;
