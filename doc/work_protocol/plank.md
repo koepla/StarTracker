@@ -86,3 +86,13 @@ Date:           17.08.2021
 Time spent:     2h
 ```
 Today I refactored the Protocol class on both microcontroller and client side. I also tried to write a driver for our TMC Stepper Drivers, which has some issues, but I think I isolated the problem to the Move function.
+
+---
+
+## :memo: microcontroller driver code, visual studio solution, http-requests, location-service...
+
+```
+Date:           18.08.2021 - 28.08.2021		
+Time spent:     40h
+```
+In the specified timespan I fixed the driver code for the TMC Stepper Drivers, the Issue was that I sent 64 bytes of data, but the Serial Buffer of the Arduino can by default only hold 63 bytes. After the driver code was fixed I created the Visual Studio Solution for the real source code. I implemented the now called StarAPI (Ephemeris computation framework) as a static library which is referenced by the StarTracker Project. In order to fetch ephemeris data from Webservices, I implemented a class to send HttpRequests, I later used this functionality to implemented the GeoLocation class, which returns approximated Location data. 
