@@ -66,7 +66,7 @@ namespace Protocol {
 
 		void WaitComm() noexcept;
 
-		uint32_t Available() noexcept(false);
+		[[nodiscard]] uint32_t Available() noexcept(false);
 
 	private:
 

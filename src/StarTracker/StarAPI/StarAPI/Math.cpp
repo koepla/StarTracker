@@ -57,7 +57,7 @@ namespace Star {
 		return Math::Degrees(std::atan2(y, x));
 	}
 
-	double Math::RealDegrees(double degree, double arcmin, double arcsec) {
+	double Math::DecimalDegrees(double degree, double arcmin, double arcsec) {
 
 		return (degree + arcmin / 60.0L + arcsec / 3600.0L);
 	}
