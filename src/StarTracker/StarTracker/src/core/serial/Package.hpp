@@ -136,7 +136,7 @@ namespace Protocol {
 		*	Returns a value of type T at the given index
 		*/
 		template <typename T>
-		T Read(uint32_t index) noexcept(false) {
+		[[nodiscard]] T Read(uint32_t index) noexcept(false) {
 
 			if ((index) * sizeof(T) > (BUFFER_SIZE - sizeof(T))) {
 
@@ -150,7 +150,7 @@ namespace Protocol {
 		*	Returns a pointer of type T to the buffer at the given offset
 		*/
 		template <typename T>
-		T* ReadRange(uint32_t offset) noexcept(false) {
+		[[nodiscard]] T* ReadRange(uint32_t offset) noexcept(false) {
 
 			if ((offset) * sizeof(T) > (BUFFER_SIZE - sizeof(T))) {
 
@@ -163,12 +163,12 @@ namespace Protocol {
 		/*
 		*	Returns how many bytes of the Buffer are filled
 		*/
-		size_t GetSize() const noexcept {
+		[[nodiscard]] size_t GetSize() const noexcept {
 
 			return static_cast<size_t>(header.Size);
 		}
 
-		Command GetFlag() const noexcept {
+		[[nodiscard]] Command GetFlag() const noexcept {
 
 			return header.Flag;
 		}

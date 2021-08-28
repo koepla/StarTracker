@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 
 		auto mars = Star::Coordinates::Spherical(
 			Star::Math::HourToDegrees(hour, minute, second), 
-			Star::Math::RealDegrees(degree, arcmin, arcsec));
+			Star::Math::DecimalDegrees(degree, arcmin, arcsec));
 
 		auto marsPos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(mars, observer, Star::Date::Now());
 
