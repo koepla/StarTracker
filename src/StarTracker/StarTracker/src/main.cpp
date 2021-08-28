@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
 
 		if (input == 'y') {
 
-			observer = { location.Latitude, location.Longitude };
+			observer = { location.Latitude, -location.Longitude };
 		}
 		else if (input == 'n') {
 
