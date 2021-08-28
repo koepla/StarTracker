@@ -6,6 +6,16 @@
 
 namespace Protocol {
 
+	class PackageException : public std::exception {
+
+	private:
+		std::string message;
+
+	public:
+		PackageException(std::string&& message) : message(std::move(message)) { }
+		[[nodiscard]] virtual const char* what() const noexcept override { return message.c_str(); }
+	};
+
 	/*
 	*	enumeration for protocol flags
 	*/
@@ -25,14 +35,14 @@ namespace Protocol {
 	*/
 	struct Header {
 
-		__declspec(align(1)) Command flag;
-		__declspec(align(1)) uint8_t size;
+		__declspec(align(1)) Command Flag;
+		__declspec(align(1)) uint8_t Size;
 
-		Header() : flag(Command::NONE), size(0) {
+		Header() : Flag(Command::NONE), Size(0) {
 
 		}
 
-		Header(Command flag, uint8_t size) : flag(flag), size(size) {
+		Header(const Command& flag, uint8_t size) : Flag(flag), Size(size) {
 
 		}
 	};
@@ -41,47 +51,49 @@ namespace Protocol {
 	*	protocol struct, contains header and a byte buffer, which size can be specified by the template
 	*/
 	template <uint16_t N>
-	struct Package {
+	class Package {
 
-		static constexpr uint16_t BUFF_SIZE = N - sizeof(Header);
+	private:
+		static constexpr uint16_t BUFFER_SIZE = N - sizeof(Header);
 
 		__declspec(align(1)) Header header;
-		__declspec(align(1)) uint8_t buff[BUFF_SIZE];
+		__declspec(align(1)) uint8_t buffer[BUFFER_SIZE];
 
+	public:
 		/*
 		*	Sets the header flag to NONE and the size to zero
 		*	Sets the whole buffer to 0
 		*/
-		Package() : header(Header(Command::NONE, 0)) {
+		Package() : header(Command::NONE, 0) {
 
-			static_assert(BUFF_SIZE >= 0, "Buffer size must not be negative!");
+			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 
-			std::memset(buff, 0, BUFF_SIZE);
+			std::memset(buffer, 0, BUFFER_SIZE);
 		}
 
 		/*
 		*	Sets the specified header flag
 		*	Sets size and buffer to zero
 		*/
-		Package(Command flag) : header(Header(flag, 0)) {
+		Package(const Command& flag) : header(flag, 0) {
 
-			static_assert(BUFF_SIZE >= 0, "Buffer size must not be negative!");
+			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 
-			std::memset(buff, 0, BUFF_SIZE);
+			std::memset(buffer, 0, BUFFER_SIZE);
 		}
 
-		Package& Clear() {
+		Package& Clear() noexcept {
 			
-			std::memset(buff, 0, BUFF_SIZE);
-			header.size = 0;
-			header.flag = Command::NONE;
+			std::memset(buffer, 0, BUFFER_SIZE);
+			header.Size = 0;
+			header.Flag = Command::NONE;
 
 			return *this;
 		}
 
-		Package& SetFlag(Command flag) {
+		Package& SetFlag(const Command& flag) noexcept {
 
-			header.flag = flag;
+			header.Flag = flag;
 
 			return *this;
 		}
@@ -92,21 +104,31 @@ namespace Protocol {
 		*	Copies data into the buffer
 		*/
 		template <typename T>
-		Package& Push(const T& data) {
+		Package& Push(const T& data) noexcept(false) {
 
-			uint8_t osize = header.size;
-			std::memcpy(buff + osize, &data, sizeof(T));
-			header.size += sizeof(T);
+			if (sizeof(T) + header.Size > BUFFER_SIZE) {
+
+				throw PackageException("Push would exceed remaining buffer size");
+			}
+
+			uint8_t currentSize = header.Size;
+			std::memcpy(buffer + currentSize, &data, sizeof(T));
+			header.Size += sizeof(T);
 
 			return *this;
 		}
 
 		template <typename T>
-		Package& PushRange(const T* data, uint32_t count) {
+		Package& PushRange(const T* data, uint32_t count) noexcept(false) {
 
-			uint8_t osize = header.size;
-			std::memcpy(buff + osize, data, count * sizeof(T));
-			header.size += count * sizeof(T);
+			if ((sizeof(T) * count) + header.Size > BUFFER_SIZE) {
+
+				throw PackageException("Push would exceed remaining buffer size");
+			}
+
+			uint8_t currentSize = header.Size;
+			std::memcpy(buffer + currentSize, data, count * sizeof(T));
+			header.Size += count * sizeof(T);
 			return *this;
 		}
 
@@ -114,31 +136,41 @@ namespace Protocol {
 		*	Returns a value of type T at the given index
 		*/
 		template <typename T>
-		T Read(uint32_t index) {
+		T Read(uint32_t index) noexcept(false) {
 
-			return *reinterpret_cast<T*>(buff + index * sizeof(T));
+			if ((index) * sizeof(T) > (BUFFER_SIZE - sizeof(T))) {
+
+				throw PackageException("Index out of range");
+			}
+
+			return *reinterpret_cast<T*>(buffer + index * sizeof(T));
 		}
 
 		/*
 		*	Returns a pointer of type T to the buffer at the given offset
 		*/
 		template <typename T>
-		T* ReadRange(uint32_t offset) {
+		T* ReadRange(uint32_t offset) noexcept(false) {
 
-			return reinterpret_cast<T*>(buff + offset * sizeof(T));
+			if ((offset) * sizeof(T) > (BUFFER_SIZE - sizeof(T))) {
+
+				throw PackageException("Offset out of range");
+			}
+
+			return reinterpret_cast<T*>(buffer + offset * sizeof(T));
 		}
 
 		/*
 		*	Returns how many bytes of the Buffer are filled
 		*/
-		size_t GetSize() const {
+		size_t GetSize() const noexcept {
 
-			return static_cast<size_t>(header.size);
+			return static_cast<size_t>(header.Size);
 		}
 
-		Command GetFlag() const {
+		Command GetFlag() const noexcept {
 
-			return header.flag;
+			return header.Flag;
 		}
 	};
 
