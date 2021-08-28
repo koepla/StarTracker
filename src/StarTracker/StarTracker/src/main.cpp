@@ -1,12 +1,45 @@
 #include <StarAPI/StarAPI.hpp>
 #include "core/serial/Serial.hpp"
 #include "core/serial/Package.hpp"
+#include "utils/GeoLocation.hpp"
 
 int main(int argc, char** argv) {
 
 	Protocol::Serial serialPort;
+	Utils::LocationService::Location location;
+	Star::Coordinates::Observer observer;
 
-	auto observer = Star::Coordinates::Observer(48.30694, -14.28583);
+	try {
+
+		location = Utils::LocationService::GeoLocation::Get();
+
+		std::cout << "Is this your location (" << location.City << ", " << location.RegionName << ", " << location.Country;
+		std::cout << ", Lat: " << location.Latitude << ", Lon: " << location.Longitude << ") [y,n]? ";
+
+		char input;
+		std::cin >> input;
+
+		if (input == 'y') {
+
+			observer = { location.Latitude, location.Longitude };
+		}
+		else if (input == 'n') {
+
+			std::cout << "Please enter your location <latitude> <longitude>: ";
+			double latitude, longitude;
+			std::cin >> latitude >> longitude;
+
+			observer = { latitude, longitude };
+		}
+	}
+	catch (const Utils::LocationService::GeoLocationException&) {
+	
+		std::cout << "Please enter your location <latitude> <longitude>: ";
+		double latitude, longitude;
+		std::cin >> latitude >> longitude;
+
+		observer = { latitude, longitude };
+	}
 
 	try {
 
