@@ -62,9 +62,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="lib\glfw3.lib" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="extern\glad\glad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1381,5 +1378,9 @@
     <None Include="extern\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="lib\glfw3_debug.lib" />
+    <Library Include="lib\glfw3_release.lib" />
   </ItemGroup>
 </Project>
