@@ -49,3 +49,21 @@ CONTENT     MOVE     => list of 4 byte float angles -> last 4 bytes are the time
 
 Creating an step by step instruction on how to build and print StarTracker when you first start the program.
 
+#### Editor Concept
+
+The following image shows a design idea for the editor user interface. The Editor will consist of a File Menu, and Tabs for Tracking, Scripting, Image Manipulation and a Construction Guide. 
+
+##### Tracking
+
+The Tracking Tab consists of a Panel for all the Trackable Components, e.g. supported celestial bodies. There will be an option to add a custom trackable component, where right ascension and declination or azimuth and altitude can be specified by the user. A trackable component will consist of an Image of the celestial body, the name, and the current position data. There will probably be a flag if the component is currently visible to the observer or not. 
+
+The Tracking Tab also consists of the Camera Viewport, which will render the live camera feed. The tab on the right will show Camera settings, Serial interface settings, and location settings.
+
+##### Scripting
+
+The Scripting Tab contains the Node Editor. There will be various Nodes for Trackable Components, Tracking Shots, user steered shots, and so on. There will also be a Scripting component, which will run a Lua Script or C# Script (still to be decided). The Panel on the right will display the node settings.
+
+![EditorConcept](Editorconcept.png)
+
+
+
