@@ -14,7 +14,7 @@ namespace Algo {
 
 			std::vector<T> out(size);
 
-			for (auto i = 0; i < size; i++) {
+			for (uint32_t i = 0; i < size; i++) {
 
 				out[i] = (((*(img1 + i)) + (*(img2 + i))) / 2);
 			}
