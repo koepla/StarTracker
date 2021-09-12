@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-namespace Protocol {
+namespace Serial {
 
 	class PackageException : public std::exception {
 
