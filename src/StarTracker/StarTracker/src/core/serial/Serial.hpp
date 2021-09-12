@@ -10,7 +10,7 @@
 *	For reference, see https://docs.microsoft.com/en-us/previous-versions/ff802693(v=msdn.10)?redirectedfrom=MSDN
 */
 
-namespace Protocol {
+namespace Serial {
 
 	class SerialException : public std::exception {
 
@@ -24,7 +24,7 @@ namespace Protocol {
 		[[nodiscard]] virtual const char* what() const noexcept override;
 	};
 
-	class Serial
+	class SerialPort
 	{
 	private:
 		HANDLE hCom;
@@ -33,8 +33,8 @@ namespace Protocol {
 
 	public:
 
-		Serial();
-		~Serial();
+		SerialPort();
+		~SerialPort();
 
 		/*
 		*	Opens the specified port

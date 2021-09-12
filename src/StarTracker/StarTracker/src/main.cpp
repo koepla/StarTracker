@@ -5,7 +5,7 @@
 
 int main(int argc, char** argv) {
 
-	Protocol::Serial serialPort;
+	Serial::SerialPort serialPort;
 	Utils::LocationService::Location location;
 	Star::Coordinates::Observer observer;
 
@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
 	try {
 
-		auto portNames = Protocol::Serial::GetPortNames();
+		auto portNames = Serial::SerialPort::GetPortNames();
 
 		if (portNames.size() == 0) {
 
@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
 
 		serialPort.Open(portChoice, 115200);
 	}
-	catch (const Protocol::SerialException& e) {
+	catch (const Serial::SerialException& e) {
 
 		std::cerr << e.what() << std::endl;
 		return -1;
@@ -91,13 +91,13 @@ int main(int argc, char** argv) {
 
 		try {
 
-			Protocol::Pack32 package = Protocol::Pack32(Protocol::Command::MOVE);
+			Serial::Pack32 package = Serial::Pack32(Serial::Command::MOVE);
 			package.Push<float>(static_cast<float>(marsPos.Altitude));
 			package.Push<float>(static_cast<float>(marsPos.Azimuth));
 
 			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 		}
-		catch (const Protocol::SerialException& e) {
+		catch (const Serial::SerialException& e) {
 
 			std::cerr << "Can't send data: " << e.what() << std::endl;
 		}

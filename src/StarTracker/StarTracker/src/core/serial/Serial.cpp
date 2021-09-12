@@ -14,11 +14,11 @@ namespace Protocol {
 		return this->message.c_str();
 	}
 
-	Serial::Serial() : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {
+	SerialPort::SerialPort() : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {
 
 	}
 
-	Serial::~Serial() {
+	SerialPort::~SerialPort() {
 
 		if (IsOpen()) {
 
@@ -26,7 +26,7 @@ namespace Protocol {
 		}
 	}
 
-	void Serial::Open(const std::string& port, uint32_t baudrate) noexcept(false) {
+	void SerialPort::Open(const std::string& port, uint32_t baudrate) noexcept(false) {
 
 		auto prefixed = prefixPort(port);
 		
@@ -47,7 +47,7 @@ namespace Protocol {
 		initTimeouts(64);
 	}
 
-	void Serial::Close() noexcept(false) {
+	void SerialPort::Close() noexcept(false) {
 
 		if (CloseHandle(hCom) == 0) {
 
@@ -56,7 +56,7 @@ namespace Protocol {
 		isOpen = false;
 	}
 
-	uint32_t Serial::Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false) {
+	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false) {
 
 		initTimeouts(bytes2read);
 
@@ -82,7 +82,7 @@ namespace Protocol {
 		}
 	}
 
-	uint32_t Serial::Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false) {
+	uint32_t SerialPort::Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false) {
 
 		// Number of bytes written
 		DWORD dwwritten;
@@ -104,17 +104,17 @@ namespace Protocol {
 		}
 	}
 
-	bool Serial::IsOpen() const noexcept {
+	bool SerialPort::IsOpen() const noexcept {
 
 		return isOpen && (hCom != INVALID_HANDLE_VALUE);
 	}
 
-	void Serial::WaitComm() noexcept {
+	void SerialPort::WaitComm() noexcept {
 
 		WaitCommEvent(hCom, &dwEventMask, NULL);
 	}
 
-	uint32_t Serial::Available() noexcept(false)
+	uint32_t SerialPort::Available() noexcept(false)
 	{
 		if (!IsOpen()) {
 
@@ -132,7 +132,7 @@ namespace Protocol {
 		return static_cast<uint32_t>(stat.cbInQue);
 	}
 
-	inline std::string Serial::prefixPort(const std::string& port) {
+	inline std::string SerialPort::prefixPort(const std::string& port) {
 
 		if (strncmp(port.c_str(), "\\\\.\\", 4) == 0) {
 
@@ -144,7 +144,7 @@ namespace Protocol {
 		}
 	}
 
-	void Serial::setBaudrate(uint32_t baudrate) {
+	void SerialPort::setBaudrate(uint32_t baudrate) {
 
 		DWORD baud = 0;
 
@@ -190,7 +190,7 @@ namespace Protocol {
 		}
 	}
 
-	void Serial::initReceiveMask() {
+	void SerialPort::initReceiveMask() {
 		
 		dwEventMask = EV_RXCHAR;
 
@@ -200,7 +200,7 @@ namespace Protocol {
 		}
 	}
 
-	void Serial::initTimeouts(uint32_t charCount) {
+	void SerialPort::initTimeouts(uint32_t charCount) {
 
 		COMMTIMEOUTS timeouts = { 0 };
 		timeouts.ReadIntervalTimeout = 100;
@@ -215,7 +215,7 @@ namespace Protocol {
 		}
 	}
 
-	std::vector<std::string> Serial::GetPortNames()
+	std::vector<std::string> SerialPort::GetPortNames()
 	{
 		std::vector<std::string> ports;
 		char target[4096];
