@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace Protocol {
+namespace Serial {
 
 	SerialException::SerialException(std::string&& message) noexcept : message(std::move(message)) {
 
