@@ -1,8 +1,11 @@
 #ifndef _DRIVER_H_
 #define _DRIVER_H_
 
-#include <TMCStepper.h>
+#ifndef Arduino_h
 #include <Arduino.h>
+#endif
+
+#include <TMCStepper.h>
 
 #define R_SENSE 0.11f
 #define DRIVER_ADDRESS 0x00
