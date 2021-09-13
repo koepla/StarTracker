@@ -18,7 +18,7 @@
 
 #else
 
-#define STR_ASSERT(c, ...) if(!(c)) { MessageBoxA(nullptr, c, "Startracker Assertion", NULL); }
+#define STR_ASSERT(c, m) if(!(c)) { MessageBoxA(nullptr, m, "Startracker Assertion", NULL); }
 
 #endif
 
