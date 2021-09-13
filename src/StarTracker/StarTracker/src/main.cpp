@@ -1,4 +1,5 @@
 #include <StarAPI/StarAPI.hpp>
+#include "core/Core.hpp"
 #include "core/serial/Serial.hpp"
 #include "core/serial/Package.hpp"
 #include "utils/GeoLocation.hpp"
@@ -37,7 +38,6 @@ int main(int argc, char** argv) {
 		std::cout << "Please enter your location <latitude> <longitude>: ";
 		double latitude, longitude;
 		std::cin >> latitude >> longitude;
-
 		observer = { latitude, longitude };
 	}
 
@@ -94,8 +94,7 @@ int main(int argc, char** argv) {
 			Serial::Pack32 package = Serial::Pack32(Serial::Command::MOVE);
 			package.Push<float>(static_cast<float>(marsPos.Altitude));
 			package.Push<float>(static_cast<float>(marsPos.Azimuth));
-
-			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+			STR_ASSERT(serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof(package), "Couldn't send the entire package");
 		}
 		catch (const Serial::SerialException& e) {
 
