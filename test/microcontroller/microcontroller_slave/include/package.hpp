@@ -4,7 +4,9 @@
 #define SERIAL_RX_BUFFER_SIZE 256
 #define SERIAL_TX_BUFFER_SIZE 256
 
+#ifndef Arduino_h
 #include <Arduino.h>
+#endif
 
 #pragma pack(push, 1)
 
