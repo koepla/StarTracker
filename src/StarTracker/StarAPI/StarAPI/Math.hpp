@@ -23,8 +23,8 @@ namespace Star {
 		static double ArcCosine(double angle);
 		static double ArcTangent(double angle);
 		static double ArcTangent2(double y, double x);
-		static double DecimalDegrees(double degree, double arcmin, double arcsec);
-		static double HourToDegrees(double hour, double minute, double sec);
+		static double DaaToDegrees(double degree, double arcmin, double arcsec);
+		static double HmsToDegrees(double hour, double minute, double sec);
     };
 }
 
