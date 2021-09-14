@@ -82,8 +82,8 @@ int main(int argc, char** argv) {
 		std::cin >> degree >> arcmin >> arcsec;
 
 		auto mars = Star::Coordinates::Spherical(
-			Star::Math::HourToDegrees(hour, minute, second), 
-			Star::Math::DecimalDegrees(degree, arcmin, arcsec));
+			Star::Math::HmsToDegrees(hour, minute, second), 
+			Star::Math::DaaToDegrees(degree, arcmin, arcsec));
 
 		auto marsPos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(mars, observer, Star::Date::Now());
 
