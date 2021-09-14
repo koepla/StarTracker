@@ -81,19 +81,19 @@ int main(int argc, char** argv) {
 		std::cout << "Enter Declination (Format: <degrees> <arcminutes> <arcseconds>): ";
 		std::cin >> degree >> arcmin >> arcsec;
 
-		auto mars = Star::Coordinates::Spherical(
+		auto celestialBodySpherical = Star::Coordinates::Spherical(
 			Star::Math::HmsToDegrees(hour, minute, second), 
 			Star::Math::DaaToDegrees(degree, arcmin, arcsec));
 
-		auto marsPos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(mars, observer, Star::Date::Now());
+		auto observedCelestialBody = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(celestialBodySpherical, observer, Star::Date::Now());
 
-		std::cout << "Sending computed data " << marsPos.ToString() << " to micro controller..." << std::endl;
+		std::cout << "Sending computed data " << observedCelestialBody.ToString() << " to micro controller..." << std::endl;
 
 		try {
 
 			Serial::Pack32 package = Serial::Pack32(Serial::Command::MOVE);
-			package.Push<float>(static_cast<float>(marsPos.Altitude));
-			package.Push<float>(static_cast<float>(marsPos.Azimuth));
+			package.Push<float>(static_cast<float>(observedCelestialBody.Altitude));
+			package.Push<float>(static_cast<float>(observedCelestialBody.Azimuth));
 			STR_ASSERT(serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof(package), "Couldn't send the entire package");
 		}
 		catch (const Serial::SerialException& e) {
