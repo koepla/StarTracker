@@ -57,12 +57,12 @@ namespace Star {
 		return Math::Degrees(std::atan2(y, x));
 	}
 
-	double Math::DecimalDegrees(double degree, double arcmin, double arcsec) {
+	double Math::DaaToDegrees(double degree, double arcmin, double arcsec) {
 
 		return (degree + arcmin / 60.0L + arcsec / 3600.0L);
 	}
 
-	double Math::HourToDegrees(double hour, double minute, double sec) {
+	double Math::HmsToDegrees(double hour, double minute, double sec) {
 
 		return 15.0L * (hour + minute / 60.0L + sec / 3600.0L);
 	}
