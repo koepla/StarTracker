@@ -2,7 +2,9 @@
 #include "core/Core.hpp"
 #include "core/serial/Serial.hpp"
 #include "core/serial/Package.hpp"
+#include "utils/HttpRequest.hpp"
 #include "utils/GeoLocation.hpp"
+#include "utils/Stopwatch.hpp"
 
 int main(int argc, char** argv) {
 
