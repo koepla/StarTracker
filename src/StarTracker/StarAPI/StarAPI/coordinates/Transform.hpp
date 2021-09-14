@@ -44,6 +44,10 @@ namespace Star::Coordinates {
         * 
         *   routine:
         *   rotates the given rectangular coordinates around the y axis [angle] degrees
+        *   
+        *   note:
+        *   could technically use a 4x4 rotation matrix, but due to the fact that we only need to rotate around the y axis,
+        *   this 'hard coded' rotation is faster
         */
         static void RotateY(Rectangular& rectCoords, double angle);
 
