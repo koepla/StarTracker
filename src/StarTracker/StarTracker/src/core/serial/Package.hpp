@@ -42,7 +42,7 @@ namespace Serial {
 
 		}
 
-		Header(const Command& flag, uint8_t size) : Flag(flag), Size(size) {
+		Header(Command flag, uint8_t size) : Flag(flag), Size(size) {
 
 		}
 	};
@@ -75,7 +75,7 @@ namespace Serial {
 		*	Sets the specified header flag
 		*	Sets size and buffer to zero
 		*/
-		Package(const Command& flag) : header(flag, 0) {
+		Package(Command flag) : header(flag, 0) {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 
@@ -91,7 +91,7 @@ namespace Serial {
 			return *this;
 		}
 
-		Package& SetFlag(const Command& flag) noexcept {
+		Package& SetFlag(Command flag) noexcept {
 
 			header.Flag = flag;
 
