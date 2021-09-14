@@ -23,11 +23,11 @@ namespace Utils::Diagnostics {
 
 		if (running) {
 
-			return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count();
+			return static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - startTime).count());
 		}
 		else {
 
-			return std::chrono::duration_cast<std::chrono::milliseconds>(stopTime - startTime).count();
+			return static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(stopTime - startTime).count());
 		}
 	}
 }
