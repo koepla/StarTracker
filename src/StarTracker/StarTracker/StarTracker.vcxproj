@@ -107,6 +107,7 @@
     <ClCompile Include="src\utils\HttpRequest.cpp" />
     <ClCompile Include="src\core\serial\Serial.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\utils\Stopwatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -417,6 +418,7 @@
     <ClInclude Include="src\core\Core.hpp" />
     <ClInclude Include="src\core\serial\Package.hpp" />
     <ClInclude Include="src\core\serial\Serial.hpp" />
+    <ClInclude Include="src\utils\Stopwatch.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="extern\glm\detail\func_common.inl" />
