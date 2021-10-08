@@ -8,6 +8,24 @@
 
 int main(int argc, char** argv) {
 
+	try {
+
+		auto elements = Star::Ephemeris::CelestialBody::LoadFromFile("assets/KeplarianElements.json");
+
+		for (auto& e : elements) {
+
+			std::cout << e.GetName();
+		}
+	}
+	catch (const std::exception& e) {
+
+		std::cerr << e.what() << std::endl;
+	}
+
+	return 0;
+
+	
+
 	Serial::SerialPort serialPort;
 	Utils::LocationService::Location location;
 	Star::Coordinates::Observer observer;

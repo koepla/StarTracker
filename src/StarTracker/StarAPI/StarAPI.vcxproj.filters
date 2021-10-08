@@ -39,6 +39,12 @@
     <ClInclude Include="StarAPI\coordinates\Transform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StarAPI\ephemeris\KeplarianElements.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StarAPI\ephemeris\CelestialBody.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StarAPI\coordinates\Transform.cpp">
@@ -60,6 +66,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarAPI\Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StarAPI\ephemeris\KeplarianElements.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StarAPI\ephemeris\CelestialBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

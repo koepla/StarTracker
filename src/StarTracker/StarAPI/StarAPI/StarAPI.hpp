@@ -8,5 +8,7 @@
 #include "coordinates/Spherical.hpp"
 #include "coordinates/Terrestrial.hpp"
 #include "coordinates/Transform.hpp"
+#include "ephemeris/KeplarianElements.hpp"
+#include "ephemeris/CelestialBody.hpp"
 
 #endif
