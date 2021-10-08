@@ -1,0 +1,20 @@
+{
+  "CelestialBodies": [
+
+    {
+      "Name": "Mercury",
+      "SemiMajorAxis": 0.38709927,
+      "SemiMajorAxisCentury": 0.00000037,
+      "Eccentricity": 0.20563593,
+      "EccentricityCentury": 0.00001906,
+      "Inclination": 7.00497902,
+      "InclinationCentury": -0.00594749,
+      "MeanLongitude": 252.25032350,
+      "MeanLongitudeCentury": 149472.67411175,
+      "LonPerihelion": 77.45779628,
+      "LonPerihelionCentury": 0.16047689,
+      "LonAscendingNode": 48.33076593,
+      "LonAscendingNodeCentury": -0.12534081
+    }
+  ]
+}
