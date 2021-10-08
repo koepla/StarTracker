@@ -18,7 +18,7 @@
     <ClInclude Include="StarAPI\StarAPI.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\Date.hpp">
+    <ClInclude Include="StarAPI\DateTime.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StarAPI\Math.hpp">
@@ -62,7 +62,7 @@
     <ClCompile Include="StarAPI\coordinates\Terrestrial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StarAPI\Date.cpp">
+    <ClCompile Include="StarAPI\DateTime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarAPI\Math.cpp">

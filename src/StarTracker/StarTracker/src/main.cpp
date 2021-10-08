@@ -15,9 +15,9 @@ int main(int argc, char** argv) {
 		for (auto& e : elements) {
 
 			std::cout << e.GetName() << std::endl;
-			auto sph = e.GetSphericalPosition(Star::Date::Now());
+			auto sph = e.GetSphericalPosition(Star::DateTime::Now());
 			auto location = Utils::LocationService::GeoLocation::Get();
-			auto pos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, Star::Date::Now());
+			auto pos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, Star::DateTime::Now());
 		
 			std::cout << pos.ToString() << std::endl;
 		}
@@ -27,9 +27,7 @@ int main(int argc, char** argv) {
 		std::cerr << e.what() << std::endl;
 	}
 
-	return 0;
-
-	
+	return 0;	
 
 	Serial::SerialPort serialPort;
 	Utils::LocationService::Location location;
@@ -110,7 +108,7 @@ int main(int argc, char** argv) {
 			Star::Math::HmsToDegrees(hour, minute, second), 
 			Star::Math::DaaToDegrees(degree, arcmin, arcsec));
 
-		auto observedCelestialBody = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(celestialBodySpherical, observer, Star::Date::Now());
+		auto observedCelestialBody = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(celestialBodySpherical, observer, Star::DateTime::Now());
 
 		std::cout << "Sending computed data " << observedCelestialBody.ToString() << " to micro controller..." << std::endl;
 

@@ -1,21 +1,21 @@
-#include "Date.hpp"
+#include "DateTime.hpp"
 
 namespace Star {
 
-	Date::Date(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) 
+	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) 
 	: Year(year), Month(month), Day(day), Hour(hour), Minute(minute), Second(second) 
 	{
 
 	}
 
 
-	Date Date::Now() {
+	DateTime DateTime::Now() {
 
 		std::time_t time = std::time(0);
 		tm ltm = tm();
 		localtime_s(&ltm, &time);
 
-		return Date(static_cast<int64_t>(ltm.tm_year) + 1900, 
+		return DateTime(static_cast<int64_t>(ltm.tm_year) + 1900, 
 					static_cast<int64_t>(ltm.tm_mon) + 1, 
 					static_cast<int64_t>(ltm.tm_mday),
 					static_cast<int64_t>(ltm.tm_hour),
@@ -23,12 +23,12 @@ namespace Star {
 					static_cast<int64_t>(ltm.tm_sec));
 	}
 
-	double Date::Jdn(const Date& date) {
+	double DateTime::Jdn(const DateTime& date) {
 
 		return Mjdn(date) + 2400000.5L;
 	}
 
-	double Date::Mjdn(const Date& date) {
+	double DateTime::Mjdn(const DateTime& date) {
 
 		auto mod = date;
 
@@ -56,13 +56,13 @@ namespace Star {
 
 	}
 
-	double Date::JulianCenturies(const Date& date, bool floor) {
+	double DateTime::JulianCenturies(const DateTime& date, bool floor) {
 
-		double jdn = floor ? std::floor(Date::Jdn(date)) : Date::Jdn(date);
+		double jdn = floor ? std::floor(DateTime::Jdn(date)) : DateTime::Jdn(date);
 		return (jdn - 2451545.0L) / 36525.0L;
 	}
 
-	double Date::BesselEpoch(const Date& date) {
+	double DateTime::BesselEpoch(const DateTime& date) {
 
 		return 1900 + (Jdn(date) - 2415020.31352L) / 365.242198781L;
 	}
@@ -70,10 +70,10 @@ namespace Star {
 	/*
 	*	Greenwich mean sidereal time in degrees
 	*/
-	double Date::Gmst(const Date& date) {
+	double DateTime::Gmst(const DateTime& date) {
 
 		const double secs = 86400.0L;
-		double mjd = Date::Mjdn(date);
+		double mjd = DateTime::Mjdn(date);
 		double mjd_0 = std::floor(mjd);
 		double UT = secs * (mjd - mjd_0); // [s]
 		double T = (mjd - 51544.5L) / 36525.0L;
@@ -100,7 +100,7 @@ namespace Star {
 		return gmstDeg;
 	}
 
-	std::string Date::ToString() const {
+	std::string DateTime::ToString() const {
 
 		char buff[100];
 		sprintf_s(buff, sizeof(buff),

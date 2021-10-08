@@ -103,7 +103,7 @@
     <ClInclude Include="StarAPI\coordinates\Spherical.hpp" />
     <ClInclude Include="StarAPI\coordinates\Terrestrial.hpp" />
     <ClInclude Include="StarAPI\coordinates\Transform.hpp" />
-    <ClInclude Include="StarAPI\Date.hpp" />
+    <ClInclude Include="StarAPI\DateTime.hpp" />
     <ClInclude Include="StarAPI\Math.hpp" />
     <ClInclude Include="StarAPI\StarAPI.hpp" />
   </ItemGroup>
@@ -115,7 +115,7 @@
     <ClCompile Include="StarAPI\coordinates\Spherical.cpp" />
     <ClCompile Include="StarAPI\coordinates\Terrestrial.cpp" />
     <ClCompile Include="StarAPI\coordinates\Transform.cpp" />
-    <ClCompile Include="StarAPI\Date.cpp" />
+    <ClCompile Include="StarAPI\DateTime.cpp" />
     <ClCompile Include="StarAPI\Math.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
