@@ -14,7 +14,12 @@ int main(int argc, char** argv) {
 
 		for (auto& e : elements) {
 
-			std::cout << e.GetName();
+			std::cout << e.GetName() << std::endl;
+			auto sph = e.GetSphericalPosition(Star::Date::Now());
+			auto location = Utils::LocationService::GeoLocation::Get();
+			auto pos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, Star::Date::Now());
+		
+			std::cout << pos.ToString() << std::endl;
 		}
 	}
 	catch (const std::exception& e) {

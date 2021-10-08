@@ -12,6 +12,7 @@ namespace Star {
         static inline constexpr long double PI = 3.14159265355897L;
         static inline constexpr long double PI2 = (2 * PI);
 
+		static double Abs(double x);
 		static double Frac(double x);
 		static double Mod(double a, double b);
 		static double Degrees(double radians);

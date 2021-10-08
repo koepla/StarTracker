@@ -22,7 +22,7 @@ namespace Star::Ephemeris {
 		CelestialBody(const KeplarianElements& keplerElements, const KeplarianElements& keplerElementsCentury);
 		CelestialBody(const std::string& name, const KeplarianElements& keplerElements, const KeplarianElements& keplerElementsCentury);
 		[[nodiscard]] const std::string& GetName() const noexcept;
-		[[nodiscard]] Star::Coordinates::Spherical GetSphericalPosition(const Date& date) const noexcept;
+		[[nodiscard]] Star::Coordinates::Spherical GetSphericalPosition(const Date& date, double eps = 1e-12) const noexcept;
 
 	public:
 		[[nodiscard]] static std::vector<CelestialBody> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
