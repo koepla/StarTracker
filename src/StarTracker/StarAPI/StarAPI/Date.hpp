@@ -39,7 +39,7 @@ namespace Star {
 		/*
 		*	calculates the julian centuries via the julian day number
 		*/
-		static double JulienCenturies(const Date& date, bool floor = false);
+		static double JulianCenturies(const Date& date, bool floor = false);
 
 		/*
 		*	returns the bessel epoch

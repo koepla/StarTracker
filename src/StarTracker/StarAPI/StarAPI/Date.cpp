@@ -56,7 +56,7 @@ namespace Star {
 
 	}
 
-	double Date::JulienCenturies(const Date& date, bool floor) {
+	double Date::JulianCenturies(const Date& date, bool floor) {
 
 		double jdn = floor ? std::floor(Date::Jdn(date)) : Date::Jdn(date);
 		return (jdn - 2451545.0L) / 36525.0L;
