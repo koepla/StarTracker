@@ -60,7 +60,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)StarTracker\extern\;$(SolutionDir)StarAPI\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)extern\;$(SolutionDir)StarTracker\extern\;$(SolutionDir)StarAPI\</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -79,7 +79,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)StarTracker\extern\;$(SolutionDir)StarAPI\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)extern\;$(SolutionDir)StarTracker\extern\;$(SolutionDir)StarAPI\</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -421,6 +421,7 @@
     <ClInclude Include="src\utils\Stopwatch.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\KeplarianElements.json" />
     <None Include="extern\glm\detail\func_common.inl" />
     <None Include="extern\glm\detail\func_common_simd.inl" />
     <None Include="extern\glm\detail\func_exponential.inl" />
