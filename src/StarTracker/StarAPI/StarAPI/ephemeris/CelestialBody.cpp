@@ -17,7 +17,7 @@ namespace Star::Ephemeris {
         return name;
     }
 
-    Star::Coordinates::Spherical CelestialBody::GetSphericalPosition(const Date& date) const noexcept
+    Star::Coordinates::Spherical CelestialBody::GetSphericalPosition(const Date& date, double eps) const noexcept
     {
         double t = Date::JulianCenturies(date);
 
@@ -31,11 +31,55 @@ namespace Star::Ephemeris {
             keplerElements.LonAscendingNode + keplerElementsCentury.LonAscendingNode * t
         };
 
-        double perihelion = currKeplerElem.LonPerihelion - currKeplerElem.LonAscendingNode;
-        double meanAnomaly = currKeplerElem.MeanLongitude - currKeplerElem.LonPerihelion;
+        double w = currKeplerElem.LonPerihelion;
+        double Om = currKeplerElem.LonAscendingNode;
+        double I = currKeplerElem.Inclination;
 
+        // compute argument of perihelion and mean anomaly
 
-        return Star::Coordinates::Spherical();
+        double perihelion = w - Om;
+        double meanAnomaly = Math::Mod(currKeplerElem.MeanLongitude - w, 360.0);
+
+        // compute eccentric anomaly
+
+        double edeg = Math::Degrees(currKeplerElem.Eccentricity);
+        double erad = currKeplerElem.Eccentricity;
+
+        double eccentricAnomaly = meanAnomaly + edeg * Math::Sine(meanAnomaly);
+        double de;
+
+        do {
+
+            double dm = meanAnomaly - (eccentricAnomaly - edeg * Math::Sine(eccentricAnomaly));
+            de = dm / (1 - erad * Math::Cosine(eccentricAnomaly));
+            eccentricAnomaly += de;
+
+        } while (Math::Abs(de) > eps);
+
+        // The above part should work and checks with online sources, the code below doesn't work!
+
+        // compute planets heliocentric coordinates in orbital plane (x axis aligned from the focus to perihelion)
+
+        double x = currKeplerElem.SemiMajorAxis * (Math::Cosine(eccentricAnomaly) - currKeplerElem.Eccentricity);
+        double y = currKeplerElem.SemiMajorAxis * std::sqrt(1 - std::pow(currKeplerElem.Eccentricity, 2)) * Math::Sine(eccentricAnomaly);
+        double z = 0;
+
+        double xecl = (Math::Cosine(w) * Math::Cosine(Om) - Math::Sine(w) * Math::Sine(Om) * Math::Cosine(I)) * x + (-Math::Sine(w) * Math::Cosine(Om) - Math::Cosine(w) * Math::Sine(Om) * Math::Cosine(I)) * y;
+        double yecl = (Math::Cosine(w) * Math::Sine(Om) + Math::Sine(w) * Math::Cosine(Om) * Math::Cosine(I)) * x + (-Math::Sine(w) * Math::Sine(Om) + Math::Cosine(w) * Math::Cosine(Om) * Math::Cosine(I)) * y;
+        double zecl = (Math::Sine(w) * Math::Sine(I)) * x + (Math::Cosine(w) * Math::Cosine(I)) * y;
+
+        // compute equatorial coordinates in the ICRF frame
+
+        double xeq = xecl;
+        double yeq = Math::Cosine(23.43928) * yecl - Math::Sine(23.43928) * zecl;
+        double zeq = Math::Sine(23.43928) * yecl + Math::Cosine(23.43928) * zecl;
+
+        return Coordinates::Spherical{
+
+            std::sqrt(xeq * xeq + yeq * yeq + zeq * zeq), // radius
+            Math::ArcTangent2(yeq, xeq),// RA
+            Math::ArcTangent(zeq / std::sqrt(xeq * xeq + yeq * yeq)) // DECL
+        };
     }
 
     std::vector<CelestialBody> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false)

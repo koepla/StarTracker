@@ -2,6 +2,11 @@
 
 namespace Star {
 
+	double Math::Abs(double x) {
+
+		return x < 0 ? -x : x;
+	}
+
 	double Math::Frac(double x) {
 
 		return x - std::floor(x);
