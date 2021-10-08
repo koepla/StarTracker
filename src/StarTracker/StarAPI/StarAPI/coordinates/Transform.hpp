@@ -6,7 +6,7 @@
 #include "Spherical.hpp"
 #include "Rectangular.hpp"
 #include "Terrestrial.hpp"
-#include "../Date.hpp"
+#include "../DateTime.hpp"
 
 /*
 *   Calculations are based on the pdf doc\references\astronomy_with_personal_computer.pdf
@@ -68,7 +68,7 @@ namespace Star::Coordinates {
         *   routine:
         *   calculates the horizontal coordinates for given spherical coordinates and an observer at a certain date
         */
-        static Horizontal TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const Date& date);
+        static Horizontal TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date);
     };
 }
 

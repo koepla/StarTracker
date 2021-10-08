@@ -17,11 +17,11 @@ namespace Star::Ephemeris {
         return name;
     }
 
-    Star::Coordinates::Spherical CelestialBody::GetSphericalPosition(const Date& date, double eps) const noexcept
+    Star::Coordinates::Spherical CelestialBody::GetSphericalPosition(const DateTime& date, double eps) const noexcept
     {
-        double t = Date::JulianCenturies(date);
+        double t = DateTime::JulianCenturies(date);
 
-        KeplarianElements currKeplerElem = {
+        KeplarianElements meanKeplerElem = {
 
             keplerElements.SemiMajorAxis + keplerElementsCentury.SemiMajorAxis * t,
             keplerElements.Eccentricity + keplerElementsCentury.Eccentricity * t,
@@ -31,19 +31,19 @@ namespace Star::Ephemeris {
             keplerElements.LonAscendingNode + keplerElementsCentury.LonAscendingNode * t
         };
 
-        double w = currKeplerElem.LonPerihelion;
-        double Om = currKeplerElem.LonAscendingNode;
-        double I = currKeplerElem.Inclination;
+        double w = meanKeplerElem.LonPerihelion;
+        double Om = meanKeplerElem.LonAscendingNode;
+        double I = meanKeplerElem.Inclination;
 
         // compute argument of perihelion and mean anomaly
 
         double perihelion = w - Om;
-        double meanAnomaly = Math::Mod(currKeplerElem.MeanLongitude - w, 360.0);
+        double meanAnomaly = Math::Mod(meanKeplerElem.MeanLongitude - w, 360.0);
 
         // compute eccentric anomaly
 
-        double edeg = Math::Degrees(currKeplerElem.Eccentricity);
-        double erad = currKeplerElem.Eccentricity;
+        double edeg = Math::Degrees(meanKeplerElem.Eccentricity);
+        double erad = meanKeplerElem.Eccentricity;
 
         double eccentricAnomaly = meanAnomaly + edeg * Math::Sine(meanAnomaly);
         double de;
@@ -57,11 +57,12 @@ namespace Star::Ephemeris {
         } while (Math::Abs(de) > eps);
 
         // The above part should work and checks with online sources, the code below doesn't work!
+        // TODO: Figure out why the below code doesn't work
 
         // compute planets heliocentric coordinates in orbital plane (x axis aligned from the focus to perihelion)
 
-        double x = currKeplerElem.SemiMajorAxis * (Math::Cosine(eccentricAnomaly) - currKeplerElem.Eccentricity);
-        double y = currKeplerElem.SemiMajorAxis * std::sqrt(1 - std::pow(currKeplerElem.Eccentricity, 2)) * Math::Sine(eccentricAnomaly);
+        double x = meanKeplerElem.SemiMajorAxis * (Math::Cosine(eccentricAnomaly) - meanKeplerElem.Eccentricity);
+        double y = meanKeplerElem.SemiMajorAxis * std::sqrt(1 - std::pow(meanKeplerElem.Eccentricity, 2)) * Math::Sine(eccentricAnomaly);
         double z = 0;
 
         double xecl = (Math::Cosine(w) * Math::Cosine(Om) - Math::Sine(w) * Math::Sine(Om) * Math::Cosine(I)) * x + (-Math::Sine(w) * Math::Cosine(Om) - Math::Cosine(w) * Math::Sine(Om) * Math::Cosine(I)) * y;

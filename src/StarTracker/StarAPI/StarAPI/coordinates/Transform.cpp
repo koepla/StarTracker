@@ -68,9 +68,9 @@ namespace Star::Coordinates {
 		return horizontalCoords;
 	}
 
-	Horizontal Transform::TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const Date& date) {
+	Horizontal Transform::TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) {
 
-		double hourAngle = Date::Gmst(date) + observer.Longitude - sphericalCoords.RightAscension;
+		double hourAngle = DateTime::Gmst(date) + observer.Longitude - sphericalCoords.RightAscension;
 		return EquatorialToHorizontal(sphericalCoords.Declination, hourAngle, observer.Latitude);
 	}
 }
