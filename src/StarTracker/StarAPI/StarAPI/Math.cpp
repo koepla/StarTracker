@@ -1,6 +1,6 @@
 #include "Math.hpp"
 
-namespace Star {
+namespace StarTracker {
 
 	double Math::Abs(double x) {
 
