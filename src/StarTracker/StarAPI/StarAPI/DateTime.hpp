@@ -1,5 +1,5 @@
-#ifndef _STARAPI_DATE_H_
-#define _STARAPI_DATE_H_
+#ifndef STARAPI_DATETIME_H
+#define STARAPI_DATETIME_H
 
 #include "Math.hpp"
 #include <ctime>
@@ -9,7 +9,7 @@
 *	date struct for simplification and convenience
 */
 
-namespace Star {
+namespace StarTracker {
 
 	class DateTime {
 
@@ -58,4 +58,4 @@ namespace Star {
 	};
 }
 
-#endif //_STARAPI_DATE_H_
+#endif //STARAPI_DATETIME_H

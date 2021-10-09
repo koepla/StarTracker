@@ -1,10 +1,10 @@
-#ifndef _STARAPI_MATH_H_
-#define _STARAPI_MATH_H_
+#ifndef STARAPI_MATH_H
+#define STARAPI_MATH_H
 
 #include <cstdint>
 #include <cmath>
 
-namespace Star {
+namespace StarTracker {
 
     class Math {
 
@@ -29,4 +29,4 @@ namespace Star {
     };
 }
 
-#endif // _STARAPI_MATH_
+#endif // STARAPI_MATH_H

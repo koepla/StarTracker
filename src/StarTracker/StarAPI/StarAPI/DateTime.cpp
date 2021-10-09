@@ -1,6 +1,6 @@
 #include "DateTime.hpp"
 
-namespace Star {
+namespace StarTracker {
 
 	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) 
 	: Year(year), Month(month), Day(day), Hour(hour), Minute(minute), Second(second) 
@@ -53,7 +53,6 @@ namespace Star {
 		double realHour = (double)(mod.Hour + mod.Minute / 60.0L + mod.Second / 3600.0L);
 
 		return (365LL * mod.Year - 679004LL + b + int64_t(30.6001 * (mod.Month + 1LL)) + mod.Day) + realHour / 24.0L;
-
 	}
 
 	double DateTime::JulianCenturies(const DateTime& date, bool floor) {

@@ -1,13 +1,13 @@
 #include "CelestialBody.hpp"
 
-namespace Star::Ephemeris {
+namespace StarTracker::Ephemeris {
 
-    CelestialBody::CelestialBody(const KeplarianElements& keplerElements, const KeplarianElements& keplerElementsCentury) : CelestialBody("Unnamed Celestial Body", keplerElements, keplerElementsCentury)
+    CelestialBody::CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) : CelestialBody("Unnamed Celestial Body", keplerElements, keplerElementsCentury)
     {
 
     }
 
-    CelestialBody::CelestialBody(const std::string& name, const KeplarianElements& keplerElements, const KeplarianElements& keplerElementsCentury) : name(name), keplerElements(keplerElements), keplerElementsCentury(keplerElementsCentury)
+    CelestialBody::CelestialBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) : name(name), keplerElements(keplerElements), keplerElementsCentury(keplerElementsCentury)
     {
 
     }
@@ -17,11 +17,11 @@ namespace Star::Ephemeris {
         return name;
     }
 
-    Star::Coordinates::Spherical CelestialBody::GetSphericalPosition(const DateTime& date, double eps) const noexcept
+    StarTracker::Ephemeris::Coordinates::Spherical CelestialBody::GetSphericalPosition(const DateTime& date, double eps) const noexcept
     {
         double t = DateTime::JulianCenturies(date);
 
-        KeplarianElements meanKeplerElem = {
+        KeplerianElements meanKeplerElem = {
 
             keplerElements.SemiMajorAxis + keplerElementsCentury.SemiMajorAxis * t,
             keplerElements.Eccentricity + keplerElementsCentury.Eccentricity * t,
@@ -109,7 +109,7 @@ namespace Star::Ephemeris {
             celestialBodies.push_back(CelestialBody{
 
                 element["Name"].get<std::string>(),
-                KeplarianElements {
+                KeplerianElements {
 
                     element["SemiMajorAxis"].get<double>(),
                     element["Eccentricity"].get<double>(),
@@ -118,7 +118,7 @@ namespace Star::Ephemeris {
                     element["LonPerihelion"].get<double>(),
                     element["LonAscendingNode"].get<double>()
                 },
-                KeplarianElements {
+                KeplerianElements {
 
                     element["SemiMajorAxisCentury"].get<double>(),
                     element["EccentricityCentury"].get<double>(),
@@ -176,7 +176,7 @@ namespace Star::Ephemeris {
     {
         // The EM-Bary keplarian elements are hardcoded because they are needed for every computation
 
-        KeplarianElements meanEarth{};
+        KeplerianElements meanEarth{};
         meanEarth.SemiMajorAxis = 1.00000261 + 0.00000562 * julianCenturies;
         meanEarth.Eccentricity = 0.01671022 - 0.00003804 * julianCenturies;
         meanEarth.Inclination = 0.00005 - 0.01294668 * julianCenturies;
@@ -209,5 +209,3 @@ namespace Star::Ephemeris {
         return earthCoords;
     }
 }
-
-
