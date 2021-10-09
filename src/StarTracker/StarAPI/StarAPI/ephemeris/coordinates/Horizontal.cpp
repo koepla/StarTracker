@@ -1,6 +1,6 @@
 #include "Horizontal.hpp"
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
 	Horizontal::Horizontal() : Azimuth(0), Altitude(0) {
 

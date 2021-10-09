@@ -1,6 +1,6 @@
 #include "Transform.hpp"
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
     Rectangular Transform::SphericalToRectangular(const Spherical& coords) {
 

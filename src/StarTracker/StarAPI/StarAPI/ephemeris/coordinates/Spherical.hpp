@@ -1,9 +1,9 @@
-#ifndef _STARAPI_SPHERICAL_H_
-#define _STARAPI_SPHERICAL_H_
+#ifndef STARAPI_EPHEMERIS_COORDINATES_SPHERICAL_H
+#define STARAPI_EPHEMERIS_COORDINATES_SPHERICAL_H
 
 #include <string>
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
     struct Spherical {
 
@@ -18,4 +18,4 @@ namespace Star::Coordinates {
     };
 }
 
-#endif // _STARAPI_SPHERICAL_H_
+#endif // STARAPI_EPHEMERIS_COORDINATES_SPHERICAL_H

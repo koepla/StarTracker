@@ -1,6 +1,6 @@
 #include "Rectangular.hpp"
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
 	Rectangular::Rectangular() : X(0), Y(0), Z(0) {
 
