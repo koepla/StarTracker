@@ -1,5 +1,5 @@
-#ifndef _SERIAL_H_
-#define _SERIAL_H_
+#ifndef STARTRACKER_SERIAL_SERIAL_H
+#define STARTRACKER_SERIAL_SERIAL_H
 
 #include <iostream>
 #include <windows.h>
@@ -92,4 +92,4 @@ namespace Serial {
 	};
 }
 
-#endif // _SERIAL_H_
+#endif // STARTRACKER_SERIAL_SERIAL_H

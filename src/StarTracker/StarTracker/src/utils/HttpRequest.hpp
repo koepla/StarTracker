@@ -1,5 +1,5 @@
-#ifndef _HTTPREQUEST_H_
-#define _HTTPREQUEST_H_
+#ifndef STARTRACKER_UTILS_HTTPREQUEST_H
+#define STARTRACKER_UTILS_HTTPREQUEST_H
 
 #include <iostream>
 #include <Windows.h>
@@ -45,4 +45,4 @@ namespace Utils::Http {
 	};
 }
 
-#endif // _HTTPREQUEST_H_
+#endif // STARTRACKER_UTILS_HTTPREQUEST_H

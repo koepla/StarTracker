@@ -1,5 +1,5 @@
-#ifndef _LOCATION_H_
-#define _LOCATION_H_
+#ifndef STARTRACKER_UTILS_GEOLOCATION_H
+#define STARTRACKER_UTILS_GEOLOCATION_H
 
 #include <string>
 
@@ -52,4 +52,4 @@ namespace Utils::LocationService {
 	};
 }
 
-#endif // _LOCATION_H_
+#endif // STARTRACKER_UTILS_GEOLOCATION_H
