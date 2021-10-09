@@ -1,14 +1,14 @@
-#ifndef _STAR_API_H_
-#define _STAR_API_H_
+#ifndef STARAPI_H
+#define STARAPI_H
 
 #include "DateTime.hpp"
 #include "Math.hpp"
-#include "coordinates/Horizontal.hpp"
-#include "coordinates/Rectangular.hpp"
-#include "coordinates/Spherical.hpp"
-#include "coordinates/Terrestrial.hpp"
-#include "coordinates/Transform.hpp"
-#include "ephemeris/KeplarianElements.hpp"
+#include "ephemeris/coordinates/Horizontal.hpp"
+#include "ephemeris/coordinates/Rectangular.hpp"
+#include "ephemeris/coordinates/Spherical.hpp"
+#include "ephemeris/coordinates/Terrestrial.hpp"
+#include "ephemeris/coordinates/Transform.hpp"
+#include "ephemeris/KeplerianElements.hpp"
 #include "ephemeris/CelestialBody.hpp"
 
-#endif
+#endif // STARAPI_H

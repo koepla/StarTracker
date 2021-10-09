@@ -1,6 +1,6 @@
 #include "Spherical.hpp"
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
 	Spherical::Spherical() : RightAscension(0), Declination(0), Radius(1) {
 

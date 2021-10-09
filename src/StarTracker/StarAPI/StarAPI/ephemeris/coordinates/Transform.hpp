@@ -1,19 +1,19 @@
-#ifndef _STARAPI_COORDINATES_H_
-#define _STARAPI_COORDINATES_H_
+#ifndef STARAPI_EPHEMERIS_COORDINATES_TRANSFORM_H
+#define STARAPI_EPHEMERIS_COORDINATES_TRANSFORM_H
 
-#include "../Math.hpp"
+#include "../../Math.hpp"
 #include "Horizontal.hpp"
 #include "Spherical.hpp"
 #include "Rectangular.hpp"
 #include "Terrestrial.hpp"
-#include "../DateTime.hpp"
+#include "../../DateTime.hpp"
 
 /*
 *   Calculations are based on the pdf doc\references\astronomy_with_personal_computer.pdf
 *   For further reference, also see http://www.stjarnhimlen.se/comp/tutorial.html 
 */
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
     class Transform {
 
@@ -72,4 +72,4 @@ namespace Star::Coordinates {
     };
 }
 
-#endif // _STARAPI_COORDINATES_H_
+#endif // STARAPI_EPHEMERIS_COORDINATES_TRANSFORM_H

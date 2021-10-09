@@ -421,7 +421,7 @@
     <ClInclude Include="src\utils\Stopwatch.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\KeplarianElements.json" />
+    <None Include="assets\CelestialBodies.json" />
     <None Include="extern\glm\detail\func_common.inl" />
     <None Include="extern\glm\detail\func_common_simd.inl" />
     <None Include="extern\glm\detail\func_exponential.inl" />

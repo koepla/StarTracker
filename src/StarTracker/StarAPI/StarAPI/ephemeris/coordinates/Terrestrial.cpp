@@ -1,6 +1,6 @@
 #include "Terrestrial.hpp"
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
 	Terrestrial::Terrestrial() : Latitude(0), Longitude(0) {
 

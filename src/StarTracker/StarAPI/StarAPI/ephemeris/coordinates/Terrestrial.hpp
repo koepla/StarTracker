@@ -1,9 +1,9 @@
-#ifndef _STARAPI_TERRESTIAL_H_
-#define _STARAPI_TERRESTIAL_H_
+#ifndef STARAPI_EPHEMERIS_COORDINATES_TERRESTRIAL_H
+#define STARAPI_EPHEMERIS_COORDINATES_TERRESTRIAL_H
 
 #include <string>
 
-namespace Star::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates {
 
 	struct Terrestrial {
 
@@ -22,4 +22,4 @@ namespace Star::Coordinates {
 	typedef Terrestrial Observer;
 }
 
-#endif // _STARAPI_TERRESTIAL_H_
+#endif // STARAPI_EPHEMERIS_COORDINATES_TERRESTRIAL_H

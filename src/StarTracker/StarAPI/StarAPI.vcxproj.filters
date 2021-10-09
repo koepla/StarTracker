@@ -24,22 +24,22 @@
     <ClInclude Include="StarAPI\Math.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\coordinates\Horizontal.hpp">
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Horizontal.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\coordinates\Rectangular.hpp">
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Rectangular.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\coordinates\Spherical.hpp">
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Spherical.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\coordinates\Terrestrial.hpp">
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Terrestrial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\coordinates\Transform.hpp">
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Transform.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StarAPI\ephemeris\KeplarianElements.hpp">
+    <ClInclude Include="StarAPI\ephemeris\KeplerianElements.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StarAPI\ephemeris\CelestialBody.hpp">
@@ -47,19 +47,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StarAPI\coordinates\Transform.cpp">
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StarAPI\coordinates\Horizontal.cpp">
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Horizontal.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StarAPI\coordinates\Rectangular.cpp">
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Rectangular.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StarAPI\coordinates\Spherical.cpp">
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Spherical.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StarAPI\coordinates\Terrestrial.cpp">
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Terrestrial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarAPI\DateTime.cpp">
@@ -68,7 +68,7 @@
     <ClCompile Include="StarAPI\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StarAPI\ephemeris\KeplarianElements.cpp">
+    <ClCompile Include="StarAPI\ephemeris\KeplerianElements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StarAPI\ephemeris\CelestialBody.cpp">

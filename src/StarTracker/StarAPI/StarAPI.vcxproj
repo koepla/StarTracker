@@ -97,24 +97,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="StarAPI\ephemeris\CelestialBody.hpp" />
-    <ClInclude Include="StarAPI\ephemeris\KeplarianElements.hpp" />
-    <ClInclude Include="StarAPI\coordinates\Horizontal.hpp" />
-    <ClInclude Include="StarAPI\coordinates\Rectangular.hpp" />
-    <ClInclude Include="StarAPI\coordinates\Spherical.hpp" />
-    <ClInclude Include="StarAPI\coordinates\Terrestrial.hpp" />
-    <ClInclude Include="StarAPI\coordinates\Transform.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\KeplerianElements.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Horizontal.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Rectangular.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Spherical.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Terrestrial.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\coordinates\Transform.hpp" />
     <ClInclude Include="StarAPI\DateTime.hpp" />
     <ClInclude Include="StarAPI\Math.hpp" />
     <ClInclude Include="StarAPI\StarAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StarAPI\ephemeris\CelestialBody.cpp" />
-    <ClCompile Include="StarAPI\ephemeris\KeplarianElements.cpp" />
-    <ClCompile Include="StarAPI\coordinates\Horizontal.cpp" />
-    <ClCompile Include="StarAPI\coordinates\Rectangular.cpp" />
-    <ClCompile Include="StarAPI\coordinates\Spherical.cpp" />
-    <ClCompile Include="StarAPI\coordinates\Terrestrial.cpp" />
-    <ClCompile Include="StarAPI\coordinates\Transform.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\KeplerianElements.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Horizontal.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Rectangular.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Spherical.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Terrestrial.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\coordinates\Transform.cpp" />
     <ClCompile Include="StarAPI\DateTime.cpp" />
     <ClCompile Include="StarAPI\Math.cpp" />
   </ItemGroup>
