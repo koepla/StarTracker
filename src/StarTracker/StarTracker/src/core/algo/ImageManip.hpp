@@ -1,5 +1,5 @@
-#ifndef _IMAGEMANIP_H_
-#define _IMAGEMANIP_H_
+#ifndef STARTRACKER_ALGO_IMAGEMANIP_H
+#define STARTRACKER_ALGO_IMAGEMANIP_H
 
 #include <vector>
 
@@ -24,4 +24,4 @@ namespace Algo {
 	};
 }
 
-#endif // _IMAGEMANIP_H_
+#endif // STARTRACKER_ALGO_IMAGEMANIP_H

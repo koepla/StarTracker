@@ -1,5 +1,5 @@
-#ifndef _PACKAGE_H_
-#define _PACKAGE_H_
+#ifndef STARTRACKER_SERIAL_PACKAGE_H
+#define STARTRACKER_SERIAL_PACKAGE_H
 
 #include <iostream>
 #include <vector>
@@ -181,4 +181,4 @@ namespace Serial {
 	typedef Package<128> Pack128;
 }
 
-#endif // _PACKAGE_H_
+#endif // STARTRACKER_SERIAL_PACKAGE_H

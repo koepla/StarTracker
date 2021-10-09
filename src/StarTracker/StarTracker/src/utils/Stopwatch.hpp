@@ -1,5 +1,5 @@
-#ifndef _STOPWATCH_H_
-#define _STOPWATCH_H_
+#ifndef STARTRACKER_UTILS_STOPWATCH_H
+#define STARTRACKER_UTILS_STOPWATCH_H
 
 #include <chrono>
 
@@ -22,5 +22,5 @@ namespace Utils::Diagnostics {
 	};
 }
 
-#endif // _STOPWATCH_H_
+#endif // STARTRACKER_UTILS_STOPWATCH_H
 

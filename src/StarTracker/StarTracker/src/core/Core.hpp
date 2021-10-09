@@ -1,5 +1,5 @@
-#ifndef _CORE_H_
-#define _CORE_H_
+#ifndef STARTRACKER_CORE_H
+#define STARTRACKER_CORE_H
 
 #include <cstdio>
 
@@ -22,4 +22,4 @@
 
 #endif
 
-#endif // _CORE_H_
+#endif // STARTRACKER_CORE_H
