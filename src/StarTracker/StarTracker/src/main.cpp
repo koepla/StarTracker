@@ -10,15 +10,15 @@ int main(int argc, char** argv) {
 
 	try {
 
-		auto elements = Star::Ephemeris::CelestialBody::LoadFromFile("assets/KeplarianElements.json");
+		auto elements = StarTracker::Ephemeris::CelestialBody::LoadFromFile("assets/CelestialBodies.json");
 
 		for (auto& e : elements) {
 
-			std::cout << e.GetName() << std::endl;
-			auto sph = e.GetSphericalPosition(Star::DateTime::Now());
+			std::cout << e.GetName() << " ";
+			auto sph = e.GetSphericalPosition(StarTracker::DateTime::Now());
 			auto location = Utils::LocationService::GeoLocation::Get();
-			auto pos = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, Star::DateTime::Now());
-		
+			auto pos = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, StarTracker::DateTime::Now());
+
 			std::cout << pos.ToString() << std::endl;
 		}
 	}
@@ -27,11 +27,13 @@ int main(int argc, char** argv) {
 		std::cerr << e.what() << std::endl;
 	}
 
-	return 0;	
+	return 0;
+
+#if 0
 
 	Serial::SerialPort serialPort;
 	Utils::LocationService::Location location;
-	Star::Coordinates::Observer observer;
+	StarTracker::Ephemeris::Coordinates::Observer observer;
 
 	try {
 
@@ -104,11 +106,11 @@ int main(int argc, char** argv) {
 		std::cout << "Enter Declination (Format: <degrees> <arcminutes> <arcseconds>): ";
 		std::cin >> degree >> arcmin >> arcsec;
 
-		auto celestialBodySpherical = Star::Coordinates::Spherical(
-			Star::Math::HmsToDegrees(hour, minute, second), 
-			Star::Math::DaaToDegrees(degree, arcmin, arcsec));
+		auto celestialBodySpherical = StarTracker::Ephemeris::Coordinates::Spherical(
+			StarTracker::Math::HmsToDegrees(hour, minute, second), 
+			StarTracker::Math::DaaToDegrees(degree, arcmin, arcsec));
 
-		auto observedCelestialBody = Star::Coordinates::Transform::TerrestrialObserverToHorizontal(celestialBodySpherical, observer, Star::DateTime::Now());
+		auto observedCelestialBody = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(celestialBodySpherical, observer, StarTracker::DateTime::Now());
 
 		std::cout << "Sending computed data " << observedCelestialBody.ToString() << " to micro controller..." << std::endl;
 
@@ -124,6 +126,8 @@ int main(int argc, char** argv) {
 			std::cerr << "Can't send data: " << e.what() << std::endl;
 		}
 	}
+
+#endif 
 
 	return 0;
 }
