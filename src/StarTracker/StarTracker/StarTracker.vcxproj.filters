@@ -1387,7 +1387,7 @@
     <None Include="extern\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="assets\KeplarianElements.json" />
+    <None Include="assets\CelestialBodies.json" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="lib\glfw3_debug.lib" />
