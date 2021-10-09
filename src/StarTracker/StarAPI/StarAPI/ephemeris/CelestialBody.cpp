@@ -49,8 +49,6 @@ namespace Star::Ephemeris {
 
         auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanKeplerElem.SemiMajorAxis, eccentricAnomaly, meanKeplerElem.Eccentricity);
 
-        std::printf("True Anomaly: %lf ", Math::Radians(trueAnomaly));
-
         // compute Planets heliocentric position in 3D-space
 
         double xh = distance * (Math::Cosine(Om) * Math::Cosine(trueAnomaly + w - Om) - Math::Sine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
