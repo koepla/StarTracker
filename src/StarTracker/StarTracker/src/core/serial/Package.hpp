@@ -12,7 +12,7 @@ namespace Serial {
 		std::string message;
 
 	public:
-		PackageException(std::string&& message) : message(std::move(message)) { }
+		explicit PackageException(std::string&& message) : message(std::move(message)) { }
 		[[nodiscard]] virtual const char* what() const noexcept override { return message.c_str(); }
 	};
 

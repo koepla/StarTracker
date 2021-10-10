@@ -10,7 +10,7 @@ namespace Algo {
 	public:
 
 		template <typename T>
-		static std::vector<T> Stack(const T* img1, const T* img2, uint32_t size) {
+		[[nodiscard]] static std::vector<T> Stack(const T* img1, const T* img2, uint32_t size) {
 
 			std::vector<T> out(size);
 

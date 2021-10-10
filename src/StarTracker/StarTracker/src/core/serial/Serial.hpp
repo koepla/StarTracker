@@ -19,7 +19,7 @@ namespace Serial {
 
 	public:
 
-		SerialException(std::string&& message) noexcept;
+		explicit SerialException(std::string&& message) noexcept;
 
 		[[nodiscard]] virtual const char* what() const noexcept override;
 	};
@@ -51,22 +51,22 @@ namespace Serial {
 		*	Reads from currently open Port
 		*	Takes byte-buffer and bytes to reader
 		*/
-		uint32_t Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false);
+		[[nodiscard]] uint32_t Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false);
 
 		/*
 		*	Writes to currently open Port
 		*	Takes byte-buffer and bytes to write
 		*/
-		uint32_t Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false);
+		[[nodiscard]] uint32_t Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false);
 
 		/*
 		*	Returns true if Port is open
 		*/
-		bool IsOpen() const noexcept;
+		[[nodiscard]] bool IsOpen() const noexcept;
+		[[nodiscard]] uint32_t Available() noexcept(false);
 
 		void WaitComm() noexcept;
 
-		[[nodiscard]] uint32_t Available() noexcept(false);
 
 	private:
 
