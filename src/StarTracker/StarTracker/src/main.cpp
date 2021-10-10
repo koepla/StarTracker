@@ -11,15 +11,18 @@ int main(int argc, char** argv) {
 	try {
 
 		auto elements = StarTracker::Ephemeris::CelestialBody::LoadFromFile("assets/CelestialBodies.json");
+		auto location = Utils::LocationService::GeoLocation::Get();
 
-		for (auto& e : elements) {
+		while (true) {
 
-			std::cout << e.GetName() << " ";
-			auto sph = e.GetSphericalPosition(StarTracker::DateTime::Now());
-			auto location = Utils::LocationService::GeoLocation::Get();
-			auto pos = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, StarTracker::DateTime::Now());
+			for (auto& e : elements) {
 
-			std::cout << pos.ToString() << std::endl;
+				std::cout << e.GetName() << " ";
+				auto sph = e.GetSphericalPosition(StarTracker::DateTime::Now());
+				auto pos = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(sph, { location.Latitude, -location.Longitude }, StarTracker::DateTime::Now());
+
+				std::cout << pos.ToString() << std::endl;
+			}
 		}
 	}
 	catch (const std::exception& e) {
