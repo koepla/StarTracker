@@ -133,8 +133,6 @@ namespace StarTracker::Ephemeris {
         return celestialBodies;
     }
 
-    // Correct for drifting ecliptic due to planets pull on the Earth
-
     double CelestialBody::computeEccentricAnomaly(double meanAnomaly, double eccentricity, double eps) const noexcept
     {
         double edeg = Math::Degrees(eccentricity);
@@ -143,13 +141,15 @@ namespace StarTracker::Ephemeris {
         double eccentricAnomaly = meanAnomaly + edeg * Math::Sine(meanAnomaly);
         double de;
 
+        uint64_t iteration = 0;
+
         do {
 
             double dm = meanAnomaly - (eccentricAnomaly - edeg * Math::Sine(eccentricAnomaly));
             de = dm / (1 - erad * Math::Cosine(eccentricAnomaly));
             eccentricAnomaly += de;
 
-        } while (Math::Abs(de) > eps);
+        } while (Math::Abs(de) > eps && ++iteration < 10);
 
         return eccentricAnomaly;
     }
@@ -165,12 +165,12 @@ namespace StarTracker::Ephemeris {
         return std::make_pair(Math::Mod(trueAnomaly, 360.0), distance);
     }
 
+    // Correct for drifting ecliptic due to planets pull on the Earth
+
     double CelestialBody::computeEcliptic(double julianCenturies) const noexcept
     {
         return (23.43929111 - (46.8150 + (0.00059 - 0.001813 * julianCenturies) * julianCenturies) * julianCenturies / 3600.0);
     }
-
-    // Returns radius and longitude of the Sun, needed for heliocentric to geocentric transform
 
     Coordinates::Rectangular CelestialBody::computeEarthPos(double julianCenturies) const noexcept
     {
