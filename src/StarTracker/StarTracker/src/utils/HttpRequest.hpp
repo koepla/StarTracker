@@ -14,7 +14,7 @@ namespace Utils::Http {
 		std::string message;
 
 	public:
-		HttpRequestException(std::string&& message);
+		explicit HttpRequestException(std::string&& message);
 
 		[[nodiscard]] virtual const char* what() const noexcept;
 	};

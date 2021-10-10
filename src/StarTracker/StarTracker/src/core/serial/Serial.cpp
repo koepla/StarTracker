@@ -11,7 +11,7 @@ namespace Serial {
 
 	const char* SerialException::what() const noexcept {
 
-		return this->message.c_str();
+		return message.c_str();
 	}
 
 	SerialPort::SerialPort() : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {

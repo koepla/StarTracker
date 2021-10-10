@@ -20,7 +20,7 @@ namespace Utils::LocationService {
 		std::string message;
 
 	public:
-		GeoLocationException(std::string&& message);
+		explicit GeoLocationException(std::string&& message);
 
 		[[nodiscard]] virtual const char* what() const noexcept override;
 	};
