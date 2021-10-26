@@ -53,6 +53,10 @@ Creating an step by step instruction on how to build and print StarTracker when 
 
 The following image shows a design idea for the editor user interface. The Editor will consist of a File Menu, and Tabs for Tracking, Scripting, Image Manipulation and a Construction Guide. 
 
+##### Astronomical Calculations, Graphing
+
+Graph Position vs Time, compare to other objects, calculate when Planet will be visible, calculate closest encounter between two Objects in specified timespan.
+
 ##### Tracking
 
 The Tracking Tab consists of a Panel for all the Trackable Components, e.g. supported celestial bodies. There will be an option to add a custom trackable component, where right ascension and declination or azimuth and altitude can be specified by the user. A trackable component will consist of an Image of the celestial body, the name, and the current position data. There will probably be a flag if the component is currently visible to the observer or not. 
