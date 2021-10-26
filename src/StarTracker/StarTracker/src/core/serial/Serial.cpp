@@ -14,11 +14,12 @@ namespace Serial {
 		return message.c_str();
 	}
 
-	SerialPort::SerialPort() : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {
+	SerialPort::SerialPort() noexcept : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {
+
 
 	}
 
-	SerialPort::~SerialPort() {
+	SerialPort::~SerialPort() noexcept(false) {
 
 		if (IsOpen()) {
 
@@ -114,7 +115,7 @@ namespace Serial {
 		WaitCommEvent(hCom, &dwEventMask, NULL);
 	}
 
-	uint32_t SerialPort::Available() noexcept(false)
+	uint32_t SerialPort::Available() const noexcept(false)
 	{
 		if (!IsOpen()) {
 

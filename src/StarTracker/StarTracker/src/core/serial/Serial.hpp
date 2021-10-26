@@ -1,7 +1,6 @@
 #ifndef STARTRACKER_SERIAL_SERIAL_H
 #define STARTRACKER_SERIAL_SERIAL_H
 
-#include <iostream>
 #include <windows.h>
 #include <string>
 #include <vector>
@@ -18,7 +17,6 @@ namespace Serial {
 		std::string message;
 
 	public:
-
 		explicit SerialException(std::string&& message) noexcept;
 
 		[[nodiscard]] virtual const char* what() const noexcept override;
@@ -32,9 +30,8 @@ namespace Serial {
 		bool isOpen;
 
 	public:
-
-		SerialPort();
-		~SerialPort();
+		SerialPort() noexcept;
+		~SerialPort() noexcept(false);
 
 		/*
 		*	Opens the specified port
@@ -63,7 +60,7 @@ namespace Serial {
 		*	Returns true if Port is open
 		*/
 		[[nodiscard]] bool IsOpen() const noexcept;
-		[[nodiscard]] uint32_t Available() noexcept(false);
+		[[nodiscard]] uint32_t Available() const noexcept(false);
 
 		void WaitComm() noexcept;
 

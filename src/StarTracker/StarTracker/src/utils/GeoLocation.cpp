@@ -5,7 +5,7 @@
 
 namespace Utils::LocationService {
 
-	GeoLocationException::GeoLocationException(std::string&& message) : message(std::move(message)) {
+	GeoLocationException::GeoLocationException(std::string&& message) noexcept : message(std::move(message)) {
 
 	}
 

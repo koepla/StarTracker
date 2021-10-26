@@ -1,7 +1,6 @@
 #ifndef STARTRACKER_UTILS_HTTPREQUEST_H
 #define STARTRACKER_UTILS_HTTPREQUEST_H
 
-#include <iostream>
 #include <Windows.h>
 #include <WinInet.h>
 #include <string>
@@ -14,7 +13,7 @@ namespace Utils::Http {
 		std::string message;
 
 	public:
-		explicit HttpRequestException(std::string&& message);
+		explicit HttpRequestException(std::string&& message) noexcept;
 
 		[[nodiscard]] virtual const char* what() const noexcept;
 	};

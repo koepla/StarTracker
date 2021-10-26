@@ -20,8 +20,8 @@ namespace StarTracker::Ephemeris {
 		KeplerianElements keplerElementsCentury;
 
 	public:
-		CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury);
-		CelestialBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury);
+		CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
+		CelestialBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
 		[[nodiscard]] const std::string& GetName() const noexcept;
 		[[nodiscard]] Coordinates::Spherical GetSphericalPosition(const DateTime& date, double eps = 1e-12) const noexcept;
 

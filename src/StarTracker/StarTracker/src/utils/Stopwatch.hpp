@@ -13,7 +13,7 @@ namespace Utils::Diagnostics {
 		std::chrono::steady_clock::time_point stopTime;
 
 	public:
-		Stopwatch();
+		Stopwatch() noexcept;
 
 		void Start() noexcept;
 		void Stop() noexcept;

@@ -2,12 +2,12 @@
 
 namespace StarTracker::Ephemeris {
 
-    CelestialBody::CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) : CelestialBody("Unnamed Celestial Body", keplerElements, keplerElementsCentury)
+    CelestialBody::CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept : CelestialBody("Unnamed Celestial Body", keplerElements, keplerElementsCentury)
     {
 
     }
 
-    CelestialBody::CelestialBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) : name(name), keplerElements(keplerElements), keplerElementsCentury(keplerElementsCentury)
+    CelestialBody::CelestialBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept : name(name), keplerElements(keplerElements), keplerElementsCentury(keplerElementsCentury)
     {
 
     }
