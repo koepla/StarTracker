@@ -1,7 +1,6 @@
 #ifndef STARTRACKER_SERIAL_PACKAGE_H
 #define STARTRACKER_SERIAL_PACKAGE_H
 
-#include <iostream>
 #include <vector>
 
 namespace Serial {

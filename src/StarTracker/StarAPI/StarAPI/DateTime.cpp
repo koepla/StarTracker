@@ -2,14 +2,14 @@
 
 namespace StarTracker {
 
-	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) 
+	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) noexcept
 	: Year(year), Month(month), Day(day), Hour(hour), Minute(minute), Second(second) 
 	{
 
 	}
 
 
-	DateTime DateTime::Now() {
+	DateTime DateTime::Now() noexcept {
 
 		std::time_t time = std::time(0);
 		tm ltm = tm();
@@ -23,12 +23,12 @@ namespace StarTracker {
 					static_cast<int64_t>(ltm.tm_sec));
 	}
 
-	double DateTime::Jdn(const DateTime& date) {
+	double DateTime::Jdn(const DateTime& date) noexcept {
 
 		return Mjdn(date) + 2400000.5L;
 	}
 
-	double DateTime::Mjdn(const DateTime& date) {
+	double DateTime::Mjdn(const DateTime& date) noexcept {
 
 		auto mod = date;
 
@@ -39,7 +39,7 @@ namespace StarTracker {
 			mod.Month += 12;
 			--mod.Year;
 		}
-		if ((10000L * mod.Year + 100L * mod.Month + mod.Day) <= 15821004L) {
+		if ((10000 * mod.Year + 100 * mod.Month + mod.Day) <= 15821004) {
 
 			// julian calender
 			b = -2 + ((mod.Year + 4716) / 4) - 1179;
@@ -50,56 +50,55 @@ namespace StarTracker {
 			b = (mod.Year / 400) - (mod.Year / 100) + (mod.Year / 4);
 		}
 
-		double realHour = (double)(mod.Hour + mod.Minute / 60.0L + mod.Second / 3600.0L);
+		double realHour = (double)(mod.Hour + mod.Minute / 60.0 + mod.Second / 3600.0);
 
-		return (365LL * mod.Year - 679004LL + b + int64_t(30.6001 * (mod.Month + 1LL)) + mod.Day) + realHour / 24.0L;
+		return (365 * mod.Year - 679004 + b + int64_t(30.6001 * (mod.Month + 1LL)) + mod.Day) + realHour / 24.0;
 	}
 
-	double DateTime::JulianCenturies(const DateTime& date, bool floor) {
+	double DateTime::JulianCenturies(const DateTime& date, bool floor) noexcept {
 
 		double jdn = floor ? std::floor(DateTime::Jdn(date)) : DateTime::Jdn(date);
-		return (jdn - 2451545.0L) / 36525.0L;
+		return (jdn - 2451545.0) / 36525.0;
 	}
 
-	double DateTime::BesselEpoch(const DateTime& date) {
+	double DateTime::BesselEpoch(const DateTime& date) noexcept {
 
-		return 1900 + (Jdn(date) - 2415020.31352L) / 365.242198781L;
+		return 1900.0 + (Jdn(date) - 2415020.31352) / 365.242198781;
 	}
 
 	/*
 	*	Greenwich mean sidereal time in degrees
 	*/
-	double DateTime::Gmst(const DateTime& date) {
+	double DateTime::Gmst(const DateTime& date) noexcept {
 
-		const double secs = 86400.0L;
-		double mjd = DateTime::Mjdn(date);
-		double mjd_0 = std::floor(mjd);
-		double UT = secs * (mjd - mjd_0); // [s]
-		double T = (mjd - 51544.5L) / 36525.0L;
-		double T_0 = (mjd_0 - 51544.5L) / 36525.0L;
+		constexpr double secs = 86400.0;
+		const double mjd = DateTime::Mjdn(date);
+		const double mjd_0 = std::floor(mjd);
+		const double UT = secs * (mjd - mjd_0);
+		const double T = (mjd - 51544.5) / 36525.0;
+		const double T_0 = (mjd_0 - 51544.5) / 36525.0;
 
-
-		double gmst = 24110.54841L + 8640184.812866 * T_0 + 1.0027379093 * UT + (0.093104 - 6.2e-6 * T) * T * T;
+		const double gmst = 24110.54841 + 8640184.812866 * T_0 + 1.0027379093 * UT + (0.093104 - 6.2e-6 * T) * T * T;
 
 		double gmstDeg = Math::Degrees((Math::PI2 / secs) * Math::Mod(gmst, secs));
 
 		if (gmstDeg > 0.0) {
 			while (gmstDeg > 360.0) {
 
-				gmstDeg -= 360.0L;
+				gmstDeg -= 360.0;
 			}
 		}
 		else {
 			while (gmstDeg < 0.0) {
 
-				gmstDeg += 360.0L;
+				gmstDeg += 360.0;
 			}
 		}
 
 		return gmstDeg;
 	}
 
-	std::string DateTime::ToString() const {
+	std::string DateTime::ToString() const noexcept {
 
 		char buff[100];
 		sprintf_s(buff, sizeof(buff),

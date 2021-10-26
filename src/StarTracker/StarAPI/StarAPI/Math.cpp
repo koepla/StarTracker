@@ -19,12 +19,12 @@ namespace StarTracker {
 
 	double Math::Degrees(double radians) {
 
-		return radians * 180.0L / Math::PI;
+		return radians * 180.0 / Math::PI;
 	}
 
 	double Math::Radians(double degrees) {
 
-		return degrees * Math::PI / 180.0L;
+		return degrees * Math::PI / 180.0;
 	}
 
 	double Math::Sine(double angle) {
@@ -64,11 +64,11 @@ namespace StarTracker {
 
 	double Math::DaaToDegrees(double degree, double arcmin, double arcsec) {
 
-		return (degree + arcmin / 60.0L + arcsec / 3600.0L);
+		return (degree + arcmin / 60.0 + arcsec / 3600.0);
 	}
 
 	double Math::HmsToDegrees(double hour, double minute, double sec) {
 
-		return 15.0L * (hour + minute / 60.0L + sec / 3600.0L);
+		return 15.0 * (hour + minute / 60.0 + sec / 3600.0);
 	}
 }

@@ -12,14 +12,4 @@
 
 #endif
 
-#ifdef _DEBUG
-
-#define STR_ASSERT(c, m) if(!(c)) { fprintf(stderr, "[STARTRACKER ASSERTION] %s\n" m); __debugbreak(); }
-
-#else
-
-#define STR_ASSERT(c, m) if(!(c)) { MessageBoxA(nullptr, m, "Startracker Assertion", NULL); }
-
-#endif
-
 #endif // STARTRACKER_CORE_H
