@@ -10,7 +10,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	}
 
-	std::string Spherical::ToString() const {
+	std::string Spherical::ToString() const noexcept {
 
 		return "[right_ascension = " + std::to_string(RightAscension) + " | declination = " + std::to_string(Declination) + " | r = " + std::to_string(Radius) + "]";
 	}

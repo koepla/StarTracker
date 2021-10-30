@@ -10,7 +10,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	}
 
-	std::string Rectangular::ToString() const {
+	std::string Rectangular::ToString() const noexcept {
 
 		return "[x = " + std::to_string(X) + " | y = " + std::to_string(Y) + " | z = " + std::to_string(Z) + "]";
 	}

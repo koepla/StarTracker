@@ -10,7 +10,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	}
 
-	std::string Terrestrial::ToString() const {
+	std::string Terrestrial::ToString() const noexcept {
 
 		return "[latitude = " + std::to_string(Latitude) + " | longitude = " + std::to_string(Longitude) + "]";
 	}

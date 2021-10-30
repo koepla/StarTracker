@@ -10,7 +10,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	}
 
-	std::string Horizontal::ToString() const {
+	std::string Horizontal::ToString() const noexcept {
 
 		return "[azimuth = " + std::to_string(Azimuth) + " | altitude = " + std::to_string(Altitude) + "]";
 	}
