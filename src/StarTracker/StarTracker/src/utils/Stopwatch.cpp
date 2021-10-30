@@ -1,6 +1,6 @@
 #include "Stopwatch.hpp"
 
-namespace Utils::Diagnostics {
+namespace StarTracker::Utils::Diagnostics {
 
 	Stopwatch::Stopwatch() noexcept : running(false), startTime(), stopTime() {
 

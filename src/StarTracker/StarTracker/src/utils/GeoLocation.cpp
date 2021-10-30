@@ -3,7 +3,7 @@
 
 #include <nlohmann/json.hpp>
 
-namespace Utils::LocationService {
+namespace StarTracker::Utils::LocationService {
 
 	GeoLocationException::GeoLocationException(std::string&& message) noexcept : message(std::move(message)) {
 
