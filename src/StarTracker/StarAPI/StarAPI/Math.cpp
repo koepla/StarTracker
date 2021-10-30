@@ -7,16 +7,6 @@ namespace StarTracker {
 		return x < 0 ? -x : x;
 	}
 
-	double Math::Frac(double x) {
-
-		return x - std::floor(x);
-	}
-
-	double Math::Mod(double a, double b) {
-
-		return b * Math::Frac(a / b);
-	}
-
 	double Math::Degrees(double radians) {
 
 		return radians * 180.0 / Math::PI;
@@ -25,6 +15,16 @@ namespace StarTracker {
 	double Math::Radians(double degrees) {
 
 		return degrees * Math::PI / 180.0;
+	}
+
+	double Math::Frac(double x) {
+
+		return x - std::floor(x);
+	}
+
+	double Math::Mod(double a, double b) {
+
+		return b * Math::Frac(a / b);
 	}
 
 	double Math::Sine(double angle) {
