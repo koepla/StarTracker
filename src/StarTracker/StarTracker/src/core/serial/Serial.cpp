@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace Serial {
+namespace StarTracker::Serial {
 
 	SerialException::SerialException(std::string&& message) noexcept : message(std::move(message)) {
 
@@ -133,7 +133,7 @@ namespace Serial {
 		return static_cast<uint32_t>(stat.cbInQue);
 	}
 
-	inline std::string SerialPort::prefixPort(const std::string& port) {
+	inline std::string SerialPort::prefixPort(const std::string& port) noexcept {
 
 		if (strncmp(port.c_str(), "\\\\.\\", 4) == 0) {
 
@@ -145,7 +145,7 @@ namespace Serial {
 		}
 	}
 
-	void SerialPort::setBaudrate(uint32_t baudrate) {
+	void SerialPort::setBaudrate(uint32_t baudrate) noexcept(false) {
 
 		DWORD baud = 0;
 
@@ -191,7 +191,7 @@ namespace Serial {
 		}
 	}
 
-	void SerialPort::initReceiveMask() {
+	void SerialPort::initReceiveMask() noexcept(false) {
 		
 		dwEventMask = EV_RXCHAR;
 
@@ -201,7 +201,7 @@ namespace Serial {
 		}
 	}
 
-	void SerialPort::initTimeouts(uint32_t charCount) {
+	void SerialPort::initTimeouts(uint32_t charCount) noexcept(false) {
 
 		COMMTIMEOUTS timeouts = { 0 };
 		timeouts.ReadIntervalTimeout = 100;
@@ -216,8 +216,8 @@ namespace Serial {
 		}
 	}
 
-	std::vector<std::string> SerialPort::GetPortNames()
-	{
+	std::vector<std::string> SerialPort::GetPortNames() noexcept(false) {
+
 		std::vector<std::string> ports;
 		char target[4096];
 
