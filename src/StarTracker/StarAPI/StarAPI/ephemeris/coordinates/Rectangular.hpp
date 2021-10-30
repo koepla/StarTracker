@@ -14,7 +14,14 @@ namespace StarTracker::Ephemeris::Coordinates {
         Rectangular();
         Rectangular(double x, double y, double z);
 
-        std::string ToString() const;
+        /**
+        * Formats member variables to a std::string
+        *
+        * @return the member variables `X`, `Y` and `Z`
+        *     formatted as std::string
+        *
+        */
+        [[nodiscard]] std::string ToString() const noexcept;
     };
 }
 

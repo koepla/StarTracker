@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace Utils::LocationService {
+namespace StarTracker::Utils::LocationService {
 
 	struct Location {
 
@@ -28,25 +28,15 @@ namespace Utils::LocationService {
 	class GeoLocation {
 
 	public:
-		/*
-			note:
-			This method has a certain degree of inaccuracy, 
-			as the location is determined via the IP address
-			
-			input:
-			none
-
-			routine:
-			Sends HttpRequest to "https://ip-api.com/json/", parses json to Location struct
-
-			returns:
-			Location struct
-
-			throws:
-			GeoLocationException
-
-			example: (surrounded by try-catch block) 
-			auto location = Utils::LocationService::GeoLocation::Get();
+		/**
+		* Retrieves the GeoLocation via IP address
+		*
+		* @see Location
+		* 
+		* @return Location struct
+		*
+		* @throws GeoLocationException if the HttpRequest fails
+		* 
 		*/
 		[[nodiscard]] static Location Get() noexcept(false);
 	};

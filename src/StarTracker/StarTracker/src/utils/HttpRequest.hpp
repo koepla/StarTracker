@@ -5,7 +5,7 @@
 #include <WinInet.h>
 #include <string>
 
-namespace Utils::Http {
+namespace StarTracker::Utils::Http {
 
 	class HttpRequestException : public std::exception {
 
@@ -21,24 +21,17 @@ namespace Utils::Http {
 	class HttpRequest {
 
 	public:
-		/*
-			input:
-			server (const reference)
-			url (const reference)
-
-			routine:
-			Sends Get request to specified server/url and expects text/html
-
-			returns:
-			Response-Data as std::string
-
-			throws:
-			HttpRequestException
-
-			example: (surrounded by try-catch block)
-			If one wants to send a request to the url "https://ip-api.com/json/",
-			The function has to be called like this
-			auto responseData = Utils::Http::HttpRequest::Get("ip-api.com", "json");
+		/**
+		* Performs HttpRequest to the specified server and url
+		*
+		* @param server name of the server (without the protocol name as http is the only supported one)
+		* 
+		* @param url url path
+		*
+		* @return response data as std::string
+		*
+		* @throws HttpRequestException if the HttpRequest fails
+		* 
 		*/
 		[[nodiscard]] static std::string Get(const std::string& server, const std::string& url) noexcept(false);
 	};

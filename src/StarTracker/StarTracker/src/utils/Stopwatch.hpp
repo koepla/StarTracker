@@ -3,7 +3,7 @@
 
 #include <chrono>
 
-namespace Utils::Diagnostics {
+namespace StarTracker::Utils::Diagnostics {
 
 	class Stopwatch {
 
@@ -15,12 +15,26 @@ namespace Utils::Diagnostics {
 	public:
 		Stopwatch() noexcept;
 
+		/**
+		* Starts the stopwatch
+		* 
+		*/
 		void Start() noexcept;
+
+		/**
+		* Stops the stopwatch
+		*
+		*/
 		void Stop() noexcept;
 
-		double GetEllapsedMilliseconds() const noexcept;
+		/**
+		* Number of milliseconds that are ellapsed since start or the timespan between stop and start
+		* 
+		* @return number of ellapsed milliseconds
+		* 
+		*/
+		[[nodiscard]] double GetEllapsedMilliseconds() const noexcept;
 	};
 }
 
 #endif // STARTRACKER_UTILS_STOPWATCH_H
-

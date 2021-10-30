@@ -3,12 +3,23 @@
 
 #include <vector>
 
-namespace Algo {
+namespace StarTracker::Algo {
 
 	class ImageManip {
 
 	public:
-
+		/**
+		* Stacks two images by averaging the values of the data arrays
+		*
+		* @param img1 pointer to the image data of the first image
+		* 
+		* @param img2 pointer to the image data of the second image
+		*
+		* @param size number of elements in the data array (should be width * height)
+		*
+		* @return stacked image data as std::vector
+		* 
+		*/
 		template <typename T>
 		[[nodiscard]] static std::vector<T> Stack(const T* img1, const T* img2, uint32_t size) {
 
