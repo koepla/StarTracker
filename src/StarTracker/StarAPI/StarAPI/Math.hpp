@@ -12,12 +12,15 @@ namespace StarTracker {
     public:
 		static inline constexpr double PI = std::numbers::pi;
         static inline constexpr double PI2 = (2.0 * PI);
+		static inline constexpr double C0 = 299792458;
+		static inline constexpr double AU = 149597870700;
 
 		static double Abs(double x);
-		static double Frac(double x);
-		static double Mod(double a, double b);
 		static double Degrees(double radians);
 		static double Radians(double degrees);
+
+		static double Frac(double x);
+		static double Mod(double a, double b);
 		static double Sine(double angle);
 		static double Cosine(double angle);
 		static double Tangent(double angle);
@@ -25,9 +28,10 @@ namespace StarTracker {
 		static double ArcCosine(double angle);
 		static double ArcTangent(double angle);
 		static double ArcTangent2(double y, double x);
+
 		static double DaaToDegrees(double degree, double arcmin, double arcsec);
 		static double HmsToDegrees(double hour, double minute, double sec);
-    };
+	};
 }
 
 #endif // STARAPI_MATH_H
