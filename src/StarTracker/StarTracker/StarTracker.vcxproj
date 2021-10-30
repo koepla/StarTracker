@@ -103,6 +103,7 @@
     <ClCompile Include="extern\imgui\imgui_widgets.cpp" />
     <ClCompile Include="extern\stb_image\stb_image.c" />
     <ClCompile Include="extern\stb_image\stb_image_write.c" />
+    <ClCompile Include="src\core\serial\Package.cpp" />
     <ClCompile Include="src\utils\GeoLocation.cpp" />
     <ClCompile Include="src\utils\HttpRequest.cpp" />
     <ClCompile Include="src\core\serial\Serial.cpp" />

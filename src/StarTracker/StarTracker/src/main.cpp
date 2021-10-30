@@ -10,11 +10,11 @@
 
 #include <iostream>
 
-int main(int argc, char** argv) {
+int main(int argc, const char** argv) {
 
 	try {
 
-		auto&& location = Utils::LocationService::GeoLocation::Get();
+		auto&& location = StarTracker::Utils::LocationService::GeoLocation::Get();
 		auto&& planets = StarTracker::Ephemeris::CelestialBody::LoadFromFile("assets/CelestialBodies.json");
 
 		for (auto&& planet : planets) {
@@ -26,7 +26,11 @@ int main(int argc, char** argv) {
 					{ location.Latitude, -location.Longitude },
 					StarTracker::DateTime::Now());
 
+			std::cout << planet.GetName() << " | ";
+			std::cout << position.ToString() << " | ";
 			std::cout << observedPosition.ToString() << std::endl;
+
+			std::cin.get();
 		}
 	}
 	catch (const std::exception& e) {
