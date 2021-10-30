@@ -14,7 +14,14 @@ namespace StarTracker::Ephemeris::Coordinates {
         Spherical();
         Spherical(double rightAscension, double declination, double radius = 1);
 
-        std::string ToString() const;
+        /**
+        * Formats member variables to a std::string
+        *
+        * @return the member variables `Radius`, `RightAscension` and `Declination`
+        *     formatted as std::string
+        *
+        */
+        [[nodiscard]] std::string ToString() const noexcept;
     };
 }
 

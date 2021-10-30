@@ -2,8 +2,9 @@
 #define STARTRACKER_SERIAL_PACKAGE_H
 
 #include <vector>
+#include <string>
 
-namespace Serial {
+namespace StarTracker::Serial {
 
 	class PackageException : public std::exception {
 
@@ -11,13 +12,10 @@ namespace Serial {
 		std::string message;
 
 	public:
-		explicit PackageException(std::string&& message) : message(std::move(message)) { }
-		[[nodiscard]] virtual const char* what() const noexcept override { return message.c_str(); }
+		explicit PackageException(std::string&& message);
+		[[nodiscard]] virtual const char* what() const noexcept override;
 	};
 
-	/*
-	*	enumeration for protocol flags
-	*/
 	enum class Command : uint8_t {
 
 		NONE   = (1 << 0),
@@ -29,26 +27,15 @@ namespace Serial {
 		ACK    = (1 << 6)
 	};
 
-	/*
-	*	header struct, contains flag and size in bytes
-	*/
 	struct Header {
 
 		__declspec(align(1)) Command Flag;
 		__declspec(align(1)) uint8_t Size;
 
-		Header() : Flag(Command::NONE), Size(0) {
-
-		}
-
-		Header(Command flag, uint8_t size) : Flag(flag), Size(size) {
-
-		}
+		Header();
+		Header(Command flag, uint8_t size);
 	};
 
-	/*
-	*	protocol struct, contains header and a byte buffer, which size can be specified by the template
-	*/
 	template <uint16_t N>
 	class Package {
 
@@ -59,10 +46,6 @@ namespace Serial {
 		__declspec(align(1)) uint8_t buffer[BUFFER_SIZE];
 
 	public:
-		/*
-		*	Sets the header flag to NONE and the size to zero
-		*	Sets the whole buffer to 0
-		*/
 		Package() : header(Command::NONE, 0) {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
@@ -70,10 +53,6 @@ namespace Serial {
 			std::memset(buffer, 0, BUFFER_SIZE);
 		}
 
-		/*
-		*	Sets the specified header flag
-		*	Sets size and buffer to zero
-		*/
 		Package(Command flag) : header(flag, 0) {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
@@ -81,6 +60,12 @@ namespace Serial {
 			std::memset(buffer, 0, BUFFER_SIZE);
 		}
 
+		/**
+		* Clears the buffer of the package
+		*
+		* @return reference to this for chained function calls
+		* 
+		*/
 		Package& Clear() noexcept {
 			
 			std::memset(buffer, 0, BUFFER_SIZE);
@@ -90,6 +75,14 @@ namespace Serial {
 			return *this;
 		}
 
+		/**
+		* Sets the specified flag in the package header
+		* 
+		* @param flag command flag that should be set
+		*
+		* @return reference to this for chained function calls
+		*
+		*/
 		Package& SetFlag(Command flag) noexcept {
 
 			header.Flag = flag;
@@ -97,10 +90,15 @@ namespace Serial {
 			return *this;
 		}
 
-		/*
-		*	Function for pushing data into the buffer,
-		*	Takes data and element count
-		*	Copies data into the buffer
+		/**
+		* Pushes the specified data into the byte buffer
+		*
+		* @param data as const reference
+		*
+		* @return reference to this for chained function calls
+		*
+		* @throws PackageException if the push exceeds the remaining buffer size
+		* 
 		*/
 		template <typename T>
 		Package& Push(const T& data) noexcept(false) {
@@ -117,6 +115,18 @@ namespace Serial {
 			return *this;
 		}
 
+		/**
+		* Pushes the specified data array into the byte buffer
+		*
+		* @param data pointer to base of data array
+		* 
+		* @param count number of elements
+		*
+		* @return reference to this for chained function calls
+		*
+		* @throws PackageException if the push exceeds the remaining buffer size
+		*
+		*/
 		template <typename T>
 		Package& PushRange(const T* data, uint32_t count) noexcept(false) {
 
@@ -131,8 +141,15 @@ namespace Serial {
 			return *this;
 		}
 
-		/*
-		*	Returns a value of type T at the given index
+		/**
+		* Reads from the package buffer
+		*
+		* @param index for the read operation
+		*
+		* @return read value
+		*
+		* @throws PackageException if the index is out of range
+		*
 		*/
 		template <typename T>
 		[[nodiscard]] T Read(uint32_t index) noexcept(false) {
@@ -145,8 +162,15 @@ namespace Serial {
 			return *reinterpret_cast<T*>(buffer + index * sizeof(T));
 		}
 
-		/*
-		*	Returns a pointer of type T to the buffer at the given offset
+		/**
+		* Reads array from the package buffer
+		*
+		* @param offset for the read operation
+		*
+		* @return pointer to offset
+		*
+		* @throws PackageException if the offset is out of range
+		*
 		*/
 		template <typename T>
 		[[nodiscard]] T* ReadRange(uint32_t offset) noexcept(false) {
@@ -159,14 +183,23 @@ namespace Serial {
 			return reinterpret_cast<T*>(buffer + offset * sizeof(T));
 		}
 
-		/*
-		*	Returns how many bytes of the Buffer are filled
+		/**
+		* Number of bytes that fill up the package buffer
+		*
+		* @return number of bytes
+		*
 		*/
 		[[nodiscard]] size_t GetSize() const noexcept {
 
 			return static_cast<size_t>(header.Size);
 		}
 
+		/**
+		* Flag that is in the package header
+		*
+		* @return command flag
+		*
+		*/
 		[[nodiscard]] Command GetFlag() const noexcept {
 
 			return header.Flag;
