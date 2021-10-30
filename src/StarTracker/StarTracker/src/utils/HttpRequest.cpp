@@ -1,6 +1,6 @@
 #include "HttpRequest.hpp"
 
-namespace Utils::Http {
+namespace StarTracker::Utils::Http {
 
 	HttpRequestException::HttpRequestException(std::string&& message) noexcept : message(std::move(message)) {
 	
