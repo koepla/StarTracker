@@ -5,9 +5,11 @@
 #include "coordinates/Spherical.hpp"
 #include "coordinates/Rectangular.hpp"
 #include "../DateTime.hpp"
+
 #include <vector>
 #include <filesystem>
 #include <fstream>
+
 #include <nlohmann/json.hpp>
 
 namespace StarTracker::Ephemeris {
