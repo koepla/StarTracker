@@ -1,5 +1,7 @@
 #include "CelestialBody.hpp"
 
+#include <nlohmann/json.hpp>
+
 namespace StarTracker::Ephemeris {
 
     CelestialBody::CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept : CelestialBody("Unnamed Celestial Body", keplerElements, keplerElementsCentury)

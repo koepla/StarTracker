@@ -2,6 +2,7 @@
 #define STARTRACKER_UTILS_GEOLOCATION_H
 
 #include <string>
+#include <nlohmann/json.hpp>
 
 namespace StarTracker::Utils::LocationService {
 

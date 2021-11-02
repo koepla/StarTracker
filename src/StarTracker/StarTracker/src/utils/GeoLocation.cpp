@@ -1,8 +1,6 @@
 #include "GeoLocation.hpp"
 #include "HttpRequest.hpp"
 
-#include <nlohmann/json.hpp>
-
 namespace StarTracker::Utils::LocationService {
 
 	GeoLocationException::GeoLocationException(std::string&& message) noexcept : message(std::move(message)) {
