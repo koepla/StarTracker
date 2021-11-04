@@ -46,7 +46,7 @@ int main(int argc, const char** argv) {
 	
 			for (auto&& body : celestialBodies) {
 
-				std::cout << body.GetName() << std::endl;
+				std::cout << body.GetName() << " " << body.GetSphericalPosition(StarTracker::DateTime::Now()).ToString() << std::endl;
 			}
 
 			std::string bodyName;
@@ -59,17 +59,18 @@ int main(int argc, const char** argv) {
 
 					package.Clear();
 					package.SetFlag(StarTracker::Serial::Command::MOVE);
-					
-					auto position = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
-						body.GetSphericalPosition(StarTracker::DateTime::Now()),
-						{ observer.Latitude, -observer.Longitude },
+
+					auto sphericalPosition = body.GetSphericalPosition(StarTracker::DateTime::Now());
+					auto observedPosition = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
+						sphericalPosition,
+						{ observer.Latitude, observer.Longitude },
 						StarTracker::DateTime::Now()
 					);
 
-					std::cout << "Computed position: " << position.ToString() << std::endl;
+					std::cout << "Computed position: " << sphericalPosition.ToString() << " " << observedPosition.ToString() << std::endl;
 
-					package.Push<float>(static_cast<float>(position.Altitude));
-					package.Push<float>(static_cast<float>(position.Azimuth));
+					package.Push<float>(static_cast<float>(observedPosition.Altitude));
+					package.Push<float>(static_cast<float>(observedPosition.Azimuth));
 
 					if (serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof(package)) {
 
