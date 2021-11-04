@@ -15,22 +15,22 @@ namespace StarTracker {
 		static inline constexpr double C0 = 299792458;
 		static inline constexpr double AU = 149597870700;
 
-		static double Abs(double x);
-		static double Degrees(double radians);
-		static double Radians(double degrees);
+		[[nodiscard]] static double Abs(double x);
+		[[nodiscard]] static double Degrees(double radians);
+		[[nodiscard]] static double Radians(double degrees);
 
-		static double Frac(double x);
-		static double Mod(double a, double b);
-		static double Sine(double angle);
-		static double Cosine(double angle);
-		static double Tangent(double angle);
-		static double ArcSine(double angle);
-		static double ArcCosine(double angle);
-		static double ArcTangent(double angle);
-		static double ArcTangent2(double y, double x);
+		[[nodiscard]] static double Frac(double x);
+		[[nodiscard]] static double Mod(double a, double b);
+		[[nodiscard]] static double Sine(double angle);
+		[[nodiscard]] static double Cosine(double angle);
+		[[nodiscard]] static double Tangent(double angle);
+		[[nodiscard]] static double ArcSine(double angle);
+		[[nodiscard]] static double ArcCosine(double angle);
+		[[nodiscard]] static double ArcTangent(double angle);
+		[[nodiscard]] static double ArcTangent2(double y, double x);
 
-		static double DaaToDegrees(double degree, double arcmin, double arcsec);
-		static double HmsToDegrees(double hour, double minute, double sec);
+		[[nodiscard]] static double DaaToDegrees(double degree, double arcmin, double arcsec);
+		[[nodiscard]] static double HmsToDegrees(double hour, double minute, double sec);
 	};
 }
 

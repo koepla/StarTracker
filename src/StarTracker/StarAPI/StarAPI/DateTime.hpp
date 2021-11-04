@@ -28,34 +28,34 @@ namespace StarTracker {
 		/*
 		*	returns the current date
 		*/
-		static DateTime Now() noexcept;
+		[[nodiscard]] static DateTime Now() noexcept;
 
 		/*
 		*	calculates the julian day number for a given date
 		*/
-		static double Jdn(const DateTime& date) noexcept;
-		static double Mjdn(const DateTime& date) noexcept;
+		[[nodiscard]] static double Jdn(const DateTime& date) noexcept;
+		[[nodiscard]] static double Mjdn(const DateTime& date) noexcept;
 
 		/*
 		*	calculates the julian centuries via the julian day number
 		*/
-		static double JulianCenturies(const DateTime& date, bool floor = false) noexcept;
+		[[nodiscard]] static double JulianCenturies(const DateTime& date, bool floor = false) noexcept;
 
 		/*
 		*	returns the bessel epoch
 		*/
-		static double BesselEpoch(const DateTime& d) noexcept;
+		[[nodiscard]] static double BesselEpoch(const DateTime& d) noexcept;
 
 		/*
 		*	Greenwich mean sidereal time in degrees
 		*/
-		static double Gmst(const DateTime& d) noexcept;
+		[[nodiscard]] static double Gmst(const DateTime& d) noexcept;
 
 		/*
 		*	returns the date as a formatted string
 		*/
-		std::string ToString() const noexcept;
+		[[nodiscard]] std::string ToString() const noexcept;
 	};
 }
 
-#endif //STARAPI_DATETIME_H
+#endif // STARAPI_DATETIME_H
