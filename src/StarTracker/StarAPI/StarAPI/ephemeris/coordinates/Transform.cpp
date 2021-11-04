@@ -41,13 +41,14 @@ namespace StarTracker::Ephemeris::Coordinates {
 	}
 
 	Horizontal Transform::EquatorialToHorizontal(double declination, double hourAngle, double latitude) noexcept {
-
-        Rectangular re = RotateRectangular(SphericalToRectangular(Spherical(hourAngle, declination)), latitude);
+        
+        Rectangular re = SphericalToRectangular(Spherical{ hourAngle, declination });
+        Rectangular rerot = RotateRectangular(re, latitude);
 
 		// add 180 to get the angle from north to east to south and so on
         Horizontal horizontalCoords{};
-		horizontalCoords.Azimuth = Math::ArcTangent2(re.Y, re.X) + 180.0;
-		horizontalCoords.Altitude = Math::ArcSine(re.Z);
+		horizontalCoords.Azimuth = Math::ArcTangent2(rerot.Y, rerot.X) + 180.0;
+		horizontalCoords.Altitude = Math::ArcSine(rerot.Z);
 
 		return horizontalCoords;
 	}
