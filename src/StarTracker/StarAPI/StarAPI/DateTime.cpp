@@ -71,7 +71,7 @@ namespace StarTracker {
 	*/
 	double DateTime::Gmst(const DateTime& date) noexcept {
 
-		constexpr double secs = 86400.0;
+		const double secs = 86400.0;
 		const double mjd = DateTime::Mjdn(date);
 		const double mjd_0 = std::floor(mjd);
 		const double UT = secs * (mjd - mjd_0);
