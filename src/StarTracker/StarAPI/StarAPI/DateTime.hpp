@@ -51,6 +51,8 @@ namespace StarTracker {
 		* 
 		*	Caution: This may still be an issue, it works for now
 		*/
+
+#pragma message ("Temporary fix for Gmst, because we would only be allowed to pass the relative UTC time. This may still produce some unknown issues.") 
 		[[nodiscard]] static double Lmst(const DateTime& utc) noexcept;
 
 		/*
