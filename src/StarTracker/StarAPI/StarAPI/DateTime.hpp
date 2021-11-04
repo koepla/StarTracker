@@ -47,9 +47,11 @@ namespace StarTracker {
 		[[nodiscard]] static double BesselEpoch(const DateTime& d) noexcept;
 
 		/*
-		*	Greenwich mean sidereal time in degrees
+		*	Local mean sidereal time in degrees
+		* 
+		*	Caution: This may still be an issue, it works for now
 		*/
-		[[nodiscard]] static double Gmst(const DateTime& d) noexcept;
+		[[nodiscard]] static double Lmst(const DateTime& utc) noexcept;
 
 		/*
 		*	returns the date as a formatted string

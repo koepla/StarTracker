@@ -67,9 +67,9 @@ namespace StarTracker {
 	}
 
 	/*
-	*	Greenwich mean sidereal time in degrees
+	*	Local mean sidereal time in degrees
 	*/
-	double DateTime::Gmst(const DateTime& date) noexcept {
+	double DateTime::Lmst(const DateTime& date) noexcept {
 
 		const double secs = 86400.0;
 		const double mjd = DateTime::Mjdn(date);
