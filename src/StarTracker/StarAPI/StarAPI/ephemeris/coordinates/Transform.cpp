@@ -55,7 +55,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	Horizontal Transform::TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) noexcept {
 
-		double hourAngle = DateTime::Gmst(date) + observer.Longitude - sphericalCoords.RightAscension;
+		double hourAngle = DateTime::Lmst(date) - sphericalCoords.RightAscension;
 		return EquatorialToHorizontal(sphericalCoords.Declination, hourAngle, observer.Latitude);
 	}
 }
