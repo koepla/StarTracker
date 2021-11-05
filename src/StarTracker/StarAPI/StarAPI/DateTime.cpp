@@ -23,6 +23,20 @@ namespace StarTracker {
 					static_cast<int64_t>(ltm.tm_sec));
 	}
 
+	DateTime DateTime::UtcNow() noexcept
+	{
+		std::time_t time = std::time(0);
+		tm ltm = tm();
+		gmtime_s(&ltm, &time);
+
+		return DateTime(static_cast<int64_t>(ltm.tm_year) + 1900,
+			static_cast<int64_t>(ltm.tm_mon) + 1,
+			static_cast<int64_t>(ltm.tm_mday),
+			static_cast<int64_t>(ltm.tm_hour),
+			static_cast<int64_t>(ltm.tm_min),
+			static_cast<int64_t>(ltm.tm_sec));
+	}
+
 	double DateTime::Jdn(const DateTime& date) noexcept {
 
 		return Mjdn(date) + 2400000.5L;
@@ -69,7 +83,7 @@ namespace StarTracker {
 	/*
 	*	Local mean sidereal time in degrees
 	*/
-	double DateTime::Lmst(const DateTime& date) noexcept {
+	double DateTime::Gmst(const DateTime& date) noexcept {
 
 		const double secs = 86400.0;
 		const double mjd = DateTime::Mjdn(date);
