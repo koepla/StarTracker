@@ -29,6 +29,7 @@ namespace StarTracker {
 		*	returns the current date
 		*/
 		[[nodiscard]] static DateTime Now() noexcept;
+		[[nodiscard]] static DateTime UtcNow() noexcept;
 
 		/*
 		*	calculates the julian day number for a given date
@@ -53,7 +54,7 @@ namespace StarTracker {
 		*/
 
 #pragma message ("Temporary fix for Gmst, because we would only be allowed to pass the relative UTC time. This may still produce some unknown issues.") 
-		[[nodiscard]] static double Lmst(const DateTime& utc) noexcept;
+		[[nodiscard]] static double Gmst(const DateTime& utc) noexcept;
 
 		/*
 		*	returns the date as a formatted string
