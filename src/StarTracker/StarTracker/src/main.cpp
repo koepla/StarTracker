@@ -10,37 +10,60 @@
 
 #include <iostream>
 
+bool sendToTracker(StarTracker::Serial::SerialPort& port, StarTracker::Serial::Pack32& package, const StarTracker::Ephemeris::Coordinates::Horizontal& position) {
+
+	std::cout << "\tTracking Object " << position.ToString() << std::endl << std::endl;
+
+	package.Clear();
+	package.SetFlag(StarTracker::Serial::Command::MOVE);
+	package.Push<float>(static_cast<float>(position.Altitude));
+	package.Push<float>(static_cast<float>(position.Azimuth));
+
+	return (port.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof(package));
+}
+
+void printHeader() {
+
+	std::cout << "------ StarTracker Commandline Interface ------" << std::endl << std::endl;
+}
+
 int main(int argc, const char** argv) {
 
 	try {
 
+		printHeader();
+
 		StarTracker::Serial::SerialPort serialPort{};
 		StarTracker::Serial::Pack32 package{};
+
+		std::cout << "#Port Selection " << std::endl;
 
 		auto portNames = serialPort.GetPortNames();
 
 		if (portNames.size() == 0) {
 
-			std::cerr << "No Serial Ports available" << std::endl;
+			std::cerr << "\tNo Serial Ports available" << std::endl;
 			return -1;
 		}
 
 		for (auto&& port : portNames) {
 
-			std::cout << port << std::endl;
+			std::cout << "\t" << port << std::endl;
 		}
 
 		std::string selectedPort;
-		std::cout << "Select a port: ";
+		std::cout << "\tSelect a port: ";
 		std::cin >> selectedPort;
 
 		serialPort.Open(selectedPort, 115200);
+
+		std::cout << std::endl << "#Tracker Adjustment " << std::endl;
 
 		char dec;
 		do {
 
 			float pitch, yaw;
-			std::cout << "Adjust tracker origin <pitch> <yaw>: ";
+			std::cout << "\tAdjust tracker origin <pitch> <yaw>: ";
 			std::cin >> pitch >> yaw;
 
 			package.Clear();
@@ -55,13 +78,15 @@ int main(int argc, const char** argv) {
 			package.Push(0.0f);
 			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 
-			std::cout << "Adjust further? [y/n] ";
+			std::cout << "\tAdjust further? [y|n] ";
 			std::cin >> dec;
 		} 
 		while (dec == 'y');
 
+		std::cout << std::endl << "#Celestial Body Computation" << std::endl;
+
 		StarTracker::Ephemeris::Coordinates::Observer observer{};
-		std::cout << "Enter Location <latitude> <longitude>: ";
+		std::cout << "\tEnter Location <latitude> <longitude>: ";
 		std::cin >> observer.Latitude >> observer.Longitude;
 
 		while (!GetAsyncKeyState(VK_ESCAPE) && serialPort.IsOpen()) {
@@ -70,39 +95,56 @@ int main(int argc, const char** argv) {
 	
 			for (auto&& body : celestialBodies) {
 
-				std::cout << body.GetName() << " " << body.GetSphericalPosition(StarTracker::DateTime::Now()).ToString() << std::endl;
+				std::cout << "\t" << body.GetName() << " " << body.GetSphericalPosition(StarTracker::DateTime::Now()).ToString() << std::endl;
 			}
 
+			std::cout << "\tManual [no precomputed data]" << std::endl;
+
 			std::string bodyName;
-			std::cout << "Select a body: ";
+			std::cout << "\tSelect a body: ";
 			std::cin >> bodyName;
 
-			for (auto&& body : celestialBodies) {
+			if (bodyName._Equal("Manual")) {
 
-				if (body.GetName()._Equal(bodyName)) {
+				double raHour, raMin, raSec;
+				std::cout << "\t\tEnter Right Ascension <hour> <minute> <second>: ";
+				std::cin >> raHour >> raMin >> raSec;
 
-					package.Clear();
-					package.SetFlag(StarTracker::Serial::Command::MOVE);
+				double declDeg, declArcmin, declArcsec;
+				std::cout << "\t\tEnter Declination <degree> <arcmin> <arcsec>: ";
+				std::cin >> declDeg >> declArcmin >> declArcsec;
 
-					auto sphericalPosition = body.GetSphericalPosition(StarTracker::DateTime::Now());
-					auto observedPosition = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
-						sphericalPosition,
-						{ observer.Latitude, observer.Longitude },
-						StarTracker::DateTime::Now()
-					);
+				StarTracker::Ephemeris::Coordinates::Spherical manualObject{};
+				manualObject.RightAscension = StarTracker::Math::HmsToDegrees(raHour, raMin, raSec);
+				manualObject.Declination = StarTracker::Math::DaaToDegrees(declDeg, declArcmin, declArcsec);
+				manualObject.Radius = 1.0;
 
-					std::cout << "Computed position: " << sphericalPosition.ToString() << " " << observedPosition.ToString() << std::endl;
+				auto observedPosition = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
+					manualObject,
+					{ observer.Latitude, observer.Longitude },
+					StarTracker::DateTime::Now()
+				);
 
-					package.Push<float>(static_cast<float>(observedPosition.Altitude));
-					package.Push<float>(static_cast<float>(observedPosition.Azimuth));
+				std::cout << std::endl << "\tComputed position: " << manualObject.ToString() << " " << observedPosition.ToString() << std::endl;
 
-					if (serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof(package)) {
+				sendToTracker(serialPort, package, observedPosition);
+			}
+			else {
 
-						std::cout << "Sent position to Tracker!" << std::endl;
-					}
-					else {
+				for (auto&& body : celestialBodies) {
 
-						std::cerr << "Couldn't send position to Tracker!" << std::endl;
+					if (body.GetName()._Equal(bodyName)) {
+
+						auto sphericalPosition = body.GetSphericalPosition(StarTracker::DateTime::Now());
+						auto observedPosition = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
+							sphericalPosition,
+							{ observer.Latitude, observer.Longitude },
+							StarTracker::DateTime::Now()
+						);
+
+						std::cout << std::endl << "\tComputed position: " << sphericalPosition.ToString() << " " << observedPosition.ToString() << std::endl;
+						
+						sendToTracker(serialPort, package, observedPosition);
 					}
 				}
 			}
