@@ -36,6 +36,30 @@ int main(int argc, const char** argv) {
 
 		serialPort.Open(selectedPort, 115200);
 
+		char dec;
+		do {
+
+			float pitch, yaw;
+			std::cout << "Adjust tracker origin <pitch> <yaw>: ";
+			std::cin >> pitch >> yaw;
+
+			package.Clear();
+			package.SetFlag(StarTracker::Serial::Command::MOVE);
+			package.Push(static_cast<float>(pitch));
+			package.Push(static_cast<float>(yaw));
+			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+			package.Clear();
+			package.SetFlag(StarTracker::Serial::Command::CONF);
+			package.Push(0.0f);
+			package.Push(0.0f);
+			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+			std::cout << "Adjust further? [y/n] ";
+			std::cin >> dec;
+		} 
+		while (dec == 'y');
+
 		StarTracker::Ephemeris::Coordinates::Observer observer{};
 		std::cout << "Enter Location <latitude> <longitude>: ";
 		std::cin >> observer.Latitude >> observer.Longitude;
