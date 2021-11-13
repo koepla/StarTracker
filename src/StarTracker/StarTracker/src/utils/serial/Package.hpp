@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-namespace StarTracker::Serial {
+namespace StarTracker::Utils::Serial {
 
 	class PackageException : public std::exception {
 

@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace StarTracker::Serial {
+namespace StarTracker::Utils::Serial {
 
 	SerialException::SerialException(std::string&& message) noexcept : message(std::move(message)) {
 
