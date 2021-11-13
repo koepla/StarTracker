@@ -18,7 +18,7 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\serial\Serial.cpp">
+    <ClCompile Include="src\utils\serial\Serial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\utils\HttpRequest.cpp">
@@ -30,15 +30,15 @@
     <ClCompile Include="src\utils\Stopwatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\serial\Package.cpp">
+    <ClCompile Include="src\utils\serial\Package.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\serial\Package.hpp">
+    <ClInclude Include="src\utils\serial\Package.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\serial\Serial.hpp">
+    <ClInclude Include="src\utils\serial\Serial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core\Core.hpp">

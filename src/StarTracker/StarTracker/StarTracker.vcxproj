@@ -102,10 +102,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\serial\Package.cpp" />
+    <ClCompile Include="src\utils\serial\Package.cpp" />
     <ClCompile Include="src\utils\GeoLocation.cpp" />
     <ClCompile Include="src\utils\HttpRequest.cpp" />
-    <ClCompile Include="src\core\serial\Serial.cpp" />
+    <ClCompile Include="src\utils\serial\Serial.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\Stopwatch.cpp" />
   </ItemGroup>
@@ -119,8 +119,8 @@
     <ClInclude Include="src\utils\GeoLocation.hpp" />
     <ClInclude Include="src\utils\HttpRequest.hpp" />
     <ClInclude Include="src\core\Core.hpp" />
-    <ClInclude Include="src\core\serial\Package.hpp" />
-    <ClInclude Include="src\core\serial\Serial.hpp" />
+    <ClInclude Include="src\utils\serial\Package.hpp" />
+    <ClInclude Include="src\utils\serial\Serial.hpp" />
     <ClInclude Include="src\utils\Stopwatch.hpp" />
   </ItemGroup>
   <ItemGroup>

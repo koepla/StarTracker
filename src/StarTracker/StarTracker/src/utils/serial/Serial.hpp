@@ -9,7 +9,7 @@
 *	For reference, see https://docs.microsoft.com/en-us/previous-versions/ff802693(v=msdn.10)?redirectedfrom=MSDN
 */
 
-namespace StarTracker::Serial {
+namespace StarTracker::Utils::Serial {
 
 	class SerialException : public std::exception {
 

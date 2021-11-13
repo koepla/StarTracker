@@ -1,8 +1,8 @@
 #include <StarAPI/StarAPI.hpp>
 
 #include "core/Core.hpp"
-#include "core/serial/Package.hpp"
-#include "core/serial/Serial.hpp"
+#include "utils/serial/Package.hpp"
+#include "utils/serial/Serial.hpp"
 
 #include "utils/GeoLocation.hpp"
 #include "utils/HttpRequest.hpp"
@@ -111,12 +111,12 @@ int main(const int, const char**) {
 
 #if 0
 
-bool sendToTracker(StarTracker::Serial::SerialPort& port, StarTracker::Serial::Pack32& package, const StarTracker::Ephemeris::Coordinates::Horizontal& position) {
+bool sendToTracker(StarTracker::Utils::Serial::SerialPort& port, StarTracker::Utils::Serial::Pack32& package, const StarTracker::Ephemeris::Coordinates::Horizontal& position) {
 
 	std::cout << "\tTracking Object " << position.ToString() << std::endl << std::endl;
 
 	package.Clear();
-	package.SetFlag(StarTracker::Serial::Command::MOVE);
+	package.SetFlag(StarTracker::Utils::Serial::Command::MOVE);
 	package.Push<float>(static_cast<float>(position.Altitude));
 	package.Push<float>(static_cast<float>(position.Azimuth));
 
@@ -129,8 +129,8 @@ int main(int argc, const char** argv) {
 
 		std::cout << "------ StarTracker Commandline Interface ------" << std::endl << std::endl;
 
-		StarTracker::Serial::SerialPort serialPort{};
-		StarTracker::Serial::Pack32 package{};
+		StarTracker::Utils::Serial::SerialPort serialPort{};
+		StarTracker::Utils::Serial::Pack32 package{};
 
 		std::cout << "#Port Selection " << std::endl;
 
@@ -163,13 +163,13 @@ int main(int argc, const char** argv) {
 			std::cin >> pitch >> yaw;
 
 			package.Clear();
-			package.SetFlag(StarTracker::Serial::Command::MOVE);
+			package.SetFlag(StarTracker::Utils::Serial::Command::MOVE);
 			package.Push(static_cast<float>(pitch));
 			package.Push(static_cast<float>(yaw));
 			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 
 			package.Clear();
-			package.SetFlag(StarTracker::Serial::Command::CONF);
+			package.SetFlag(StarTracker::Utils::Serial::Command::CONF);
 			package.Push(0.0f);
 			package.Push(0.0f);
 			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));

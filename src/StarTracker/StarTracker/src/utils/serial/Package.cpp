@@ -1,6 +1,6 @@
 #include "Package.hpp"
 
-namespace StarTracker::Serial {
+namespace StarTracker::Utils::Serial {
 
 	PackageException::PackageException(std::string&& message) : message(std::move(message)) {
 
