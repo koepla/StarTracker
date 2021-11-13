@@ -3,11 +3,199 @@
 namespace StarTracker {
 
 	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) noexcept
-	: Year(year), Month(month), Day(day), Hour(hour), Minute(minute), Second(second) 
-	{
+	: Year(year), Month(month), Day(day), Hour(hour), Minute(minute), Second(second) {
 
 	}
 
+	void DateTime::AddYears(int64_t years) noexcept {
+	
+		Year += years;
+	}
+
+	void DateTime::AddMonths(int64_t months) noexcept {
+
+		if (months > 0) {
+
+			if (Month + months > 12) {
+
+				AddYears(1);
+				AddMonths(months - 12);
+			}
+			else {
+
+				Month += months;
+			}
+		}
+		else if (months < 0) {
+
+			if (Month + months < 1) {
+
+				AddYears(-1);
+				AddMonths(months + 12);
+			}
+			else {
+
+				Month += months;
+			}
+		}
+	}
+
+	void DateTime::AddDays(int64_t days) noexcept {
+
+		switch (Month) {
+
+		case 1:  addDays(days, 31); break;
+		case 2: {
+
+			if (Year % 4 == 0) {
+
+				if (Year % 100 == 0) {
+
+					if (Year % 400 == 0) {
+
+						addDays(days, 29);
+					}
+					else {
+
+						addDays(days, 28);
+					}
+				}
+				else {
+
+					addDays(days, 29);
+				}
+			}
+			else {
+
+				addDays(days, 28);
+			}
+
+		} break;
+		case 3:  addDays(days, 31); break;
+		case 4:  addDays(days, 30); break;
+		case 5:  addDays(days, 31); break;
+		case 6:  addDays(days, 30); break;
+		case 7:  addDays(days, 31); break;
+		case 8:  addDays(days, 31); break;
+		case 9:  addDays(days, 30); break;
+		case 10: addDays(days, 31); break;
+		case 11: addDays(days, 30); break;
+		case 12: addDays(days, 31); break;
+		default: break;
+		}
+	}
+
+	void DateTime::AddHours(int64_t hours) noexcept {
+
+		if (hours > 0) {
+
+			if (Hour + hours > 23) {
+
+				AddDays(1);
+				AddHours(hours - 24);
+			}
+			else {
+
+				Hour += hours;
+			}
+		}
+		else if (hours < 0) {
+
+			if (Hour + hours < 0) {
+
+				AddDays(-1);
+				AddHours(hours + 24);
+			}
+			else {
+
+				Hour += hours;
+			}
+		}
+	}
+
+	void DateTime::AddMinutes(int64_t minutes) noexcept {
+
+		if (minutes > 0) {
+
+			if (Minute + minutes > 59) {
+
+				AddHours(1);
+				AddMinutes(minutes - 60);
+			}
+			else {
+
+				Minute += minutes;
+			}
+		}
+		else if (minutes < 0) {
+
+			if (Minute + minutes < 0) {
+
+				AddHours(-1);
+				AddMinutes(minutes + 60);
+			}
+			else {
+
+				Minute += minutes;
+			}
+		}
+	}
+
+	void DateTime::AddSeconds(int64_t seconds) noexcept {
+
+		if (seconds > 0) {
+
+			if (Second + seconds > 59) {
+
+				AddMinutes(1);
+				AddSeconds(seconds - 60);
+			}
+			else {
+
+				Second += seconds;
+			}
+		}
+		else if (seconds < 0) {
+
+			if (Second + seconds < 0) {
+
+				AddMinutes(-1);
+				AddSeconds(seconds + 60);
+			}
+			else {
+
+				Second += seconds;
+			}
+		}
+	}
+
+	void DateTime::addDays(int64_t days, const int monthDays) noexcept {
+
+		if (days > 0) {
+
+			if (Day + days > monthDays) {
+
+				AddMonths(1);
+				AddDays(days - monthDays);
+			}
+			else {
+
+				Day += days;
+			}
+		}
+		else if (days < 0) {
+
+			if (Day + days < 1) {
+
+				AddMonths(-1);
+				AddDays(days + monthDays);
+			}
+			else {
+
+				Day += days;
+			}
+		}
+	}
 
 	DateTime DateTime::Now() noexcept {
 
@@ -35,6 +223,11 @@ namespace StarTracker {
 			static_cast<int64_t>(ltm.tm_hour),
 			static_cast<int64_t>(ltm.tm_min),
 			static_cast<int64_t>(ltm.tm_sec));
+	}
+
+	int64_t DateTime::UtcDiff() noexcept {
+
+		return DateTime::Now().Hour - DateTime::UtcNow().Hour;
 	}
 
 	double DateTime::Jdn(const DateTime& date) noexcept {
