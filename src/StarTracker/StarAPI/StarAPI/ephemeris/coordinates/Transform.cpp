@@ -54,9 +54,12 @@ namespace StarTracker::Ephemeris::Coordinates {
 	}
 
 	Horizontal Transform::TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) noexcept {
+        
+        DateTime relativeUtcTime = date;
+        relativeUtcTime.AddHours(-1 * DateTime::UtcDiff());
 
-        // the greenwhich mean sidereal time for the local date time is (at least i think so) the local sidereal time
-		double hourAngle = DateTime::Gmst(date) - sphericalCoords.RightAscension;
+        double localMeanSiderealTime = DateTime::Gmst(relativeUtcTime) + observer.Longitude;
+		double hourAngle = localMeanSiderealTime - sphericalCoords.RightAscension;
 		return EquatorialToHorizontal(sphericalCoords.Declination, hourAngle, observer.Latitude);
 	}
 }
