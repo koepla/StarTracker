@@ -3,6 +3,7 @@
 
     {
       "Name": "Mercury",
+      "Type": "SSB",
       "SemiMajorAxis": 0.38709927,
       "SemiMajorAxisCentury": 0.00000037,
       "Eccentricity": 0.20563593,
@@ -18,6 +19,7 @@
     },
     {
       "Name": "Venus",
+      "Type": "SSB",
       "SemiMajorAxis": 0.72333566,
       "SemiMajorAxisCentury": 0.00000390,
       "Eccentricity": 0.00677672,
@@ -33,6 +35,7 @@
     },
     {
       "Name": "Mars",
+      "Type": "SSB",
       "SemiMajorAxis": 1.52371034,
       "SemiMajorAxisCentury": 0.00001847,
       "Eccentricity": 0.09339410,
@@ -48,6 +51,7 @@
     },
     {
       "Name": "Jupiter",
+      "Type": "SSB",
       "SemiMajorAxis": 5.20288700,
       "SemiMajorAxisCentury": -0.00011607,
       "Eccentricity": 0.04838624,
@@ -63,6 +67,7 @@
     },
     {
       "Name": "Saturn",
+      "Type": "SSB",
       "SemiMajorAxis": 9.54149883,
       "SemiMajorAxisCentury": -0.00003065,
       "Eccentricity": 0.05550825,
@@ -78,6 +83,7 @@
     },
     {
       "Name": "Uranus",
+      "Type": "SSB",
       "SemiMajorAxis": 19.18797948,
       "SemiMajorAxisCentury": -0.00020455,
       "Eccentricity": 0.04685740,
@@ -93,6 +99,7 @@
     },
     {
       "Name": "Neptune",
+      "Type": "SSB",
       "SemiMajorAxis": 30.06952752,
       "SemiMajorAxisCentury": 0.00006447,
       "Eccentricity": 0.00895439,
@@ -105,6 +112,254 @@
       "LonPerihelionCentury": 0.01009938,
       "LonAscendingNode": 131.78635853,
       "LonAscendingNodeCentury": -0.00606302
+    },
+    {
+      "Name": "Andromeda Galaxy",
+      "Designation":  "M31",
+      "Type": "CB",
+      "RightAscension": 10.68458333,
+      "Declination": 41.26888889,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Antennae Galaxy",
+      "Designation": "NGC 4038",
+      "Type": "CB",
+      "RightAscension": 180.47,
+      "Declination": -18.86444444,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Antennae Galaxy",
+      "Designation": "NGC 4039",
+      "Type": "CB",
+      "RightAscension": 180.4741667,
+      "Declination": -18.88555556,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Backward Galaxy",
+      "Designation": "NGC 4622",
+      "Type": "CB",
+      "RightAscension": 190.6570833,
+      "Declination": -40.74305556,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Bode's Galaxy",
+      "Designation": "M81",
+      "Type": "CB",
+      "RightAscension": 148.8895833,
+      "Declination": 69.06722222,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Butterfly Galaxy",
+      "Designation": "NGC 4567",
+      "Type": "CB",
+      "RightAscension": 189.13625,
+      "Declination": 11.25777778,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Butterfly Galaxy",
+      "Designation": "NGC 4568",
+      "Type": "CB",
+      "RightAscension": 189.1425,
+      "Declination": 11.23861111,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Cartwheel Galaxy",
+      "Designation": "PGC 2248",
+      "Type": "CB",
+      "RightAscension": 9.42125,
+      "Declination": -33.71638889,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Cigar Galaxy",
+      "Designation": "M82",
+      "Type": "CB",
+      "RightAscension": 148.975,
+      "Declination": 69.68305556,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Coma Pinwheel Galaxy",
+      "Designation": "M99",
+      "Type": "CB",
+      "RightAscension": 184.7067708,
+      "Declination": 14.41648889,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Helix Nebula",
+      "Designation": "NGC 7293",
+      "Type": "CB",
+      "RightAscension": 337.410625,
+      "Declination": 20.83711111,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Hoag's Galaxy",
+      "Designation": "PGC 54559",
+      "Type": "CB",
+      "RightAscension": 229.31,
+      "Declination": 21.58555556,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Large Magellanic Cloud",
+      "Designation": "PGC 17223",
+      "Type": "CB",
+      "RightAscension": 80.89375,
+      "Declination": -69.75611111,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Lindsay-Shapley Ring",
+      "Designation": "PGC 19481",
+      "Type": "CB",
+      "RightAscension": 100.7754167,
+      "Declination": -74.2263889,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Medusa Merger",
+      "Designation": "NGC 4194",
+      "Type": "CB",
+      "RightAscension": 183.5395833,
+      "Declination": 54.52694444,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Sculptor Dwarf Galaxy",
+      "Designation": "PGC 3589",
+      "Type": "CB",
+      "RightAscension": 15.03875,
+      "Declination": -33.70916667,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Mice Galaxies",
+      "Designation": "NGC 4676",
+      "Type": "CB",
+      "RightAscension": 191.5420833,
+      "Declination": 30.73194444,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Small Magellanic Cloud",
+      "Designation": "PGC 3085",
+      "Type": "CB",
+      "RightAscension": 13.18666667,
+      "Declination": -72.82861111,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Milky Way",
+      "Designation": "None",
+      "Type": "CB",
+      "RightAscension": 266.4168371,
+      "Declination": -29.00781056,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Needle Galaxy",
+      "Designation": "NGC 4565",
+      "Type": "CB",
+      "RightAscension": 189.0866667,
+      "Declination": 25.98777778,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Pinwheel Galaxy",
+      "Designation": "M101",
+      "Type": "CB",
+      "RightAscension": 210.8025,
+      "Declination": 54.34916667,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Sculptor Galaxy",
+      "Designation": "NGC 253",
+      "Type": "CB",
+      "RightAscension": 11.8875,
+      "Declination": -25.28833333,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Sombrero Galaxy",
+      "Designation": "M104",
+      "Type": "CB",
+      "RightAscension": 189.9975,
+      "Declination": -11.62305556,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Southern Pinwheel Galaxy",
+      "Designation": "M83",
+      "Type": "CB",
+      "RightAscension": 204.2538292,
+      "Declination": -29.86576111,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Sunflower Galaxy",
+      "Designation": "M63",
+      "Type": "CB",
+      "RightAscension": 198.9553077,
+      "Declination": 42.02936836,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Tadpole Galaxy",
+      "Designation": "PGC 57129",
+      "Type": "CB",
+      "RightAscension": 241.51625,
+      "Declination": 55.42555556,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Triangulum Galaxy",
+      "Designation": "M33",
+      "Type": "CB",
+      "RightAscension": 23.45841667,
+      "Declination": 30.66019444,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Whirlpool Galaxy",
+      "Designation": "M51a",
+      "Type": "CB",
+      "RightAscension": 202.4695833,
+      "Declination": 47.19527778,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Centaurus A",
+      "Designation": "NGC 5128",
+      "Type": "CB",
+      "RightAscension": 201.365,
+      "Declination": -43.01916667,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Rosette Nebula",
+      "Designation": "NGC2237, NGC2238, NGC2239, NGC2244, NGC2246",
+      "Type": "CB",
+      "RightAscension": 98.4375,
+      "Declination": 4.998333333,
+      "Radius": 1.0
+    },
+    {
+      "Name": "Eagle Nebula",
+      "Designation": "M16",
+      "Type": "CB",
+      "RightAscension": 274.7,
+      "Declination": -13.81666667,
+      "Radius": 1.0
     }
   ]
 }
