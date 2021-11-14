@@ -9,6 +9,6 @@
 #include "ephemeris/coordinates/Terrestrial.hpp"
 #include "ephemeris/coordinates/Transform.hpp"
 #include "ephemeris/KeplerianElements.hpp"
-#include "ephemeris/CelestialBody.hpp"
+#include "ephemeris/SolarSystemBody.hpp"
 
 #endif // STARAPI_H
