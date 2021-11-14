@@ -1,7 +1,6 @@
 #ifndef STARAPI_EPHEMERIS_CELESTIALBODY_H
 #define STARAPI_EPHEMERIS_CELESTIALBODY_H
 
-#include "KeplerianElements.hpp"
 #include "coordinates/Spherical.hpp"
 #include "coordinates/Rectangular.hpp"
 #include "../DateTime.hpp"
@@ -14,17 +13,28 @@
 
 namespace StarTracker::Ephemeris {
 
-	class CelestialBody
-	{
+	class CelestialBody {
+
 	private:
 		std::string name;
-		KeplerianElements keplerElements;
-		KeplerianElements keplerElementsCentury;
+		std::string designation;
+		Coordinates::Spherical position;
 
 	public:
-		CelestialBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
-		CelestialBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
-		
+		explicit CelestialBody(const Coordinates::Spherical& position) noexcept;
+		CelestialBody(const std::string& name, const Coordinates::Spherical& position) noexcept;
+		CelestialBody(const std::string& name, const std::string& designation, const Coordinates::Spherical& position) noexcept;
+
+		/**
+		* Computes the spherical position of the celestial body
+		*
+		* @param date date and time for the computation
+		*
+		* @return the computed spherical coordinates
+		*
+		*/
+		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept;
+
 		/**
 		* Retrieves the name
 		*
@@ -32,18 +42,14 @@ namespace StarTracker::Ephemeris {
 		*
 		*/
 		[[nodiscard]] const std::string& GetName() const noexcept;
-		
+
 		/**
-		* Computes the spherical position of the celestial body
+		* Retrieves the designation
 		*
-		* @param date date and time for the computation
-		*
-		* @param eps tolerance for kepler's equation
-		*
-		* @return the computed spherical coordinates
+		* @return the name of the celestial body
 		*
 		*/
-		[[nodiscard]] Coordinates::Spherical GetSphericalPosition(const DateTime& date, double eps = 1e-12) const noexcept;
+		[[nodiscard]] const std::string& GetDesignation() const noexcept;
 
 	public:
 		/**
@@ -54,16 +60,12 @@ namespace StarTracker::Ephemeris {
 		* @return list of the retrieved celestial bodies as std::vector
 		*
 		* @throws std::exception if the file doesn't exist or if the content is invalid formatted
-		* 
+		*
 		*/
-		[[nodiscard]] static std::vector<CelestialBody> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
-
-	private:
-		[[nodiscard]] double computeEccentricAnomaly(double meanAnomaly, double eccentricity, double eps = 1e-12) const noexcept;
-		[[nodiscard]] std::pair<double, double> computeTrueAnomalyAndDistance(double semiMajorAxis, double eccentricAnomaly, double eccentricity) const noexcept;
-		[[nodiscard]] double computeEcliptic(double julianCenturies) const noexcept;
-		[[nodiscard]] Coordinates::Rectangular computeEarthPos(double julianCenturies) const noexcept;
+		[[nodiscard]] static std::vector<std::unique_ptr<CelestialBody>> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
 	};
 }
 
+
 #endif // STARAPI_EPHEMERIS_CELESTIALBODY_H
+
