@@ -8,108 +8,8 @@
 #include "utils/HttpRequest.hpp"
 #include "utils/Stopwatch.hpp"
 
+#include <istream>
 #include <iostream>
-
-#define test(expr) assert((expr) && "Failed test")
-
-int main(const int, const char**) {
-
-	try {
-
-		auto bodies = StarTracker::Ephemeris::CelestialBody::LoadFromFile("assets/CelestialBodies.json");
-
-		for (auto&& body : bodies) {
-
-			if (body.GetName()._Equal("Uranus")) {
-
-				auto location = StarTracker::Ephemeris::Coordinates::Observer{ 48.2719, 14.4484 };
-
-				auto observedPosition = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
-					body.GetSphericalPosition(StarTracker::DateTime::Now()),
-					location,
-					StarTracker::DateTime::Now()
-				);
-
-				std::cout << observedPosition.ToString() << std::endl;
-			}
-		}
-	}
-
-	catch (...) {}
-
-	using StarTracker::DateTime;
-
-	DateTime date = DateTime{ 2021, 1, 30, 12, 30, 30 };
-	date.AddMonths(10);
-	test(date.Year == 2021);
-	test(date.Month == 11);
-
-	date = DateTime{ 2021, 1, 30, 12, 30, 30 };
-	date.AddMonths(-24);
-	test(date.Year == 2019);
-	test(date.Month == 1);
-
-	date = DateTime{ 2021, 1, 1, 12, 30, 30 };
-	date.AddMonths(-1);
-	test(date.Year == 2020);
-	test(date.Month == 12);
-
-	date = DateTime{ 2024, 2, 28, 12, 30, 30 };
-	date.AddDays(2);
-	test(date.Year == 2024);
-	test(date.Month == 3);
-	test(date.Day == 1);
-
-	date = DateTime{ 2025, 2, 28, 12, 30, 30 };
-	date.AddDays(2);
-	test(date.Year == 2025);
-	test(date.Month == 3);
-	test(date.Day == 2);
-
-	date = DateTime{ 2021, 1, 1, 12, 30, 30 };
-	date.AddDays(-1);
-	test(date.Year == 2020);
-	test(date.Month == 12);
-	test(date.Day == 31);
-
-	date = DateTime{ 2021, 1, 1, 23, 30, 30 };
-	date.AddHours(1);
-	test(date.Day == 2);
-	test(date.Hour == 0);
-
-	date = DateTime{ 2021, 12, 31, 23, 59, 0 };
-	date.AddMinutes(1);
-	test(date.Year == 2022);
-	test(date.Month == 1);
-	test(date.Day == 1);
-	test(date.Hour == 0);
-	test(date.Minute == 0);
-
-	date = DateTime{ 2021, 12, 31, 23, 59, 59 };
-	date.AddSeconds(1);
-	test(date.Year == 2022);
-	test(date.Month == 1);
-	test(date.Day == 1);
-	test(date.Hour == 0);
-	test(date.Minute == 0);
-	test(date.Second == 0);
-
-	date = DateTime{ 2023, 12, 31, 23, 59, 59 };
-	date.AddSeconds(1);
-	date.AddMonths(1);
-	date.AddDays(28);
-	test(date.Year == 2024);
-	test(date.Month == 2);
-	test(date.Day == 29);
-	test(date.Hour == 0);
-	test(date.Minute == 0);
-	test(date.Second == 0);
-		
-
-	return 0;
-}
-
-#if 0
 
 bool sendToTracker(StarTracker::Utils::Serial::SerialPort& port, StarTracker::Utils::Serial::Pack32& package, const StarTracker::Ephemeris::Coordinates::Horizontal& position) {
 
@@ -191,7 +91,7 @@ int main(int argc, const char** argv) {
 	
 			for (auto&& body : celestialBodies) {
 
-				std::cout << "\t" << body.GetName() << " " << body.GetSphericalPosition(StarTracker::DateTime::Now()).ToString() << std::endl;
+				std::cout << "\t" << body->GetName() << " " << body->GetSphericalPosition(StarTracker::DateTime::Now()).ToString() << std::endl;
 			}
 
 			std::cout << "\tManual [no precomputed data]" << std::endl;
@@ -229,9 +129,9 @@ int main(int argc, const char** argv) {
 
 				for (auto&& body : celestialBodies) {
 
-					if (body.GetName()._Equal(bodyName)) {
+					if (body->GetName()._Equal(bodyName)) {
 
-						auto sphericalPosition = body.GetSphericalPosition(StarTracker::DateTime::Now());
+						auto sphericalPosition = body->GetSphericalPosition(StarTracker::DateTime::Now());
 						auto observedPosition = StarTracker::Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
 							sphericalPosition,
 							{ observer.Latitude, observer.Longitude },
@@ -257,5 +157,3 @@ int main(int argc, const char** argv) {
 	
 	return 0;
 }
-
-#endif
