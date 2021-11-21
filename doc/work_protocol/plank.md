@@ -96,3 +96,104 @@ Date:           18.08.2021 - 28.08.2021
 Time spent:     40h
 ```
 In the specified timespan I fixed the driver code for the TMC Stepper Drivers, the Issue was that I sent 64 bytes of data, but the Serial Buffer of the Arduino can by default only hold 63 bytes. After the driver code was fixed I created the Visual Studio Solution for the real source code. I implemented the now called StarAPI (Ephemeris computation framework) as a static library which is referenced by the StarTracker Project. In order to fetch ephemeris data from Webservices, I implemented a class to send HttpRequests, I later used this functionality to implemented the GeoLocation class, which returns approximated Location data. 
+
+---
+
+## :memo: platform-io project, refactor
+
+```
+Date:           14.09.2021
+Time spent:     0.5h
+```
+Added the PlatformIO project to the src Folder (microcontroller-code). I also made minor refactorings to the StarTracker source code and added a little stopwatch utility-class.
+
+---
+
+## :memo: started celestial body computation code
+
+```
+Date:           08.10.2021
+Time spent:     4h
+```
+Today I started to work on the source code for computing right ascension and declination from given keplarian elements. It still has a few bugs but I've tracked the problem down to computing the mean anomaly. 
+
+---
+
+## :memo: first working celestial body computation code
+
+```
+Date:           09.10.2021
+Time spent:     6h
+```
+Today I sort of completed the celestialbody computation code, it works for solar system bodies. I still had a few issues with transforming heliocentric coordinates to geocentric coordinates. Celestial bodies can now be loaded from a .json file, I added the major planets of our solar system.
+
+---
+
+## :memo: update on celestial body computation
+
+```
+Date:           10.10.2021
+Time spent:     0.5h
+```
+Made a minor change for computing the solution for kepler's equation. 
+
+---
+
+## :memo: code documentation
+
+```
+Date:           30.10.2021
+Time spent:     2h
+```
+On this day, I documented all major functions of the StarTracker codebase. 
+
+---
+
+## :memo: code documentation
+
+```
+Date:           02.11.2021
+Time spent:     2h
+```
+Today I removed all external dependencies from our repository. StarTracker now uses vcpkg packages. I added build instructions to the readme of our repository. 
+
+---
+
+## :memo: bug in greenwhich mean sidereal time
+
+```
+Date:           02.11.2021
+Time spent:     2.5h
+```
+Today I discovered a bug in our computation of the greenwhich mean sidereal time. Due to the change to winter-time, the code doesn't work anymore. I added a temporary fix: We can pass in the local time to the function that computes the greenwhich mean sidereal time, because this will already give us the local mean sidereal time. But we have to ditch the addition of the observer's longitude, which is by any means not optimal.
+
+---
+
+## :memo: first real test of StarTracker
+
+```
+Date:           02.11.2021
+Time spent:     4h
+```
+Today we went out onto the fields for testing our prototype project. We detected a few inconveniences in the way which StarTracker performs movements. The photographing of celestial bodies didn't quite work due to our inability to operate the camera. We had an issue with focusing to infinity, and the images where blurred due to the manual shutter release. But we have to admit that we learned a lot for our project.
+
+---
+
+## :memo: functions for adding parts of time to DateTime, GMST fix
+
+```
+Date:           13.11.2021
+Time spent:     2h
+```
+Today I implemented functions for adding parts of time (seconds, minutes, hours...) to our StarTracker::DateTime class. I used the TDD strategy and it worked out pretty well. These additions enabled me to implement a function which computes the difference to utc time, and then adds or subtracts the difference to a given time. This means that we can compute the relative UTC-time for any other time. We need this exact functionality for our greenwhich mean sidereal time issue, which I then went on to fix. 
+
+---
+
+## :memo: added support for fixed objects to celestial body class
+
+```
+Date:           13.11.2021
+Time spent:     3h
+```
+Today I renamed the CelestialBody class to SolarSystemBody, in order to use the CelestialBody class as a base class, which directly reads right ascension and declination from the json file. We need this functionality for fixed bodies (Galaxies, Stars). I added some major galaxies and nebulas to the .json file. 
+
