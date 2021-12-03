@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\algo\ImageManip.hpp" />
+    <ClInclude Include="src\core\Assert.hpp" />
     <ClInclude Include="src\utils\GeoLocation.hpp" />
     <ClInclude Include="src\utils\HttpRequest.hpp" />
     <ClInclude Include="src\core\Core.hpp" />
