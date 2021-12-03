@@ -1,9 +1,9 @@
-#ifndef STARTRACKER_ALGO_IMAGEMANIP_H
-#define STARTRACKER_ALGO_IMAGEMANIP_H
+#ifndef STARTRACKER_CORE_ALGO_IMAGEMANIP_H
+#define STARTRACKER_CORE_ALGO_IMAGEMANIP_H
 
 #include <vector>
 
-namespace StarTracker::Algo {
+namespace StarTracker::Core::Algo {
 
 	class ImageManip {
 
@@ -35,4 +35,4 @@ namespace StarTracker::Algo {
 	};
 }
 
-#endif // STARTRACKER_ALGO_IMAGEMANIP_H
+#endif // STARTRACKER_CORE_ALGO_IMAGEMANIP_H
