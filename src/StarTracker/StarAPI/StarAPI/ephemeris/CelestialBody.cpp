@@ -1,30 +1,14 @@
 #include "CelestialBody.hpp"
+#include "FixedBody.hpp"
 #include "SolarSystemBody.hpp"
 
 namespace StarTracker::Ephemeris {
-	
-    CelestialBody::CelestialBody(const Coordinates::Spherical& position) noexcept : CelestialBody("Unnamed celestial body", position) {
-
-
-	}
-
-	CelestialBody::CelestialBody(const std::string& name, const Coordinates::Spherical& position) noexcept : CelestialBody(name, "None", position) {
-
-
-	}
-
-    CelestialBody::CelestialBody(const std::string& name, const std::string& designation, const Coordinates::Spherical& position) noexcept :
-        name(name), designation(designation), position(position) {
-
-
+    
+    CelestialBody::CelestialBody(const std::string& name, const std::string& designation) noexcept : name{ name }, designation{ designation } {
+    
     }
 
-	Coordinates::Spherical CelestialBody::GetSphericalPosition(const DateTime& date) const noexcept {
-
-        return position;
-	}
-
-	const std::string& CelestialBody::GetName() const noexcept {
+    const std::string& CelestialBody::GetName() const noexcept {
 
         return name;
 	}
@@ -90,7 +74,7 @@ namespace StarTracker::Ephemeris {
             }
             else if (type._Equal("CB")) {
 
-                celestialBodies.push_back(std::make_unique<CelestialBody>(CelestialBody{
+                celestialBodies.push_back(std::make_unique<FixedBody>(FixedBody{
 
                     element["Name"].get<std::string>(),
                     element["Designation"].get<std::string>(),

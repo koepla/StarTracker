@@ -107,6 +107,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="StarAPI\ephemeris\CelestialBody.hpp" />
+    <ClInclude Include="StarAPI\ephemeris\FixedBody.hpp" />
     <ClInclude Include="StarAPI\ephemeris\SolarSystemBody.hpp" />
     <ClInclude Include="StarAPI\ephemeris\KeplerianElements.hpp" />
     <ClInclude Include="StarAPI\ephemeris\coordinates\Horizontal.hpp" />
@@ -120,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="StarAPI\ephemeris\CelestialBody.cpp" />
+    <ClCompile Include="StarAPI\ephemeris\FixedBody.cpp" />
     <ClCompile Include="StarAPI\ephemeris\SolarSystemBody.cpp" />
     <ClCompile Include="StarAPI\ephemeris\KeplerianElements.cpp" />
     <ClCompile Include="StarAPI\ephemeris\coordinates\Horizontal.cpp" />

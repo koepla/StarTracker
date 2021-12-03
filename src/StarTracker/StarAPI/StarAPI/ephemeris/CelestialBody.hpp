@@ -15,16 +15,13 @@ namespace StarTracker::Ephemeris {
 
 	class CelestialBody {
 
-	private:
+	protected:
 		std::string name;
 		std::string designation;
-		Coordinates::Spherical position;
+
+		CelestialBody(const std::string& name, const std::string& designation) noexcept;
 
 	public:
-		explicit CelestialBody(const Coordinates::Spherical& position) noexcept;
-		CelestialBody(const std::string& name, const Coordinates::Spherical& position) noexcept;
-		CelestialBody(const std::string& name, const std::string& designation, const Coordinates::Spherical& position) noexcept;
-
 		/**
 		* Computes the spherical position of the celestial body
 		*
@@ -33,7 +30,7 @@ namespace StarTracker::Ephemeris {
 		* @return the computed spherical coordinates
 		*
 		*/
-		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept;
+		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept = 0;
 
 		/**
 		* Retrieves the name

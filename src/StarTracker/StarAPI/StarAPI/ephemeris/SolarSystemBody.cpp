@@ -7,16 +7,15 @@ namespace StarTracker::Ephemeris {
     SolarSystemBody::SolarSystemBody(
         const KeplerianElements& keplerElements, 
         const KeplerianElements& keplerElementsCentury) noexcept : 
-        SolarSystemBody("Unnamed Celestial Body", keplerElements, keplerElementsCentury) {
-
+        SolarSystemBody{ "Unnamed Celestial Body", keplerElements, keplerElementsCentury } {
 
     }
 
     SolarSystemBody::SolarSystemBody(
         const std::string& name, const KeplerianElements& keplerElements, 
-        const KeplerianElements& keplerElementsCentury) noexcept : CelestialBody(name, {}),
-        keplerElements(keplerElements), keplerElementsCentury(keplerElementsCentury) {
-
+        const KeplerianElements& keplerElementsCentury) noexcept : 
+        CelestialBody{ name, {} },
+        keplerElements{ keplerElements }, keplerElementsCentury{ keplerElementsCentury } {
 
     }
 
