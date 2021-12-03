@@ -56,6 +56,9 @@
     <ClInclude Include="src\utils\Stopwatch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\Assert.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\CelestialBodies.json" />
