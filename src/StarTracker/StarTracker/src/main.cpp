@@ -8,8 +8,8 @@
 #include "utils/HttpRequest.hpp"
 #include "utils/Stopwatch.hpp"
 
-#include <istream>
 #include <iostream>
+#include <filesystem>
 
 bool sendToTracker(StarTracker::Utils::Serial::SerialPort& port, StarTracker::Utils::Serial::Pack32& package, const StarTracker::Ephemeris::Coordinates::Horizontal& position) {
 
@@ -98,7 +98,7 @@ int main(int argc, const char** argv) {
 
 			std::string bodyName;
 			std::cout << "\tSelect a body: ";
-			std::cin >> bodyName;
+			std::getline(std::cin, bodyName);
 
 			if (bodyName._Equal("Manual")) {
 
