@@ -21,7 +21,7 @@ namespace StarTracker::Ephemeris {
 
     StarTracker::Ephemeris::Coordinates::Spherical SolarSystemBody::GetSphericalPosition(const DateTime& date) const noexcept {
 
-        double t = DateTime::JulianCenturies(date);
+        const double t = DateTime::JulianCenturies(date);
 
         KeplerianElements meanKeplerElem = {
 
@@ -39,39 +39,39 @@ namespace StarTracker::Ephemeris {
 
         // compute argument of perihelion and mean anomaly
 
-        double perihelion = w - Om;
-        double meanAnomaly = Math::Mod(meanKeplerElem.MeanLongitude - w, 360.0);
+        const double perihelion = w - Om;
+        const double meanAnomaly = Math::Mod(meanKeplerElem.MeanLongitude - w, 360.0);
 
         // compute eccentric anomaly
 
-        double eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanKeplerElem.Eccentricity);
+        const double eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanKeplerElem.Eccentricity);
 
 
         // compute true Anomaly and distance of the Planet
 
-        auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanKeplerElem.SemiMajorAxis, eccentricAnomaly, meanKeplerElem.Eccentricity);
+        const auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanKeplerElem.SemiMajorAxis, eccentricAnomaly, meanKeplerElem.Eccentricity);
 
         // compute Planets heliocentric position in 3D-space
 
-        double xh = distance * (Math::Cosine(Om) * Math::Cosine(trueAnomaly + w - Om) - Math::Sine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
-        double yh = distance * (Math::Sine(Om) * Math::Cosine(trueAnomaly + w - Om) + Math::Cosine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
-        double zh = distance * (Math::Sine(trueAnomaly + w - Om) * Math::Sine(I));
+        const double xh = distance * (Math::Cosine(Om) * Math::Cosine(trueAnomaly + w - Om) - Math::Sine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
+        const double yh = distance * (Math::Sine(Om) * Math::Cosine(trueAnomaly + w - Om) + Math::Cosine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
+        const double zh = distance * (Math::Sine(trueAnomaly + w - Om) * Math::Sine(I));
         
         // compute Planets rectangular ecliptic geocentric position in 3D-space
 
         Coordinates::Rectangular earthCoords = computeEarthPos(t);
 
-        double xg = xh - earthCoords.X;
-        double yg = yh - earthCoords.Y;
-        double zg = zh - earthCoords.Z;
+        const double xg = xh - earthCoords.X;
+        const double yg = yh - earthCoords.Y;
+        const double zg = zh - earthCoords.Z;
 
         // transform to rectangular equatorial coordinates
 
-        double ecl = computeEcliptic(t);
+        const double ecl = computeEcliptic(t);
     
-        double xe = xg;
-        double ye = yg * Math::Cosine(ecl) - zg * Math::Sine(ecl);
-        double ze = yg * Math::Sine(ecl) + zg * Math::Cosine(ecl);
+        const double xe = xg;
+        const double ye = yg * Math::Cosine(ecl) - zg * Math::Sine(ecl);
+        const double ze = yg * Math::Sine(ecl) + zg * Math::Cosine(ecl);
 
         Coordinates::Spherical sphericalCoords{};
         sphericalCoords.RightAscension = Math::ArcTangent2(ye, xe);
