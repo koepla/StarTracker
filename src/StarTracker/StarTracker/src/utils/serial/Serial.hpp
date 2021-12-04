@@ -139,12 +139,10 @@ namespace StarTracker::Utils::Serial {
 		/**
 		* Sets the baudrate
 		*
-		* @param charCount multiplier for the COM timeouts
-		*
 		* @throws SerialException if the timeouts couldn't be set
 		* 
 		*/
-		void initTimeouts(uint32_t charCount) noexcept(false);
+		void initTimeouts() noexcept(false);
 
 	public:
 
