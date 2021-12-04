@@ -5,8 +5,7 @@
 
 namespace StarTracker::Utils::Serial {
 
-	SerialException::SerialException(std::string&& message) noexcept : message(std::move(message)) {
-
+	SerialException::SerialException(std::string&& message) noexcept : message{ std::move(message) } {
 
 	}
 
@@ -15,8 +14,7 @@ namespace StarTracker::Utils::Serial {
 		return message.c_str();
 	}
 
-	SerialPort::SerialPort() noexcept : hCom(nullptr), isOpen(false), dwEventMask(EV_RXCHAR | EV_ERR) {
-
+	SerialPort::SerialPort() noexcept : hCom{ nullptr }, isOpen{ false }, dwEventMask{ EV_RXCHAR } {
 
 	}
 
@@ -30,7 +28,7 @@ namespace StarTracker::Utils::Serial {
 
 	void SerialPort::Open(const std::string& port, uint32_t baudrate) noexcept(false) {
 
-		auto prefixed = prefixPort(port);
+		const auto prefixed = prefixPort(port);
 		
 		hCom = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -46,7 +44,7 @@ namespace StarTracker::Utils::Serial {
 
 		setBaudrate(baudrate);
 		initReceiveMask();
-		initTimeouts(64);
+		initTimeouts();
 	}
 
 	void SerialPort::Close() noexcept(false) {
@@ -55,12 +53,11 @@ namespace StarTracker::Utils::Serial {
 
 			throw SerialException("Couldn't close Serial Port");
 		}
+
 		isOpen = false;
 	}
 
 	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false) {
-
-		initTimeouts(bytes2read);
 
 		// Number of bytes read
 		DWORD dwread;
@@ -202,14 +199,14 @@ namespace StarTracker::Utils::Serial {
 		}
 	}
 
-	void SerialPort::initTimeouts(uint32_t charCount) noexcept(false) {
+	void SerialPort::initTimeouts() noexcept(false) {
 
 		COMMTIMEOUTS timeouts = { 0 };
-		timeouts.ReadIntervalTimeout = 100;
-		timeouts.ReadTotalTimeoutConstant = 100;
-		timeouts.ReadTotalTimeoutMultiplier = charCount;
-		timeouts.WriteTotalTimeoutConstant = 100;
-		timeouts.WriteTotalTimeoutMultiplier = charCount;
+		timeouts.ReadIntervalTimeout = 1;
+		timeouts.ReadTotalTimeoutConstant = 1;
+		timeouts.ReadTotalTimeoutMultiplier = 1;
+		timeouts.WriteTotalTimeoutConstant = 1;
+		timeouts.WriteTotalTimeoutMultiplier = 1;
 
 		if (!SetCommTimeouts(hCom, &timeouts)) {
 
@@ -219,7 +216,7 @@ namespace StarTracker::Utils::Serial {
 
 	std::vector<std::string> SerialPort::GetPortNames() noexcept(false) {
 
-		std::vector<std::string> ports;
+		std::vector<std::string> ports{};
 		char target[4096];
 
 		for (int i = 0; i < 255; i++) {
