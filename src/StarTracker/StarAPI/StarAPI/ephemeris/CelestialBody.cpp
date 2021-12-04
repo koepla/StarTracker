@@ -18,7 +18,7 @@ namespace StarTracker::Ephemeris {
         return designation;
     }
 
-    std::vector<std::unique_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
+    std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
 
         std::ifstream fin(filePath);
 
@@ -34,14 +34,14 @@ namespace StarTracker::Ephemeris {
             throw std::exception("File was empty!");
         }
 
-        nlohmann::json jObject = nlohmann::json::parse(fileContent);
+        nlohmann::json jObject = nlohmann::json::parse(fileContent, nullptr, false, true);
 
         if (!jObject.contains("CelestialBodies") || !jObject["CelestialBodies"].is_array()) {
 
             throw std::exception("Couldn't find CelestialBodies Array!");
         }
 
-        std::vector<std::unique_ptr<CelestialBody>> celestialBodies{};
+        std::vector<std::shared_ptr<CelestialBody>> celestialBodies{};
 
         for (auto& element : jObject["CelestialBodies"]) {
 
@@ -49,7 +49,7 @@ namespace StarTracker::Ephemeris {
 
             if (type._Equal("SSB")) {
 
-                celestialBodies.push_back(std::make_unique<SolarSystemBody>(SolarSystemBody{
+                celestialBodies.push_back(std::make_shared<SolarSystemBody>(SolarSystemBody{
 
                     element["Name"].get<std::string>(),
                     KeplerianElements {
@@ -74,7 +74,7 @@ namespace StarTracker::Ephemeris {
             }
             else if (type._Equal("CB")) {
 
-                celestialBodies.push_back(std::make_unique<FixedBody>(FixedBody{
+                celestialBodies.push_back(std::make_shared<FixedBody>(FixedBody{
 
                     element["Name"].get<std::string>(),
                     element["Designation"].get<std::string>(),
