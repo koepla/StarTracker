@@ -2,8 +2,7 @@
 
 namespace StarTracker::Utils::Diagnostics {
 
-	Stopwatch::Stopwatch() noexcept : running(false), startTime(), stopTime() {
-
+	Stopwatch::Stopwatch() noexcept : running{ false }, startTime{}, stopTime{} {
 
 	}
 

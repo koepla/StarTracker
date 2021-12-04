@@ -3,7 +3,7 @@
 namespace StarTracker {
 
 	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) noexcept
-	: Year(year), Month(month), Day(day), Hour(hour), Minute(minute), Second(second) {
+		: Year{ year }, Month{ month }, Day{ day }, Hour{ hour }, Minute{ minute }, Second{ second } {
 
 	}
 

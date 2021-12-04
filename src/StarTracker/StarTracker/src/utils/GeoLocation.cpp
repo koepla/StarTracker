@@ -3,7 +3,7 @@
 
 namespace StarTracker::Utils::LocationService {
 
-	GeoLocationException::GeoLocationException(std::string&& message) noexcept : message(std::move(message)) {
+	GeoLocationException::GeoLocationException(std::string&& message) noexcept : message{ std::move(message) } {
 
 	}
 
@@ -14,7 +14,7 @@ namespace StarTracker::Utils::LocationService {
 
 	Location GeoLocation::Get() noexcept(false) {
 
-		std::string responseData = "";
+		std::string responseData{ "" };
 
 		try {
 
@@ -28,7 +28,7 @@ namespace StarTracker::Utils::LocationService {
 		}
 
 		// Try to parse the responseData to a json object using nlohmann::json
-		nlohmann::json jObject = nlohmann::json::parse(responseData);
+		nlohmann::json jObject = nlohmann::json::parse(responseData, nullptr, false, true);
 
 		// Check if the json object contains the correct key-value pairs
 		if (jObject.contains("country") && jObject.contains("regionName") && jObject.contains("city") && jObject.contains("lat") && jObject.contains("lon")) {

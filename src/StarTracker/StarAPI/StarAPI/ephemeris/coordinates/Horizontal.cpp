@@ -2,11 +2,11 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-	Horizontal::Horizontal() : Azimuth(0), Altitude(0) {
+	Horizontal::Horizontal() : Azimuth{ 0 }, Altitude{ 0 } {
 
 	}
 
-	Horizontal::Horizontal(double azimuth, double altitude) : Azimuth(azimuth), Altitude(altitude) {
+	Horizontal::Horizontal(double azimuth, double altitude) : Azimuth{ azimuth }, Altitude{ altitude } {
 
 	}
 

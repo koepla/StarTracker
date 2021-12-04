@@ -7,10 +7,10 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	struct Terrestrial {
 
-		/// latitude positive in north, negative in south
+		// latitude positive in north, negative in south
 		double Latitude;
 
-		/// longitude positive in east, negative in west
+		// longitude positive in east, negative in west
 		double Longitude;
 
 		Terrestrial();

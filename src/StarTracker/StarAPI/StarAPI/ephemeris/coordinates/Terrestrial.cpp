@@ -2,11 +2,11 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-	Terrestrial::Terrestrial() : Latitude(0), Longitude(0) {
+	Terrestrial::Terrestrial() : Latitude{ 0 }, Longitude{ 0 } {
 
 	}
 
-	Terrestrial::Terrestrial(double latitude, double longitude) : Latitude(latitude), Longitude(longitude) {
+	Terrestrial::Terrestrial(double latitude, double longitude) : Latitude{ latitude }, Longitude{ longitude } {
 
 	}
 
