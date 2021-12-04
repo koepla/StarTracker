@@ -2,11 +2,11 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-	Rectangular::Rectangular() : X(0), Y(0), Z(0) {
+	Rectangular::Rectangular() : X{ 0 }, Y{ 0 }, Z{ 0 } {
 
 	}
 
-	Rectangular::Rectangular(double x, double y, double z) : X(x), Y(y), Z(z) {
+	Rectangular::Rectangular(double x, double y, double z) : X{ x }, Y{ y }, Z{ z } {
 
 	}
 

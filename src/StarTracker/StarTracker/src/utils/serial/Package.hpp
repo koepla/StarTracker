@@ -46,14 +46,14 @@ namespace StarTracker::Utils::Serial {
 		__declspec(align(1)) uint8_t buffer[BUFFER_SIZE];
 
 	public:
-		Package() : header(Command::NONE, 0) {
+		Package() : header{ Command::NONE, 0 } {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 
 			std::memset(buffer, 0, BUFFER_SIZE);
 		}
 
-		Package(Command flag) : header(flag, 0) {
+		Package(Command flag) : header{ flag, 0 } {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 

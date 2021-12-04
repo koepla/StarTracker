@@ -21,11 +21,11 @@ namespace StarTracker::Core::Algo {
 		* 
 		*/
 		template <typename T>
-		[[nodiscard]] static std::vector<T> Stack(const T* img1, const T* img2, uint32_t size) {
+		[[nodiscard]] static std::vector<T> Stack(const T* img1, const T* img2, std::size_t size) {
 
-			std::vector<T> out(size);
+			std::vector<T> out{ size };
 
-			for (uint32_t i = 0; i < size; i++) {
+			for (auto i = std::size_t{ 0 }; i < size; i++) {
 
 				out[i] = (((*(img1 + i)) + (*(img2 + i))) / 2);
 			}
