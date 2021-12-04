@@ -59,7 +59,7 @@ namespace StarTracker::Ephemeris {
 		* @throws std::exception if the file doesn't exist or if the content is invalid formatted
 		*
 		*/
-		[[nodiscard]] static std::vector<std::unique_ptr<CelestialBody>> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
+		[[nodiscard]] static std::vector<std::shared_ptr<CelestialBody>> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
 	};
 }
 
