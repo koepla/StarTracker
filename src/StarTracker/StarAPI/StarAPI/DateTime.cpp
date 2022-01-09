@@ -274,7 +274,7 @@ namespace StarTracker {
 	}
 
 	/*
-	*	Local mean sidereal time in degrees
+	*	Greenwhich mean sidereal time in degrees
 	*/
 	double DateTime::Gmst(const DateTime& date) noexcept {
 
@@ -307,7 +307,8 @@ namespace StarTracker {
 
 	std::string DateTime::ToString() const noexcept {
 
-		char buff[100];
+		char buff[24];
+		buff[23] = '\0';
 		sprintf_s(buff, sizeof(buff),
 			"[%02d-%02d-%04d | %02d:%02d:%02d]",
 			static_cast<int>(Day),
@@ -317,6 +318,6 @@ namespace StarTracker {
 			static_cast<int>(Minute),
 			static_cast<int>(Second));
 
-		return std::string(buff);
+		return std::string{ buff };
 	}
 }
