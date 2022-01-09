@@ -65,7 +65,7 @@ namespace StarTracker::Utils::Serial {
 		* @throws SerialException if the read fails
 		* 
 		*/
-		[[nodiscard]] uint32_t Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false);
+		[[nodiscard]] uint32_t Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx = true) noexcept(false);
 
 		/**
 		* Writes to the currently open COM port
