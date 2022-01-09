@@ -1,7 +1,7 @@
-#ifndef _DRIVER_H_
-#define _DRIVER_H_
+#ifndef STARTRACKER_FIRMWARE_DRIVER_H
+#define STARTRACKER_FIRMWARE_DRIVER_H
 
-#include <TMCStepper/TMCStepper.h>
+#include <TMCStepper.h>
 
 #define R_SENSE 0.11f
 #define DRIVER_ADDRESS 0x00
@@ -20,12 +20,12 @@ enum class MotorState : uint8_t {
 
 struct DriverConfig {
 
-    uint16_t microSteps;
-    uint16_t enablePin;
-    uint16_t stepPin;
-    uint16_t rxPin;
-    uint16_t txPin;
-    float rmsCurrent;
+    uint16_t MicroSteps;
+    uint16_t EnablePin;
+    uint16_t StepPin;
+    uint16_t RxPin;
+    uint16_t TxPin;
+    float RmsCurrent;
 };
 
 class Driver {
@@ -45,9 +45,9 @@ private:
 public:
     Driver(DriverConfig pitchLeftConfig, DriverConfig pitchRightConfig, DriverConfig yawConfig) 
     : 
-        pitchLeft(TMC2209Stepper(pitchLeftConfig.rxPin, pitchLeftConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
-        pitchRight(TMC2209Stepper(pitchRightConfig.rxPin, pitchRightConfig.txPin, R_SENSE, DRIVER_ADDRESS)),
-        yaw(TMC2209Stepper(yawConfig.rxPin, yawConfig.txPin, R_SENSE, DRIVER_ADDRESS))
+        pitchLeft{TMC2209Stepper{pitchLeftConfig.RxPin, pitchLeftConfig.TxPin, R_SENSE, DRIVER_ADDRESS}},
+        pitchRight{TMC2209Stepper{pitchRightConfig.RxPin, pitchRightConfig.TxPin, R_SENSE, DRIVER_ADDRESS}},
+        yaw{TMC2209Stepper{yawConfig.RxPin, yawConfig.TxPin, R_SENSE, DRIVER_ADDRESS}}
     { 
         this->pitchLeftConf = pitchLeftConfig;
         this->pitchRightConf = pitchRightConfig;
@@ -66,7 +66,7 @@ public:
 
     void Move(float pitchAngle, float yawAngle) {
 
-        if(pitchLeftConf.microSteps != pitchRightConf.microSteps) {
+        if(pitchLeftConf.MicroSteps != pitchRightConf.MicroSteps) {
 
             // In this case (Edge case because it would be the programmers fault) we don't want to move because otherwise 
             // we would damage the 3D printed construction
@@ -76,8 +76,8 @@ public:
         float pitchBy = pitchAngle - currentPitch;
         float yawBy = yawAngle - currentYaw;
 
-        int64_t pitchSteps = pitchBy * static_cast<float>(pitchLeftConf.microSteps) * (200.0f / 360.0f);
-        int64_t yawSteps = yawBy * static_cast<float>(yawConf.microSteps) * (200.0f / 360.0f);
+        int64_t pitchSteps = pitchBy * static_cast<float>(pitchLeftConf.MicroSteps) * (200.0f / 360.0f);
+        int64_t yawSteps = yawBy * static_cast<float>(yawConf.MicroSteps) * (200.0f / 360.0f);
 
         bool pitchShaft = pitchSteps > 0 ? true : false;
         pitchLeft.shaft(!pitchShaft);
@@ -133,35 +133,35 @@ public:
 private:
     static void initMotor(TMC2209Stepper* motor, DriverConfig* config) {
 
-        pinMode(config->enablePin, OUTPUT);
-        pinMode(config->stepPin, OUTPUT);
+        pinMode(config->EnablePin, OUTPUT);
+        pinMode(config->StepPin, OUTPUT);
         
-        digitalWrite(config->enablePin, LOW); // enable driver in hardware
+        digitalWrite(config->EnablePin, LOW); // enable driver in hardware
 
         motor->beginSerial(115200);
         motor->begin();
         motor->toff(5); // enable driver in software
-        motor->rms_current(config->rmsCurrent);
-        motor->microsteps(config->microSteps);
+        motor->rms_current(config->RmsCurrent);
+        motor->microsteps(config->MicroSteps);
         motor->pwm_autoscale(true);
     }
 
     static void stepMotor(DriverConfig* config, DriverConfig* secondConfig = nullptr, uint32_t delayUsBeg = 1000, uint32_t delayUsEnd = 1000) {
 
-        digitalWrite(config->stepPin, HIGH);
+        digitalWrite(config->StepPin, HIGH);
 
         if(secondConfig != nullptr) {
 
-            digitalWrite(secondConfig->stepPin, HIGH);
+            digitalWrite(secondConfig->StepPin, HIGH);
         }
 
         delayMicroseconds(delayUsBeg);
 
-        digitalWrite(config->stepPin, LOW);
+        digitalWrite(config->StepPin, LOW);
 
         if(secondConfig != nullptr) {
 
-            digitalWrite(secondConfig->stepPin, LOW);
+            digitalWrite(secondConfig->StepPin, LOW);
         }
 
         delayMicroseconds(delayUsEnd);
@@ -169,8 +169,8 @@ private:
 
     static void enableMotor(DriverConfig* config, bool enable) {
 
-        digitalWrite(config->enablePin, enable ? LOW : HIGH); // enable driver in hardware
+        digitalWrite(config->EnablePin, enable ? LOW : HIGH); // enable driver in hardware
     }
 };
 
-#endif // _DRIVER_H_
+#endif // STARTRACKER_FIRMWARE_DRIVER_H
