@@ -1,5 +1,5 @@
-#ifndef _PACKAGE_H_
-#define _PACKAGE_H_
+#ifndef STARTRACKER_FIRMWARE_PACKAGE_H
+#define STARTRACKER_FIRMWARE_PACKAGE_H
 
 #include <Arduino.h>
 
@@ -26,15 +26,15 @@ namespace Protocol {
 	*/
 	struct Header {
 
-		Command flag;
-		uint8_t size;
+		Command Flag;
+		uint8_t Size;
 
-		Header() : flag(Command::NONE), size(0) {
+		Header() : Flag{Command::NONE}, Size{0} {
 
 
 		}
 
-		Header(Command flag, uint8_t size) : flag(flag), size(size) {
+		Header(Command flag, uint8_t size) : Flag{flag}, Size{size} {
 
 
 		}
@@ -47,16 +47,16 @@ namespace Protocol {
 	template <uint16_t N>
 	struct Package {
 
-		static constexpr uint16_t BUFF_SIZE = N - sizeof(Header);
+		static constexpr uint16_t BUFF_SIZE = N - sizeof(Protocol::Header);
 
-		Header header;
+		Protocol::Header Header;
 		uint8_t buff[BUFF_SIZE];
 
 		/*
 		*	Sets the header flag to NONE and the size to zero
 		*	Sets the whole buffer to 0
 		*/
-		Package() : header(Header(Command::NONE, 0)) {
+		Package() : Header{Protocol::Header{Command::NONE, 0}} {
 
 			static_assert(BUFF_SIZE >= 0, "Buffer size must not be less than zero");
 
@@ -67,7 +67,7 @@ namespace Protocol {
 		*	Sets the specified header flag
 		*	Sets size and buffer to zero
 		*/
-		Package(Command flag) : header(Header(flag, 0)) {
+		Package(Command flag) : Header{Protocol::Header{flag, 0}} {
 
 			static_assert(BUFF_SIZE >= 0, "Buffer size must not be less than zero");
 
@@ -77,15 +77,15 @@ namespace Protocol {
 		Package& Clear() {
 			
 			memset(buff, 0, BUFF_SIZE);
-			header.size = 0;
-			header.flag = Command::NONE;
+			Header.Size = 0;
+			Header.Flag = Command::NONE;
 
 			return *this;
 		}
 
 		Package& SetFlag(Command flag) {
 
-			header.flag = flag;
+			Header.Flag = flag;
 
 			return *this;
 		}
@@ -98,9 +98,9 @@ namespace Protocol {
 		template <typename T>
 		Package& Push(const T& data) {
 
-			uint8_t osize = header.size;
+			uint8_t osize = Header.Size;
 			memcpy(buff + osize, &data, sizeof(T));
-			header.size += sizeof(T);
+			Header.Size += sizeof(T);
 
 			return *this;
 		}
@@ -108,9 +108,9 @@ namespace Protocol {
 		template <typename T>
 		Package& PushRange(const T* data, uint8_t count) {
 
-			uint8_t osize = header.size;
+			uint8_t osize = Header.Size;
 			memcpy(buff + osize, data, count * sizeof(T));
-			header.size += count * sizeof(T);
+			Header.Size += count * sizeof(T);
 			return *this;
 		}
 
@@ -137,12 +137,12 @@ namespace Protocol {
 		*/
 		size_t GetSize() const {
 
-			return static_cast<size_t>(header.size);
+			return static_cast<size_t>(Header.Size);
 		}
 
 		Command GetFlag() const {
 
-			return header.flag;
+			return Header.Flag;
 		}
 	};
 
@@ -155,4 +155,4 @@ namespace Protocol {
 
 #pragma pack(pop)
 
-#endif // _PACKAGE_H_
+#endif // STARTRACKER_FIRMWARE_PACKAGE_H
