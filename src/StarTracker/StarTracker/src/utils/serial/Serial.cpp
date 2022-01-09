@@ -57,7 +57,7 @@ namespace StarTracker::Utils::Serial {
 		isOpen = false;
 	}
 
-	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read) noexcept(false) {
+	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx) noexcept(false) {
 
 		// Number of bytes read
 		DWORD dwread;
@@ -68,7 +68,10 @@ namespace StarTracker::Utils::Serial {
 			throw SerialException("Port is not open");
 		}
 
-		WaitComm();
+		if (waitForRx) {
+
+			WaitComm();
+		}
 
 		// Read operation
 		if (!ReadFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwread, NULL)) {
