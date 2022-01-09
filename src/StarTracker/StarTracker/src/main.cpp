@@ -1,6 +1,7 @@
 #include <StarAPI/StarAPI.hpp>
 
 #include "core/Core.hpp"
+#include "core/Assert.hpp"
 #include "utils/serial/Package.hpp"
 #include "utils/serial/Serial.hpp"
 
@@ -25,7 +26,52 @@ bool sendToTracker(StarTracker::Utils::Serial::SerialPort& port, StarTracker::Ut
 
 int main(int argc, const char** argv) {
 
+	/* Serial Debug - ECHO Test */
 	try {
+
+		StarTracker::Utils::Serial::SerialPort serialPort{};
+		StarTracker::Utils::Serial::Pack32 txPackage{ StarTracker::Utils::Serial::Command::ACK };
+		StarTracker::Utils::Serial::Pack32 rxPackage{ StarTracker::Utils::Serial::Command::NONE };
+
+		serialPort.Open("COM3", 115200);
+
+		while (serialPort.IsOpen()) {
+
+			rxPackage.Clear();
+
+			std::fprintf(stdout, "SENDING - %s\n", StarTracker::DateTime::Now().ToString().c_str());
+
+			ASSERT(serialPort.Write(reinterpret_cast<uint8_t*>(&txPackage), sizeof txPackage) == sizeof txPackage);
+
+			while (serialPort.Available() != sizeof rxPackage) {
+
+				std::fprintf(stdout, "WAITING - %s\n", StarTracker::DateTime::Now().ToString().c_str());
+				Sleep(50);
+			}
+
+			ASSERT(serialPort.Read(reinterpret_cast<uint8_t*>(&rxPackage), sizeof rxPackage) == sizeof rxPackage, false);
+
+			if (rxPackage.GetFlag() == StarTracker::Utils::Serial::Command::ACK) {
+
+				std::fprintf(stdout, "ECHO - %s\n", StarTracker::DateTime::Now().ToString().c_str());
+			}
+			else {
+
+				std::fprintf(stderr, "FAILURE - %s\n", StarTracker::DateTime::Now().ToString().c_str());
+				__debugbreak();
+			}
+
+			Sleep(500);
+		}
+	}
+	catch (const std::exception& e) {
+
+		std::fprintf(stderr, "Fatal Exception: %s\n", e.what());
+	}
+
+	exit(0);
+
+	try {	
 
 		std::cout << "------ StarTracker Commandline Interface ------" << std::endl << std::endl;
 
@@ -66,13 +112,13 @@ int main(int argc, const char** argv) {
 			package.SetFlag(StarTracker::Utils::Serial::Command::MOVE);
 			package.Push(static_cast<float>(pitch));
 			package.Push(static_cast<float>(yaw));
-			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+			ASSERT(serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof package);
 
 			package.Clear();
 			package.SetFlag(StarTracker::Utils::Serial::Command::CONF);
 			package.Push(0.0f);
 			package.Push(0.0f);
-			serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+			ASSERT(serialPort.Write(reinterpret_cast<uint8_t*>(&package), sizeof(package)) == sizeof package);
 
 			std::cout << "\tAdjust further? [y|n] ";
 			std::cin >> dec;
