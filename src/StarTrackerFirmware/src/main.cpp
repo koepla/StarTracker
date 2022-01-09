@@ -1,106 +1,109 @@
 #include "Package.hpp"
 #include "Driver.hpp"
 
-DriverConfig pitchLeftConf = {
+auto main() -> int {
 
-    .microSteps = 256,
-    .enablePin = 3,
-    .stepPin = 2,
-    .rxPin = 5,
-    .txPin = 4,
-    .rmsCurrent = 1000
-};
+    DriverConfig pitchLeftConf = {
 
-DriverConfig pitchRightConf = {
+        .MicroSteps = 256,
+        .EnablePin = 3,
+        .StepPin = 2,
+        .RxPin = 5,
+        .TxPin = 4,
+        .RmsCurrent = 1000
+    };
 
-    .microSteps = 256,
-    .enablePin = 7,
-    .stepPin = 6,
-    .rxPin = 9,
-    .txPin = 8,
-    .rmsCurrent = 1000
-};
+    DriverConfig pitchRightConf = {
 
-DriverConfig yawConf = {
+        .MicroSteps = 256,
+        .EnablePin = 7,
+        .StepPin = 6,
+        .RxPin = 9,
+        .TxPin = 8,
+        .RmsCurrent = 1000
+    };
 
-    .microSteps = 256,
-    .enablePin = 11,
-    .stepPin = 10,
-    .rxPin = 13,
-    .txPin = 12,
-    .rmsCurrent = 600
-};
+    DriverConfig yawConf = {
 
-Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf);
-Protocol::Pack32 package;
+        .MicroSteps = 256,
+        .EnablePin = 11,
+        .StepPin = 10,
+        .RxPin = 13,
+        .TxPin = 12,
+        .RmsCurrent = 600
+    };
 
-void setup(){           
+    Driver driver = Driver(pitchLeftConf, pitchRightConf, yawConf);
+    Protocol::Pack32 package;
 
+    init();
     driver.Init();
     Serial.begin(115200);
-}
 
-void loop(){
+    while(true) {
 
-    if(Serial.available() != sizeof(package)) {
+        if(Serial.available() != sizeof(package)) {
 
-        return;
+            continue;
+        }
+
+        Serial.readBytes(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+        switch(package.Header.Flag) {
+
+            case Protocol::Command::NONE: {
+
+                package.Clear();
+                
+                break;
+            }
+            case Protocol::Command::WAKEUP: {
+
+                MotorAxis axis = package.Read<MotorAxis>(0);
+                driver.SetMotorState(axis, MotorState::ON);
+
+                break;
+            }
+            case Protocol::Command::SLEEP: {
+
+                MotorAxis axis = package.Read<MotorAxis>(0);
+                driver.SetMotorState(axis, MotorState::OFF);
+
+                break;
+            }
+            case Protocol::Command::CONF: {
+
+                float pitch = package.Read<float>(0);
+                float yaw = package.Read<float>(1);
+
+                driver.SetCurrentPosition(pitch, yaw);
+
+                break;
+            }
+            case Protocol::Command::MOVE: {
+
+                float pitch = package.Read<float>(0);
+                float yaw = package.Read<float>(1);
+
+                driver.Move(pitch, yaw);
+
+                break;
+            }
+            case Protocol::Command::ORIGIN: {
+
+                driver.Move(0.0f, 0.0f);
+
+                break;
+            }
+            case Protocol::Command::ACK: {
+
+                // In this case the client expects the same package to be returned (ECHO)
+                Serial.write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
+
+                break;
+            }
+        };     
     }
 
-    Serial.readBytes(reinterpret_cast<uint8_t*>(&package), sizeof(package));
-
-    switch(package.header.flag) {
-
-        case Protocol::Command::NONE: {
-
-            package.Clear();
-            
-            break;
-        }
-        case Protocol::Command::WAKEUP: {
-
-            MotorAxis axis = package.Read<MotorAxis>(0);
-            driver.SetMotorState(axis, MotorState::ON);
-
-            break;
-        }
-        case Protocol::Command::SLEEP: {
-
-            MotorAxis axis = package.Read<MotorAxis>(0);
-            driver.SetMotorState(axis, MotorState::OFF);
-
-            break;
-        }
-        case Protocol::Command::CONF: {
-
-            float pitch = package.Read<float>(0);
-            float yaw = package.Read<float>(1);
-
-            driver.SetCurrentPosition(pitch, yaw);
-
-            break;
-        }
-        case Protocol::Command::MOVE: {
-
-            float pitch = package.Read<float>(0);
-            float yaw = package.Read<float>(1);
-
-            driver.Move(pitch, yaw);
-
-            break;
-        }
-        case Protocol::Command::ORIGIN: {
-
-            driver.Move(0.0f, 0.0f);
-
-            break;
-        }
-        case Protocol::Command::ACK: {
-
-            // In this case the client expects the same package to be returned
-            Serial.write(reinterpret_cast<uint8_t*>(&package), sizeof(package));
-
-            break;
-        }
-    };  
+    return 0;
 }
