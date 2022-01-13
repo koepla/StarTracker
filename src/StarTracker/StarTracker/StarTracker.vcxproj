@@ -21,7 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
@@ -102,12 +102,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\Application.cpp" />
     <ClCompile Include="src\utils\serial\Package.cpp" />
     <ClCompile Include="src\utils\GeoLocation.cpp" />
     <ClCompile Include="src\utils\HttpRequest.cpp" />
     <ClCompile Include="src\utils\serial\Serial.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\utils\Stopwatch.cpp" />
+    <ClCompile Include="src\core\Window.cpp" />
+    <ClCompile Include="src\core\View.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -115,6 +118,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\Application.hpp" />
     <ClInclude Include="src\core\algo\ImageManip.hpp" />
     <ClInclude Include="src\core\Assert.hpp" />
     <ClInclude Include="src\utils\GeoLocation.hpp" />
@@ -123,6 +127,8 @@
     <ClInclude Include="src\utils\serial\Package.hpp" />
     <ClInclude Include="src\utils\serial\Serial.hpp" />
     <ClInclude Include="src\utils\Stopwatch.hpp" />
+    <ClInclude Include="src\core\Window.hpp" />
+    <ClInclude Include="src\core\View.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\CelestialBodies.json" />
