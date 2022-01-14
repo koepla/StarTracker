@@ -2,17 +2,17 @@
 
 namespace StarTracker {
 
-	DateTime::DateTime(int64_t year, int64_t month, int64_t day, int64_t hour, int64_t minute, int64_t second) noexcept
+	DateTime::DateTime(std::int64_t year, std::int64_t month, std::int64_t day, std::int64_t hour, std::int64_t minute, std::int64_t second) noexcept
 		: Year{ year }, Month{ month }, Day{ day }, Hour{ hour }, Minute{ minute }, Second{ second } {
 
 	}
 
-	void DateTime::AddYears(int64_t years) noexcept {
+	void DateTime::AddYears(std::int64_t years) noexcept {
 	
 		Year += years;
 	}
 
-	void DateTime::AddMonths(int64_t months) noexcept {
+	void DateTime::AddMonths(std::int64_t months) noexcept {
 
 		if (months > 0) {
 
@@ -40,7 +40,7 @@ namespace StarTracker {
 		}
 	}
 
-	void DateTime::AddDays(int64_t days) noexcept {
+	void DateTime::AddDays(std::int64_t days) noexcept {
 
 		switch (Month) {
 
@@ -85,7 +85,7 @@ namespace StarTracker {
 		}
 	}
 
-	void DateTime::AddHours(int64_t hours) noexcept {
+	void DateTime::AddHours(std::int64_t hours) noexcept {
 
 		if (hours > 0) {
 
@@ -113,7 +113,7 @@ namespace StarTracker {
 		}
 	}
 
-	void DateTime::AddMinutes(int64_t minutes) noexcept {
+	void DateTime::AddMinutes(std::int64_t minutes) noexcept {
 
 		if (minutes > 0) {
 
@@ -141,7 +141,7 @@ namespace StarTracker {
 		}
 	}
 
-	void DateTime::AddSeconds(int64_t seconds) noexcept {
+	void DateTime::AddSeconds(std::int64_t seconds) noexcept {
 
 		if (seconds > 0) {
 
@@ -169,7 +169,7 @@ namespace StarTracker {
 		}
 	}
 
-	void DateTime::addDays(int64_t days, const int monthDays) noexcept {
+	void DateTime::addDays(std::int64_t days, const std::int32_t monthDays) noexcept {
 
 		if (days > 0) {
 
@@ -199,72 +199,78 @@ namespace StarTracker {
 
 	DateTime DateTime::Now() noexcept {
 
-		std::time_t time = std::time(0);
-		tm ltm = tm();
+		const auto time = std::time(0);
+
+		tm ltm{};
 		localtime_s(&ltm, &time);
 
-		return DateTime(static_cast<int64_t>(ltm.tm_year) + 1900, 
-					static_cast<int64_t>(ltm.tm_mon) + 1, 
-					static_cast<int64_t>(ltm.tm_mday),
-					static_cast<int64_t>(ltm.tm_hour),
-					static_cast<int64_t>(ltm.tm_min),
-					static_cast<int64_t>(ltm.tm_sec));
+		return DateTime{ 
+
+			static_cast<std::int64_t>(ltm.tm_year) + 1900,
+			static_cast<std::int64_t>(ltm.tm_mon) + 1,
+			static_cast<std::int64_t>(ltm.tm_mday),
+			static_cast<std::int64_t>(ltm.tm_hour),
+			static_cast<std::int64_t>(ltm.tm_min),
+			static_cast<std::int64_t>(ltm.tm_sec) 
+		};
 	}
 
 	DateTime DateTime::UtcNow() noexcept
 	{
-		std::time_t time = std::time(0);
-		tm ltm = tm();
+		const auto time = std::time(0);
+
+		tm ltm{};
 		gmtime_s(&ltm, &time);
 
-		return DateTime(static_cast<int64_t>(ltm.tm_year) + 1900,
-			static_cast<int64_t>(ltm.tm_mon) + 1,
-			static_cast<int64_t>(ltm.tm_mday),
-			static_cast<int64_t>(ltm.tm_hour),
-			static_cast<int64_t>(ltm.tm_min),
-			static_cast<int64_t>(ltm.tm_sec));
+		return DateTime{
+
+			static_cast<std::int64_t>(ltm.tm_year) + 1900,
+			static_cast<std::int64_t>(ltm.tm_mon) + 1,
+			static_cast<std::int64_t>(ltm.tm_mday),
+			static_cast<std::int64_t>(ltm.tm_hour),
+			static_cast<std::int64_t>(ltm.tm_min),
+			static_cast<std::int64_t>(ltm.tm_sec)
+		};
 	}
 
-	int64_t DateTime::UtcDiff() noexcept {
+	std::int64_t DateTime::UtcDiff() noexcept {
 
 		return DateTime::Now().Hour - DateTime::UtcNow().Hour;
 	}
 
-	double DateTime::Jdn(const DateTime& date) noexcept {
+	double DateTime::Jdn(DateTime date) noexcept {
 
-		return Mjdn(date) + 2400000.5L;
+		return Mjdn(date) + 2400000.5;
 	}
 
-	double DateTime::Mjdn(const DateTime& date) noexcept {
+	double DateTime::Mjdn(DateTime date) noexcept {
 
-		auto mod = date;
+		auto b = std::int64_t{ 0 };
 
-		int64_t b;
+		if (date.Month <= 2) {
 
-		if (mod.Month <= 2) {
-
-			mod.Month += 12;
-			--mod.Year;
+			date.Month += 12;
+			--date.Year;
 		}
-		if ((10000 * mod.Year + 100 * mod.Month + mod.Day) <= 15821004) {
+		if ((10000 * date.Year + 100 * date.Month + date.Day) <= 15821004) {
 
 			// julian calender
-			b = -2 + ((mod.Year + 4716) / 4) - 1179;
+			b = -2 + ((date.Year + 4716) / 4) - 1179;
 		}
 		else {
 
 			// gregorian calender
-			b = (mod.Year / 400) - (mod.Year / 100) + (mod.Year / 4);
+			b = (date.Year / 400) - (date.Year / 100) + (date.Year / 4);
 		}
 
-		double realHour = (double)(mod.Hour + mod.Minute / 60.0 + mod.Second / 3600.0);
+		double realHour = (double)(date.Hour + date.Minute / 60.0 + date.Second / 3600.0);
 
-		return (365 * mod.Year - 679004 + b + int64_t(30.6001 * (mod.Month + 1LL)) + mod.Day) + realHour / 24.0;
+		return (365 * date.Year - 679004 + b + std::int64_t(30.6001 * (date.Month + 1LL)) + date.Day) + realHour / 24.0;
 	}
 
 	double DateTime::JulianCenturies(const DateTime& date, bool floor) noexcept {
 
-		double jdn = floor ? std::floor(DateTime::Jdn(date)) : DateTime::Jdn(date);
+		const auto jdn = floor ? std::floor(DateTime::Jdn(date)) : DateTime::Jdn(date);
 		return (jdn - 2451545.0) / 36525.0;
 	}
 
@@ -278,31 +284,32 @@ namespace StarTracker {
 	*/
 	double DateTime::Gmst(const DateTime& date) noexcept {
 
-		const double secs = 86400.0;
-		const double mjd = DateTime::Mjdn(date);
-		const double mjd_0 = std::floor(mjd);
-		const double UT = secs * (mjd - mjd_0);
-		const double T = (mjd - 51544.5) / 36525.0;
-		const double T_0 = (mjd_0 - 51544.5) / 36525.0;
+		const auto secondsInDay = 86400.0;
+		const auto meanJulianDayNumber = DateTime::Mjdn(date);
+		const auto meanJulianDayNumberFloor = std::floor(meanJulianDayNumber);
+		const auto UT = secondsInDay * (meanJulianDayNumber - meanJulianDayNumberFloor);
+		const auto T = (meanJulianDayNumber - 51544.5) / 36525.0;
+		const auto T_0 = (meanJulianDayNumberFloor - 51544.5) / 36525.0;
 
-		const double gmst = 24110.54841 + 8640184.812866 * T_0 + 1.0027379093 * UT + (0.093104 - 6.2e-6 * T) * T * T;
+		const auto greenwhichMeanSiderealTime = 24110.54841 + 8640184.812866 * T_0 + 1.0027379093 * UT + (0.093104 - 6.2e-6 * T) * T * T;
+		auto greenwhichMeanSiderealTimeDegrees = Math::Degrees((Math::PI2 / secondsInDay) * Math::Mod(greenwhichMeanSiderealTime, secondsInDay));
 
-		double gmstDeg = Math::Degrees((Math::PI2 / secs) * Math::Mod(gmst, secs));
+		if (greenwhichMeanSiderealTimeDegrees > 0.0) {
 
-		if (gmstDeg > 0.0) {
-			while (gmstDeg > 360.0) {
+			while (greenwhichMeanSiderealTimeDegrees > 360.0) {
 
-				gmstDeg -= 360.0;
+				greenwhichMeanSiderealTimeDegrees -= 360.0;
 			}
 		}
 		else {
-			while (gmstDeg < 0.0) {
 
-				gmstDeg += 360.0;
+			while (greenwhichMeanSiderealTimeDegrees < 0.0) {
+
+				greenwhichMeanSiderealTimeDegrees += 360.0;
 			}
 		}
 
-		return gmstDeg;
+		return greenwhichMeanSiderealTimeDegrees;
 	}
 
 	std::string DateTime::ToString() const noexcept {

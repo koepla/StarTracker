@@ -21,7 +21,7 @@ namespace StarTracker::Ephemeris {
 
     StarTracker::Ephemeris::Coordinates::Spherical SolarSystemBody::GetSphericalPosition(const DateTime& date) const noexcept {
 
-        const double t = DateTime::JulianCenturies(date);
+        const auto t = DateTime::JulianCenturies(date);
 
         KeplerianElements meanKeplerElem = {
 
@@ -33,45 +33,39 @@ namespace StarTracker::Ephemeris {
             keplerElements.LonAscendingNode + keplerElementsCentury.LonAscendingNode * t
         };
 
-        const double& w = meanKeplerElem.LonPerihelion;
-        const double& Om = meanKeplerElem.LonAscendingNode;
-        const double& I = meanKeplerElem.Inclination;
+        const auto w = meanKeplerElem.LonPerihelion;
+        const auto Om = meanKeplerElem.LonAscendingNode;
+        const auto I = meanKeplerElem.Inclination;
 
         // compute argument of perihelion and mean anomaly
-
-        const double perihelion = w - Om;
-        const double meanAnomaly = Math::Mod(meanKeplerElem.MeanLongitude - w, 360.0);
+        const auto perihelion = w - Om;
+        const auto meanAnomaly = Math::Mod(meanKeplerElem.MeanLongitude - w, 360.0);
 
         // compute eccentric anomaly
-
-        const double eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanKeplerElem.Eccentricity);
+        const auto eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanKeplerElem.Eccentricity);
 
 
         // compute true Anomaly and distance of the Planet
-
         const auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanKeplerElem.SemiMajorAxis, eccentricAnomaly, meanKeplerElem.Eccentricity);
 
         // compute Planets heliocentric position in 3D-space
-
-        const double xh = distance * (Math::Cosine(Om) * Math::Cosine(trueAnomaly + w - Om) - Math::Sine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
-        const double yh = distance * (Math::Sine(Om) * Math::Cosine(trueAnomaly + w - Om) + Math::Cosine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
-        const double zh = distance * (Math::Sine(trueAnomaly + w - Om) * Math::Sine(I));
+        const auto xh = distance * (Math::Cosine(Om) * Math::Cosine(trueAnomaly + w - Om) - Math::Sine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
+        const auto yh = distance * (Math::Sine(Om) * Math::Cosine(trueAnomaly + w - Om) + Math::Cosine(Om) * Math::Sine(trueAnomaly + w - Om) * Math::Cosine(I));
+        const auto zh = distance * (Math::Sine(trueAnomaly + w - Om) * Math::Sine(I));
         
         // compute Planets rectangular ecliptic geocentric position in 3D-space
-
         Coordinates::Rectangular earthCoords = computeEarthPos(t);
 
-        const double xg = xh - earthCoords.X;
-        const double yg = yh - earthCoords.Y;
-        const double zg = zh - earthCoords.Z;
+        const auto xg = xh - earthCoords.X;
+        const auto yg = yh - earthCoords.Y;
+        const auto zg = zh - earthCoords.Z;
 
         // transform to rectangular equatorial coordinates
-
-        const double ecl = computeEcliptic(t);
+        const auto ecl = computeEcliptic(t);
     
-        const double xe = xg;
-        const double ye = yg * Math::Cosine(ecl) - zg * Math::Sine(ecl);
-        const double ze = yg * Math::Sine(ecl) + zg * Math::Cosine(ecl);
+        const auto xe = xg;
+        const auto ye = yg * Math::Cosine(ecl) - zg * Math::Sine(ecl);
+        const auto ze = yg * Math::Sine(ecl) + zg * Math::Cosine(ecl);
 
         Coordinates::Spherical sphericalCoords{};
         sphericalCoords.RightAscension = Math::ArcTangent2(ye, xe);
@@ -83,38 +77,36 @@ namespace StarTracker::Ephemeris {
 
     double SolarSystemBody::computeEccentricAnomaly(double meanAnomaly, double eccentricity, double eps) const noexcept {
 
-        double edeg = Math::Degrees(eccentricity);
-        double erad = eccentricity;
+        const auto eccentricityDegrees = Math::Degrees(eccentricity);
+        const auto eccentricityRadians = eccentricity;
 
-        double eccentricAnomaly = meanAnomaly + edeg * Math::Sine(meanAnomaly);
-        double de;
-
-        uint64_t iteration = 0;
+        auto eccentricAnomaly = meanAnomaly + eccentricityDegrees * Math::Sine(meanAnomaly);
+        auto deltaEccentric = double{ 0.0 };
+        auto iteration = std::size_t{ 0 };
 
         do {
 
-            double dm = meanAnomaly - (eccentricAnomaly - edeg * Math::Sine(eccentricAnomaly));
-            de = dm / (1 - erad * Math::Cosine(eccentricAnomaly));
-            eccentricAnomaly += de;
+            const auto dm = meanAnomaly - (eccentricAnomaly - eccentricityDegrees * Math::Sine(eccentricAnomaly));
+            deltaEccentric = dm / (1 - eccentricityRadians * Math::Cosine(eccentricAnomaly));
+            eccentricAnomaly += deltaEccentric;
 
-        } while (Math::Abs(de) > eps && ++iteration < 10);
+        } while (Math::Abs(deltaEccentric) > eps && ++iteration < 10);
 
         return eccentricAnomaly;
     }
 
     std::pair<double, double> SolarSystemBody::computeTrueAnomalyAndDistance(double semiMajorAxis, double eccentricAnomaly, double eccentricity) const noexcept {
 
-        double xv = semiMajorAxis * (Math::Cosine(eccentricAnomaly) - eccentricity);
-        double yv = semiMajorAxis * std::sqrt(1 - std::pow(eccentricity, 2)) * Math::Sine(eccentricAnomaly);
+        const auto xv = semiMajorAxis * (Math::Cosine(eccentricAnomaly) - eccentricity);
+        const auto yv = semiMajorAxis * std::sqrt(1 - std::pow(eccentricity, 2)) * Math::Sine(eccentricAnomaly);
 
-        double trueAnomaly = Math::ArcTangent2(yv, xv);
-        double distance = std::sqrt(xv * xv + yv * yv);
+        const auto trueAnomaly = Math::ArcTangent2(yv, xv);
+        const auto distance = std::sqrt(xv * xv + yv * yv);
 
         return std::make_pair(Math::Mod(trueAnomaly, 360.0), distance);
     }
 
     // Correct for drifting ecliptic due to planets pull on the Earth
-
     double SolarSystemBody::computeEcliptic(double julianCenturies) const noexcept {
 
         return (23.43929111 - (46.8150 + (0.00059 - 0.001813 * julianCenturies) * julianCenturies) * julianCenturies / 3600.0);
@@ -132,26 +124,23 @@ namespace StarTracker::Ephemeris {
         meanEarth.LonPerihelion = 102.93768193 + 0.32327364 * julianCenturies;
         meanEarth.LonAscendingNode = -11.26064 - (18228.25 / 3600.0) * julianCenturies;
 
-        const double& w = meanEarth.LonPerihelion;
-        const double& Om = meanEarth.LonAscendingNode;
-        const double& I = meanEarth.Inclination;
+        const auto w = meanEarth.LonPerihelion;
+        const auto Om = meanEarth.LonAscendingNode;
+        const auto I = meanEarth.Inclination;
 
-        double perihelion = w - Om;
-        double meanAnomaly = Math::Mod(meanEarth.MeanLongitude - w, 360.0);
+        const auto perihelion = w - Om;
+        const auto meanAnomaly = Math::Mod(meanEarth.MeanLongitude - w, 360.0);
 
         // compute eccentric anomaly
-
-        double eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanEarth.Eccentricity);
+        const auto eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanEarth.Eccentricity);
 
         // compute true Anomaly and distance
-
-        auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanEarth.SemiMajorAxis, eccentricAnomaly, meanEarth.Eccentricity);
-
-        double lonEarth = trueAnomaly + w;
+        const auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanEarth.SemiMajorAxis, eccentricAnomaly, meanEarth.Eccentricity);
+        const auto longitudeEarth = trueAnomaly + w;
 
         Coordinates::Rectangular earthCoords{};
-        earthCoords.X = distance * Math::Cosine(lonEarth);
-        earthCoords.Y = distance * Math::Sine(lonEarth);
+        earthCoords.X = distance * Math::Cosine(longitudeEarth);
+        earthCoords.Y = distance * Math::Sine(longitudeEarth);
         earthCoords.Z = 0;
 
         return earthCoords;
