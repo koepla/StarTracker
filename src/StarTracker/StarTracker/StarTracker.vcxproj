@@ -111,6 +111,7 @@
     <ClCompile Include="src\utils\Stopwatch.cpp" />
     <ClCompile Include="src\core\Window.cpp" />
     <ClCompile Include="src\core\View.cpp" />
+    <ClCompile Include="src\core\UIView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -129,6 +130,7 @@
     <ClInclude Include="src\utils\Stopwatch.hpp" />
     <ClInclude Include="src\core\Window.hpp" />
     <ClInclude Include="src\core\View.hpp" />
+    <ClInclude Include="src\core\UIView.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\CelestialBodies.json" />
