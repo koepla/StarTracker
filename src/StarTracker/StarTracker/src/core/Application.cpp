@@ -27,14 +27,14 @@ namespace StarTracker::Core {
 			view->OnInit();
 		}
 
-		float lastFrameTime = glfwGetTime();
+		auto lastFrameTime = glfwGetTime();
 
 		while (window.IsRunning()) {
 
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			float time = glfwGetTime();
-			float deltaTime = time - lastFrameTime;
+			const auto time = glfwGetTime();
+			const auto deltaTime = time - lastFrameTime;
 			lastFrameTime = time;
 
 			userInterfaceView.UIBegin();
