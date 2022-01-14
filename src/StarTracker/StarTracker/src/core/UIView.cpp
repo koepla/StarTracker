@@ -90,9 +90,6 @@ namespace StarTracker::Core {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   
 
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SourceSansPro-Bold.ttf", 18.0f);
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/SourceSansPro-Regular.ttf", 18.0f);
-
 		ImGui::StyleColorsDark();
 
 		ImGuiStyle& style = ImGui::GetStyle();
