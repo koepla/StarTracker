@@ -29,7 +29,6 @@ namespace StarTracker::Core {
 				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 				windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 				windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
 			}
 
 			if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
@@ -88,7 +87,7 @@ namespace StarTracker::Core {
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
 
 		ImGui::StyleColorsDark();
 
