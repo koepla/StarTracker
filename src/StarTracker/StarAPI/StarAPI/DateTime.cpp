@@ -265,7 +265,7 @@ namespace StarTracker {
 
 		double realHour = (double)(date.Hour + date.Minute / 60.0 + date.Second / 3600.0);
 
-		return (365 * date.Year - 679004 + b + std::int64_t(30.6001 * (date.Month + 1LL)) + date.Day) + realHour / 24.0;
+		return (365 * date.Year - 679004 + b + static_cast<std::int64_t>( 30.6001 * (date.Month + 1LL)) + date.Day) + realHour / 24.0;
 	}
 
 	double DateTime::JulianCenturies(const DateTime& date, bool floor) noexcept {
