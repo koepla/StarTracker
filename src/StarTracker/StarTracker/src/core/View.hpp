@@ -7,11 +7,13 @@ namespace StarTracker::Core {
 
 	class View {
 
-	private:
+	protected:
 		void* nativeWindowHandle;
 
 	public:
 		explicit View(void* nativeWindowHandle) noexcept;
+
+		void SetNativeWindowHandle(void* nativeWindowHandle) noexcept;
 		
 		virtual void OnInit() noexcept = 0;
 		virtual void OnDestroy() noexcept = 0;

@@ -2,21 +2,30 @@
 #define STARTRACKER_CORE_APPLICATION_H
 
 #include "View.hpp"
+#include "UIView.hpp"
 #include "Window.hpp"
 
 #include <vector>
 
 namespace StarTracker::Core {
 
-	using ApplicationData = WindowData;
+	struct ApplicationData {
+
+		std::int32_t Width;
+		std::int32_t Height;
+		std::string Title;
+		bool EnableDockspace;
+		bool Fullscreen;
+	};
 
 	class Application {
 
-	private:
+	protected:
 		inline static Application* instance = nullptr;
 
-	private:
+	protected:
 		Window window;
+		UIView userInterfaceView;
 		std::vector<View*> viewList;
 
 	public:
@@ -26,6 +35,8 @@ namespace StarTracker::Core {
 
 		void Run() noexcept;
 		void Close() noexcept;
+
+		void AddToViewList(View* view) noexcept;
 
 		[[nodiscard]] Window& GetWindow() noexcept;
 

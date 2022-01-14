@@ -19,6 +19,7 @@ auto main(int, const char**) -> int {
 	applicationData.Title = "StarTracker";
 	applicationData.Width = 1280;
 	applicationData.Height = 720;
+	applicationData.EnableDockspace = true;
 	applicationData.Fullscreen = false;
 
 	StarTracker::Core::Application application{ applicationData };
