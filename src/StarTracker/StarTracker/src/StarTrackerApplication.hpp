@@ -1,6 +1,7 @@
 #ifndef STARTRACKER_STARTRACKERAPPLICATION_H
 #define STARTRACKER_STARTRACKERAPPLICATION_H
 
+#include "ExperimentalView.hpp"
 #include "TrackableBodyView.hpp"
 
 namespace StarTracker {
@@ -9,6 +10,7 @@ namespace StarTracker {
 
 	private:
 		TrackableBodyView trackableBodyView;
+		ExperimentalView experimentalView;
 
 	public:
 		explicit StarTrackerApplication(const Core::ApplicationData& applicationData) noexcept;
