@@ -40,7 +40,7 @@ namespace StarTracker::Ephemeris {
 		* @return the name of the celestial body
 		*
 		*/
-		[[nodiscard]] const std::string& GetName() const noexcept;
+		[[nodiscard]] std::string GetName() const noexcept;
 
 		/**
 		* Retrieves the designation
@@ -48,7 +48,7 @@ namespace StarTracker::Ephemeris {
 		* @return the name of the celestial body
 		*
 		*/
-		[[nodiscard]] const std::string& GetDesignation() const noexcept;
+		[[nodiscard]] std::string GetDesignation() const noexcept;
 
 	public:
 		/**
