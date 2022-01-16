@@ -112,6 +112,8 @@
     <ClCompile Include="src\core\Window.cpp" />
     <ClCompile Include="src\core\View.cpp" />
     <ClCompile Include="src\core\UIView.cpp" />
+    <ClCompile Include="src\StarTrackerApplication.cpp" />
+    <ClCompile Include="src\TrackableBodyView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -131,6 +133,8 @@
     <ClInclude Include="src\core\Window.hpp" />
     <ClInclude Include="src\core\View.hpp" />
     <ClInclude Include="src\core\UIView.hpp" />
+    <ClInclude Include="src\StarTrackerApplication.hpp" />
+    <ClInclude Include="src\TrackableBodyView.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
