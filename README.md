@@ -34,7 +34,7 @@ After you installed vcpkg, you have to run the following commands in the vcpkg f
 .\vcpkg install nlohmann-json:x64-windows-static
 ```
 ```psh
-.\vcpkg install imgui[docking-experimental,opengl3-binding]:x64-windows-static
+.\vcpkg install imgui[core,docking-experimental,opengl3-binding,glfw-binding]:x64-windows-static
 ```
 
 After running
