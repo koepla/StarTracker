@@ -9,7 +9,9 @@
 #include <filesystem>
 #include <fstream>
 
+#pragma warning(disable:26819)
 #include <nlohmann/json.hpp>
+#pragma warning(default:26819)
 
 namespace StarTracker::Ephemeris {
 
