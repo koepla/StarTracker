@@ -85,6 +85,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="assets\CelestialBodies.json" />
+    <None Include="assets\ephemeris\CelestialBodies.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\SFNSDisplay-Bold.ttf" />
+    <Font Include="assets\fonts\SFNSDisplay-Heavy.ttf" />
+    <Font Include="assets\fonts\SFNSDisplay-Light.ttf" />
+    <Font Include="assets\fonts\SFNSDisplay-Semibold.ttf" />
+    <Font Include="assets\fonts\SFNSDisplay-Thin.ttf" />
+    <Font Include="assets\fonts\SFNSText-RegularItalic.ttf" />
+    <Font Include="assets\fonts\SFNSDisplay-Regular.ttf" />
+    <Font Include="assets\fonts\SFNSDisplay-Medium.ttf" />
   </ItemGroup>
 </Project>
