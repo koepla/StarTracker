@@ -89,7 +89,27 @@ namespace StarTracker::Core {
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
 
-		ImGui::StyleColorsDark();
+		ImGui::StyleColorsLight();
+
+		/* 
+			Light = 0,
+			Regular = 1,
+			Medium = 2,
+			Semibold = 3,
+			Bold = 4,
+			Heavy = 5,
+			Italic = 6,
+		*/
+
+		float fontSize = 22.0f;
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Light.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Regular.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Medium.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Semibold.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Bold.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Heavy.ttf", fontSize);
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSText-RegularItalic.ttf", fontSize);
+		io.FontDefault = io.Fonts->Fonts[UIFont::Regular];
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
