@@ -1,6 +1,7 @@
 #ifndef STARTRACKER_CORE_UIVIEW_H
 #define STARTRACKER_CORE_UIVIEW_H
 
+#include "Core.hpp"
 #include "View.hpp"
 
 #include <glad/glad.h>
@@ -14,7 +15,7 @@ namespace StarTracker::Core {
 	// Workaround for enum class, so we don't have to write out the cast when using
 	// ImGui->GetIO().Fonts->Fonts[UIFont::Regular];
 
-	struct UIFont {
+	struct UIFont final {
 
 		inline static constexpr int Light = 0;
 		inline static constexpr int Regular = 1;
