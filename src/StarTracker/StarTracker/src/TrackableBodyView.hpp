@@ -22,7 +22,7 @@ namespace StarTracker {
 
 	private:
 		Ephemeris::Coordinates::Observer observer;
-		std::vector <std::shared_ptr<Ephemeris::CelestialBody>> celestialBodies;
+		std::vector<std::shared_ptr<Ephemeris::CelestialBody>> celestialBodies;
 
 	public:
 		explicit TrackableBodyView(void* nativeWindowHandle) noexcept;

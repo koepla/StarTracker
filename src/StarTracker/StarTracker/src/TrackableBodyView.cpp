@@ -15,7 +15,7 @@ namespace StarTracker {
 
 			try {
 
-				auto geoLocation = Utils::LocationService::GeoLocation::Get();
+				const auto geoLocation = Utils::LocationService::GeoLocation::Get();
 
 				Ephemeris::Coordinates::Observer observer{};
 				observer.Latitude = geoLocation.Latitude;
@@ -45,7 +45,7 @@ namespace StarTracker {
 					observer,
 					DateTime::Now()
 				);
-
+				
 				const auto data = std::format("Name: {}, Designation: {}, Azimuth: {}, Elevation: {}", 
 					body->GetName(),
 					body->GetDesignation(),
