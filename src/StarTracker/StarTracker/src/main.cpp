@@ -8,14 +8,14 @@ auto main(int, char**) -> int {
 	applicationData.Height = 720;
 	applicationData.EnableDockspace = true;
 	applicationData.Fullscreen = false;
-	applicationData.VerticalSync = false;
+	applicationData.VerticalSync = true;
 
 	try {
 
 		StarTracker::StarTrackerApplication application{ applicationData };
 		application.Run();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception&) {
 
 		ASSERT(false && "Fatal exception!");
 	}
