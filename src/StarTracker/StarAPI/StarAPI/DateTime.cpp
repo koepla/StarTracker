@@ -263,7 +263,7 @@ namespace StarTracker {
 			b = (date.Year / 400) - (date.Year / 100) + (date.Year / 4);
 		}
 
-		double realHour = (double)(date.Hour + date.Minute / 60.0 + date.Second / 3600.0);
+		const auto realHour = static_cast<double>(date.Hour + date.Minute / 60.0 + date.Second / 3600.0);
 
 		return (365 * date.Year - 679004 + b + static_cast<std::int64_t>( 30.6001 * (date.Month + 1LL)) + date.Day) + realHour / 24.0;
 	}
@@ -317,7 +317,7 @@ namespace StarTracker {
 		char buff[24];
 		buff[23] = '\0';
 		sprintf_s(buff, sizeof(buff),
-			"[%02d-%02d-%04d | %02d:%02d:%02d]",
+			"%02d.%02d.%04d - %02d:%02d:%02d",
 			static_cast<int>(Day),
 			static_cast<int>(Month),
 			static_cast<int>(Year),
