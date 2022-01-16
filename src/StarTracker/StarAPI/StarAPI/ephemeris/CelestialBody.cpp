@@ -8,14 +8,14 @@ namespace StarTracker::Ephemeris {
     
     }
 
-    const std::string& CelestialBody::GetName() const noexcept {
+    std::string CelestialBody::GetName() const noexcept {
 
         return name;
 	}
 
-    const std::string& CelestialBody::GetDesignation() const noexcept {
+    std::string CelestialBody::GetDesignation() const noexcept {
 
-        return designation;
+        return designation.empty() ? std::string{ "No Designation" } : designation;
     }
 
     std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
