@@ -13,29 +13,35 @@
 #include <iostream>
 #include <filesystem>
 
-class TrackerView : public StarTracker::Core::View {
+class ComputationView : public StarTracker::Core::View {
 
 private:
 	std::vector<std::shared_ptr<StarTracker::Ephemeris::CelestialBody>> celestialBodies;
 	StarTracker::Ephemeris::Coordinates::Observer observer;
 
 public:
-	explicit TrackerView(void* nativeWindowHandle) noexcept : View{ nativeWindowHandle } {
+	explicit ComputationView(void* nativeWindowHandle) noexcept : View{ nativeWindowHandle }, celestialBodies{}, observer{} {
 
-		celestialBodies = {};
-		observer = {};
 	}
 
 	virtual void OnInit() noexcept override {
 
-		celestialBodies = StarTracker::Ephemeris::CelestialBody::LoadFromFile("assets/CelestialBodies.json");
-		auto geoLocation = StarTracker::Utils::LocationService::GeoLocation::Get();
+		const auto geoLocation = StarTracker::Utils::LocationService::GeoLocation::Get();
 		observer = { geoLocation.Latitude, geoLocation.Longitude };
+		celestialBodies = StarTracker::Ephemeris::CelestialBody::LoadFromFile("assets/ephemeris/CelestialBodies.json");
 	}
 
 	virtual void OnUpdate(float deltaTime) noexcept override {
 
 		ImGui::Begin("Celestial Bodies");
+
+		auto mediumFont = ImGui::GetIO().Fonts->Fonts[StarTracker::Core::UIFont::Medium];
+
+		ImGui::PushFont(mediumFont);
+		ImGui::Text("%s", StarTracker::DateTime::Now().ToString().c_str());
+		ImGui::PopFont();
+
+		ImGui::Separator();
 
 		for (auto& body : celestialBodies) {
 
@@ -44,15 +50,14 @@ public:
 				observer,
 				StarTracker::DateTime::Now()
 			);
-
 			ImGui::Text("Name: {%s} Designation: {%s} Azimuth: {%lf} Elevation: {%lf}",
 				body->GetName().c_str(),
 				body->GetDesignation().c_str(),
 				position.Azimuth,
 				position.Altitude
 			);
+			ImGui::Separator();
 		}
-
 		ImGui::End();
 	}
 
@@ -62,7 +67,7 @@ public:
 	}
 };
 
-auto main(int, const char**) -> int {
+auto main(int, char**) -> int {
 
 	StarTracker::Core::ApplicationData applicationData{};
 	applicationData.Title = "StarTracker";
@@ -70,13 +75,20 @@ auto main(int, const char**) -> int {
 	applicationData.Height = 720;
 	applicationData.EnableDockspace = true;
 	applicationData.Fullscreen = false;
+	applicationData.VerticalSync = false;
 
-	StarTracker::Core::Application application{ applicationData };
+	try {
+		StarTracker::Core::Application application{ applicationData };
 
-	TrackerView view{ application.GetWindow().GetNativeHandle() };
+		const auto view = std::make_unique<ComputationView>(application.GetWindow().GetNativeHandle());
 
-	application.AddToViewList(&view);
-	application.Run();
+		application.AddToViewList(view.get());
+		application.Run();
+	}
+	catch (const std::exception& e) {
+
+		ASSERT(false && "Fatal exception!");
+	}
 
 	return 0;
 }
