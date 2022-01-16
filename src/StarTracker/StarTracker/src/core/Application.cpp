@@ -9,7 +9,8 @@ namespace StarTracker::Core {
 				.Height = applicationData.Height,
 				.Title = applicationData.Title,
 				.Running = true,
-				.Fullscreen = applicationData.Fullscreen
+				.Fullscreen = applicationData.Fullscreen,
+				.VerticalSync = applicationData.VerticalSync
 			} 
 		}, 
 		userInterfaceView{ nullptr, applicationData.EnableDockspace } 

@@ -16,6 +16,7 @@ namespace StarTracker::Core {
 		std::string Title;
 		bool EnableDockspace;
 		bool Fullscreen;
+		bool VerticalSync;
 	};
 
 	class Application {

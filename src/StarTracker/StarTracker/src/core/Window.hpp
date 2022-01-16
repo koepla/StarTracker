@@ -16,6 +16,7 @@ namespace StarTracker::Core {
 		std::string Title;
 		bool Running;
 		bool Fullscreen;
+		bool VerticalSync;
 	};
 
 	class Window {

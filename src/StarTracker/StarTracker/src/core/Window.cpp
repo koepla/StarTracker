@@ -33,7 +33,7 @@ namespace StarTracker::Core {
             glfwTerminate();
         }
 
-        glfwSwapInterval(1);
+        glfwSwapInterval(windowData.VerticalSync ? 1 : 0);
         glfwSetWindowUserPointer(nativeHandle, &this->windowData);
         glfwSetWindowSizeCallback(nativeHandle, [](GLFWwindow* handle, int width, int height) -> void {
 
