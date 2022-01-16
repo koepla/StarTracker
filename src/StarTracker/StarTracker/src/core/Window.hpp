@@ -2,6 +2,7 @@
 #define STARTRACKER_CORE_WINDOW_H
 
 #include "Assert.hpp"
+#include "Core.hpp"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
