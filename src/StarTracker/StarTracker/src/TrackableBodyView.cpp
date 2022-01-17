@@ -53,7 +53,7 @@ namespace StarTracker {
 					position.Altitude
 				);
 
-				const auto windowId = std::format("Begin Tracking {} ({})", body->GetName(), body->GetDesignation());
+				const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
 
 				bool selected = false;
 				if (ImGui::Selectable(data.c_str(), &selected)) {
@@ -62,9 +62,15 @@ namespace StarTracker {
 				}
 
 				bool popUpOpen = true;
-				if (ImGui::BeginPopupModal(windowId.c_str(), &popUpOpen)) {
+				if (ImGui::BeginPopupModal(windowId.c_str(), &popUpOpen, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-					ImGui::Text("Tracking %s", body->GetName().c_str());
+					const auto size = ImGui::CalcTextSize(windowId.c_str());
+
+					ImGui::Text(windowId.c_str());
+					if (ImGui::Button("Track", ImVec2{ size.x, 1.4f * size.y })) {
+
+						std::printf("Tracking...\n");
+					}
 					ImGui::EndPopup();
 				}
 				ImGui::Separator();
