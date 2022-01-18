@@ -22,11 +22,11 @@ namespace StarTracker::Utils::Diagnostics {
 
 		if (running) {
 
-			return static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - startTime).count() / 1000.0);
+			return static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - startTime).count() / 1000.0);
 		}
 		else {
 
-			return static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(stopTime - startTime).count() / 1000.0);
+			return static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime).count() / 1000.0);
 		}
 	}
 }
