@@ -33,7 +33,7 @@ namespace StarTracker {
 
 		if (ImGui::Begin("Trackable Bodies")) {
 
-			ImGui::PushFont(ImGui::GetIO().Fonts->Fonts[Core::UIFont::Medium]);
+			ImGui::PushFont(Core::UIFont::Medium);
 			ImGui::Text("%s", DateTime::Now().ToString().c_str());
 			ImGui::PopFont();
 			ImGui::Separator();

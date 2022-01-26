@@ -12,21 +12,18 @@
 
 namespace StarTracker::Core {
 
-	// Workaround for enum class, so we don't have to write out the cast when using
-	// ImGui->GetIO().Fonts->Fonts[UIFont::Regular];
-
 	struct UIFont final {
 
-		inline static constexpr int Light = 0;
-		inline static constexpr int Regular = 1;
-		inline static constexpr int Medium = 2;
-		inline static constexpr int Semibold = 3;
-		inline static constexpr int Bold = 4;
-		inline static constexpr int Heavy = 5;
-		inline static constexpr int Italic = 6;
+		inline static ImFont* Light = nullptr;
+		inline static ImFont* Regular = nullptr;
+		inline static ImFont* Medium = nullptr;
+		inline static ImFont* Semibold = nullptr;
+		inline static ImFont* Bold = nullptr;
+		inline static ImFont* Heavy = nullptr;
+		inline static ImFont* Italic = nullptr;
 	};
 
-	class UIView : public View {
+	class UIView final : public View {
 
 	private:
 		bool enableDockspace;

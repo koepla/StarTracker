@@ -91,25 +91,15 @@ namespace StarTracker::Core {
 
 		ImGui::StyleColorsLight();
 
-		/* 
-			Light = 0,
-			Regular = 1,
-			Medium = 2,
-			Semibold = 3,
-			Bold = 4,
-			Heavy = 5,
-			Italic = 6,
-		*/
-
 		float fontSize = 22.0f;
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Light.ttf", fontSize);
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Regular.ttf", fontSize);
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Medium.ttf", fontSize);
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Semibold.ttf", fontSize);
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Bold.ttf", fontSize);
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Heavy.ttf", fontSize);
-		io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSText-RegularItalic.ttf", fontSize);
-		io.FontDefault = io.Fonts->Fonts[UIFont::Regular];
+		UIFont::Light = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Light.ttf", fontSize);
+		UIFont::Regular = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Regular.ttf", fontSize);
+		UIFont::Medium = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Medium.ttf", fontSize);
+		UIFont::Semibold = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Semibold.ttf", fontSize);
+		UIFont::Bold = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Bold.ttf", fontSize);
+		UIFont::Heavy = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSDisplay-Heavy.ttf", fontSize);
+		UIFont::Italic = io.Fonts->AddFontFromFileTTF("assets/fonts/SFNSText-RegularItalic.ttf", fontSize);
+		io.FontDefault = UIFont::Regular;
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

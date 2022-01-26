@@ -15,6 +15,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <thread>
 
 namespace StarTracker {
 
