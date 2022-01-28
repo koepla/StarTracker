@@ -91,11 +91,11 @@ public:
 
             if(i < aPitchSteps) {
 
-                stepMotor(&pitchLeftConf, &pitchRightConf, 1000, 1000);
+                stepMotor(&pitchLeftConf, &pitchRightConf, 100, 100);
             }
             if(i < aYawSteps) {
 
-                stepMotor(&yawConf, nullptr, 1000, 1000);
+                stepMotor(&yawConf, nullptr, 100, 100);
             }
         }
 

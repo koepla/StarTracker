@@ -6,6 +6,7 @@
 #include "core/Application.hpp"
 #include "core/Assert.hpp"
 #include "core/Core.hpp"
+#include "core/Tracker.hpp"
 #include "utils/serial/Package.hpp"
 #include "utils/serial/Serial.hpp"
 
@@ -23,6 +24,7 @@ namespace StarTracker {
 
 	private:
 		Ephemeris::Coordinates::Observer observer;
+		Core::Tracker tracker;
 		std::vector<std::shared_ptr<Ephemeris::CelestialBody>> celestialBodies;
 
 	public:
