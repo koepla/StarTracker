@@ -2,10 +2,9 @@
 
 namespace StarTracker {
 
-	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle } {
+	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, celestialBodies{}, tracker{} {
 	
-		observer = {};
-		celestialBodies = {};
+
 	}
 
 	void TrackableBodyView::OnInit() noexcept {
@@ -27,6 +26,15 @@ namespace StarTracker {
 				return {};
 			}
 		}();
+
+		try {
+
+			ASSERT(tracker.Connect() && "Failed to connect to tracker!");
+		}
+		catch (const std::exception&) {
+
+			ASSERT(false && "Failed to connect to tracker!");
+		}
 	}
 
 	void TrackableBodyView::OnUpdate(float deltaTime) noexcept {
@@ -40,23 +48,24 @@ namespace StarTracker {
 			
 			for (const auto& body : celestialBodies) {
 
-				const auto position = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
-					body->GetSphericalPosition(DateTime::Now()),
+				const auto sphericalPosition = body->GetSphericalPosition(DateTime::Now());
+				const auto positionPreview = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
+					sphericalPosition,
 					observer,
 					DateTime::Now()
 				);
 				
-				const auto data = std::format("Name: {}, Designation: {}, Azimuth: {}, Elevation: {}", 
+				const auto bodyData = std::format("Name: {}, Designation: {}, Azimuth: {}, Elevation: {}", 
 					body->GetName(),
 					body->GetDesignation(),
-					position.Azimuth,
-					position.Altitude
+					positionPreview.Azimuth,
+					positionPreview.Altitude
 				);
 
 				const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
 
 				bool selected = false;
-				if (ImGui::Selectable(data.c_str(), &selected)) {
+				if (ImGui::Selectable(bodyData.c_str(), &selected)) {
 
 					ImGui::OpenPopup(windowId.c_str());					
 				}
@@ -69,7 +78,22 @@ namespace StarTracker {
 					ImGui::Text(windowId.c_str());
 					if (ImGui::Button("Track", ImVec2{ size.x, 1.4f * size.y })) {
 
-						std::printf("Tracking...\n");
+						const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
+
+							if (status == Core::TrackerCallbackStatus::FAILURE) {
+
+								std::fprintf(stderr, "Failure on tracking!\n");
+							}
+							else {
+
+								std::fprintf(stdout, "Tracking finished!\n");
+							}
+						};
+
+						if (tracker.Track(sphericalPosition, observer, 20000, trackerCallback)) {
+
+							std::fprintf(stdout, "Started tracking!\n");
+						}
 					}
 					ImGui::EndPopup();
 				}
@@ -82,6 +106,13 @@ namespace StarTracker {
 
 	void TrackableBodyView::OnDestroy() noexcept {
 
+		try {
 
+			ASSERT(tracker.Disconnect() && "Failed to disconnect from tracker!");
+		}
+		catch (const std::exception&) {
+
+			ASSERT(false && "Failed to disconnect from tracker!");
+		}
 	}
 }
