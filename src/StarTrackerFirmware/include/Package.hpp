@@ -5,7 +5,7 @@
 
 #pragma pack(push, 1)
 
-namespace Protocol {
+namespace StarTracker {
 
 	/*
 	*	enumeration for protocol flags
@@ -28,16 +28,6 @@ namespace Protocol {
 
 		Command Flag;
 		uint8_t Size;
-
-		Header() : Flag{Command::NONE}, Size{0} {
-
-
-		}
-
-		Header(Command flag, uint8_t size) : Flag{flag}, Size{size} {
-
-
-		}
 	};
 
 	/*
@@ -47,16 +37,16 @@ namespace Protocol {
 	template <uint16_t N>
 	struct Package {
 
-		static constexpr uint16_t BUFF_SIZE = N - sizeof(Protocol::Header);
+		static constexpr uint16_t BUFF_SIZE = N - sizeof(StarTracker::Header);
 
-		Protocol::Header Header;
+		StarTracker::Header Header;
 		uint8_t buff[BUFF_SIZE];
 
 		/*
 		*	Sets the header flag to NONE and the size to zero
 		*	Sets the whole buffer to 0
 		*/
-		Package() : Header{Protocol::Header{Command::NONE, 0}} {
+		Package() noexcept : Header{Command::NONE, 0} {
 
 			static_assert(BUFF_SIZE >= 0, "Buffer size must not be less than zero");
 
@@ -67,14 +57,14 @@ namespace Protocol {
 		*	Sets the specified header flag
 		*	Sets size and buffer to zero
 		*/
-		Package(Command flag) : Header{Protocol::Header{flag, 0}} {
+		Package(Command flag) noexcept : Header{flag, 0} {
 
 			static_assert(BUFF_SIZE >= 0, "Buffer size must not be less than zero");
 
 			memset(buff, 0, BUFF_SIZE);
 		}
 
-		Package& Clear() {
+		Package& Clear() noexcept {
 			
 			memset(buff, 0, BUFF_SIZE);
 			Header.Size = 0;
@@ -83,7 +73,7 @@ namespace Protocol {
 			return *this;
 		}
 
-		Package& SetFlag(Command flag) {
+		Package& SetFlag(Command flag) noexcept {
 
 			Header.Flag = flag;
 
@@ -96,7 +86,7 @@ namespace Protocol {
 		*	Copes data into the buffer
 		*/
 		template <typename T>
-		Package& Push(const T& data) {
+		Package& Push(const T& data) noexcept {
 
 			uint8_t osize = Header.Size;
 			memcpy(buff + osize, &data, sizeof(T));
@@ -106,7 +96,7 @@ namespace Protocol {
 		}
 
 		template <typename T>
-		Package& PushRange(const T* data, uint8_t count) {
+		Package& PushRange(const T* data, uint8_t count) noexcept {
 
 			uint8_t osize = Header.Size;
 			memcpy(buff + osize, data, count * sizeof(T));
@@ -118,7 +108,7 @@ namespace Protocol {
 		*	Returns a value of type T at the given index
 		*/
 		template <typename T>
-		T Read(uint8_t index) {
+		T Read(uint8_t index) noexcept {
 
 			return *reinterpret_cast<T*>(buff + index * sizeof(T));
 		}
@@ -127,7 +117,7 @@ namespace Protocol {
 		*	Returns a pointer of type T to the buffer at the given offset
 		*/
 		template <typename T>
-		T* ReadRange(uint8_t offset) {
+		T* ReadRange(uint8_t offset) noexcept {
 
 			return reinterpret_cast<T*>(buff + offset * sizeof(T));
 		}
@@ -135,12 +125,12 @@ namespace Protocol {
 		/*
 		*	Returns how many bytes of the buffer are in use
 		*/
-		size_t GetSize() const {
+		size_t GetSize() const noexcept {
 
 			return static_cast<size_t>(Header.Size);
 		}
 
-		Command GetFlag() const {
+		Command GetFlag() const noexcept {
 
 			return Header.Flag;
 		}
