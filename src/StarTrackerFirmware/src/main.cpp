@@ -1,63 +1,42 @@
-#define SERIAL_TX_BUFFER_SIZE 256
-#define SERIAL_RX_BUFFER_SIZE 256
-
 #include "Package.hpp"
-#include "Driver.hpp"
-
-void blink() {
-
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(100);
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(100);
-}
+#include "StepperDriver.hpp"
 
 auto main() -> int {
 
-    DriverConfig pitchLeftConf = {
+    StarTracker::StepperDriverConfig leftPitchConfig{};
+    leftPitchConfig.Microsteps = 256;
+    leftPitchConfig.EnablePin = 3;
+    leftPitchConfig.StepPin = 2;
+    leftPitchConfig.RxPin = 5;
+    leftPitchConfig.TxPin = 4;
+    leftPitchConfig.RmsCurrent = 600;
 
-        .MicroSteps = 256,
-        .EnablePin = 3,
-        .StepPin = 2,
-        .RxPin = 5,
-        .TxPin = 4,
-        .RmsCurrent = 1000
-    };
+    StarTracker::StepperDriverConfig rightPitchConfig{};
+    rightPitchConfig.Microsteps = 256;
+    rightPitchConfig.EnablePin = 7;
+    rightPitchConfig.StepPin = 6;
+    rightPitchConfig.RxPin = 9;
+    rightPitchConfig.TxPin = 8;
+    rightPitchConfig.RmsCurrent = 600;
 
-    DriverConfig pitchRightConf = {
-
-        .MicroSteps = 256,
-        .EnablePin = 7,
-        .StepPin = 6,
-        .RxPin = 9,
-        .TxPin = 8,
-        .RmsCurrent = 1000
-    };
-
-    DriverConfig yawConf = {
-
-        .MicroSteps = 256,
-        .EnablePin = 11,
-        .StepPin = 10,
-        .RxPin = 13,
-        .TxPin = 12,
-        .RmsCurrent = 600
-    };
-
-    Driver driver{ pitchLeftConf, pitchRightConf, yawConf };
-    Protocol::Pack32 package{};
-    Protocol::Pack32 acknowledgePackage{ Protocol::Command::ACK };
+    StarTracker::StepperDriverConfig yawConfig{};
+    yawConfig.Microsteps = 256;
+    yawConfig.EnablePin = 11;
+    yawConfig.StepPin = 10;
+    yawConfig.RxPin = 13;
+    yawConfig.TxPin = 12;
+    yawConfig.RmsCurrent = 600;
 
     init();
-    driver.Init();
     Serial.begin(115200);
+
+    StarTracker::StepperDriver stepperDriver{ leftPitchConfig, rightPitchConfig, yawConfig };
+    StarTracker::Pack32 package{};
+    StarTracker::Pack32 acknowledgePackage{ StarTracker::Command::ACK };
 
     while(true) {
 
-        blink();
-
-        if(Serial.available() != sizeof(package)) {
+        if(Serial.available() < static_cast<int>(sizeof package)) {
 
             continue;
         }
@@ -66,56 +45,53 @@ auto main() -> int {
 
         switch(package.GetFlag()) {
 
-            case Protocol::Command::NONE: {
+            case StarTracker::Command::NONE: {
 
                 package.Clear();
                 
                 break;
             }
-            case Protocol::Command::WAKEUP: {
+            case StarTracker::Command::WAKEUP: {
 
-                MotorAxis axis = package.Read<MotorAxis>(0);
-                driver.SetMotorState(axis, MotorState::ON);
+                stepperDriver.SetMotorState(package.Read<StarTracker::MotorAxis>(0), StarTracker::MotorState::ON);
                 Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
-            case Protocol::Command::SLEEP: {
+            case StarTracker::Command::SLEEP: {
 
-                MotorAxis axis = package.Read<MotorAxis>(0);
-                driver.SetMotorState(axis, MotorState::OFF);
+                stepperDriver.SetMotorState(package.Read<StarTracker::MotorAxis>(0), StarTracker::MotorState::OFF);
                 Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
-            case Protocol::Command::CONF: {
+            case StarTracker::Command::CONF: {
 
-                float pitch = package.Read<float>(0);
-                float yaw = package.Read<float>(1);
-                driver.SetCurrentPosition(pitch, yaw);
+                const auto pitchAngle = package.Read<float>(0);
+                const auto yawAngle = package.Read<float>(1);
+                stepperDriver.SetCurrentPosition(pitchAngle, yawAngle);
                 Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
-            case Protocol::Command::MOVE: {
+            case StarTracker::Command::MOVE: {
 
-                float pitch = package.Read<float>(0);
-                float yaw = package.Read<float>(1);
-                driver.Move(pitch, yaw);
+                const auto pitchAngle = package.Read<float>(0);
+                const auto yawAngle = package.Read<float>(1);
+                stepperDriver.MoveToTarget(pitchAngle, yawAngle, 5000);
                 Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
-            case Protocol::Command::ORIGIN: {
+            case StarTracker::Command::ORIGIN: {
 
-                driver.Move(0.0f, 0.0f);
+                stepperDriver.MoveToTarget(0.0f, 0.0f, 5000);
                 Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
-            case Protocol::Command::ACK: {
+            case StarTracker::Command::ACK: {
 
-                // In this case the client only expects an ack package
                 Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
@@ -126,8 +102,11 @@ auto main() -> int {
 
                     char clearSerial [[maybe_unused]] = Serial.read();
                 }
+                break;
             }
         };  
+
+        package.Clear();
     }
 
     return 0;
