@@ -27,7 +27,6 @@ namespace StarTracker::Core {
 
 			if (sendPackage(Utils::Serial::Pack32{ Utils::Serial::Command::ACK }, true, 500)) {
 
-				std::fprintf(stdout, "Detected %s!\n", currentPort.c_str());
 				return true;
 			}
 			else {
