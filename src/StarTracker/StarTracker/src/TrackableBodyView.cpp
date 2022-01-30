@@ -1,10 +1,13 @@
 #include "TrackableBodyView.hpp"
 
+#include <malloc.h>
+#include <new.h>
+
+
 namespace StarTracker {
 
-	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, celestialBodies{}, tracker{} {
+	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, celestialBodies{}, tracker{} {	
 	
-
 	}
 
 	void TrackableBodyView::OnInit() noexcept {
@@ -44,6 +47,13 @@ namespace StarTracker {
 			ImGui::PushFont(Core::UIFont::Medium);
 			ImGui::Text("%s", DateTime::Now().ToString().c_str());
 			ImGui::PopFont();
+			ImGui::Separator();
+			
+			static int trackingDuration{ 5000 };
+			const auto contentRegion = ImGui::GetContentRegionAvail();
+			ImGui::PushItemWidth(contentRegion.x / 2);
+			ImGui::InputInt("Tracking duration [ms]", &trackingDuration);
+			ImGui::PopItemWidth();
 			ImGui::Separator();
 			
 			for (const auto& body : celestialBodies) {
@@ -86,11 +96,11 @@ namespace StarTracker {
 							}
 							else {
 
-								std::fprintf(stdout, "Tracking finished!\n");
+								std::fprintf(stdout, "Tracking finished! (%d ms)\n", trackingDuration);
 							}
 						};
 
-						if (tracker.Track(sphericalPosition, observer, 20000, trackerCallback)) {
+						if (tracker.Track(sphericalPosition, observer, trackingDuration, trackerCallback)) {
 
 							std::fprintf(stdout, "Started tracking!\n");
 						}
