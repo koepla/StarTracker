@@ -32,7 +32,7 @@ namespace StarTracker {
 
 		try {
 
-			ASSERT(tracker.Connect() && "Failed to connect to tracker!");
+			while(!tracker.Connect());
 		}
 		catch (const std::exception&) {
 

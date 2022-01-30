@@ -28,7 +28,7 @@ auto main() -> int {
     yawConfig.RmsCurrent = 600;
 
     init();
-    Serial.begin(115200);
+    Serial.begin(115200, SERIAL_8N1);
 
     StarTracker::StepperDriver stepperDriver{ leftPitchConfig, rightPitchConfig, yawConfig };
     StarTracker::Pack32 package{};
@@ -36,32 +36,30 @@ auto main() -> int {
 
     while(true) {
 
-        if(Serial.available() < static_cast<int>(sizeof package)) {
+        package.Clear();
+
+        if(static_cast<size_t>(Serial.available()) < sizeof(package)) {
 
             continue;
         }
 
-        Serial.readBytes(reinterpret_cast<uint8_t*>(&package), sizeof package);
+        Serial.readBytes(reinterpret_cast<uint8_t*>(&package), sizeof(package));
 
         switch(package.GetFlag()) {
 
             case StarTracker::Command::NONE: {
-
-                package.Clear();
                 
                 break;
             }
             case StarTracker::Command::WAKEUP: {
 
                 stepperDriver.SetMotorState(package.Read<StarTracker::MotorAxis>(0), StarTracker::MotorState::ON);
-                Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
             case StarTracker::Command::SLEEP: {
 
                 stepperDriver.SetMotorState(package.Read<StarTracker::MotorAxis>(0), StarTracker::MotorState::OFF);
-                Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
@@ -70,7 +68,6 @@ auto main() -> int {
                 const auto pitchAngle = package.Read<float>(0);
                 const auto yawAngle = package.Read<float>(1);
                 stepperDriver.SetCurrentPosition(pitchAngle, yawAngle);
-                Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
@@ -79,20 +76,17 @@ auto main() -> int {
                 const auto pitchAngle = package.Read<float>(0);
                 const auto yawAngle = package.Read<float>(1);
                 stepperDriver.MoveToTarget(pitchAngle, yawAngle, 5000);
-                Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
             case StarTracker::Command::ORIGIN: {
 
                 stepperDriver.MoveToTarget(0.0f, 0.0f, 5000);
-                Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
             case StarTracker::Command::ACK: {
 
-                Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof acknowledgePackage);
 
                 break;
             }
@@ -106,7 +100,7 @@ auto main() -> int {
             }
         };  
 
-        package.Clear();
+        Serial.write(reinterpret_cast<uint8_t*>(&acknowledgePackage), sizeof(acknowledgePackage));
     }
 
     return 0;
