@@ -94,7 +94,7 @@ auto main() -> int {
 
                 while(Serial.available() > 0) {
 
-                    char clearSerial [[maybe_unused]] = Serial.read();
+                    volatile char clearSerial [[maybe_unused]] = Serial.read();
                 }
                 break;
             }

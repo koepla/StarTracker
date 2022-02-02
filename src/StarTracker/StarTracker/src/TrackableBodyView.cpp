@@ -1,13 +1,10 @@
 #include "TrackableBodyView.hpp"
 
-#include <malloc.h>
-#include <new.h>
-
 
 namespace StarTracker {
 
 	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, celestialBodies{}, tracker{} {	
-	
+		
 	}
 
 	void TrackableBodyView::OnInit() noexcept {
@@ -45,7 +42,7 @@ namespace StarTracker {
 		if (ImGui::Begin("Trackable Bodies")) {
 
 			ImGui::PushFont(Core::UIFont::Medium);
-			ImGui::Text("%s", DateTime::Now().ToString().c_str());
+			ImGui::Text("%s [%f fps]", DateTime::Now().ToString().c_str(), 1.0f / deltaTime);
 			ImGui::PopFont();
 			ImGui::Separator();
 			
