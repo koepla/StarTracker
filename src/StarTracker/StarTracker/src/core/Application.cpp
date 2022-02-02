@@ -70,7 +70,7 @@ namespace StarTracker::Core {
 		return window;
 	}
 
-	inline Application* Application::GetInstance() noexcept {
+	Application* Application::GetInstance() noexcept {
 
 		return instance;
 	}

@@ -42,7 +42,7 @@ namespace StarTracker::Core {
 		[[nodiscard]] Window& GetWindow() noexcept;
 
 	public:
-		[[nodiscard]] inline static Application* GetInstance() noexcept;
+		[[nodiscard]] static Application* GetInstance() noexcept;
 	};
 }
 
