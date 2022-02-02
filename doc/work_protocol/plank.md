@@ -197,3 +197,15 @@ Time spent:     3h
 ```
 Today I renamed the CelestialBody class to SolarSystemBody, in order to use the CelestialBody class as a base class, which directly reads right ascension and declination from the json file. We need this functionality for fixed bodies (Galaxies, Stars). I added some major galaxies and nebulas to the .json file. 
 
+---
+
+## :memo: worked on graphical user interface
+
+```
+Date:           14.11.2021 - 02.02.2022
+Time spent:     30h
+```
+In this timespan, I started to implement the boilerplate code for the graphical user interface library of our choice: ImGui. The base structure for our GUI Application is the following: 
+Everything is contained by a derived Class of StarTracker::Core::Application. This class houses the heavy lifting for the windowing as well as a list of views which are then drawn every frame. The font of our choice is San Francisco. 
+In order to test our new GUI-System, I wrote a basic program which calculates the position of every celestial object in CelestialBodies.json. One can then select a body, which opens a popup to track the body. 
+The tracking functionality is also new. One can specify the preferred CelestialBody, one's position, and the duration for the tracking process. The tracking function then starts a new thread, which repeatedly sends tracking commands to the microcontroller.
