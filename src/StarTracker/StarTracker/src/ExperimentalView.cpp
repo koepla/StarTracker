@@ -1,5 +1,7 @@
 #include "ExperimentalView.hpp"
 
+#include <glm/glm.hpp>
+
 namespace StarTracker {
 
 	ExperimentalView::ExperimentalView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle } {
@@ -15,7 +17,6 @@ namespace StarTracker {
 
 		// Called every frame
 		if (ImGui::Begin("Experimental")) {
-
 
 		}
 		ImGui::End();
