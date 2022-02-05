@@ -14,7 +14,7 @@ namespace StarTracker::Utils::Serial {
 		return message.c_str();
 	}
 
-	SerialPort::SerialPort() noexcept : hCom{ nullptr }, isOpen{ false }, dwEventMask{ EV_RXCHAR } {
+	SerialPort::SerialPort() noexcept : hCom{ nullptr }, dwEventMask{ EV_RXCHAR }, fileName{} {
 
 	}
 
@@ -34,12 +34,8 @@ namespace StarTracker::Utils::Serial {
 
 		if (hCom == INVALID_HANDLE_VALUE) {
 
-			isOpen = false;
+			fileName = prefixed;
 			throw SerialException("Couldn't open Serial Port " + prefixed);
-		}
-		else {
-			
-			isOpen = true;
 		}
 
 		setBaudrate(baudrate);
@@ -54,13 +50,13 @@ namespace StarTracker::Utils::Serial {
 			throw SerialException("Couldn't close Serial Port");
 		}
 
-		isOpen = false;
+		hCom = INVALID_HANDLE_VALUE;
 	}
 
 	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx) noexcept(false) {
 
 		// Number of bytes read
-		DWORD dwread;
+		DWORD dwread{};
 
 		// Check if port is open
 		if (!IsOpen()) {
@@ -87,7 +83,7 @@ namespace StarTracker::Utils::Serial {
 	uint32_t SerialPort::Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false) {
 
 		// Number of bytes written
-		DWORD dwwritten;
+		DWORD dwwritten{};
 
 		// Check if port is open
 		if (!IsOpen()) {
@@ -106,9 +102,25 @@ namespace StarTracker::Utils::Serial {
 		}
 	}
 
-	bool SerialPort::IsOpen() const noexcept {
+	bool SerialPort::IsOpen() noexcept {
 
-		return isOpen && (hCom != INVALID_HANDLE_VALUE);
+		return (hCom != INVALID_HANDLE_VALUE) && IsGood();
+	}
+
+	bool SerialPort::IsGood() noexcept {
+
+		COMSTAT stat{};
+
+		// In order to check if the COM-Port is still valid, we can check its status
+		if (ClearCommError(hCom, NULL, &stat)) {
+
+			return true;
+		}
+		else {
+
+			hCom = INVALID_HANDLE_VALUE;
+			return false;
+		}
 	}
 
 	void SerialPort::WaitComm() noexcept {
@@ -116,7 +128,7 @@ namespace StarTracker::Utils::Serial {
 		WaitCommEvent(hCom, &dwEventMask, NULL);
 	}
 
-	uint32_t SerialPort::Available() const noexcept(false)
+	uint32_t SerialPort::Available() noexcept(false)
 	{
 		if (!IsOpen()) {
 
@@ -124,7 +136,7 @@ namespace StarTracker::Utils::Serial {
 			return 0;
 		}
 
-		COMSTAT stat;
+		COMSTAT stat{};
 		if (!ClearCommError(hCom, NULL, &stat)) {
 
 			throw SerialException("Cannot check status of serial port.");
@@ -136,7 +148,7 @@ namespace StarTracker::Utils::Serial {
 
 	inline std::string SerialPort::prefixPort(const std::string& port) noexcept {
 
-		if (strncmp(port.c_str(), "\\\\.\\", 4) == 0) {
+		if (port.find("\\\\.\\") != std::string::npos) {
 
 			return port;
 		}
@@ -148,7 +160,7 @@ namespace StarTracker::Utils::Serial {
 
 	void SerialPort::setBaudrate(uint32_t baudrate) noexcept(false) {
 
-		DWORD baud = 0;
+		DWORD baud{ 0 };
 
 		switch (baudrate) {
 		case 110: baud = CBR_110; break;
@@ -172,7 +184,7 @@ namespace StarTracker::Utils::Serial {
 		}
 		}
 
-		DCB dcb = { 0 };
+		DCB dcb{ 0 };
 
 		FillMemory(&dcb, sizeof(dcb), 0);
 		if (!GetCommState(hCom, &dcb)) {
