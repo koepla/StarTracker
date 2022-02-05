@@ -42,7 +42,7 @@ namespace StarTracker {
 		if (ImGui::Begin("Trackable Bodies")) {
 
 			ImGui::PushFont(Core::UIFont::Medium);
-			ImGui::Text("%s [%f fps]", DateTime::Now().ToString().c_str(), 1.0f / deltaTime);
+			ImGui::Text("%s [%f fps, Tracker: %s]", DateTime::Now().ToString().c_str(), 1.0f / deltaTime, tracker.IsConnected() ? "Connected" : "Not Connected");
 			ImGui::PopFont();
 			ImGui::Separator();
 			

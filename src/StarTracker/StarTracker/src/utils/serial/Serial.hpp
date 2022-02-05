@@ -27,7 +27,7 @@ namespace StarTracker::Utils::Serial {
 	private:
 		HANDLE hCom;
 		DWORD dwEventMask;
-		bool isOpen;
+		std::string fileName;
 
 	public:
 		SerialPort() noexcept;
@@ -87,7 +87,14 @@ namespace StarTracker::Utils::Serial {
 		* @return bool if the port is open or not
 		*
 		*/
-		[[nodiscard]] bool IsOpen() const noexcept;
+		[[nodiscard]] bool IsOpen() noexcept;
+
+		/*
+		* Checks if the COM port still exists
+		* 
+		* @return bool if the COM port exists or not
+		*/
+		[[nodiscard]] bool IsGood() noexcept;
 
 		/**
 		* Number of bytes that are in the serial buffer of the COM port
@@ -97,7 +104,7 @@ namespace StarTracker::Utils::Serial {
 		* @throws SerialException if the port is not open of the status of the port could not be checked
 		*
 		*/
-		[[nodiscard]] uint32_t Available() const noexcept(false);
+		[[nodiscard]] uint32_t Available() noexcept(false);
 
 		/**
 		* Waites for the COM port to receive bytes

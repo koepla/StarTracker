@@ -28,6 +28,7 @@ namespace StarTracker::Core {
 
 		[[nodiscard]] bool Connect() noexcept(false);
 		[[nodiscard]] bool Disconnect() noexcept(false);
+		[[nodiscard]] bool IsConnected() noexcept(false);
 		[[nodiscard]] bool Track(const Ephemeris::Coordinates::Spherical& object, const Ephemeris::Coordinates::Observer& observer, std::size_t duration, TrackerCallback callback) noexcept(false);
 	
 	private:

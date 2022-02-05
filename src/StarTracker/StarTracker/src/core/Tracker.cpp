@@ -43,12 +43,17 @@ namespace StarTracker::Core {
 
 		if (!serialPort.IsOpen()) {
 
-			return false;
+			return true;
 		}
 
 		serialPort.Close();
 
 		return !serialPort.IsOpen();
+	}
+
+	bool Tracker::IsConnected() noexcept(false) {
+
+		return serialPort.IsOpen();
 	}
 
 	bool Tracker::Track(const Ephemeris::Coordinates::Spherical& object, const Ephemeris::Coordinates::Observer& observer, std::size_t duration, TrackerCallback callback) noexcept(false) {
