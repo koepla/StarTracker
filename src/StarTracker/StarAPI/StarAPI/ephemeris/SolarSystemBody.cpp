@@ -23,15 +23,13 @@ namespace StarTracker::Ephemeris {
 
         const auto t = DateTime::JulianCenturies(date);
 
-        KeplerianElements meanKeplerElem = {
-
-            keplerElements.SemiMajorAxis + keplerElementsCentury.SemiMajorAxis * t,
-            keplerElements.Eccentricity + keplerElementsCentury.Eccentricity * t,
-            keplerElements.Inclination + keplerElementsCentury.Inclination * t,
-            keplerElements.MeanLongitude + keplerElementsCentury.MeanLongitude * t,
-            keplerElements.LonPerihelion + keplerElementsCentury.LonPerihelion * t,
-            keplerElements.LonAscendingNode + keplerElementsCentury.LonAscendingNode * t
-        };
+        KeplerianElements meanKeplerElem{};
+        meanKeplerElem.SemiMajorAxis = keplerElements.SemiMajorAxis + keplerElementsCentury.SemiMajorAxis * t;
+        meanKeplerElem.Eccentricity = keplerElements.Eccentricity + keplerElementsCentury.Eccentricity * t;
+        meanKeplerElem.Inclination = keplerElements.Inclination + keplerElementsCentury.Inclination * t;
+        meanKeplerElem.MeanLongitude = keplerElements.MeanLongitude + keplerElementsCentury.MeanLongitude * t;
+        meanKeplerElem.LonPerihelion = keplerElements.LonPerihelion + keplerElementsCentury.LonPerihelion * t;
+        meanKeplerElem.LonAscendingNode = keplerElements.LonAscendingNode + keplerElementsCentury.LonAscendingNode * t;
 
         const auto w = meanKeplerElem.LonPerihelion;
         const auto Om = meanKeplerElem.LonAscendingNode;
