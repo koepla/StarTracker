@@ -6,6 +6,7 @@
 #include "core/Application.hpp"
 #include "core/Assert.hpp"
 #include "core/Core.hpp"
+#include "core/Input.hpp"
 #include "core/Tracker.hpp"
 #include "utils/serial/Package.hpp"
 #include "utils/serial/Serial.hpp"
