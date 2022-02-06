@@ -102,6 +102,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\InputCode.cpp" />
+    <ClCompile Include="src\core\Input.cpp" />
     <ClCompile Include="src\ExperimentalView.cpp" />
     <ClCompile Include="src\core\Application.cpp" />
     <ClCompile Include="src\utils\serial\Package.cpp" />
@@ -123,6 +125,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\InputCode.hpp" />
+    <ClInclude Include="src\core\Input.hpp" />
     <ClInclude Include="src\ExperimentalView.hpp" />
     <ClInclude Include="src\core\Application.hpp" />
     <ClInclude Include="src\core\algo\ImageManip.hpp" />
