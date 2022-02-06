@@ -1,8 +1,6 @@
 #include "Serial.hpp"
 #include "../../core/Assert.hpp"
 
-#include <chrono>
-
 namespace StarTracker::Utils::Serial {
 
 	SerialException::SerialException(std::string&& message) noexcept : message{ std::move(message) } {
@@ -26,19 +24,19 @@ namespace StarTracker::Utils::Serial {
 		}
 	}
 
-	void SerialPort::Open(const std::string& port, uint32_t baudrate) noexcept(false) {
+	void SerialPort::Open(const std::string& port, uint32_t baudRate) noexcept(false) {
 
 		const auto prefixed = prefixPort(port);
 		
-		hCom = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		hCom = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
 		if (hCom == INVALID_HANDLE_VALUE) {
 
 			fileName = prefixed;
-			throw SerialException("Couldn't open Serial Port " + prefixed);
+			throw SerialException{ "Couldn't open Serial Port " + prefixed };
 		}
 
-		setBaudrate(baudrate);
+		setBaudRate(baudRate);
 		initReceiveMask();
 		initTimeouts();
 	}
@@ -47,7 +45,7 @@ namespace StarTracker::Utils::Serial {
 
 		if (CloseHandle(hCom) == 0) {
 
-			throw SerialException("Couldn't close Serial Port");
+			throw SerialException{ "Couldn't close Serial Port" };
 		}
 
 		hCom = INVALID_HANDLE_VALUE;
@@ -56,12 +54,12 @@ namespace StarTracker::Utils::Serial {
 	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx) noexcept(false) {
 
 		// Number of bytes read
-		DWORD dwread{};
+		DWORD dwRead{};
 
 		// Check if port is open
 		if (!IsOpen()) {
 
-			throw SerialException("Port is not open");
+			throw SerialException{ "Port is not open" };
 		}
 
 		if (waitForRx) {
@@ -70,20 +68,20 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		// Read operation
-		if (!ReadFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwread, NULL)) {
+		if (!ReadFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwRead, nullptr)) {
 
-			throw SerialException("Couldn't read from port");
+			throw SerialException{ "Couldn't read from port" };
 		}
 		else {
 
-			return static_cast<uint32_t>(dwread);
+			return static_cast<uint32_t>(dwRead);
 		}
 	}
 
 	uint32_t SerialPort::Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false) {
 
 		// Number of bytes written
-		DWORD dwwritten{};
+		DWORD dwWritten{};
 
 		// Check if port is open
 		if (!IsOpen()) {
@@ -92,13 +90,13 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		// Write operation
-		if (!WriteFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2write), &dwwritten, NULL)) {
+		if (!WriteFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2write), &dwWritten, nullptr)) {
 
-			throw SerialException("Couldn't write to port");
+			throw SerialException{ "Couldn't write to port" };
 		}
 		else {
 
-			return static_cast<uint32_t>(dwwritten);
+			return static_cast<uint32_t>(dwWritten);
 		}
 	}
 
@@ -112,7 +110,7 @@ namespace StarTracker::Utils::Serial {
 		COMSTAT stat{};
 
 		// In order to check if the COM-Port is still valid, we can check its status
-		if (ClearCommError(hCom, NULL, &stat)) {
+		if (ClearCommError(hCom, nullptr, &stat)) {
 
 			return true;
 		}
@@ -125,22 +123,20 @@ namespace StarTracker::Utils::Serial {
 
 	void SerialPort::WaitComm() noexcept {
 
-		WaitCommEvent(hCom, &dwEventMask, NULL);
+		WaitCommEvent(hCom, &dwEventMask, nullptr);
 	}
 
 	uint32_t SerialPort::Available() noexcept(false)
 	{
 		if (!IsOpen()) {
 
-			throw SerialException("Port is not open");
-			return 0;
+			throw SerialException{ "Port is not open" };
 		}
 
 		COMSTAT stat{};
-		if (!ClearCommError(hCom, NULL, &stat)) {
+		if (!ClearCommError(hCom, nullptr, &stat)) {
 
-			throw SerialException("Cannot check status of serial port.");
-			return 0;
+			throw SerialException{ "Cannot check status of serial port." };
 		}
 
 		return static_cast<uint32_t>(stat.cbInQue);
@@ -158,11 +154,11 @@ namespace StarTracker::Utils::Serial {
 		}
 	}
 
-	void SerialPort::setBaudrate(uint32_t baudrate) noexcept(false) {
+	void SerialPort::setBaudRate(uint32_t baudRate) noexcept(false) {
 
 		DWORD baud{ 0 };
 
-		switch (baudrate) {
+		switch (baudRate) {
 		case 110: baud = CBR_110; break;
 		case 300: baud = CBR_300; break;
 		case 600: baud = CBR_600; break;
@@ -180,7 +176,7 @@ namespace StarTracker::Utils::Serial {
 
 		default: {
 
-			throw SerialException("Invalid baudrate");
+			throw SerialException{ "Invalid baudRate" };
 		}
 		}
 
@@ -189,7 +185,7 @@ namespace StarTracker::Utils::Serial {
 		FillMemory(&dcb, sizeof(dcb), 0);
 		if (!GetCommState(hCom, &dcb)) {
 
-			throw SerialException("Couldn't set baudrate");
+			throw SerialException{ "Couldn't set baudRate" };
 		}
 
 		// 8N1
@@ -200,7 +196,7 @@ namespace StarTracker::Utils::Serial {
 
 		if (!SetCommState(hCom, &dcb)) {
 
-			throw SerialException("Couldn't set baudrate");
+			throw SerialException{ "Couldn't set baudRate" };
 		}
 	}
 
@@ -210,7 +206,7 @@ namespace StarTracker::Utils::Serial {
 
 		if (!SetCommMask(hCom, dwEventMask)) {
 
-			throw SerialException("Couldn't set Comm mask");
+			throw SerialException{ "Couldn't set Comm mask" };
 		}
 	}
 
@@ -225,7 +221,7 @@ namespace StarTracker::Utils::Serial {
 
 		if (!SetCommTimeouts(hCom, &timeouts)) {
 
-			throw SerialException("Couldn't set timeouts");
+			throw SerialException{ "Couldn't set timeouts" };
 		}
 	}
 
@@ -243,7 +239,7 @@ namespace StarTracker::Utils::Serial {
 			}
 			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
-				throw SerialException("Insufficient buffer size (programmer's fault)");
+				throw SerialException{ "Insufficient buffer size (programmer's fault)" };
 			}
 		}
 

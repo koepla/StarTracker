@@ -3,81 +3,81 @@
 #include "SolarSystemBody.hpp"
 
 namespace StarTracker::Ephemeris {
-    
-    CelestialBody::CelestialBody(const std::string& name, const std::string& designation) noexcept : name{ name }, designation{ designation } {
-    
-    }
 
-    std::string CelestialBody::GetName() const noexcept {
+	CelestialBody::CelestialBody(const std::string& name, const std::string& designation) noexcept : name{ name }, designation{ designation } {
 
-        return name;
 	}
 
-    std::string CelestialBody::GetDesignation() const noexcept {
+	std::string CelestialBody::GetName() const noexcept {
 
-        return designation.empty() ? std::string{ "No Designation" } : designation;
-    }
+		return name;
+	}
 
-    std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
+	std::string CelestialBody::GetDesignation() const noexcept {
 
-        std::ifstream fin{ filePath };
+		return designation.empty() ? std::string{ "No Designation" } : designation;
+	}
 
-        if (!fin.is_open()) {
+	std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
 
-            throw std::exception{ "Couldn't open file!" };
-        }
+		std::ifstream fin{ filePath };
 
-        const auto fileContent = std::string{ std::istreambuf_iterator<char>{ fin }, std::istreambuf_iterator<char>{ } };
+		if (!fin.is_open()) {
 
-        if (fileContent.empty()) {
+			throw std::exception{ "Couldn't open file!" };
+		}
 
-            throw std::exception{ "File was empty!" };
-        }
+		const auto fileContent = std::string{ std::istreambuf_iterator<char>{ fin }, std::istreambuf_iterator<char>{ } };
 
-        const auto jObject = nlohmann::json::parse(fileContent, nullptr, false, true);
+		if (fileContent.empty()) {
 
-        if (!jObject.contains("CelestialBodies") || !jObject["CelestialBodies"].is_array()) {
+			throw std::exception{ "File was empty!" };
+		}
 
-            throw std::exception{ "Couldn't find CelestialBodies Array!" };
-        }
+		const auto jObject = nlohmann::json::parse(fileContent, nullptr, false, true);
 
-        std::vector<std::shared_ptr<CelestialBody>> celestialBodies{};
+		if (!jObject.contains("CelestialBodies") || !jObject["CelestialBodies"].is_array()) {
 
-        for (const auto& element : jObject["CelestialBodies"]) {
+			throw std::exception{ "Couldn't find CelestialBodies Array!" };
+		}
 
-            const auto type = element["Type"].get<std::string>();
+		std::vector<std::shared_ptr<CelestialBody>> celestialBodies{};
 
-            if (type._Equal("SSB")) {
+		for (const auto& element : jObject["CelestialBodies"]) {
 
-                KeplerianElements orbitalElements{};
-                orbitalElements.SemiMajorAxis = element["SemiMajorAxis"].get<double>();
-                orbitalElements.Eccentricity = element["Eccentricity"].get<double>();
-                orbitalElements.Inclination = element["Inclination"].get<double>();
-                orbitalElements.MeanLongitude = element["MeanLongitude"].get<double>();
-                orbitalElements.LonPerihelion = element["LonPerihelion"].get<double>();
-                orbitalElements.LonAscendingNode = element["LonAscendingNode"].get<double>();
+			const auto type = element["Type"].get<std::string>();
 
-                KeplerianElements orbitalRateElements{};
-                orbitalRateElements.SemiMajorAxis = element["SemiMajorAxisCentury"].get<double>();
-                orbitalRateElements.Eccentricity = element["EccentricityCentury"].get<double>();
-                orbitalRateElements.Inclination = element["InclinationCentury"].get<double>();
-                orbitalRateElements.MeanLongitude = element["MeanLongitudeCentury"].get<double>();
-                orbitalRateElements.LonPerihelion = element["LonPerihelionCentury"].get<double>();
-                orbitalRateElements.LonAscendingNode = element["LonAscendingNodeCentury"].get<double>();
+			if (type._Equal("SSB")) {
 
-                celestialBodies.push_back(std::make_shared<SolarSystemBody>(element["Name"].get<std::string>(), orbitalElements, orbitalRateElements));
-            }
-            else if (type._Equal("FB")) {
+				KeplerianElements orbitalElements{};
+				orbitalElements.SemiMajorAxis = element["SemiMajorAxis"].get<double>();
+				orbitalElements.Eccentricity = element["Eccentricity"].get<double>();
+				orbitalElements.Inclination = element["Inclination"].get<double>();
+				orbitalElements.MeanLongitude = element["MeanLongitude"].get<double>();
+				orbitalElements.LonPerihelion = element["LonPerihelion"].get<double>();
+				orbitalElements.LonAscendingNode = element["LonAscendingNode"].get<double>();
 
-                Coordinates::Spherical sphericalCoordinates{};
-                sphericalCoordinates.RightAscension = element["RightAscension"].get<double>();
-                sphericalCoordinates.Declination = element["Declination"].get<double>();
-                sphericalCoordinates.Radius = element["Radius"].get<double>();
+				KeplerianElements orbitalRateElements{};
+				orbitalRateElements.SemiMajorAxis = element["SemiMajorAxisCentury"].get<double>();
+				orbitalRateElements.Eccentricity = element["EccentricityCentury"].get<double>();
+				orbitalRateElements.Inclination = element["InclinationCentury"].get<double>();
+				orbitalRateElements.MeanLongitude = element["MeanLongitudeCentury"].get<double>();
+				orbitalRateElements.LonPerihelion = element["LonPerihelionCentury"].get<double>();
+				orbitalRateElements.LonAscendingNode = element["LonAscendingNodeCentury"].get<double>();
 
-                celestialBodies.push_back(std::make_shared<FixedBody>(element["Name"].get<std::string>(), element["Designation"].get<std::string>(), sphericalCoordinates));
-            }
-        }
+				celestialBodies.emplace_back(std::make_shared<SolarSystemBody>(element["Name"].get<std::string>(), orbitalElements, orbitalRateElements));
+			}
+			else if (type._Equal("FB")) {
 
-        return celestialBodies;
-    }
+				Coordinates::Spherical sphericalCoordinates{};
+				sphericalCoordinates.RightAscension = element["RightAscension"].get<double>();
+				sphericalCoordinates.Declination = element["Declination"].get<double>();
+				sphericalCoordinates.Radius = element["Radius"].get<double>();
+
+				celestialBodies.emplace_back(std::make_shared<FixedBody>(element["Name"].get<std::string>(), element["Designation"].get<std::string>(), sphericalCoordinates));
+			}
+		}
+
+		return celestialBodies;
+	}
 }

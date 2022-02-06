@@ -1,7 +1,8 @@
 #ifndef STARTRACKER_SERIAL_SERIAL_H
 #define STARTRACKER_SERIAL_SERIAL_H
 
-#include <windows.h>
+#define NOMINMAX
+#include <Windows.h>
 #include <string>
 #include <vector>
 
@@ -38,17 +39,17 @@ namespace StarTracker::Utils::Serial {
 		*
 		* @param port name of the COM port
 		* 
-		* @param baudrate baudrate (self explaining)
+		* @param baudRate baudRate (self explaining)
 		*
-		* @throws SerialException if the COM port doesn't exist or couldn't be opened
+		* @throws SerialException if the COM port does not exist or could not be opened
 		* 
 		*/
-		void Open(const std::string& port, uint32_t baudrate) noexcept(false);
+		void Open(const std::string& port, uint32_t baudRate) noexcept(false);
 
 		/**
 		* Closes the currently open COM port
 		*
-		* @throws SerialException if the COM port couldn't be closed
+		* @throws SerialException if the COM port could not be closed
 		* 
 		*/
 		void Close() noexcept(false);
@@ -72,7 +73,7 @@ namespace StarTracker::Utils::Serial {
 		*
 		* @param buffer buffer for the to be written bytes
 		*
-		* @param bytes2read number of bytes to write
+		* @param bytes2write number of bytes to write
 		*
 		* @return number of bytes that where successfully written
 		*
@@ -107,7 +108,7 @@ namespace StarTracker::Utils::Serial {
 		[[nodiscard]] uint32_t Available() noexcept(false);
 
 		/**
-		* Waites for the COM port to receive bytes
+		* Waits for the COM port to receive bytes
 		*
 		*/
 		void WaitComm() noexcept;
@@ -115,38 +116,38 @@ namespace StarTracker::Utils::Serial {
 
 	private:
 		/**
-		* Prefixes the portname with \\.\ due to windows weird port names
+		* Prefixes the portName with \\.\ due to windows weird port names
 		*
 		* @param port name of the to be prefixed port
 		*
-		* @return the prefixed portname
+		* @return the prefixed portName
 		* 
 		*/
 		[[nodiscard]] static inline std::string prefixPort(const std::string& port) noexcept;
 
 	private:
 		/**
-		* Sets the baudrate
+		* Sets the baudRate
 		*
-		* @param baudrate baudrate (self explaining)
+		* @param baudRate baudRate (self explaining)
 		*
-		* @throws SerialException if the baudrate couldn't be set
+		* @throws SerialException if the baudRate could not be set
 		* 
 		*/
-		void setBaudrate(uint32_t baudrate) noexcept(false);
+		void setBaudRate(uint32_t baudRate) noexcept(false);
 
 		/**
 		* Initializes the receive mask for WaitComm
 		*
-		* @throws SerialException if the receive mask couldn't be set
+		* @throws SerialException if the receive mask could not be set
 		* 
 		*/
 		void initReceiveMask() noexcept(false);
 
 		/**
-		* Sets the baudrate
+		* Sets the baudRate
 		*
-		* @throws SerialException if the timeouts couldn't be set
+		* @throws SerialException if the timeouts baudRate be set
 		* 
 		*/
 		void initTimeouts() noexcept(false);
@@ -158,7 +159,7 @@ namespace StarTracker::Utils::Serial {
 		* 
 		* @return list of available ports as std::vector
 		*
-		* @throws SerialException if the port names couldn't be retrieved
+		* @throws SerialException if the port names could not be retrieved
 		* 
 		*/
 		[[nodiscard]] static std::vector<std::string> GetPortNames() noexcept(false);
