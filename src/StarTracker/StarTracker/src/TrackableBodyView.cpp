@@ -1,6 +1,5 @@
 #include "TrackableBodyView.hpp"
 
-
 namespace StarTracker {
 
 	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, celestialBodies{}, tracker{} {	
