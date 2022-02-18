@@ -18,7 +18,7 @@
 
 namespace StarTracker {
 
-	class ExperimentalView : public Core::View {
+	class ExperimentalView final : public Core::View {
 
 	private:
 
