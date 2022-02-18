@@ -9,16 +9,11 @@ namespace StarTracker {
 	void TrackableBodyView::OnInit() noexcept {
 
 		celestialBodies = Ephemeris::CelestialBody::LoadFromFile("assets/ephemeris/CelestialBodies.json");
-		observer = [&]() -> Ephemeris::Coordinates::Observer {
+		observer = [&]() -> Utils::LocationService::Location {
 
 			try {
 
-				const auto geoLocation = Utils::LocationService::GeoLocation::Get();
-
-				Ephemeris::Coordinates::Observer observer{};
-				observer.Latitude = geoLocation.Latitude;
-				observer.Longitude = geoLocation.Longitude;
-				return observer;
+				return Utils::LocationService::GeoLocation::Get();
 			}
 			catch (const std::exception&) {
 
@@ -28,7 +23,7 @@ namespace StarTracker {
 
 		try {
 
-			while(!tracker.Connect());
+			while (!tracker.Connect());
 		}
 		catch (const std::exception&) {
 
@@ -40,8 +35,13 @@ namespace StarTracker {
 
 		if (ImGui::Begin("Trackable Bodies")) {
 
+			const auto dateTimeInfo = std::format("{}", DateTime::Now().ToString());
+			const auto trackerInfo = std::format("Tracker: {}", tracker.IsConnected() ? "Connected" : "Not Connected");
+			const auto locationInfo = std::format("Location: {}, {}, {}", observer.City, observer.RegionName, observer.Country);
+			const auto frameInfo = std::format("Frametime: {} ms", deltaTime);
+
 			ImGui::PushFont(Core::UIFont::Medium);
-			ImGui::Text("%s [%f fps, Tracker: %s]", DateTime::Now().ToString().c_str(), 1.0f / deltaTime, tracker.IsConnected() ? "Connected" : "Not Connected");
+			ImGui::Text(std::format("{} - {} - {} - [{}]", dateTimeInfo, trackerInfo, locationInfo, frameInfo).c_str());
 			ImGui::PopFont();
 			ImGui::Separator();
 			
@@ -57,7 +57,7 @@ namespace StarTracker {
 				const auto sphericalPosition = body->GetSphericalPosition(DateTime::Now());
 				const auto positionPreview = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
 					sphericalPosition,
-					observer,
+					{ observer.Latitude, observer.Longitude },
 					DateTime::Now()
 				);
 				
@@ -96,9 +96,13 @@ namespace StarTracker {
 							}
 						};
 
-						if (tracker.Track(sphericalPosition, observer, trackingDuration, trackerCallback)) {
+						if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration, trackerCallback)) {
 
 							std::fprintf(stdout, "Started tracking!\n");
+						}
+						else {
+
+							std::fprintf(stderr, "Couldn't start tracking!\n");
 						}
 					}
 					ImGui::EndPopup();
