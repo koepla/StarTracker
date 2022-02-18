@@ -6,7 +6,7 @@
 
 namespace StarTracker {
 
-	class StarTrackerApplication : public Core::Application {
+	class StarTrackerApplication final : public Core::Application {
 
 	private:
 		TrackableBodyView trackableBodyView;
