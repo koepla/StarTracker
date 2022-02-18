@@ -21,11 +21,11 @@
 
 namespace StarTracker {
 
-	class TrackableBodyView : public Core::View {
+	class TrackableBodyView final : public Core::View {
 
 	private:
-		Ephemeris::Coordinates::Observer observer;
 		Core::Tracker tracker;
+		Utils::LocationService::Location observer;
 		std::vector<std::shared_ptr<Ephemeris::CelestialBody>> celestialBodies;
 
 	public:
