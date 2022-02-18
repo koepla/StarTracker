@@ -41,7 +41,7 @@ namespace StarTracker::Core {
 			userInterfaceView.UIBegin();
 			for (auto* view : viewList) {
 
-				view->OnUpdate(deltaTime);
+				view->OnUpdate(static_cast<float>(deltaTime));
 			}
 			userInterfaceView.UIEnd();
 
