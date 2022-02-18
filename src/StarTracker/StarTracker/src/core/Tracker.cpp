@@ -56,7 +56,12 @@ namespace StarTracker::Core {
 		return serialPort.IsOpen();
 	}
 
-	bool Tracker::Track(const Ephemeris::Coordinates::Spherical& object, const Ephemeris::Coordinates::Observer& observer, std::size_t duration, TrackerCallback callback) noexcept(false) {
+	bool Tracker::Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, std::size_t duration, TrackerCallback callback) noexcept(false) {
+
+		if (tracking.load()) {
+
+			return false;
+		}
 
 		auto trackingJob = std::thread{ [this, object, observer, duration, callback]() -> void {
 
@@ -67,13 +72,15 @@ namespace StarTracker::Core {
 				return;
 			}
 
+			tracking.store(true);
+
 			Utils::Diagnostics::Stopwatch durationWatch{};
 			durationWatch.Start();
 
 			while (durationWatch.GetEllapsedMilliseconds() < duration) {
 
 				const auto currentPosition = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
-					object,
+					object->GetSphericalPosition(DateTime::Now()),
 					observer,
 					DateTime::Now()
 				);
@@ -84,11 +91,13 @@ namespace StarTracker::Core {
 
 				if (!sendPackage(trackingPackage)) {
 
+					tracking.store(false);
 					callback(TrackerCallbackStatus::FAILURE);
 					return;
 				}
 			}
 
+			tracking.store(false);
 			callback(TrackerCallbackStatus::SUCCESS);
 		} };
 		trackingJob.detach();
