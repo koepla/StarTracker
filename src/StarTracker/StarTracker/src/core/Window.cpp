@@ -41,6 +41,45 @@ namespace StarTracker::Core {
             windowData->Width = width;
             windowData->Height = height;
             glViewport(0, 0, width, height);
+
+            Events::WindowResizeEvent windowResizeEvent{ width, height };
+            windowData->EventDispatcher.DispatchEvent(windowResizeEvent);
+        });
+        glfwSetCursorPosCallback(nativeHandle, [](GLFWwindow* handle, double x, double y) -> void {
+
+            const auto windowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(handle));
+
+            Events::MouseMoveEvent mouseMoveEvent{ x, y };
+            windowData->EventDispatcher.DispatchEvent(mouseMoveEvent);
+        });
+        glfwSetKeyCallback(nativeHandle, [](GLFWwindow* handle, int key, int scancode, int action, int mods) -> void {
+
+            const auto windowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(handle));
+            
+            const auto keyEvent = [&]() -> Events::KeyEvent {
+
+                switch (action) {
+
+                    case GLFW_PRESS: {
+
+                        return Events::KeyEvent{ static_cast<KeyCode>(key), Events::KeyStatus::Pressed };
+                    }
+                    case GLFW_REPEAT: {
+
+                        return Events::KeyEvent{ static_cast<KeyCode>(key), Events::KeyStatus::Repeated };
+                    }
+                    case GLFW_RELEASE: {
+
+                        return Events::KeyEvent{ static_cast<KeyCode>(key), Events::KeyStatus::Released };
+                    }
+                    default: {
+
+                        return Events::KeyEvent{ static_cast<KeyCode>(key), Events::KeyStatus::None };
+                    }
+                }
+            }();
+
+            windowData->EventDispatcher.DispatchEvent(keyEvent);
         });
         glfwSetWindowCloseCallback(nativeHandle, [](GLFWwindow* handle) -> void {
 

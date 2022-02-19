@@ -10,7 +10,8 @@ namespace StarTracker::Core {
 				.Title = applicationData.Title,
 				.Running = true,
 				.Fullscreen = applicationData.Fullscreen,
-				.VerticalSync = applicationData.VerticalSync
+				.VerticalSync = applicationData.VerticalSync,
+				.EventDispatcher = Events::EventDispatcher{}
 			} 
 		}, 
 		userInterfaceView{ nullptr, applicationData.EnableDockspace } 
@@ -60,9 +61,14 @@ namespace StarTracker::Core {
 		window.GetWindowData().Running = false;
 	}
 
-	void Application::AddToViewList(View* view) noexcept {
+	void Application::RegisterView(View* view) noexcept {
 
 		viewList.emplace_back(view);
+	}
+
+	void Application::RegisterEventHandler(const Events::EventHandler& eventHandler) noexcept {
+
+		window.GetWindowData().EventDispatcher.RegisterEventHandler(eventHandler);
 	}
 
 	Window& Application::GetWindow() noexcept {

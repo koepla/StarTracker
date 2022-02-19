@@ -6,7 +6,7 @@ namespace StarTracker {
     
         experimentalView.SetNativeWindowHandle(GetWindow().GetNativeHandle());
         trackableBodyView.SetNativeWindowHandle(GetWindow().GetNativeHandle());
-        AddToViewList(&experimentalView);
-        AddToViewList(&trackableBodyView);
+        RegisterView(&experimentalView);
+        RegisterView(&trackableBodyView);
     }
 }

@@ -37,7 +37,8 @@ namespace StarTracker::Core {
 		void Run() noexcept;
 		void Close() noexcept;
 
-		void AddToViewList(View* view) noexcept;
+		void RegisterView(View* view) noexcept;
+		void RegisterEventHandler(const Events::EventHandler& eventHandler) noexcept;
 
 		[[nodiscard]] Window& GetWindow() noexcept;
 

@@ -102,6 +102,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\core\events\KeyEvent.cpp" />
+    <ClCompile Include="src\core\events\MouseMoveEvent.cpp" />
+    <ClCompile Include="src\core\events\EventDispatcher.cpp" />
+    <ClCompile Include="src\core\events\Event.cpp" />
     <ClCompile Include="src\core\InputCode.cpp" />
     <ClCompile Include="src\core\Input.cpp" />
     <ClCompile Include="src\ExperimentalView.cpp" />
@@ -118,6 +122,7 @@
     <ClCompile Include="src\StarTrackerApplication.cpp" />
     <ClCompile Include="src\TrackableBodyView.cpp" />
     <ClCompile Include="src\core\Tracker.cpp" />
+    <ClCompile Include="src\core\events\WindowResizeEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -125,6 +130,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\core\events\KeyEvent.hpp" />
+    <ClInclude Include="src\core\events\MouseMoveEvent.hpp" />
+    <ClInclude Include="src\core\events\EventDispatcher.hpp" />
+    <ClInclude Include="src\core\events\Event.hpp" />
     <ClInclude Include="src\core\InputCode.hpp" />
     <ClInclude Include="src\core\Input.hpp" />
     <ClInclude Include="src\ExperimentalView.hpp" />
@@ -143,6 +152,7 @@
     <ClInclude Include="src\StarTrackerApplication.hpp" />
     <ClInclude Include="src\TrackableBodyView.hpp" />
     <ClInclude Include="src\core\Tracker.hpp" />
+    <ClInclude Include="src\core\events\WindowResizeEvent.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
