@@ -114,7 +114,7 @@
     <ClCompile Include="src\utils\GeoLocation.cpp" />
     <ClCompile Include="src\utils\HttpRequest.cpp" />
     <ClCompile Include="src\utils\serial\Serial.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\StarTrackerMain.cpp" />
     <ClCompile Include="src\utils\Stopwatch.cpp" />
     <ClCompile Include="src\core\Window.cpp" />
     <ClCompile Include="src\core\View.cpp" />

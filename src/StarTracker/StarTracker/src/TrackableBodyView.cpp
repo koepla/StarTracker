@@ -82,7 +82,7 @@ namespace StarTracker {
 					const auto size = ImGui::CalcTextSize(windowId.c_str());
 
 					ImGui::Text(windowId.c_str());
-					if (ImGui::Button("Track", ImVec2{ size.x, 1.4f * size.y })) {
+					if (ImGui::Button("Track", { size.x, 1.4f * size.y })) {
 
 						const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
 
