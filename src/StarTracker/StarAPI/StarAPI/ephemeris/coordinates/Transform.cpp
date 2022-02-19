@@ -8,29 +8,29 @@ namespace StarTracker::Ephemeris::Coordinates {
         rectCoords.X = coords.Radius * Math::Cosine(coords.RightAscension) * Math::Cosine(coords.Declination);
         rectCoords.Y = coords.Radius * Math::Sine(coords.RightAscension) * Math::Cosine(coords.Declination);
         rectCoords.Z = coords.Radius * Math::Sine(coords.Declination);
-
+        
         return rectCoords;
     }
 
     Spherical Transform::RectangularToSpherical(const Rectangular& coords) noexcept {
 
-        double x = coords.X;
-        double y = coords.Y;
-        double z = coords.Z;
-
+        const auto x = coords.X;
+        const auto y = coords.Y;
+        const auto z = coords.Z;
+        
         Spherical sphericalCoords{};
         sphericalCoords.Radius = sqrt(x * x + y * y + z * z);
         sphericalCoords.RightAscension = (x == 0 && y == 0) ? 0 : Math::ArcTangent2(y, x);
         sphericalCoords.Declination = Math::ArcTangent2(z, sqrt(x * x + y * y));
-
+        
         return sphericalCoords;
     }
 
 	Rectangular Transform::RotateRectangular(const Rectangular& rectCoords, double angle) noexcept {
 
-		double x = rectCoords.X * Math::Sine(angle) - rectCoords.Z * Math::Cosine(angle);
-		double y = rectCoords.Y;
-		double z = rectCoords.X * Math::Cosine(angle) + rectCoords.Z * Math::Sine(angle);
+        const auto x = rectCoords.X * Math::Sine(angle) - rectCoords.Z * Math::Cosine(angle);
+        const auto y = rectCoords.Y;
+        const auto z = rectCoords.X * Math::Cosine(angle) + rectCoords.Z * Math::Sine(angle);
 
         Rectangular rectangularCoords{};
         rectangularCoords.X = x;
@@ -42,13 +42,18 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 	Horizontal Transform::EquatorialToHorizontal(double declination, double hourAngle, double latitude) noexcept {
         
-        Rectangular re = SphericalToRectangular(Spherical{ hourAngle, declination });
-        Rectangular rerot = RotateRectangular(re, latitude);
-
-		// add 180 to get the angle from north to east to south and so on
+        Spherical sphericalPosition{};
+        sphericalPosition.RightAscension = hourAngle;
+        sphericalPosition.Declination = declination;
+        sphericalPosition.Radius = 1.0;
+        
+        const auto rectangularPosition = SphericalToRectangular(sphericalPosition);
+        const auto rotatedRectangularPosition = RotateRectangular(rectangularPosition, latitude);
+        
+        // add 180 to get the angle from north to east to south and so on
         Horizontal horizontalCoords{};
-		horizontalCoords.Azimuth = Math::ArcTangent2(rerot.Y, rerot.X) + 180.0;
-		horizontalCoords.Altitude = Math::ArcSine(rerot.Z);
+        horizontalCoords.Azimuth = Math::ArcTangent2(rotatedRectangularPosition.Y, rotatedRectangularPosition.X) + 180.0;
+        horizontalCoords.Altitude = Math::ArcSine(rotatedRectangularPosition.Z);
 
 		return horizontalCoords;
 	}
@@ -58,8 +63,8 @@ namespace StarTracker::Ephemeris::Coordinates {
         DateTime relativeUtcTime = date;
         relativeUtcTime.AddHours(-DateTime::UtcDiff());
 
-        double localMeanSiderealTime = DateTime::Gmst(relativeUtcTime) + observer.Longitude;
-		double hourAngle = localMeanSiderealTime - sphericalCoords.RightAscension;
+        const auto localMeanSiderealTime = DateTime::Gmst(relativeUtcTime) + observer.Longitude;
+        const auto hourAngle = localMeanSiderealTime - sphericalCoords.RightAscension;
 		return EquatorialToHorizontal(sphericalCoords.Declination, hourAngle, observer.Latitude);
 	}
 }
