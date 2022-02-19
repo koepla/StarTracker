@@ -9,18 +9,6 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 		double Azimuth;
 		double Altitude;
-
-		Horizontal();
-		Horizontal(double azimuth, double altitude);
-
-		/**
-		* Formats member variables to a std::string
-		*
-		* @return the member variables `Azimuth` and `Altitude`
-		*     formatted as std::string
-		*
-		*/
-		[[nodiscard]] std::string ToString() const noexcept;
 	};
 }
 

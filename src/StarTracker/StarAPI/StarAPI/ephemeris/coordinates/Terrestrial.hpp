@@ -12,19 +12,6 @@ namespace StarTracker::Ephemeris::Coordinates {
 
 		// longitude positive in east, negative in west
 		double Longitude;
-
-		Terrestrial();
-		Terrestrial(double latitude, double longitude);
-
-
-		/**
-		* Formats member variables to a std::string
-		*
-		* @return the member variables `Latitude` and `Longitude`
-		*     formatted as std::string
-		*
-		*/
-		[[nodiscard]] std::string ToString() const noexcept;
 	};
 
 	using Observer = Terrestrial;
