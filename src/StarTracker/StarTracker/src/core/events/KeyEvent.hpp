@@ -8,7 +8,7 @@ namespace StarTracker::Core::Events {
 
 	enum class KeyStatus : std::uint16_t {
 
-		None = -1,
+		None = 0,
 		Pressed,
 		Repeated,
 		Released
