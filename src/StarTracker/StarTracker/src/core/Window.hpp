@@ -3,6 +3,13 @@
 
 #include "Assert.hpp"
 #include "Core.hpp"
+
+#include "events/Event.hpp"
+#include "events/KeyEvent.hpp"
+#include "events/MouseMoveEvent.hpp"
+#include "events/WindowResizeEvent.hpp"
+#include "events/EventDispatcher.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -18,6 +25,8 @@ namespace StarTracker::Core {
 		bool Running;
 		bool Fullscreen;
 		bool VerticalSync;
+
+		Events::EventDispatcher EventDispatcher;
 	};
 
 	class Window {
