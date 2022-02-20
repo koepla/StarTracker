@@ -12,7 +12,7 @@
 
 namespace StarTracker::Core {
 
-	struct UIFont final {
+	struct UIFont {
 
 		inline static ImFont* Light = nullptr;
 		inline static ImFont* Regular = nullptr;
