@@ -102,6 +102,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\utils\File.cpp" />
+    <ClCompile Include="src\core\opengl\Shader.cpp" />
+    <ClCompile Include="src\core\opengl\IndexBuffer.cpp" />
+    <ClCompile Include="src\core\opengl\BufferLayout.cpp" />
     <ClCompile Include="src\core\events\KeyEvent.cpp" />
     <ClCompile Include="src\core\events\MouseMoveEvent.cpp" />
     <ClCompile Include="src\core\events\EventDispatcher.cpp" />
@@ -123,6 +127,8 @@
     <ClCompile Include="src\TrackableBodyView.cpp" />
     <ClCompile Include="src\core\Tracker.cpp" />
     <ClCompile Include="src\core\events\WindowResizeEvent.cpp" />
+    <ClCompile Include="src\core\opengl\VertexBuffer.cpp" />
+    <ClCompile Include="src\core\opengl\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -130,6 +136,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\utils\File.hpp" />
+    <ClInclude Include="src\core\opengl\Shader.hpp" />
+    <ClInclude Include="src\core\opengl\IndexBuffer.hpp" />
+    <ClInclude Include="src\core\opengl\BufferLayout.hpp" />
     <ClInclude Include="src\core\events\KeyEvent.hpp" />
     <ClInclude Include="src\core\events\MouseMoveEvent.hpp" />
     <ClInclude Include="src\core\events\EventDispatcher.hpp" />
@@ -153,9 +163,13 @@
     <ClInclude Include="src\TrackableBodyView.hpp" />
     <ClInclude Include="src\core\Tracker.hpp" />
     <ClInclude Include="src\core\events\WindowResizeEvent.hpp" />
+    <ClInclude Include="src\core\opengl\VertexBuffer.hpp" />
+    <ClInclude Include="src\core\opengl\VertexArray.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
+    <None Include="assets\shaders\defaultFragment.glsl" />
+    <None Include="assets\shaders\defaultVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\fonts\SFNSDisplay-Bold.ttf" />
