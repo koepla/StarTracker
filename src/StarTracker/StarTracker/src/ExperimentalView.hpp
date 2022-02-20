@@ -6,6 +6,8 @@
 #include "core/Application.hpp"
 #include "core/Assert.hpp"
 #include "core/Core.hpp"
+#include "core/opengl/Shader.hpp"
+#include "core/opengl/VertexArray.hpp"
 #include "utils/serial/Package.hpp"
 #include "utils/serial/Serial.hpp"
 
@@ -21,7 +23,10 @@ namespace StarTracker {
 	class ExperimentalView final : public Core::View {
 
 	private:
-
+		std::shared_ptr<Core::OpenGL::VertexArray> vertexArray;
+		std::shared_ptr<Core::OpenGL::VertexBuffer> vertexBuffer;
+		std::shared_ptr<Core::OpenGL::IndexBuffer> indexBuffer;
+		std::shared_ptr<Core::OpenGL::Shader> shader;
 
 	public:
 		explicit ExperimentalView(void* nativeWindowHandle) noexcept;
