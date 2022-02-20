@@ -6,7 +6,7 @@ auto main(int, char**) -> int {
 	applicationData.Title = "StarTracker";
 	applicationData.Width = 1280;
 	applicationData.Height = 720;
-	applicationData.EnableDockspace = true;
+	applicationData.EnableDockspace = false;
 	applicationData.Fullscreen = false;
 	applicationData.VerticalSync = true;
 
