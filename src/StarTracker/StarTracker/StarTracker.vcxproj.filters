@@ -78,6 +78,24 @@
     <ClCompile Include="src\core\events\KeyEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\opengl\BufferLayout.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\opengl\VertexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\opengl\IndexBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\opengl\VertexArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\opengl\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\File.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\serial\Package.hpp">
@@ -149,9 +167,29 @@
     <ClInclude Include="src\core\events\KeyEvent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\opengl\BufferLayout.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\opengl\VertexBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\opengl\IndexBuffer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\opengl\VertexArray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\opengl\Shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\File.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
+    <None Include="assets\shaders\defaultVertex.glsl" />
+    <None Include="assets\shaders\defaultFragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\fonts\SFNSDisplay-Bold.ttf" />
