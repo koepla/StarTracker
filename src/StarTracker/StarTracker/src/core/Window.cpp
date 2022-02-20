@@ -26,6 +26,7 @@ namespace StarTracker::Core {
 
         glfwMakeContextCurrent(nativeHandle);
 
+
         if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
 
             ASSERT(false && "Couldn't load OpenGL functions.");
