@@ -26,9 +26,6 @@ namespace StarTracker::Core::OpenGL {
 		std::uint32_t nativeType;
 		bool normalized;
 
-	private:
-		BufferElement() noexcept;
-
 	public:
 		BufferElement(ShaderDataType dataType, const std::string& name, bool normalized = false) noexcept;
 
@@ -46,6 +43,9 @@ namespace StarTracker::Core::OpenGL {
 
 	private:
 		friend class VertexBuffer;
+
+	private:
+		BufferLayout() noexcept = default;
 
 	public:
 		explicit BufferLayout(const std::vector<BufferElement>& bufferElements) noexcept;

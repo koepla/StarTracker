@@ -38,12 +38,12 @@ namespace StarTracker::Core::OpenGL {
 			if (currentElement.GetNativeType() == GL_FLOAT) {
 
 				glEnableVertexAttribArray(index);
-				glVertexAttribPointer(index, currentElement.GetPrimitiveCount(), currentElement.GetNativeType(), currentElement.IsNormalized() ? GL_TRUE : GL_FALSE, stride, (const void*)offset);
+				glVertexAttribPointer(index, currentElement.GetPrimitiveCount(), currentElement.GetNativeType(), currentElement.IsNormalized() ? GL_TRUE : GL_FALSE, stride, reinterpret_cast<const void*>(static_cast<std::intptr_t>(offset)));
 			}
 			else if (currentElement.GetNativeType() == GL_INT) {
 
 				glEnableVertexAttribArray(index);
-				glVertexAttribIPointer(index, currentElement.GetPrimitiveCount(), currentElement.GetNativeType(), stride, (const void*)offset);
+				glVertexAttribIPointer(index, currentElement.GetPrimitiveCount(), currentElement.GetNativeType(), stride, reinterpret_cast<const void*>(static_cast<std::intptr_t>(offset)));
 			}
 
 			offset += currentElement.GetStride();

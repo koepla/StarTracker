@@ -8,7 +8,7 @@ namespace StarTracker::Core::OpenGL {
 		glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
 	}
 
-	VertexBuffer::VertexBuffer(const void* data, std::uint32_t size) noexcept : nativeHandle{}, bufferLayout {} {
+	VertexBuffer::VertexBuffer(const void* data, std::uint32_t size) noexcept : nativeHandle{}, bufferLayout{} {
 	
 		glGenBuffers(1, &nativeHandle);
 		glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);

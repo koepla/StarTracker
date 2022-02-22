@@ -38,9 +38,9 @@ namespace StarTracker {
 		vertexArray->Bind();
 
 		vertexBuffer->SetLayout(vertexBufferLayout);
-		vertexBuffer->SetData(vertices.data(), vertices.size() * sizeof(glm::vec3));
+		vertexBuffer->SetData(vertices.data(), static_cast<std::uint32_t>(vertices.size() * sizeof(glm::vec3)));
 
-		indexBuffer->SetData(indices.data(), indices.size());
+		indexBuffer->SetData(indices.data(), static_cast<std::uint32_t>(indices.size()));
 	
 		vertexArray->SetIndexBuffer(indexBuffer);
 		vertexArray->SetVertexBuffer(vertexBuffer);
