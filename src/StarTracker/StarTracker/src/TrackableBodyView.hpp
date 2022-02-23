@@ -3,17 +3,17 @@
 
 #include <StarAPI/StarAPI.hpp>
 
-#include "core/Application.hpp"
-#include "core/Assert.hpp"
-#include "core/Core.hpp"
-#include "core/Input.hpp"
-#include "core/Tracker.hpp"
-#include "utils/serial/Package.hpp"
-#include "utils/serial/Serial.hpp"
+#include "Core/Application.hpp"
+#include "Core/Assert.hpp"
+#include "Core/Core.hpp"
+#include "Core/Input.hpp"
+#include "Core/Tracker.hpp"
+#include "Utils/Serial/Package.hpp"
+#include "Utils/Serial/Serial.hpp"
 
-#include "utils/GeoLocation.hpp"
-#include "utils/HttpRequest.hpp"
-#include "utils/Stopwatch.hpp"
+#include "Utils/GeoLocation.hpp"
+#include "Utils/HttpRequest.hpp"
+#include "Utils/Stopwatch.hpp"
 
 #include <filesystem>
 #include <iostream>

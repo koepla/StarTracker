@@ -4,11 +4,11 @@
 #include "Assert.hpp"
 #include "Core.hpp"
 
-#include "events/Event.hpp"
-#include "events/KeyEvent.hpp"
-#include "events/MouseMoveEvent.hpp"
-#include "events/WindowResizeEvent.hpp"
-#include "events/EventDispatcher.hpp"
+#include "Events/Event.hpp"
+#include "Events/KeyEvent.hpp"
+#include "Events/MouseMoveEvent.hpp"
+#include "Events/WindowResizeEvent.hpp"
+#include "Events/EventDispatcher.hpp"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>

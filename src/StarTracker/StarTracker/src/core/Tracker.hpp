@@ -2,9 +2,9 @@
 #define STARTRACKER_CORE_TRACKER_H
 
 #include <StarAPI/StarAPI.hpp>
-#include "../utils/Stopwatch.hpp"
-#include "../utils/serial/Package.hpp"
-#include "../utils/serial/Serial.hpp"
+#include "../Utils/Stopwatch.hpp"
+#include "../Utils/Serial/Package.hpp"
+#include "../Utils/Serial/Serial.hpp"
 
 #include <thread>
 
