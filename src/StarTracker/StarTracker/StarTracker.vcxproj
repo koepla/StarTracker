@@ -130,7 +130,6 @@
     <ClCompile Include="src\Core\Events\WindowResizeEvent.cpp" />
     <ClCompile Include="src\Core\OpenGL\VertexBuffer.cpp" />
     <ClCompile Include="src\Core\OpenGL\VertexArray.cpp" />
-    <ClCompile Include="src\Core\OpenGL\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -168,7 +167,6 @@
     <ClInclude Include="src\Core\Events\WindowResizeEvent.hpp" />
     <ClInclude Include="src\Core\OpenGL\VertexBuffer.hpp" />
     <ClInclude Include="src\Core\OpenGL\VertexArray.hpp" />
-    <ClInclude Include="src\Core\OpenGL\Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
