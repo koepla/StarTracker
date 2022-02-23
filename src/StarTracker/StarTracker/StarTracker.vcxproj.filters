@@ -18,31 +18,31 @@
     <ClCompile Include="src\StarTrackerMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\serial\Serial.cpp">
+    <ClCompile Include="src\Utils\Serial\Serial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\HttpRequest.cpp">
+    <ClCompile Include="src\Utils\HttpRequest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\GeoLocation.cpp">
+    <ClCompile Include="src\Utils\GeoLocation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\Stopwatch.cpp">
+    <ClCompile Include="src\Utils\Stopwatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\serial\Package.cpp">
+    <ClCompile Include="src\Utils\Serial\Package.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Window.cpp">
+    <ClCompile Include="src\Core\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Application.cpp">
+    <ClCompile Include="src\Core\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\View.cpp">
+    <ClCompile Include="src\Core\View.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\UIView.cpp">
+    <ClCompile Include="src\Core\UIView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\StarTrackerApplication.cpp">
@@ -54,84 +54,90 @@
     <ClCompile Include="src\ExperimentalView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Tracker.cpp">
+    <ClCompile Include="src\Core\Tracker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\Input.cpp">
+    <ClCompile Include="src\Core\Input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\InputCode.cpp">
+    <ClCompile Include="src\Core\InputCode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\events\Event.cpp">
+    <ClCompile Include="src\Core\Events\Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\events\EventDispatcher.cpp">
+    <ClCompile Include="src\Core\Events\EventDispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\events\WindowResizeEvent.cpp">
+    <ClCompile Include="src\Core\Events\WindowResizeEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\events\MouseMoveEvent.cpp">
+    <ClCompile Include="src\Core\Events\MouseMoveEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\events\KeyEvent.cpp">
+    <ClCompile Include="src\Core\Events\KeyEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\opengl\BufferLayout.cpp">
+    <ClCompile Include="src\Core\OpenGL\BufferLayout.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\opengl\VertexBuffer.cpp">
+    <ClCompile Include="src\Core\OpenGL\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\opengl\IndexBuffer.cpp">
+    <ClCompile Include="src\Core\OpenGL\IndexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\opengl\VertexArray.cpp">
+    <ClCompile Include="src\Core\OpenGL\VertexArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\opengl\Shader.cpp">
+    <ClCompile Include="src\Core\OpenGL\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\utils\File.cpp">
+    <ClCompile Include="src\Utils\File.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\OpenGL\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\ImageProcessing\Image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\utils\serial\Package.hpp">
+    <ClInclude Include="src\Utils\Serial\Package.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\serial\Serial.hpp">
+    <ClInclude Include="src\Utils\Serial\Serial.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Core.hpp">
+    <ClInclude Include="src\Core\Core.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\HttpRequest.hpp">
+    <ClInclude Include="src\Utils\HttpRequest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\GeoLocation.hpp">
+    <ClInclude Include="src\Utils\GeoLocation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\algo\ImageManip.hpp">
+    <ClInclude Include="src\Core\Algorithm\ImageManip.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\Stopwatch.hpp">
+    <ClInclude Include="src\Utils\Stopwatch.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Assert.hpp">
+    <ClInclude Include="src\Core\Assert.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Window.hpp">
+    <ClInclude Include="src\Core\Window.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Application.hpp">
+    <ClInclude Include="src\Core\Application.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\View.hpp">
+    <ClInclude Include="src\Core\View.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\UIView.hpp">
+    <ClInclude Include="src\Core\UIView.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\StarTrackerApplication.hpp">
@@ -143,46 +149,52 @@
     <ClInclude Include="src\ExperimentalView.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Tracker.hpp">
+    <ClInclude Include="src\Core\Tracker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\Input.hpp">
+    <ClInclude Include="src\Core\Input.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\InputCode.hpp">
+    <ClInclude Include="src\Core\InputCode.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\events\Event.hpp">
+    <ClInclude Include="src\Core\Events\Event.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\events\EventDispatcher.hpp">
+    <ClInclude Include="src\Core\Events\EventDispatcher.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\events\WindowResizeEvent.hpp">
+    <ClInclude Include="src\Core\Events\WindowResizeEvent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\events\MouseMoveEvent.hpp">
+    <ClInclude Include="src\Core\Events\MouseMoveEvent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\events\KeyEvent.hpp">
+    <ClInclude Include="src\Core\Events\KeyEvent.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\opengl\BufferLayout.hpp">
+    <ClInclude Include="src\Core\OpenGL\BufferLayout.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\opengl\VertexBuffer.hpp">
+    <ClInclude Include="src\Core\OpenGL\VertexBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\opengl\IndexBuffer.hpp">
+    <ClInclude Include="src\Core\OpenGL\IndexBuffer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\opengl\VertexArray.hpp">
+    <ClInclude Include="src\Core\OpenGL\VertexArray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\opengl\Shader.hpp">
+    <ClInclude Include="src\Core\OpenGL\Shader.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\utils\File.hpp">
+    <ClInclude Include="src\Utils\File.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\OpenGL\Texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\ImageProcessing\Image.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
