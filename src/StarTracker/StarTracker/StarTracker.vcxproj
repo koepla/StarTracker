@@ -102,7 +102,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\imageprocessing\Image.cpp" />
     <ClCompile Include="src\utils\File.cpp" />
     <ClCompile Include="src\core\opengl\Shader.cpp" />
     <ClCompile Include="src\core\opengl\IndexBuffer.cpp" />
@@ -137,7 +136,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\core\imageprocessing\Image.hpp" />
     <ClInclude Include="src\utils\File.hpp" />
     <ClInclude Include="src\core\opengl\Shader.hpp" />
     <ClInclude Include="src\core\opengl\IndexBuffer.hpp" />
