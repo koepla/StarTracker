@@ -96,6 +96,9 @@
     <ClCompile Include="src\utils\File.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\opengl\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils\serial\Package.hpp">
@@ -185,11 +188,16 @@
     <ClInclude Include="src\utils\File.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\core\opengl\Texture.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
     <None Include="assets\shaders\defaultVertex.glsl" />
     <None Include="assets\shaders\defaultFragment.glsl" />
+    <None Include="assets\shaders\textureFragment.glsl" />
+    <None Include="assets\shaders\textureVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\fonts\SFNSDisplay-Bold.ttf" />
@@ -200,5 +208,10 @@
     <Font Include="assets\fonts\SFNSText-RegularItalic.ttf" />
     <Font Include="assets\fonts\SFNSDisplay-Regular.ttf" />
     <Font Include="assets\fonts\SFNSDisplay-Medium.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\pillarsOfCreation.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
