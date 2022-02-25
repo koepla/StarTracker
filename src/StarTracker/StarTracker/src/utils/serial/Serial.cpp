@@ -86,7 +86,7 @@ namespace StarTracker::Utils::Serial {
 		// Check if port is open
 		if (!IsOpen()) {
 
-			throw SerialException("Port is not open");
+			throw SerialException{ "Port is not open" };
 		}
 
 		// Write operation
