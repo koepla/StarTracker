@@ -1,8 +1,11 @@
 #ifndef STARTRACKER_UTILS_GEOLOCATION_H
 #define STARTRACKER_UTILS_GEOLOCATION_H
 
-#include <string>
+#include "HttpRequest.hpp"
+
 #include <nlohmann/json.hpp>
+
+#include <string>
 
 namespace StarTracker::Utils::LocationService {
 
