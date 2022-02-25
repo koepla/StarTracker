@@ -129,6 +129,7 @@
     <ClCompile Include="src\core\events\WindowResizeEvent.cpp" />
     <ClCompile Include="src\core\opengl\VertexBuffer.cpp" />
     <ClCompile Include="src\core\opengl\VertexArray.cpp" />
+    <ClCompile Include="src\core\opengl\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StarAPI\StarAPI.vcxproj">
@@ -165,11 +166,14 @@
     <ClInclude Include="src\core\events\WindowResizeEvent.hpp" />
     <ClInclude Include="src\core\opengl\VertexBuffer.hpp" />
     <ClInclude Include="src\core\opengl\VertexArray.hpp" />
+    <ClInclude Include="src\core\opengl\Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\ephemeris\CelestialBodies.json" />
     <None Include="assets\shaders\defaultFragment.glsl" />
     <None Include="assets\shaders\defaultVertex.glsl" />
+    <None Include="assets\shaders\textureFragment.glsl" />
+    <None Include="assets\shaders\textureVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\fonts\SFNSDisplay-Bold.ttf" />
@@ -180,6 +184,9 @@
     <Font Include="assets\fonts\SFNSDisplay-Semibold.ttf" />
     <Font Include="assets\fonts\SFNSDisplay-Thin.ttf" />
     <Font Include="assets\fonts\SFNSText-RegularItalic.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\textures\pillarsOfCreation.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
