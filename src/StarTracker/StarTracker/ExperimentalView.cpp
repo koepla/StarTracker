@@ -42,8 +42,8 @@ namespace StarTracker {
 		vertexArray->SetIndexBuffer(indexBuffer);
 		vertexArray->SetVertexBuffer(vertexBuffer);
 
-		shader->LoadFromFile("../Assets/Shaders/textureVertex.glsl", "../Assets/Shaders/textureFragment.glsl");
-		texture->LoadFromFile("../Assets/Textures/pillarsOfCreation.jpg");
+		shader->LoadFromFile("Assets/Shaders/textureVertex.glsl", "Assets/Shaders/textureFragment.glsl");
+		texture->LoadFromFile("Assets/Textures/pillarsOfCreation.jpg");
 	}
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {

@@ -8,7 +8,7 @@ namespace StarTracker {
 
 	void TrackableBodyView::OnInit() noexcept {
 
-		celestialBodies = Ephemeris::CelestialBody::LoadFromFile("../Assets/Ephemeris/CelestialBodies.json");
+		celestialBodies = Ephemeris::CelestialBody::LoadFromFile("Assets/Ephemeris/CelestialBodies.json");
 		observer = [&]() -> Utils::LocationService::Location {
 
 			try {
