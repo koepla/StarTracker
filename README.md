@@ -6,7 +6,7 @@ Official repository for the diploma thesis of Ilja Koehler and Elias Plank
 
 ### Prerequisites
 
-First of all, you must have Visual Studio 2022 and vcpkg installed. I recommend to place vcpkg in a folder like C:/tools. You can download it via git:
+First of all, you must have Visual Studio 2022 or CLion and vcpkg installed. I recommend to place vcpkg in a folder like C:/tools. You can download it via git:
 
 ```psh
 git clone https://github.com/microsoft/vcpkg.git
@@ -36,11 +36,14 @@ After you installed vcpkg, you have to run the following commands in the vcpkg f
 ```psh
 .\vcpkg install imgui[core,docking-experimental,opengl3-binding,glfw-binding]:x64-windows-static
 ```
+```psh
+.\vcpkg install stb:x64-windows-static
+```
 
-After running
+In order to proceed, you have to run the following command:
 
 ```psh
 .\vcpkg integrate install
 ```
 
-once again, you should be good to go to build the project with Visual Studio.
+When the installation is finished, you have to tell your IDE your CMake Toolchain file, and the target triplet (x64-windows-static). Once these steps are complete, you can build the Application.
