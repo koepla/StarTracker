@@ -8,8 +8,8 @@
 #include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Input.hpp>
 #include <StarTracker/Core/Tracker.hpp>
-#include <StarTracker/Utils/serial/Package.hpp>
-#include <StarTracker/Utils/serial/Serial.hpp>
+#include <StarTracker/Utils/Serial/Package.hpp>
+#include <StarTracker/Utils/Serial/Serial.hpp>
 
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>

@@ -95,6 +95,8 @@ add_executable(StarTracker
         StarTracker/Utils/Serial/Package.cpp
         StarTracker/Utils/Serial/Serial.hpp
         StarTracker/Utils/Serial/Serial.cpp
+        StarTracker/Core/OpenGL/FrameBuffer.hpp
+        StarTracker/Core/OpenGL/FrameBuffer.cpp
         )
 
 

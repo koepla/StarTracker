@@ -41,7 +41,7 @@ namespace StarTracker {
 			const auto frameInfo = std::format("FrameTime: {} ms", deltaTime);
 
 			ImGui::PushFont(Core::UIFont::Medium);
-			ImGui::Text(std::format("{} - {} - {} - [{}]", dateTimeInfo, trackerInfo, locationInfo, frameInfo).c_str());
+			ImGui::Text("%s", std::format("{} - {} - {} - [{}]", dateTimeInfo, trackerInfo, locationInfo, frameInfo).c_str());
 			ImGui::PopFont();
 			ImGui::Separator();
 			
@@ -81,7 +81,7 @@ namespace StarTracker {
 
 					const auto size = ImGui::CalcTextSize(windowId.c_str());
 
-					ImGui::Text(windowId.c_str());
+					ImGui::Text("%s", windowId.c_str());
 					if (ImGui::Button("Track", { size.x, 1.4f * size.y })) {
 
 						const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
