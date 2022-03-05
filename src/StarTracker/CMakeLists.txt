@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 project(StarTracker)
 
 set(CMAKE_CXX_STANDARD 23)
+set(VCPKG_TARGET_TRIPLET x64-windows-static)
 
 find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
@@ -97,6 +98,8 @@ add_executable(StarTracker
         StarTracker/Utils/Serial/Serial.cpp
         StarTracker/Core/OpenGL/FrameBuffer.hpp
         StarTracker/Core/OpenGL/FrameBuffer.cpp
+        StarTracker/StarTrackerView.hpp
+        StarTracker/StarTrackerView.cpp
         )
 
 

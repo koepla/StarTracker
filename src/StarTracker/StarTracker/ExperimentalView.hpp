@@ -23,7 +23,7 @@
 
 namespace StarTracker {
 
-	class ExperimentalView final : public Core::View {
+	class ExperimentalView : public Core::View {
 
 	private:
 		std::shared_ptr<Core::OpenGL::VertexArray> vertexArray;

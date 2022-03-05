@@ -16,9 +16,36 @@ namespace StarTracker {
                          const GLchar* message,
                          const void* userParam )-> void {
 
-            std::fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+            const auto severityToString = [](GLenum severity) -> const char* {
+
+                switch(severity) {
+
+                    case GL_DEBUG_SEVERITY_HIGH: {
+
+                        return "HIGH_SEVERITY";
+                    }
+                    case GL_DEBUG_SEVERITY_MEDIUM: {
+
+                        return "MEDIUM_SEVERITY";
+                    }
+                    case GL_DEBUG_SEVERITY_LOW: {
+
+                        return "LOW_SEVERITY";
+                    }
+                    case GL_DEBUG_SEVERITY_NOTIFICATION: {
+
+                        return "NOTIFICATION_SEVERITY";
+                    }
+                    default: {
+
+                        return "UNKNOWN_SEVERITY";
+                    }
+                }
+            };
+
+            std::fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = %s, message = %s\n",
                      ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-                     type, severity, message );
+                     type, severityToString(severity), message );
         };
 
         glEnable(GL_DEBUG_OUTPUT);
@@ -34,7 +61,7 @@ namespace StarTracker {
 		shader = std::make_shared<Core::OpenGL::Shader>();
         frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(windowWidth, windowHeight);
 
-        static std::array<glm::vec3, 4> vertices = {
+        const static std::array<glm::vec3, 4> vertices = {
 
 			glm::vec3{ -0.5f, -0.5f, 0.0f },
 			glm::vec3{  0.5f, -0.5f, 0.0f },
@@ -42,7 +69,7 @@ namespace StarTracker {
 			glm::vec3{ -0.5f,  0.5f, 0.0f },
 		};
 
-		const static std::array<std::uint32_t, 6> indices = {
+        const static std::array<std::uint32_t, 6> indices = {
 
 			0, 1, 2, 2, 0, 3
 		};

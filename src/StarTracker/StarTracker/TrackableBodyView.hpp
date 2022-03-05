@@ -21,7 +21,7 @@
 
 namespace StarTracker {
 
-	class TrackableBodyView final : public Core::View {
+	class TrackableBodyView : public Core::View {
 
 	private:
 		Core::Tracker tracker;

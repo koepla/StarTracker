@@ -2,11 +2,9 @@
 
 namespace StarTracker {
 
-    StarTrackerApplication::StarTrackerApplication(const Core::ApplicationData& applicationData) noexcept : Core::Application{ applicationData }, trackableBodyView{ nullptr }, experimentalView{ nullptr } {
+    StarTrackerApplication::StarTrackerApplication(const Core::ApplicationData& applicationData) noexcept : Core::Application{ applicationData }, starTrackerView{ nullptr } {
     
-        experimentalView.SetNativeWindowHandle(GetWindow().GetNativeHandle());
-        trackableBodyView.SetNativeWindowHandle(GetWindow().GetNativeHandle());
-        RegisterView(&experimentalView);
-        RegisterView(&trackableBodyView);
+        starTrackerView = std::make_unique<StarTrackerView>(GetWindow().GetNativeHandle());
+        RegisterView(starTrackerView.get());
     }
 }
