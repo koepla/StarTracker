@@ -23,7 +23,7 @@ namespace StarTracker::Core {
 		inline static ImFont* Italic = nullptr;
 	};
 
-	class UIView final : public View {
+	class UIView : public View {
 
 	private:
 		bool enableDockSpace;
