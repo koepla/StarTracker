@@ -8,6 +8,22 @@ namespace StarTracker {
 
 	void ExperimentalView::OnInit() noexcept {
 
+        const auto errorCallback = [](GLenum source,
+                         GLenum type,
+                         GLuint id,
+                         GLenum severity,
+                         GLsizei length,
+                         const GLchar* message,
+                         const void* userParam )-> void GLAPIENTRY {
+
+            std::fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
+                     ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
+                     type, severity, message );
+        };
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(errorCallback, 0);
+
         const auto application = Core::Application::GetInstance();
         const auto windowWidth = application->GetWindow().GetWidth();
         const auto windowHeight = application->GetWindow().GetHeight();

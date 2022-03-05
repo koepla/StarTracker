@@ -38,10 +38,8 @@ namespace StarTracker::Core::OpenGL {
 
         this->width = width;
         this->height = height;
-        glBindTexture(GL_TEXTURE_2D, nativeTextureHandle);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        glBindRenderbuffer(GL_RENDERBUFFER, nativeRenderHandle);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        glBindFramebuffer(GL_FRAMEBUFFER, nativeHandle);
+        glViewport(0, 0, width, height);
     }
 
     void FrameBuffer::Bind() const noexcept {
