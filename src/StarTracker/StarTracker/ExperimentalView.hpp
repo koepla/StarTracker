@@ -4,6 +4,7 @@
 #include <StarTracker/Core/Application.hpp>
 #include <StarTracker/Core/Assert.hpp>
 #include <StarTracker/Core/Core.hpp>
+#include <StarTracker/Core/Input.hpp>
 #include <StarTracker/Core/OpenGL/Shader.hpp>
 #include <StarTracker/Core/OpenGL/VertexArray.hpp>
 #include <StarTracker/Core/OpenGL/Texture.hpp>
@@ -29,7 +30,6 @@ namespace StarTracker {
 		std::shared_ptr<Core::OpenGL::VertexBuffer> vertexBuffer;
 		std::shared_ptr<Core::OpenGL::IndexBuffer> indexBuffer;
 		std::shared_ptr<Core::OpenGL::Shader> shader;
-		std::shared_ptr<Core::OpenGL::Texture> texture;
         std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
 
 	public:

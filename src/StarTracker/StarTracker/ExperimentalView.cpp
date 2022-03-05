@@ -14,7 +14,7 @@ namespace StarTracker {
                          GLenum severity,
                          GLsizei length,
                          const GLchar* message,
-                         const void* userParam )-> void GLAPIENTRY {
+                         const void* userParam )-> void {
 
             std::fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
                      ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
@@ -22,7 +22,7 @@ namespace StarTracker {
         };
 
         glEnable(GL_DEBUG_OUTPUT);
-        glDebugMessageCallback(errorCallback, 0);
+        glDebugMessageCallback(errorCallback, nullptr);
 
         const auto application = Core::Application::GetInstance();
         const auto windowWidth = application->GetWindow().GetWidth();
@@ -32,15 +32,14 @@ namespace StarTracker {
 		vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
 		indexBuffer = std::make_shared<Core::OpenGL::IndexBuffer>();
 		shader = std::make_shared<Core::OpenGL::Shader>();
-		texture = std::make_shared<Core::OpenGL::Texture>();
         frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(windowWidth, windowHeight);
 
-        static std::array<glm::vec3, 8> vertices = {
+        static std::array<glm::vec3, 4> vertices = {
 
-			glm::vec3{ -0.5f, -0.5f, 0.0f }, glm::vec3{ 0.0f, 0.0f, 0.0f },
-			glm::vec3{  0.5f, -0.5f, 0.0f }, glm::vec3{ 1.0f, 0.0f, 0.0f },
-			glm::vec3{  0.5f,  0.5f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 0.0f },
-			glm::vec3{ -0.5f,  0.5f, 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f }
+			glm::vec3{ -0.5f, -0.5f, 0.0f },
+			glm::vec3{  0.5f, -0.5f, 0.0f },
+			glm::vec3{  0.5f,  0.5f, 0.0f },
+			glm::vec3{ -0.5f,  0.5f, 0.0f },
 		};
 
 		const static std::array<std::uint32_t, 6> indices = {
@@ -51,7 +50,6 @@ namespace StarTracker {
         const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
 			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
-			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aTexCoords" },
 		};
 
 		const static Core::OpenGL::BufferLayout vertexBufferLayout{ vertexBufferElements };
@@ -63,8 +61,7 @@ namespace StarTracker {
 		vertexArray->SetIndexBuffer(indexBuffer);
 		vertexArray->SetVertexBuffer(vertexBuffer);
 
-		shader->LoadFromFile("Assets/Shaders/textureVertex.glsl", "Assets/Shaders/textureFragment.glsl");
-		texture->LoadFromFile("Assets/Textures/pillarsOfCreation.jpg");
+		shader->LoadFromFile("Assets/Shaders/defaultVertex.glsl", "Assets/Shaders/defaultFragment.glsl");
 
         application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
@@ -81,16 +78,11 @@ namespace StarTracker {
 
         frameBuffer->Bind();
 		shader->Bind();
-		texture->Bind(0);
 		vertexArray->Bind();
-		glDrawElements(GL_TRIANGLES, indexBuffer->GetIndexCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(indexBuffer->GetIndexCount()), GL_UNSIGNED_INT, nullptr);
         frameBuffer->Unbind();
 
-		// Called every frame
 		if (ImGui::Begin("Experimental")) {
-
-			const auto textureStats = std::format("Width: {}, Height: {}, Channels: {}", texture->GetWidth(), texture->GetHeight(), texture->GetChannels());
-			ImGui::Text("Texture - %s", textureStats.c_str());
 
             const auto viewPortSize = ImGui::GetContentRegionAvail();
             ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(frameBuffer->GetNativeTextureHandle())), viewPortSize, { 0, 1 }, { 1, 0 });
@@ -100,6 +92,5 @@ namespace StarTracker {
 
 	void ExperimentalView::OnDestroy() noexcept {
 
-		// Called once on shutdown
 	}
 }
