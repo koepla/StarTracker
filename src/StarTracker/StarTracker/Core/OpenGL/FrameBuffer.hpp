@@ -22,7 +22,8 @@ namespace StarTracker::Core::OpenGL {
         FrameBuffer(std::int32_t width, std::int32_t height) noexcept;
         ~FrameBuffer() noexcept;
 
-        void Resize(std::int32_t width, std::int32_t height);
+        void Invalidate() noexcept;
+        void Resize(std::int32_t width, std::int32_t height) noexcept;
 
         void Bind() const noexcept;
         void Unbind() const noexcept;

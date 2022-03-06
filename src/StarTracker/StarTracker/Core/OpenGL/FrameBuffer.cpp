@@ -4,6 +4,23 @@ namespace StarTracker::Core::OpenGL {
 
     FrameBuffer::FrameBuffer(std::int32_t width, std::int32_t height) noexcept : width{ width }, height{ height }, nativeHandle{}, nativeTextureHandle{}, nativeRenderHandle{} {
 
+        Invalidate();
+    }
+
+    FrameBuffer::~FrameBuffer() noexcept {
+
+        glDeleteFramebuffers(1, &nativeHandle);
+    }
+
+    void FrameBuffer::Invalidate() noexcept {
+
+        if(nativeHandle) {
+
+            glDeleteFramebuffers(1, &nativeHandle);
+            glDeleteTextures(1, &nativeTextureHandle);
+            glDeleteRenderbuffers(1, &nativeRenderHandle);
+        }
+
         glGenFramebuffers(1, &nativeHandle);
         glBindFramebuffer(GL_FRAMEBUFFER, nativeHandle);
 
@@ -19,7 +36,7 @@ namespace StarTracker::Core::OpenGL {
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, nativeRenderHandle);
 
-        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+        if(!IsValid()) {
 
             ASSERT(false && "Invalid Framebuffer!");
         }
@@ -27,24 +44,18 @@ namespace StarTracker::Core::OpenGL {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    FrameBuffer::~FrameBuffer() noexcept {
-
-        glDeleteFramebuffers(1, &nativeHandle);
-    }
-
-    void FrameBuffer::Resize(std::int32_t width, std::int32_t height) {
+    void FrameBuffer::Resize(std::int32_t width, std::int32_t height) noexcept {
 
         this->width = width;
         this->height = height;
-        glBindTexture(GL_TEXTURE_2D, nativeTextureHandle);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-        glBindRenderbuffer(GL_RENDERBUFFER, nativeRenderHandle);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+
+        Invalidate();
     }
 
     void FrameBuffer::Bind() const noexcept {
 
         glBindFramebuffer(GL_FRAMEBUFFER, nativeHandle);
+        glViewport(0, 0, width, height);
     }
 
     void FrameBuffer::Unbind() const noexcept {

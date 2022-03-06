@@ -16,6 +16,11 @@ namespace StarTracker {
                          const GLchar* message,
                          const void* userParam )-> void {
 
+            if(severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
+
+                return;
+            }
+
             const auto severityToString = [](GLenum severity) -> const char* {
 
                 switch(severity) {
@@ -88,20 +93,39 @@ namespace StarTracker {
 		vertexArray->SetIndexBuffer(indexBuffer);
 		vertexArray->SetVertexBuffer(vertexBuffer);
 
-		shader->LoadFromFile("Assets/Shaders/defaultVertex.glsl", "Assets/Shaders/defaultFragment.glsl");
+        shader->LoadFromFile("Assets/Shaders/defaultVertex.glsl", "Assets/Shaders/defaultFragment.glsl");
+        shader->SetMat4("uTransform", glm::mat4{ 1.0f });
 
         application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
-            const auto windowResize = dynamic_cast<const Core::Events::WindowResizeEvent*>(&event);
+            const auto mouseScroll = dynamic_cast<const Core::Events::MouseScrollEvent*>(&event);
 
-            if(windowResize) {
+            if(mouseScroll) {
 
-                frameBuffer->Resize(windowResize->GetWidth(), windowResize->GetHeight());
+                static auto scale{ 1.0f };
+                if(mouseScroll->GetDeltaY() == 1.0) {
+
+                    scale *= 1.1f;
+                    shader->SetMat4("uTransform", glm::scale(glm::mat4{ 1.0f }, glm::vec3{ scale }));
+                }
+                else if(mouseScroll->GetDeltaY() == -1.0) {
+
+                    scale /= 1.1f;
+                }
+
+                const auto scaleMatrix = glm::scale(glm::mat4{ 1.0f }, glm::vec3{ scale });
+                shader->SetMat4("uTransform", scaleMatrix);
             }
         });
 	}
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
+
+        const auto application = Core::Application::GetInstance();
+        const auto windowWidth = application->GetWindow().GetWidth();
+        const auto windowHeight = application->GetWindow().GetHeight();
+
+        frameBuffer->Resize(windowWidth, windowHeight);
 
         frameBuffer->Bind();
 		shader->Bind();
@@ -109,7 +133,9 @@ namespace StarTracker {
 		glDrawElements(GL_TRIANGLES, static_cast<int>(indexBuffer->GetIndexCount()), GL_UNSIGNED_INT, nullptr);
         frameBuffer->Unbind();
 
-		if (ImGui::Begin("Experimental")) {
+        if (ImGui::Begin("Experimental")) {
+
+            ImGui::Text("%s", std::format("FrameRate: {}", 1.0f / deltaTime).c_str());
 
             const auto viewPortSize = ImGui::GetContentRegionAvail();
             ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(frameBuffer->GetNativeTextureHandle())), viewPortSize, { 0, 1 }, { 1, 0 });
