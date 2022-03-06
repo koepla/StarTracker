@@ -99,6 +99,7 @@ namespace StarTracker {
         application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
             const auto mouseScroll = dynamic_cast<const Core::Events::MouseScrollEvent*>(&event);
+            const auto windowResize = dynamic_cast<const Core::Events::WindowResizeEvent*>(&event);
 
             if(mouseScroll) {
 
@@ -116,20 +117,21 @@ namespace StarTracker {
                 const auto scaleMatrix = glm::scale(glm::mat4{ 1.0f }, glm::vec3{ scale });
                 shader->SetMat4("uTransform", scaleMatrix);
             }
+            if(windowResize) {
+
+                frameBuffer->Resize(windowResize->GetWidth(), windowResize->GetHeight());
+            }
         });
 	}
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
 
-        const auto application = Core::Application::GetInstance();
-        const auto windowWidth = application->GetWindow().GetWidth();
-        const auto windowHeight = application->GetWindow().GetHeight();
-
-        frameBuffer->Resize(windowWidth, windowHeight);
-
         frameBuffer->Bind();
 		shader->Bind();
-		vertexArray->Bind();
+        vertexArray->Bind();
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
 		glDrawElements(GL_TRIANGLES, static_cast<int>(indexBuffer->GetIndexCount()), GL_UNSIGNED_INT, nullptr);
         frameBuffer->Unbind();
 
