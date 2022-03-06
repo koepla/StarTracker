@@ -6,7 +6,9 @@
 
 #include <StarTracker/Core/Events/Event.hpp>
 #include <StarTracker/Core/Events/KeyEvent.hpp>
+#include <StarTracker/Core/Events/MouseClickEvent.hpp>
 #include <StarTracker/Core/Events/MouseMoveEvent.hpp>
+#include <StarTracker/Core/Events/MouseScrollEvent.hpp>
 #include <StarTracker/Core/Events/WindowResizeEvent.hpp>
 #include <StarTracker/Core/Events/EventDispatcher.hpp>
 

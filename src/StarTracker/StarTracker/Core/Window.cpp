@@ -53,6 +53,38 @@ namespace StarTracker::Core {
             Events::MouseMoveEvent mouseMoveEvent{ x, y };
             windowData->EventDispatcher.DispatchEvent(mouseMoveEvent);
         });
+        glfwSetMouseButtonCallback(nativeHandle, [](GLFWwindow* handle, int button, int action, int mods) -> void {
+
+            const auto windowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(handle));
+
+            const auto mouseClickEvent = [&]() -> Events::MouseClickEvent {
+
+                switch(action) {
+
+                    case GLFW_PRESS: {
+
+                        return Events::MouseClickEvent{ static_cast<MouseCode>(button), Events::MouseStatus::Pressed };
+                    }
+                    case GLFW_RELEASE: {
+
+                        return Events::MouseClickEvent{ static_cast<MouseCode>(button), Events::MouseStatus::Released };
+                    }
+                    default: {
+
+                        return Events::MouseClickEvent{ static_cast<MouseCode>(button), Events::MouseStatus::None };
+                    }
+                }
+            }();
+
+            windowData->EventDispatcher.DispatchEvent(mouseClickEvent);
+        });
+        glfwSetScrollCallback(nativeHandle, [](GLFWwindow* handle, double dx, double dy) -> void {
+
+            const auto windowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(handle));
+
+            Events::MouseScrollEvent mouseScrollEvent{ dx, dy };
+            windowData->EventDispatcher.DispatchEvent(mouseScrollEvent);
+        });
         glfwSetKeyCallback(nativeHandle, [](GLFWwindow* handle, int key, int scancode, int action, int mods) -> void {
 
             const auto windowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(handle));

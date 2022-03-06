@@ -16,7 +16,7 @@ namespace StarTracker::Core::Events {
 
 		[[nodiscard]] double GetX() const noexcept;
 		[[nodiscard]] double GetY() const noexcept;
-		[[nodiscard]] virtual std::string_view GetName() const noexcept;
+		[[nodiscard]] virtual std::string_view GetName() const noexcept override;
 	};
 }
 
