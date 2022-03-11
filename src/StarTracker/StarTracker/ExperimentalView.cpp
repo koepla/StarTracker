@@ -60,6 +60,8 @@ namespace StarTracker {
         const auto windowWidth = application->GetWindow().GetWidth();
         const auto windowHeight = application->GetWindow().GetHeight();
 
+        constexpr auto initialCameraPosition = glm::vec3{ 0.0f };
+        camera = std::make_shared<Core::OpenGL::Camera>(initialCameraPosition);
 		vertexArray = std::make_shared<Core::OpenGL::VertexArray>();
 		vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
 		indexBuffer = std::make_shared<Core::OpenGL::IndexBuffer>();
@@ -98,25 +100,8 @@ namespace StarTracker {
 
         application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
-            const auto mouseScroll = dynamic_cast<const Core::Events::MouseScrollEvent*>(&event);
             const auto windowResize = dynamic_cast<const Core::Events::WindowResizeEvent*>(&event);
 
-            if(mouseScroll) {
-
-                static auto scale{ 1.0f };
-                if(mouseScroll->GetDeltaY() == 1.0) {
-
-                    scale *= 1.1f;
-                    shader->SetMat4("uTransform", glm::scale(glm::mat4{ 1.0f }, glm::vec3{ scale }));
-                }
-                else if(mouseScroll->GetDeltaY() == -1.0) {
-
-                    scale /= 1.1f;
-                }
-
-                const auto scaleMatrix = glm::scale(glm::mat4{ 1.0f }, glm::vec3{ scale });
-                shader->SetMat4("uTransform", scaleMatrix);
-            }
             if(windowResize) {
 
                 frameBuffer->Resize(windowResize->GetWidth(), windowResize->GetHeight());
@@ -126,12 +111,17 @@ namespace StarTracker {
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
 
+        const auto application = Core::Application::GetInstance();
+        const auto windowWidth = application->GetWindow().GetWidth();
+        const auto windowHeight = application->GetWindow().GetHeight();
+
         frameBuffer->Bind();
 		shader->Bind();
         vertexArray->Bind();
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        shader->SetMat4("uTransform", camera->GetProjectionMatrix() * camera->GetViewMatrix(deltaTime));
 
+        glClear(GL_COLOR_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, static_cast<int>(indexBuffer->GetIndexCount()), GL_UNSIGNED_INT, nullptr);
         frameBuffer->Unbind();
 

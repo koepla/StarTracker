@@ -104,6 +104,8 @@ add_executable(StarTracker
         StarTracker/Core/Events/MouseClickEvent.cpp
         StarTracker/Core/Events/MouseScrollEvent.hpp
         StarTracker/Core/Events/MouseScrollEvent.cpp
+        StarTracker/Core/OpenGL/Camera.hpp
+        StarTracker/Core/OpenGL/Camera.cpp
         )
 
 

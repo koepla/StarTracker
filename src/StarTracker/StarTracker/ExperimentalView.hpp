@@ -5,6 +5,7 @@
 #include <StarTracker/Core/Assert.hpp>
 #include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Input.hpp>
+#include <StarTracker/Core/OpenGL/Camera.hpp>
 #include <StarTracker/Core/OpenGL/Shader.hpp>
 #include <StarTracker/Core/OpenGL/VertexArray.hpp>
 #include <StarTracker/Core/OpenGL/Texture.hpp>
@@ -26,6 +27,7 @@ namespace StarTracker {
 	class ExperimentalView : public Core::View {
 
 	private:
+        std::shared_ptr<Core::OpenGL::Camera> camera;
 		std::shared_ptr<Core::OpenGL::VertexArray> vertexArray;
 		std::shared_ptr<Core::OpenGL::VertexBuffer> vertexBuffer;
 		std::shared_ptr<Core::OpenGL::IndexBuffer> indexBuffer;
