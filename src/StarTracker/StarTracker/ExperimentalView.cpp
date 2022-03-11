@@ -60,7 +60,7 @@ namespace StarTracker {
         const auto windowWidth = application->GetWindow().GetWidth();
         const auto windowHeight = application->GetWindow().GetHeight();
 
-        constexpr auto initialCameraPosition = glm::vec3{ 0.0f };
+        constexpr auto initialCameraPosition = glm::vec3{ 0.0f, 0.0f, 10.0f };
         camera = std::make_shared<Core::OpenGL::Camera>(initialCameraPosition);
 		vertexArray = std::make_shared<Core::OpenGL::VertexArray>();
 		vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
@@ -110,10 +110,6 @@ namespace StarTracker {
 	}
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
-
-        const auto application = Core::Application::GetInstance();
-        const auto windowWidth = application->GetWindow().GetWidth();
-        const auto windowHeight = application->GetWindow().GetHeight();
 
         frameBuffer->Bind();
 		shader->Bind();

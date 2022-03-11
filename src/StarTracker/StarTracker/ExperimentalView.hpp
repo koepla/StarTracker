@@ -34,8 +34,6 @@ namespace StarTracker {
 		std::shared_ptr<Core::OpenGL::Shader> shader;
         std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
 
-        glm::mat4 transform;
-
 	public:
 		explicit ExperimentalView(void* nativeWindowHandle) noexcept;
 
