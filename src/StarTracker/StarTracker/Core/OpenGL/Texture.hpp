@@ -4,10 +4,17 @@
 #include <StarTracker/Core/Assert.hpp>
 
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 #include <filesystem>
 
 namespace StarTracker::Core::OpenGL {
+
+    struct TextureVertex {
+
+        glm::vec3 Position;
+        glm::vec2 TextureCoordinates;
+    };
 
 	class Texture {
 
