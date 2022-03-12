@@ -3,8 +3,10 @@
 
 #include <StarTracker/Core/Application.hpp>
 #include <StarTracker/Core/Assert.hpp>
+#include <StarTracker/Core/AssetDataBase.hpp>
 #include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Input.hpp>
+#include <StarTracker/Core/ImageProcessing.hpp>
 #include <StarTracker/Core/OpenGL/Camera.hpp>
 #include <StarTracker/Core/OpenGL/Shader.hpp>
 #include <StarTracker/Core/OpenGL/VertexArray.hpp>
@@ -33,6 +35,10 @@ namespace StarTracker {
 		std::shared_ptr<Core::OpenGL::IndexBuffer> indexBuffer;
 		std::shared_ptr<Core::OpenGL::Shader> shader;
         std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
+
+        std::shared_ptr<Core::OpenGL::Texture> blueTexture;
+        std::shared_ptr<Core::OpenGL::Texture> pillarsTexture;
+        std::shared_ptr<Core::OpenGL::FrameBuffer> stackFrameBuffer;
 
 	public:
 		explicit ExperimentalView(void* nativeWindowHandle) noexcept;

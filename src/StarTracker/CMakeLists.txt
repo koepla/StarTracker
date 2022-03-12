@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.20)
 project(StarTracker)
 
 set(CMAKE_CXX_STANDARD 23)
@@ -36,7 +36,7 @@ add_library(StarEngine
         StarEngine/Ephemeris/Coordinates/Terrestrial.cpp
         StarEngine/Ephemeris/Coordinates/Transform.hpp
         StarEngine/Ephemeris/Coordinates/Transform.cpp
-        )
+        StarTracker/Core/ImageProcessing.cpp StarTracker/Core/ImageProcessing.hpp)
 
 add_executable(StarTracker
         StarTracker/ExperimentalView.hpp
@@ -106,6 +106,8 @@ add_executable(StarTracker
         StarTracker/Core/Events/MouseScrollEvent.cpp
         StarTracker/Core/OpenGL/Camera.hpp
         StarTracker/Core/OpenGL/Camera.cpp
+        StarTracker/Core/AssetDataBase.hpp
+        StarTracker/Core/AssetDataBase.cpp
         )
 
 
@@ -134,4 +136,8 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/defaultFragm
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/defaultVertex.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/defaultVertex.glsl COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/textureFragment.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/textureFragment.glsl COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/textureVertex.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/textureVertex.glsl COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/textureStackFragment.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/textureStackFragment.glsl COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/textureStackVertex.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/textureStackVertex.glsl COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Textures/pillarsOfCreation.jpg ${CMAKE_CURRENT_BINARY_DIR}/Assets/Textures/pillarsOfCreation.jpg COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Textures/blue.png ${CMAKE_CURRENT_BINARY_DIR}/Assets/Textures/blue.png COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Textures/yellow.png ${CMAKE_CURRENT_BINARY_DIR}/Assets/Textures/yellow.png COPYONLY)
