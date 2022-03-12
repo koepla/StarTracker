@@ -146,6 +146,7 @@ namespace StarTracker::Core::OpenGL {
 
 		if (location == -1) {
 
+            std::fprintf(stderr, "Name: %s\n", name.c_str());
 			ASSERT(false && "Uniform `name` doesn't exist!");
 		}
 		else {
@@ -177,6 +178,7 @@ namespace StarTracker::Core::OpenGL {
 
 			glDeleteProgram(shaderProgram);
 
+            std::fprintf(stderr, "FailureInfo: %s\n", failureInfo.data());
 			ASSERT(false && "Shader compilation failed, see `failureInfo`!");
 		}
 
