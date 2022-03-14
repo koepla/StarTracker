@@ -47,8 +47,6 @@ namespace StarTracker {
 		vertexArray->SetIndexBuffer(indexBuffer);
 		vertexArray->SetVertexBuffer(vertexBuffer);
 
-        shader->SetMat4("uTransform", glm::mat4{ 1.0f });
-
         application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
             const auto windowResize = dynamic_cast<const Core::Events::WindowResizeEvent*>(&event);
@@ -58,21 +56,16 @@ namespace StarTracker {
                 frameBuffer->Resize(windowResize->GetWidth(), windowResize->GetHeight());
             }
         });
-
-        blueTexture = Core::AssetDataBase::LoadTexture("blue.png");
-        pillarsTexture = Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg");
     }
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
 
-        frameBuffer->Bind();
-		shader->Bind();
-        vertexArray->Bind();
-
         shader->SetMat4("uTransform", camera->GetProjectionMatrix() * camera->GetViewMatrix(deltaTime));
 
-        glClear(GL_COLOR_BUFFER_BIT);
-		glDrawElements(GL_TRIANGLES, static_cast<int>(indexBuffer->GetIndexCount()), GL_UNSIGNED_INT, nullptr);
+        frameBuffer->Bind();
+        Core::OpenGL::Renderer::SetClearColor({ 0.15f, 0.15f, 0.15f, 1.0f });
+        Core::OpenGL::Renderer::Clear();
+        Core::OpenGL::Renderer::DrawIndexed(vertexArray, shader, Core::OpenGL::PrimitiveMode::Triangle);
         frameBuffer->Unbind();
 
         if (ImGui::Begin("Experimental")) {
@@ -82,15 +75,6 @@ namespace StarTracker {
             ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(frameBuffer->GetNativeTextureHandle())), viewPortSize, { 0, 1 }, { 1, 0 });
 		}
 		ImGui::End();
-
-        if (ImGui::Begin("Stack")) {
-
-            stackFrameBuffer = Core::ImageProcessing::Stack({ blueTexture, pillarsTexture });
-
-            const auto viewPortSize = ImGui::GetContentRegionAvail();
-            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(stackFrameBuffer->GetNativeTextureHandle())), viewPortSize, { 0, 1 }, { 1, 0 });
-        }
-        ImGui::End();
     }
 
 	void ExperimentalView::OnDestroy() noexcept {

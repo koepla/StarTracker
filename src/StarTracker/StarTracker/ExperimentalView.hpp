@@ -12,17 +12,11 @@
 #include <StarTracker/Core/OpenGL/VertexArray.hpp>
 #include <StarTracker/Core/OpenGL/Texture.hpp>
 #include <StarTracker/Core/OpenGL/FrameBuffer.hpp>
-#include <StarTracker/Utils/Serial/Package.hpp>
-#include <StarTracker/Utils/Serial/Serial.hpp>
+#include <StarTracker/Core/OpenGL/Renderer.hpp>
 		  
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>
 #include <StarTracker/Utils/Stopwatch.hpp>
-
-#include <glm/glm.hpp>
-
-#include <filesystem>
-#include <iostream>
 
 namespace StarTracker {
 
@@ -35,10 +29,6 @@ namespace StarTracker {
 		std::shared_ptr<Core::OpenGL::IndexBuffer> indexBuffer;
 		std::shared_ptr<Core::OpenGL::Shader> shader;
         std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
-
-        std::shared_ptr<Core::OpenGL::Texture> blueTexture;
-        std::shared_ptr<Core::OpenGL::Texture> pillarsTexture;
-        std::shared_ptr<Core::OpenGL::FrameBuffer> stackFrameBuffer;
 
 	public:
 		explicit ExperimentalView(void* nativeWindowHandle) noexcept;
