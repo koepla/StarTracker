@@ -22,7 +22,7 @@ namespace StarTracker::Core {
 	class Application {
 
 	protected:
-		inline static Application* instance = nullptr;
+		static inline Application* instance = nullptr;
 
 	protected:
 		Window window;
