@@ -92,7 +92,7 @@ namespace StarTracker {
 							}
 							else {
 
-								std::fprintf(stdout, "Tracking finished! (%d ms)\n", trackingDuration);
+								std::fprintf(stdout, "Tracking finished! (%lf ms)\n", trackingDuration);
 							}
 						};
 
