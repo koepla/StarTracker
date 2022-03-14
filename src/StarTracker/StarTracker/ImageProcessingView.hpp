@@ -17,14 +17,14 @@
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>
 #include <StarTracker/Utils/Stopwatch.hpp>
+#include <StarTracker/Utils/File.hpp>
 
 namespace StarTracker {
 
     class ImageProcessingView : public Core::View {
 
     private:
-        std::shared_ptr<Core::OpenGL::Texture> blueTexture;
-        std::shared_ptr<Core::OpenGL::Texture> pillarsTexture;
+        std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
 
     public:
         explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
