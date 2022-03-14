@@ -82,4 +82,14 @@ namespace StarTracker::Core::OpenGL {
 
         return nativeRenderHandle;
     }
+
+    std::int32_t FrameBuffer::GetWidth() const noexcept {
+
+        return width;
+    }
+
+    std::int32_t FrameBuffer::GetHeight() const noexcept {
+
+        return height;
+    }
 }

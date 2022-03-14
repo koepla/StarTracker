@@ -32,6 +32,8 @@ namespace StarTracker::Core::OpenGL {
         [[nodiscard]] std::uint32_t GetNativeHandle() const noexcept;
         [[nodiscard]] std::uint32_t GetNativeTextureHandle() const noexcept;
         [[nodiscard]] std::uint32_t GetNativeRenderHandle() const noexcept;
+        [[nodiscard]] std::int32_t GetWidth() const noexcept;
+        [[nodiscard]] std::int32_t GetHeight() const noexcept;
     };
 }
 
