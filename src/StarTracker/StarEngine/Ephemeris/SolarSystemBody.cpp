@@ -40,7 +40,6 @@ namespace StarTracker::Ephemeris {
         // compute eccentric anomaly
         const auto eccentricAnomaly = computeEccentricAnomaly(meanAnomaly, meanKeplerElem.Eccentricity);
 
-
         // compute true Anomaly and distance of the Planet
         const auto [trueAnomaly, distance] = computeTrueAnomalyAndDistance(meanKeplerElem.SemiMajorAxis, eccentricAnomaly, meanKeplerElem.Eccentricity);
 

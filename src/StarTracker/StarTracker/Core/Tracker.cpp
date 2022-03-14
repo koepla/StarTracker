@@ -56,7 +56,7 @@ namespace StarTracker::Core {
 		return serialPort.IsOpen();
 	}
 
-	bool Tracker::Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, std::size_t duration, TrackerCallback callback) noexcept(false) {
+	bool Tracker::Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, double duration, TrackerCallback callback) noexcept(false) {
 
 		if (tracking.load()) {
 

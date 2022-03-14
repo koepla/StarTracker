@@ -45,10 +45,10 @@ namespace StarTracker {
 			ImGui::PopFont();
 			ImGui::Separator();
 			
-			static int trackingDuration{ 5000 };
+			static double trackingDuration{ 5000 };
 			const auto contentRegion = ImGui::GetContentRegionAvail();
 			ImGui::PushItemWidth(contentRegion.x / 2);
-			ImGui::InputInt("Tracking duration [ms]", &trackingDuration);
+			ImGui::InputDouble("Tracking duration [ms]", &trackingDuration);
 			ImGui::PopItemWidth();
 			ImGui::Separator();
 			

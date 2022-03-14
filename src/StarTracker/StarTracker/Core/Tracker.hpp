@@ -30,7 +30,7 @@ namespace StarTracker::Core {
 		[[nodiscard]] bool Connect() noexcept(false);
 		[[nodiscard]] bool Disconnect() noexcept(false);
 		[[nodiscard]] bool IsConnected() noexcept(false);
-		[[nodiscard]] bool Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, std::size_t duration, TrackerCallback callback) noexcept(false);
+		[[nodiscard]] bool Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, double duration, TrackerCallback callback) noexcept(false);
 	
 	private:
 		[[nodiscard]] bool sendPackage(Utils::Serial::Pack32 package, bool enableMaxWait = false, std::size_t maxWait = 500) noexcept(false);
