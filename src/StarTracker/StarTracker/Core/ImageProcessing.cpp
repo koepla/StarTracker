@@ -2,7 +2,7 @@
 
 namespace StarTracker::Core {
 
-    std::shared_ptr<OpenGL::FrameBuffer> ImageProcessing::Stack(const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
+    const std::shared_ptr<OpenGL::FrameBuffer>& ImageProcessing::Stack(const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
 
         if(textureList.size() < 2) {
 
@@ -34,7 +34,7 @@ namespace StarTracker::Core {
         if (firstPass) {
 
             // Use max texture width
-            frameBuffer = std::make_shared<OpenGL::FrameBuffer>(textureWidth, textureHeight);
+            stackFrameBuffer = std::make_shared<OpenGL::FrameBuffer>(textureWidth, textureHeight);
             vertexArray = std::make_shared<Core::OpenGL::VertexArray>();
             vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
             indexBuffer = std::make_shared<Core::OpenGL::IndexBuffer>();
@@ -78,11 +78,6 @@ namespace StarTracker::Core {
             firstPass = false;
         }
 
-        // Perform Stacking
-        frameBuffer->Bind();
-        stackShader->Bind();
-        vertexArray->Bind();
-
         // Pass the number of textures to the Shader
         stackShader->SetInt("uNumberOfPassedTextures", static_cast<int>(textureList.size()));
 
@@ -97,11 +92,18 @@ namespace StarTracker::Core {
         }
 
         // Draw call which stacks the textures
-        glClear(GL_COLOR_BUFFER_BIT);
-        glDrawElements(GL_TRIANGLES, static_cast<int>(indexBuffer->GetIndexCount()), GL_UNSIGNED_INT, nullptr);
-        frameBuffer->Unbind();
+        stackFrameBuffer->Bind();
+        OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+        OpenGL::Renderer::Clear();
+        OpenGL::Renderer::DrawIndexed(vertexArray, stackShader, OpenGL::PrimitiveMode::Triangle);
+        stackFrameBuffer->Unbind();
 
         // TODO(Plank): Copy framebuffer content to a separate Texture
-        return frameBuffer;
+        return stackFrameBuffer;
+    }
+
+    const std::shared_ptr<OpenGL::FrameBuffer>& ImageProcessing::GetStackFrameBuffer() noexcept {
+
+        return stackFrameBuffer;
     }
 }
