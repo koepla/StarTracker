@@ -2,6 +2,7 @@
 #define STARTRACKER_STARTRACKERVIEW_H
 
 #include <StarTracker/ExperimentalView.hpp>
+#include <StarTracker/ImageProcessingView.hpp>
 #include <StarTracker/TrackableBodyView.hpp>
 
 namespace StarTracker {
@@ -10,6 +11,7 @@ namespace StarTracker {
 
     private:
         std::unique_ptr<ExperimentalView> experimentalView;
+        std::unique_ptr<ImageProcessingView> imageProcessingView;
         std::unique_ptr<TrackableBodyView> trackableBodyView;
 
     public:
