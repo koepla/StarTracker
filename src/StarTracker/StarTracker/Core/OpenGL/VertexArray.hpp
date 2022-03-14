@@ -21,7 +21,10 @@ namespace StarTracker::Core::OpenGL {
 
 		void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) noexcept;
 		void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) noexcept;
-	
+
+        [[nodiscard]] const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const noexcept;
+        [[nodiscard]] const std::shared_ptr<VertexBuffer>& GetVertexBuffer() const noexcept;
+
 		void Bind() const noexcept;
 		void Unbind() const noexcept;
 	};
