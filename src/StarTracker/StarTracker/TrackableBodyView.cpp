@@ -23,7 +23,7 @@ namespace StarTracker {
 
 		try {
 
-			while (!tracker.Connect());
+			//while (!tracker.Connect());
 		}
 		catch (const std::exception&) {
 

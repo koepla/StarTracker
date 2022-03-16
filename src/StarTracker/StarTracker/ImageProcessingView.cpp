@@ -2,14 +2,16 @@
 
 namespace StarTracker {
 
-    ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle}, textureList{} {
+    ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle} {
 
     }
 
     void ImageProcessingView::OnInit() noexcept {
 
         // Initialize ImageProcessing Buffers
-        ASSERT(Core::ImageProcessing::Initialize() && "Couldn't initialize ImageProcessing");
+        frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(100, 100);
+        blue = Core::AssetDataBase::LoadTexture("blue.png");
+        pillars = Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg");
     }
 
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
@@ -18,37 +20,17 @@ namespace StarTracker {
 
             const auto textSize = ImGui::GetFontSize();
             const auto availableSize = ImGui::GetContentRegionAvail();
-            if (ImGui::Button("Select Images", { availableSize.x, textSize * 1.4f })) {
+            if (ImGui::Button("Stack Images", { availableSize.x, textSize * 1.4f })) {
 
-                const auto result = Utils::File::OpenFileDialog(true);
+                if(!Core::ImageProcessing::Stack(frameBuffer, { blue, pillars })) {
 
-                std::printf("Found %d textures!\n", static_cast<int>(result.size()));
-
-                textureList.clear();
-                for(const auto& path : result) {
-
-                    auto texture = std::make_shared<Core::OpenGL::Texture>();
-                    texture->LoadFromFile(path);
-                    textureList.emplace_back(texture);
-                }
-
-                if (!Core::ImageProcessing::Stack(textureList)->IsValid()) {
-
-                    ImGui::OpenPopup("ImageStackError");
-                }
-
-                bool popUpOpen = true;
-                if (ImGui::BeginPopupModal("ImageStackError", &popUpOpen, ImGuiWindowFlags_AlwaysAutoResize)) {
-
-                    ImGui::Text("Couldn't Stack Images!");
-                    ImGui::EndPopup();
+                    std::fprintf(stderr, "Couldn't Stack Textures!\n");
                 }
             }
 
-            const auto stackedImageId = static_cast<std::intptr_t>(Core::ImageProcessing::GetStackFrameBuffer()->GetNativeTextureHandle());
+            const auto stackedImageId = static_cast<std::intptr_t>(frameBuffer->GetNativeTextureHandle());
             const auto[textureWidth, textureHeight] = [&]() -> std::pair<float, float> {
 
-                const auto frameBuffer = Core::ImageProcessing::GetStackFrameBuffer();
                 const auto frameBufferWidth = static_cast<float>(frameBuffer->GetWidth());
                 const auto frameBufferHeight = static_cast<float>(frameBuffer->GetHeight());
                 const auto availableSize = ImGui::GetContentRegionAvail();
