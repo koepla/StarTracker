@@ -28,6 +28,10 @@ namespace StarTracker::Core::OpenGL {
 
 		const auto format = [&]() -> std::uint32_t {
 
+            if(filePath.string().ends_with("blue.png")) {
+
+                return GL_RED;
+            }
 			if (channels == 4) {
 
 				return GL_RGBA;
