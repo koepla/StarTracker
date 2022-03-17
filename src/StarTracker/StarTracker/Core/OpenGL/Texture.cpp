@@ -26,30 +26,31 @@ namespace StarTracker::Core::OpenGL {
 		stbi_set_flip_vertically_on_load(true);
 		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
 
-		const auto format = [&]() -> std::uint32_t {
+		const auto [internalFormat, dataFormat] = [&]() -> std::pair<std::int32_t, std::int32_t> {
 
-            if(filePath.string().ends_with("blue.png")) {
-
-                return GL_RED;
-            }
 			if (channels == 4) {
 
-				return GL_RGBA;
+				return { GL_RGBA8, GL_RGBA };
 			}
 			if (channels == 3) {
 
-				return GL_RGB;
+                if(filePath.string().ends_with("png")) {
+
+                    return { GL_R8, GL_RED };
+                }
+
+				return { GL_RGB8, GL_RGB };
 			}
 			else {
 
 				ASSERT(false && "Invalid Format!");
-				return 0;
+				return {};
 			}
 		}();
 
 		if (data) {
 
-			glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 			stbi_image_free(data);
