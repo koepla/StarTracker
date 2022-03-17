@@ -37,7 +37,7 @@ namespace StarTracker::Utils {
 		}
 	}
 
-    std::vector<std::filesystem::path> File::OpenFileDialog(bool allowMultiple) noexcept {
+    std::vector<std::filesystem::path> File::OpenFileDialog(const std::string& title, bool allowMultiple) noexcept {
 
         char file[MAX_PATH] = { 0 };
 
@@ -48,6 +48,7 @@ namespace StarTracker::Utils {
         ofn.lpstrFile = file;
         ofn.nMaxFile = MAX_PATH;
         ofn.lpstrFilter = "All Files\0*.*";
+        ofn.lpstrTitle = title.c_str();
         ofn.nFilterIndex = 1;
         ofn.Flags = OFN_PATHMUSTEXIST;
 
@@ -80,7 +81,7 @@ namespace StarTracker::Utils {
         }
     }
 
-    std::filesystem::path File::SaveFileDialog() noexcept {
+    std::filesystem::path File::SaveFileDialog(const std::string& title) noexcept {
 
         char file[MAX_PATH] = { 0 };
 
@@ -89,6 +90,7 @@ namespace StarTracker::Utils {
         ofn.lStructSize = sizeof(OPENFILENAME);
         ofn.hwndOwner = nullptr;
         ofn.lpstrFile = file;
+        ofn.lpstrTitle = title.c_str();
         ofn.nMaxFile = MAX_PATH;
         ofn.lpstrFilter = "All Files\0*.*";
         ofn.nFilterIndex = 1;

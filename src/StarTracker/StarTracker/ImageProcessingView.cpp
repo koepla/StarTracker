@@ -20,7 +20,7 @@ namespace StarTracker {
             const auto availableSize = ImGui::GetContentRegionAvail();
             if (ImGui::Button("Select Images", { availableSize.x, textSize * 1.4f })) {
 
-                const auto selectedImages = Utils::File::OpenFileDialog(true);
+                const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
 
                 std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList{};
                 for(const auto& currentImagePath : selectedImages) {

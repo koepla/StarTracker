@@ -16,8 +16,8 @@ namespace StarTracker::Utils {
 
 	public:
 		[[nodiscard]] static std::string ReadFile(const std::filesystem::path& filePath) noexcept;
-        [[nodiscard]] static std::vector<std::filesystem::path> OpenFileDialog(bool allowMultiple) noexcept;
-        [[nodiscard]] static std::filesystem::path SaveFileDialog() noexcept;
+        [[nodiscard]] static std::vector<std::filesystem::path> OpenFileDialog(const std::string& title, bool allowMultiple) noexcept;
+        [[nodiscard]] static std::filesystem::path SaveFileDialog(const std::string& title) noexcept;
 	};
 }
 
