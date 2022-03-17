@@ -7,8 +7,8 @@ namespace StarTracker::Core::OpenGL {
 
 	Texture::Texture() noexcept : nativeHandle{}, width{}, height{}, channels{} {
 	
-		glGenTextures(1, &nativeHandle);
-		glBindTexture(GL_TEXTURE_2D, nativeHandle);
+		glCreateTextures(GL_TEXTURE_2D, 1, &nativeHandle);
+		glBindTextureUnit(0, nativeHandle);
 	}
 
 	Texture::~Texture() noexcept {
@@ -18,53 +18,48 @@ namespace StarTracker::Core::OpenGL {
 
 	void Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        stbi_set_flip_vertically_on_load(1);
+        std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
 
-		stbi_set_flip_vertically_on_load(true);
-		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
+        if(data) {
 
-		const auto [internalFormat, dataFormat] = [&]() -> std::pair<std::int32_t, std::int32_t> {
+            const auto [internalFormat, dataFormat] = [&]() -> std::pair<std::uint32_t, std::uint32_t> {
 
-			if (channels == 4) {
+                if(channels == 4) {
 
-				return { GL_RGBA8, GL_RGBA };
-			}
-			if (channels == 3) {
-
-                if(filePath.string().ends_with("png")) {
-
-                    return { GL_R8, GL_RED };
+                    return { GL_RGBA8, GL_RGBA };
                 }
+                else if(channels == 3) {
 
-				return { GL_RGB8, GL_RGB };
-			}
-			else {
+                    if(filePath.string().ends_with(".png")) {
 
-				ASSERT(false && "Invalid Format!");
-				return {};
-			}
-		}();
+                        return { GL_R8, GL_RED };
+                    }
+                    else {
 
-		if (data) {
+                        return { GL_RGB8, GL_RGB };
+                    }
+                }
+                else {
 
-			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
+                    ASSERT(false && "Invalid Image Format!");
+                }
+            }();
 
-			stbi_image_free(data);
-		}
-		else {
+            glTextureStorage2D(nativeHandle, 1, internalFormat, width, height);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
 
-			ASSERT(false && "Invalid Image!");
-		}
+            stbi_image_free(data);
+        }
 	}
 
 	void Texture::Bind(std::uint32_t slot) const noexcept {
 
-		glActiveTexture(GL_TEXTURE0 + slot);
-		glBindTexture(GL_TEXTURE_2D, nativeHandle);
+		glBindTextureUnit(slot, nativeHandle);
 	}
 
 	std::uint32_t Texture::GetNativeHandle() const noexcept {
