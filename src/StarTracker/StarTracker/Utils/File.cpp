@@ -50,7 +50,7 @@ namespace StarTracker::Utils {
         ofn.lpstrFilter = "All Files\0*.*";
         ofn.lpstrTitle = title.c_str();
         ofn.nFilterIndex = 1;
-        ofn.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_ENABLESIZING;
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER;
 
         if (allowMultiple) {
 
