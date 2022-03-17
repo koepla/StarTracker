@@ -6,7 +6,6 @@ namespace StarTracker::Core {
 
         if(textureList.size() < 2) {
 
-            ASSERT(false && "Invalid number of Textures for Stacking Operation!");
             return false;
         }
 

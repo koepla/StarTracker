@@ -19,39 +19,17 @@ namespace StarTracker::Core::OpenGL {
 	void Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
 
         stbi_set_flip_vertically_on_load(1);
-        std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 0);
+        std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
 
         if(data) {
 
-            const auto [internalFormat, dataFormat] = [&]() -> std::pair<std::uint32_t, std::uint32_t> {
-
-                if(channels == 4) {
-
-                    return { GL_RGBA8, GL_RGBA };
-                }
-                else if(channels == 3) {
-
-                    if(filePath.string().ends_with(".png")) {
-
-                        return { GL_R8, GL_RED };
-                    }
-                    else {
-
-                        return { GL_RGB8, GL_RGB };
-                    }
-                }
-                else {
-
-                    ASSERT(false && "Invalid Image Format!");
-                }
-            }();
-
-            glTextureStorage2D(nativeHandle, 1, internalFormat, width, height);
+            glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
             glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
             glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+            glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
 
             stbi_image_free(data);
         }

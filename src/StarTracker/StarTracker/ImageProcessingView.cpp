@@ -8,10 +8,8 @@ namespace StarTracker {
 
     void ImageProcessingView::OnInit() noexcept {
 
-        // Initialize ImageProcessing Buffers
-        frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(100, 100);
-        blue = Core::AssetDataBase::LoadTexture("blue.png");
-        pillars = Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg");
+        // Initialize ImageProcessing FrameBuffer
+        targetFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(100, 100);
     }
 
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
@@ -20,19 +18,29 @@ namespace StarTracker {
 
             const auto textSize = ImGui::GetFontSize();
             const auto availableSize = ImGui::GetContentRegionAvail();
-            if (ImGui::Button("Stack Images", { availableSize.x, textSize * 1.4f })) {
+            if (ImGui::Button("Select Images", { availableSize.x, textSize * 1.4f })) {
 
-                if(!Core::ImageProcessing::Stack(frameBuffer, { blue, pillars })) {
+                const auto selectedImages = Utils::File::OpenFileDialog(true);
 
-                    std::fprintf(stderr, "Couldn't Stack Textures!\n");
+                std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList{};
+                for(const auto& currentImagePath : selectedImages) {
+
+                    const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
+                    currentTexture->LoadFromFile(currentImagePath);
+                    textureList.emplace_back(currentTexture);
+                }
+
+                if(!Core::ImageProcessing::Stack(targetFrameBuffer, textureList)) {
+
+                    std::fprintf(stderr, "Unable to Stack Images!\n");
                 }
             }
 
-            const auto stackedImageId = static_cast<std::intptr_t>(frameBuffer->GetNativeTextureHandle());
+            const auto stackedImageId = static_cast<std::intptr_t>(targetFrameBuffer->GetNativeTextureHandle());
             const auto[textureWidth, textureHeight] = [&]() -> std::pair<float, float> {
 
-                const auto frameBufferWidth = static_cast<float>(frameBuffer->GetWidth());
-                const auto frameBufferHeight = static_cast<float>(frameBuffer->GetHeight());
+                const auto frameBufferWidth = static_cast<float>(targetFrameBuffer->GetWidth());
+                const auto frameBufferHeight = static_cast<float>(targetFrameBuffer->GetHeight());
                 const auto availableSize = ImGui::GetContentRegionAvail();
 
                 if(frameBufferWidth > frameBufferHeight) {
