@@ -50,30 +50,38 @@ namespace StarTracker::Utils {
         ofn.lpstrFilter = "All Files\0*.*";
         ofn.lpstrTitle = title.c_str();
         ofn.nFilterIndex = 1;
-        ofn.Flags = OFN_PATHMUSTEXIST;
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_EXPLORER | OFN_ENABLESIZING;
 
-        if(allowMultiple) {
+        if (allowMultiple) {
 
             ofn.Flags |= OFN_ALLOWMULTISELECT;
         }
 
         if (GetOpenFileNameA(&ofn) == TRUE) {
 
-            std::vector<std::filesystem::path> result{};
-            const auto paths = splitString(ofn.lpstrFile, " ");
+            std::vector<std::filesystem::path> filePaths{};
 
-            if(paths.empty()) {
+            char *p = ofn.lpstrFile;
+            std::string path = p;
+            p += path.size() + 1;
 
-                return std::vector<std::filesystem::path>{};
+            if (*p == 0) {
+
+                filePaths.emplace_back(path.c_str());
+            }
+            else {
+
+                while (*p != 0) {
+
+                    std::string fileName = p;
+                    std::string result{};
+                    result = result.append(path).append("\\").append(fileName);
+                    filePaths.emplace_back(result);
+                    p += fileName.size() + 1;
+                }
             }
 
-            const auto directory = std::filesystem::path{ paths.at(0) };
-            for(auto i = std::size_t{ 1 }; i < paths.size(); i++) {
-
-                result.emplace_back(directory / std::filesystem::path{ paths.at(i) });
-            }
-
-            return result;
+            return filePaths;
         }
         else {
 
