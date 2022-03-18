@@ -11,20 +11,6 @@ namespace StarTracker {
         // Initialize ImageProcessing FrameBuffer
         stackFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
         kernelFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
-
-        const auto application = Core::Application::GetInstance();
-        application->RegisterEventHandler([&](const Core::Events::Event& event) -> void {
-
-            const auto keyEvent = dynamic_cast<const Core::Events::KeyEvent*>(&event);
-
-            if(keyEvent) {
-
-                if(keyEvent->IsPressed() && keyEvent->GetKeyCode() == Core::KeyCode::Escape) {
-
-                    application->Close();
-                }
-            }
-        });
     }
 
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
