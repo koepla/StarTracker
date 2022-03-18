@@ -2,14 +2,15 @@
 
 namespace StarTracker {
 
-    ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle} {
+    ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle}, textureList{} {
 
     }
 
     void ImageProcessingView::OnInit() noexcept {
 
         // Initialize ImageProcessing FrameBuffer
-        targetFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(100, 100);
+        stackFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
+        kernelFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
 
         const auto application = Core::Application::GetInstance();
         application->RegisterEventHandler([&](const Core::Events::Event& event) -> void {
@@ -28,64 +29,134 @@ namespace StarTracker {
 
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
 
+        const auto textSize = ImGui::GetFontSize();
+        const auto availableSize = ImGui::GetContentRegionAvail();
+
+        static float verticalButtonPosition{ 0.0f };
+
         if (ImGui::Begin("Image Processing")) {
 
-            const auto textSize = ImGui::GetFontSize();
-            const auto width = ImGui::GetContentRegionAvail().x;
-            if (ImGui::Button("Select Images", { width, textSize * 1.4f })) {
+            ImGui::PushID("ImageProcessingAlignmentTable");
+            if (ImGui::BeginTable("", 2))
+            {
+                ImGui::TableNextRow();
 
-                const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
+                {   // Final Images
+                    ImGui::PushFont(Core::UIFont::Medium);
 
-                std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList{};
-                for(const auto& currentImagePath : selectedImages) {
+                    const auto stackedImageId = static_cast<std::intptr_t>(stackFrameBuffer->GetNativeTextureHandle());
+                    const auto kernelImageId = static_cast<std::intptr_t>(kernelFrameBuffer->GetNativeTextureHandle());
 
-                    const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
-                    currentTexture->LoadFromFile(currentImagePath);
-                    textureList.emplace_back(currentTexture);
+                    const auto textureWidth = ImGui::GetContentRegionAvail().x / 2.0f;
+                    const auto textureHeight = static_cast<float>(stackFrameBuffer->GetHeight()) / static_cast<float>(stackFrameBuffer->GetWidth()) * textureWidth;
+
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text("Stacked Image");
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Text("Kernel Image");
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Image(reinterpret_cast<void*>(stackedImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Image(reinterpret_cast<void*>(kernelImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+
+                    ImGui::PopFont();
                 }
 
-                if(!Core::ImageProcessing::Stack(targetFrameBuffer, textureList)) {
+                {   // Stacking
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
 
-                    std::fprintf(stderr, "Unable to Stack Images!\n");
+                    ImGui::PushFont(Core::UIFont::Medium);
+                    ImGui::Text("Image List");
+                    ImGui::PopFont();
+
+                    for (const auto& currentTexture : textureList) {
+
+                        const auto textureHeight = 5.0f * textSize;
+                        const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
+
+                        if ((ImGui::GetCursorPosX() + textureWidth) >= (availableSize.x / 2.0f)) {
+
+                            ImGui::NewLine();
+                        }
+
+                        ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+                        ImGui::SameLine();
+                    }
+
+                    if (!textureList.empty()) {
+
+                        ImGui::NewLine();
+                        verticalButtonPosition = ImGui::GetCursorPosY();
+                    }
+                    else {
+
+                        ImGui::SetCursorPosY(verticalButtonPosition);
+                    }
+
+                    if (ImGui::Button("Select Images for Stacking", {availableSize.x / 2.0f, textSize * 1.4f })) {
+
+                        const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
+
+                        textureList.clear();
+                        for(const auto& currentImagePath : selectedImages) {
+
+                            const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
+                            currentTexture->LoadFromFile(currentImagePath);
+                            textureList.emplace_back(currentTexture);
+                        }
+
+                        if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
+
+                            std::fprintf(stderr, "Unable to Stack Images!\n");
+                        }
+                    }
                 }
+
+                {   // Kernel
+                    ImGui::TableSetColumnIndex(1);
+
+                    ImGui::PushFont(Core::UIFont::Medium);
+                    ImGui::Text("Kernel Matrix");
+                    ImGui::PopFont();
+
+                    static std::array<float, 9> kernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+                    ImGui::PushItemWidth(availableSize.x / 2.0f);
+                    ImGui::PushID("Kernel-Row-0");
+                    ImGui::InputFloat3("", kernel.data(), "%.6f");
+                    ImGui::PopID();
+                    ImGui::Separator();
+                    ImGui::PushID("Kernel-Row-1");
+                    ImGui::InputFloat3("", kernel.data() + 3, "%.6f");
+                    ImGui::PopID();
+                    ImGui::Separator();
+                    ImGui::PushID("Kernel-Row-2");
+                    ImGui::InputFloat3("", kernel.data() + 6, "%.6f");
+                    ImGui::PopID();
+                    ImGui::PopItemWidth();
+
+                    if (!textureList.empty()) {
+
+                        ImGui::SetCursorPosY(verticalButtonPosition);
+                    }
+                    else {
+
+                        verticalButtonPosition = ImGui::GetCursorPosY();
+                    }
+
+                    if (ImGui::Button("Apply Kernel", {availableSize.x / 2.0f, textSize * 1.4f })) {
+
+                        if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, kernel)) {
+
+                            std::fprintf(stderr, "Unable to Apply Kernel!\n");
+                        }
+                    }
+                }
+
+                ImGui::EndTable();
             }
-
-            static std::array<float, 9> kernel{};
-            ImGui::InputFloat3("Kernel-Row-0", kernel.data());
-            ImGui::Separator();
-            ImGui::InputFloat3("Kernel-Row-1", kernel.data() + 3);
-            ImGui::Separator();
-            ImGui::InputFloat3("Kernel-Row-2", kernel.data() + 6);
-
-            if (ImGui::Button("Apply Kernel", { width, textSize * 1.4f })) {
-
-                if (!Core::ImageProcessing::Kernel(targetFrameBuffer, kernel)) {
-
-                    std::fprintf(stderr, "Unable to Apply Kernel!\n");
-                }
-            }
-
-            const auto stackedImageId = static_cast<std::intptr_t>(targetFrameBuffer->GetNativeTextureHandle());
-            const auto[textureWidth, textureHeight] = [&]() -> std::pair<float, float> {
-
-                const auto frameBufferWidth = static_cast<float>(targetFrameBuffer->GetWidth());
-                const auto frameBufferHeight = static_cast<float>(targetFrameBuffer->GetHeight());
-                const auto availableSize = ImGui::GetContentRegionAvail();
-
-                if(frameBufferWidth > frameBufferHeight) {
-
-                    const auto width = availableSize.x;
-                    const auto height = frameBufferHeight / frameBufferWidth * width;
-                    return { width, height };
-                }
-                else {
-
-                    const auto height = availableSize.y;
-                    const auto width = frameBufferWidth / frameBufferHeight * height;
-                    return { width, height };
-                }
-            }();
-            ImGui::Image(reinterpret_cast<void*>(stackedImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+            ImGui::PopID();
         }
         ImGui::End();
     }

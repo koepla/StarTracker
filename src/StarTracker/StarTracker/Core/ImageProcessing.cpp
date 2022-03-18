@@ -105,9 +105,11 @@ namespace StarTracker::Core {
         return true;
     }
 
-    bool ImageProcessing::Kernel(const std::shared_ptr<OpenGL::FrameBuffer> &target, const std::array<float, 9>& kernel) noexcept {
+    bool ImageProcessing::Kernel(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::shared_ptr<OpenGL::FrameBuffer>& source, const std::array<float, 9>& kernel) noexcept {
 
         initialize();
+
+        target->Resize(source->GetWidth(), source->GetHeight());
 
         for (auto i = std::size_t{ 0 }; i < 9; i++) {
 
@@ -117,7 +119,7 @@ namespace StarTracker::Core {
         }
 
         kernelShader->SetInt("uTexture", 0);
-        glBindTextureUnit(0, target->GetNativeTextureHandle());
+        glBindTextureUnit(0, source->GetNativeTextureHandle());
 
         target->Bind();
         OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });

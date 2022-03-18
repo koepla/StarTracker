@@ -24,7 +24,9 @@ namespace StarTracker {
     class ImageProcessingView : public Core::View {
 
     private:
-        std::shared_ptr<Core::OpenGL::FrameBuffer> targetFrameBuffer;
+        std::shared_ptr<Core::OpenGL::FrameBuffer> stackFrameBuffer;
+        std::shared_ptr<Core::OpenGL::FrameBuffer> kernelFrameBuffer;
+        std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
 
     public:
         explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
