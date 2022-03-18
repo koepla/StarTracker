@@ -119,6 +119,12 @@ namespace StarTracker::Core::OpenGL {
 		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 
+    void Shader::SetMat3(const std::string &name, const glm::mat3 &value) noexcept {
+
+        glUseProgram(nativeHandle);
+        glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+    }
+
 	void Shader::SetMat4(const std::string& name, const glm::mat4& value) noexcept {
 
 		glUseProgram(nativeHandle);

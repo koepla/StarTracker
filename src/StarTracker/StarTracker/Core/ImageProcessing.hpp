@@ -17,9 +17,14 @@ namespace StarTracker::Core {
         static inline std::shared_ptr<OpenGL::VertexBuffer> vertexBuffer;
         static inline std::shared_ptr<OpenGL::IndexBuffer> indexBuffer;
         static inline std::shared_ptr<OpenGL::Shader> stackShader;
+        static inline std::shared_ptr<OpenGL::Shader> kernelShader;
+
+    private:
+        static void initialize() noexcept;
 
     public:
         [[nodiscard]] static bool Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>>& textureList) noexcept;
+        [[nodiscard]] static bool Kernel(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::array<float, 9>& kernel) noexcept;
     };
 }
 

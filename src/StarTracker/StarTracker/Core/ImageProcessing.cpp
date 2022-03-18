@@ -2,12 +2,7 @@
 
 namespace StarTracker::Core {
 
-    bool ImageProcessing::Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
-
-        if(textureList.size() < 2) {
-
-            return false;
-        }
+    void ImageProcessing::initialize() noexcept {
 
         static bool firstPass{ true };
         if (firstPass) {
@@ -18,6 +13,7 @@ namespace StarTracker::Core {
 
             // Stacking shader from AssetDataBase
             stackShader = AssetDataBase::LoadShader("textureStackVertex.glsl", "textureStackFragment.glsl");
+            kernelShader = AssetDataBase::LoadShader("kernelVertex.glsl", "kernelFragment.glsl");
 
             // Fixed texture vertices
             const static std::array<OpenGL::TextureVertex, 4> vertices = {
@@ -54,6 +50,16 @@ namespace StarTracker::Core {
 
             firstPass = false;
         }
+    }
+
+    bool ImageProcessing::Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
+
+        if(textureList.size() < 2) {
+
+            return false;
+        }
+
+        initialize();
 
         // find max texture Resolution
         const auto[textureWidth, textureHeight] = [&]() -> std::pair<std::int32_t, std::int32_t> {
@@ -94,6 +100,29 @@ namespace StarTracker::Core {
         OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
         OpenGL::Renderer::Clear();
         OpenGL::Renderer::DrawIndexed(vertexArray, stackShader, OpenGL::PrimitiveMode::Triangle);
+        target->Unbind();
+
+        return true;
+    }
+
+    bool ImageProcessing::Kernel(const std::shared_ptr<OpenGL::FrameBuffer> &target, const std::array<float, 9>& kernel) noexcept {
+
+        initialize();
+
+        for (auto i = std::size_t{ 0 }; i < 9; i++) {
+
+            const auto kernelElement = kernel.at(i);
+            const auto uniformName = std::format("uKernel[{}]", i);
+            kernelShader->SetFloat(uniformName, kernelElement);
+        }
+
+        kernelShader->SetInt("uTexture", 0);
+        glBindTextureUnit(0, target->GetNativeTextureHandle());
+
+        target->Bind();
+        OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+        OpenGL::Renderer::Clear();
+        OpenGL::Renderer::DrawIndexed(vertexArray, kernelShader, OpenGL::PrimitiveMode::Triangle);
         target->Unbind();
 
         return true;

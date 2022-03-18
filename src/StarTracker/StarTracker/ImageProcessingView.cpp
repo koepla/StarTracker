@@ -10,6 +10,20 @@ namespace StarTracker {
 
         // Initialize ImageProcessing FrameBuffer
         targetFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(100, 100);
+
+        const auto application = Core::Application::GetInstance();
+        application->RegisterEventHandler([&](const Core::Events::Event& event) -> void {
+
+            const auto keyEvent = dynamic_cast<const Core::Events::KeyEvent*>(&event);
+
+            if(keyEvent) {
+
+                if(keyEvent->IsPressed() && keyEvent->GetKeyCode() == Core::KeyCode::Escape) {
+
+                    application->Close();
+                }
+            }
+        });
     }
 
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
@@ -17,8 +31,8 @@ namespace StarTracker {
         if (ImGui::Begin("Image Processing")) {
 
             const auto textSize = ImGui::GetFontSize();
-            const auto availableSize = ImGui::GetContentRegionAvail();
-            if (ImGui::Button("Select Images", { availableSize.x, textSize * 1.4f })) {
+            const auto width = ImGui::GetContentRegionAvail().x;
+            if (ImGui::Button("Select Images", { width, textSize * 1.4f })) {
 
                 const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
 
@@ -33,6 +47,21 @@ namespace StarTracker {
                 if(!Core::ImageProcessing::Stack(targetFrameBuffer, textureList)) {
 
                     std::fprintf(stderr, "Unable to Stack Images!\n");
+                }
+            }
+
+            static std::array<float, 9> kernel{};
+            ImGui::InputFloat3("Kernel-Row-0", kernel.data());
+            ImGui::Separator();
+            ImGui::InputFloat3("Kernel-Row-1", kernel.data() + 3);
+            ImGui::Separator();
+            ImGui::InputFloat3("Kernel-Row-2", kernel.data() + 6);
+
+            if (ImGui::Button("Apply Kernel", { width, textSize * 1.4f })) {
+
+                if (!Core::ImageProcessing::Kernel(targetFrameBuffer, kernel)) {
+
+                    std::fprintf(stderr, "Unable to Apply Kernel!\n");
                 }
             }
 

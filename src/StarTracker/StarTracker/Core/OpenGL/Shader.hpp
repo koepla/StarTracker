@@ -33,6 +33,7 @@ namespace StarTracker::Core::OpenGL {
 		void SetFloat2(const std::string& name, const glm::vec2& value) noexcept;
 		void SetFloat3(const std::string& name, const glm::vec3& value) noexcept;
 		void SetFloat4(const std::string& name, const glm::vec4& value) noexcept;
+        void SetMat3(const std::string& name, const glm::mat3& value) noexcept;
 		void SetMat4(const std::string& name, const glm::mat4& value) noexcept;
 
 		void Bind() const noexcept;

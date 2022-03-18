@@ -141,3 +141,5 @@ configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/textureStack
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Textures/pillarsOfCreation.jpg ${CMAKE_CURRENT_BINARY_DIR}/Assets/Textures/pillarsOfCreation.jpg COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Textures/blue.png ${CMAKE_CURRENT_BINARY_DIR}/Assets/Textures/blue.png COPYONLY)
 configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Textures/yellow.png ${CMAKE_CURRENT_BINARY_DIR}/Assets/Textures/yellow.png COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/kernelFragment.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/kernelFragment.glsl COPYONLY)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets/Shaders/kernelVertex.glsl ${CMAKE_CURRENT_BINARY_DIR}/Assets/Shaders/kernelVertex.glsl COPYONLY)
