@@ -54,11 +54,6 @@ namespace StarTracker::Core {
 
     bool ImageProcessing::Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
 
-        if(textureList.size() < 2) {
-
-            return false;
-        }
-
         initialize();
 
         // find max texture Resolution
