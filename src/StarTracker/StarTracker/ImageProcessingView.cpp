@@ -67,7 +67,7 @@ namespace StarTracker {
 
                         for (const auto& currentTexture : textureList) {
 
-                            const auto textureHeight = 5.0f * textSize;
+                            const auto textureHeight = kernelMatrixEditorHeight - 2.0f * itemInnerSpacing.y;
                             const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
 
                             if (textureWidth > ImGui::GetContentRegionAvail().x) {
@@ -137,6 +137,7 @@ namespace StarTracker {
                            return kernelNames[3];
                        }
 
+                        return "Invalid";
                     }());
                     ImGui::PopID();
                     ImGui::PopItemWidth();
