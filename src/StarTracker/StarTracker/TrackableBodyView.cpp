@@ -23,7 +23,7 @@ namespace StarTracker {
 
 		try {
 
-			while (!tracker.Connect());
+            const auto avoidNodiscard [[maybe_unused]] = tracker.Connect();
 		}
 		catch (const std::exception&) {
 
@@ -117,7 +117,7 @@ namespace StarTracker {
 
                                 if (status == Core::TrackerCallbackStatus::FAILURE) {
 
-                                    trackingStatus = "Failure";
+                                    trackingStatus = "Failure on tracking";
                                 }
                                 else {
 
@@ -131,7 +131,7 @@ namespace StarTracker {
                             }
                             else {
 
-                                trackingStatus = "Failure";
+                                trackingStatus = "Failure on tracking";
                             }
                         }
                         ImGui::Text("Status: %s", trackingStatus.c_str());
