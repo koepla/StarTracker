@@ -16,13 +16,13 @@ namespace StarTracker {
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
 
         const auto textSize = ImGui::GetFontSize();
-        static auto kernelMatrixEditorHeight{ 0.0f };
         const auto itemSpacing = ImGui::GetStyle().ItemSpacing;
         const auto itemInnerSpacing = ImGui::GetStyle().ItemInnerSpacing;
+        static auto kernelMatrixEditorHeight{ 0.0f };
 
         if (ImGui::Begin("Image Processing")) {
 
-            ImGui::PushID("ImageProcessingAlignmentTable");
+            ImGui::PushID("idImageProcessingAlignmentTable");
             if (ImGui::BeginTable("", 2))
             {
                 // Row-0
@@ -60,7 +60,7 @@ namespace StarTracker {
 
                     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
 
-                    if (ImGui::BeginChild("ImageListChildElement", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar)) {
+                    if (ImGui::BeginChild("idTextureList", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar)) {
 
                         const auto cursorPosition = ImGui::GetCursorPos();
                         ImGui::SetCursorPos({ cursorPosition.x + itemInnerSpacing.x, cursorPosition.y + itemInnerSpacing.y });
@@ -109,7 +109,7 @@ namespace StarTracker {
                     static ImGuiInputTextFlags_ kernelMatrixInputFlags{ ImGuiInputTextFlags_None };
                     static int selectedKernelIndex{ 0 };
                     const char* kernelNames[4] = { "Custom", "Blur", "Edge-Detection", "Sharpen" };
-                    ImGui::PushID("KernelEnumSlider");
+                    ImGui::PushID("idKernelEnumSlider");
                     ImGui::SliderInt("", &selectedKernelIndex, 0, 3, [&]() -> const char* {
 
                        if (selectedKernelIndex == 0) {
@@ -144,7 +144,7 @@ namespace StarTracker {
 
                     ImGui::SameLine();
 
-                    ImGui::PushID("KernelMatrixResetButton");
+                    ImGui::PushID("idKernelMatrixReset");
                     if (ImGui::Button("Reset", { ImGui::GetContentRegionAvail().x, 0.0f })) {
 
                         kernelMatrixInputFlags = ImGuiInputTextFlags_None;
@@ -160,13 +160,13 @@ namespace StarTracker {
                     }
 
                     ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-                    ImGui::PushID("Kernel-Row-0");
+                    ImGui::PushID("idKernelMatrixRow0");
                     ImGui::InputFloat3("", selectedKernel.data(), "%.6f", kernelMatrixInputFlags);
                     ImGui::PopID();
-                    ImGui::PushID("Kernel-Row-1");
+                    ImGui::PushID("idKernelMatrixRow1");
                     ImGui::InputFloat3("", selectedKernel.data() + 3, "%.6f", kernelMatrixInputFlags);
                     ImGui::PopID();
-                    ImGui::PushID("Kernel-Row-2");
+                    ImGui::PushID("idKernelMatrixRow2");
                     ImGui::InputFloat3("", selectedKernel.data() + 6, "%.6f", kernelMatrixInputFlags);
                     ImGui::PopID();
                     ImGui::PopItemWidth();
@@ -188,17 +188,19 @@ namespace StarTracker {
 
                         const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
 
-                        textureList.clear();
-                        for(const auto& currentImagePath : selectedImages) {
+                        if(!selectedImages.empty()) {
 
-                            const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
-                            currentTexture->LoadFromFile(currentImagePath);
-                            textureList.emplace_back(currentTexture);
-                        }
+                            textureList.clear();
+                            for(const auto& currentImagePath : selectedImages) {
 
-                        if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
+                                const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
+                                currentTexture->LoadFromFile(currentImagePath);
+                                textureList.emplace_back(currentTexture);
+                            }
 
-                            std::fprintf(stderr, "Unable to Stack Images!\n");
+                            if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
+
+                            }
                         }
                     }
 
@@ -208,7 +210,6 @@ namespace StarTracker {
 
                         if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, selectedKernel)) {
 
-                            std::fprintf(stderr, "Unable to Apply Kernel!\n");
                         }
                     }
                 }

@@ -23,7 +23,7 @@ namespace StarTracker {
 
 		try {
 
-			//while (!tracker.Connect());
+			while (!tracker.Connect());
 		}
 		catch (const std::exception&) {
 
@@ -80,67 +80,67 @@ namespace StarTracker {
 			ImGui::PushItemWidth(contentRegion.x / 2);
 			ImGui::InputDouble("Tracking duration [ms]", &trackingDuration);
 			ImGui::PopItemWidth();
-			ImGui::Separator();
-			
-			for (const auto& body : celestialBodies) {
 
-				const auto sphericalPosition = body->GetSphericalPosition(DateTime::Now());
-				const auto positionPreview = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
-					sphericalPosition,
-					{ observer.Latitude, observer.Longitude },
-					DateTime::Now()
-				);
+            if (ImGui::BeginTable("Trackable Bodies", 1)) {
 
-				const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
-                const auto availableSize = ImGui::GetContentRegionAvail().x;
-                const auto usedSize = availableSize / 4.0f;
+                for(const auto& body : celestialBodies) {
 
-				bool selected = false;
-				if (ImGui::Selectable(std::format("Name: {}", body->GetName()).c_str(), &selected)) {
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
 
-					ImGui::OpenPopup(windowId.c_str());					
-				}
-                ImGui::SameLine(1.0f * usedSize);
-                ImGui::Text("Designation: %s", body->GetDesignation().c_str());
-                ImGui::SameLine(2.0f * usedSize);
-                ImGui::Text("Azimuth: %6.2lf", positionPreview.Azimuth);
-                ImGui::SameLine(3.0f * usedSize);
-                ImGui::Text("Elevation: %6.2lf", positionPreview.Altitude);
+                    auto& style = ImGui::GetStyle();
+                    const auto itemSpacing = style.ItemSpacing;
+                    const auto fontSize = ImGui::GetFontSize();
+                    const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
+                    const auto cardHeight = 4.0f * fontSize + 3.8f * itemSpacing.y - 6.0f;
 
+                    static std::string trackingStatus{ "Not tracking" };
 
-				bool popUpOpen = true;
-				if (ImGui::BeginPopupModal(windowId.c_str(), &popUpOpen, ImGuiWindowFlags_AlwaysAutoResize)) {
+                    if (drawCelestialBodyCard(body,
+                                          { observer.Latitude, observer.Longitude },
+                                          Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg"),
+                                          { ImGui::GetContentRegionAvail().x, cardHeight })) {
 
-					const auto size = ImGui::CalcTextSize(windowId.c_str());
+                        trackingStatus = "Not tracking";
+                        ImGui::OpenPopup(windowId.c_str());
+                    }
 
-					ImGui::Text("%s", windowId.c_str());
-					if (ImGui::Button("Track", { size.x, 1.4f * size.y })) {
+                    bool open = true;
+                    if (ImGui::BeginPopupModal(windowId.c_str(), &open, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-						const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
+                        const auto size = ImGui::CalcTextSize(windowId.c_str());
 
-							if (status == Core::TrackerCallbackStatus::FAILURE) {
+                        ImGui::Text("%s", windowId.c_str());
+                        if (ImGui::Button("Track", { size.x * 2.0f, 1.4f * size.y })) {
 
-								std::fprintf(stderr, "Failure on tracking!\n");
-							}
-							else {
+                            const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
 
-								std::fprintf(stdout, "Tracking finished! (%lf ms)\n", trackingDuration);
-							}
-						};
+                                if (status == Core::TrackerCallbackStatus::FAILURE) {
 
-						if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration, trackerCallback)) {
+                                    trackingStatus = "Failure";
+                                }
+                                else {
 
-							std::fprintf(stdout, "Started tracking!\n");
-						}
-						else {
+                                    trackingStatus = "Finished tracking";
+                                }
+                            };
 
-							std::fprintf(stderr, "Couldn't start tracking!\n");
-						}
-					}
-					ImGui::EndPopup();
-				}
-				ImGui::Separator();
-			}
+                            if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration, trackerCallback)) {
+
+                                trackingStatus = "Started tracking";
+                            }
+                            else {
+
+                                trackingStatus = "Failure";
+                            }
+                        }
+                        ImGui::Text("Status: %s", trackingStatus.c_str());
+
+                        ImGui::EndPopup();
+                    }
+                }
+                ImGui::EndTable();
+            }
 		}
 		ImGui::End();
 	}
@@ -156,4 +156,72 @@ namespace StarTracker {
 			ASSERT(false && "Failed to disconnect from tracker!");
 		}
 	}
+
+    bool TrackableBodyView::drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body,
+                                                  const Ephemeris::Coordinates::Observer& observer,
+                                                  const std::shared_ptr<Core::OpenGL::Texture>& texture,
+                                                  const glm::vec2& size) noexcept {
+
+        bool selected = false;
+
+        const auto drawList = ImGui::GetWindowDrawList();
+        const auto fontSize = ImGui::GetFontSize();
+        auto& style = ImGui::GetStyle();
+
+        const auto itemInnerSpacing = style.ItemInnerSpacing;
+        const auto itemSpacing = style.ItemSpacing;
+        const auto textColor = ImGui::GetColorU32(style.Colors[ImGuiCol_Text]);
+        const auto textLightColor = ImGui::GetColorU32(style.Colors[ImGuiCol_TextDisabled]);
+        const auto imageColor = ImGui::GetColorU32(ImVec4{ 255.0f, 255.0f, 255.0f, 255.0f });
+        const auto childId = std::format("idChildElement{}{}", body->GetName(), body->GetDesignation());
+        const auto selectableActiveColor = style.Colors[ImGuiCol_FrameBgActive];
+        const auto selectableHoveredColor = style.Colors[ImGuiCol_FrameBgHovered];
+
+        ImGui::PushStyleColor(ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg]);
+        if (ImGui::BeginChild(childId.c_str(), ImVec2{ size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
+
+            const auto textureId = static_cast<std::intptr_t>(texture->GetNativeHandle());
+            const auto cursorPosition = ImGui::GetCursorPos();
+            const auto windowPosition = ImGui::GetWindowPos();
+            auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x, windowPosition.y + cursorPosition.y };
+
+            const auto selectableId = std::format("idSelectable{}{}", body->GetName(), body->GetDesignation());
+            ImGui::PushID(selectableId.c_str());
+            ImGui::PushStyleColor(ImGuiCol_HeaderActive, selectableActiveColor);
+            ImGui::PushStyleColor(ImGuiCol_HeaderHovered, selectableHoveredColor);
+            if (ImGui::Selectable("", false, ImGuiSelectableFlags_None, { size.x, size.y })) {
+
+                selected = true;
+            }
+            ImGui::PopStyleColor(2);
+            ImGui::PopID();
+
+            drawList->AddImageRounded(reinterpret_cast<void*>(textureId), drawPosition, { drawPosition.x + size.y, drawPosition.y + size.y }, { 0.0f, 1.0f }, { 1.0f, 0.0f }, imageColor, 4.0f);
+            drawPosition = { drawPosition.x + size.y + itemSpacing.x, drawPosition.y };
+
+            drawList->AddText(Core::UIFont::Medium, fontSize, drawPosition, textColor, body->GetName().c_str());
+            drawPosition = { drawPosition.x, drawPosition.y + fontSize + itemSpacing.y * 0.6f };
+
+            drawList->AddText(Core::UIFont::Regular, fontSize - 2.0f, drawPosition, textLightColor, body->GetDesignation().c_str());
+            drawPosition = { drawPosition.x, drawPosition.y + fontSize - 2.0f + itemSpacing.y * 0.6f };
+
+            const auto now = DateTime::Now();
+            const auto positionPreview = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
+                    body->GetSphericalPosition(now),
+                    observer,
+                    now
+            );
+
+            const auto azimuthText = std::format("Azimuth: {}", positionPreview.Azimuth);
+            drawList->AddText(Core::UIFont::Regular, fontSize - 2.0f, drawPosition, textLightColor, azimuthText.c_str());
+            drawPosition = { drawPosition.x, drawPosition.y + fontSize - 2.0f + itemSpacing.y * 0.6f };
+
+            const auto elevationText = std::format("Elevation: {}", positionPreview.Altitude);
+            drawList->AddText(Core::UIFont::Regular, fontSize - 2.0f, drawPosition, textLightColor, elevationText.c_str());
+        }
+        ImGui::EndChild();
+        ImGui::PopStyleColor();
+
+        return selected;
+    }
 }
