@@ -11,7 +11,7 @@ namespace StarTracker::Core {
 
 		const auto availablePorts = Utils::Serial::SerialPort::GetPortNames();
 
-		if (availablePorts.size() == 0) {
+		if (availablePorts.empty()) {
 
 			return false;
 		}
@@ -56,7 +56,7 @@ namespace StarTracker::Core {
 		return serialPort.IsOpen();
 	}
 
-	bool Tracker::Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, double duration, TrackerCallback callback) noexcept(false) {
+	bool Tracker::Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, double duration, const TrackerCallback& callback) noexcept(false) {
 
 		if (tracking.load()) {
 
@@ -105,7 +105,7 @@ namespace StarTracker::Core {
 		return true;
 	}
 
-	bool Tracker::sendPackage(Utils::Serial::Pack32 package, bool enableMaxWait, std::size_t maxWait) noexcept(false) {
+	bool Tracker::sendPackage(Utils::Serial::Pack32 package, bool enableMaxWait, double maxWait) noexcept(false) {
 
 		Utils::Serial::Pack32 responsePackage{};
 

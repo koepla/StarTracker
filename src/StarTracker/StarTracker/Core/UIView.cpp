@@ -102,7 +102,7 @@ namespace StarTracker::Core {
         style.WindowRounding = 0.0f;
         style.WindowBorderSize = 0.0f;
 
-		const auto fontSize = 22.0f;
+		const auto fontSize = 18.0f;
 		UIFont::Light = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Light.ttf", fontSize);
 		UIFont::Regular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Regular.ttf", fontSize);
 		UIFont::Medium = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Medium.ttf", fontSize);
