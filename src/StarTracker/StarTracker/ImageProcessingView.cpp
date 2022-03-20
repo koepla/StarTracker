@@ -16,15 +16,14 @@ namespace StarTracker {
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
 
         const auto textSize = ImGui::GetFontSize();
-        const auto availableSize = ImGui::GetContentRegionAvail();
-
-        static float verticalButtonPosition{ 0.0f };
+        static float kernelMatrixEditorHeight{ 0.0f };
 
         if (ImGui::Begin("Image Processing")) {
 
             ImGui::PushID("ImageProcessingAlignmentTable");
             if (ImGui::BeginTable("", 2))
             {
+                // Row-0
                 ImGui::TableNextRow();
 
                 {   // Final Images
@@ -38,50 +37,142 @@ namespace StarTracker {
 
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text("Stacked Image");
+                    ImGui::Image(reinterpret_cast<void*>(stackedImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+
                     ImGui::TableSetColumnIndex(1);
                     ImGui::Text("Kernel Image");
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Image(reinterpret_cast<void*>(stackedImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
-                    ImGui::TableSetColumnIndex(1);
                     ImGui::Image(reinterpret_cast<void*>(kernelImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
 
                     ImGui::PopFont();
                 }
 
-                {   // Stacking
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
+                // Row-1
+                ImGui::TableNextRow();
 
+                {   // Stacking
+                    ImGui::TableSetColumnIndex(0);
                     ImGui::PushFont(Core::UIFont::Medium);
-                    ImGui::Text("Image List");
+                    ImGui::Text("Loaded Images");
                     ImGui::PopFont();
 
+                    const auto availableWidth = ImGui::GetContentRegionAvail().x;
+                    ImGui::BeginChild("ImageListChildElement", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
                     for (const auto& currentTexture : textureList) {
 
                         const auto textureHeight = 5.0f * textSize;
                         const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
 
-                        if ((ImGui::GetCursorPosX() + textureWidth) >= (availableSize.x / 2.0f)) {
+                        if ((ImGui::GetCursorPosX() + textureWidth) >= (availableWidth)) {
 
                             ImGui::NewLine();
                         }
 
                         ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
-                        ImGui::SameLine();
+
+                        if (currentTexture != textureList.back()) {
+
+                            ImGui::SameLine();
+                        }
+                    }
+                    ImGui::EndChild();
+                }
+
+                static std::array<float, 9> userKernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+                static std::array<float, 9> selectedKernel{ userKernel };
+
+                {
+                    // Kernel
+                    ImGui::TableSetColumnIndex(1);
+
+                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+                    ImGui::PushFont(Core::UIFont::Medium);
+                    ImGui::Text("Kernel Matrix");
+                    ImGui::PopFont();
+                    ImGui::PopItemWidth();
+
+                    const auto availableWidth = ImGui::GetContentRegionAvail().x;
+                    const auto resetButtonTextWidth = ImGui::CalcTextSize("Reset").x * 2.5f;
+
+                    kernelMatrixEditorHeight = ImGui::GetCursorPosY();
+                    ImGui::PushItemWidth(availableWidth - resetButtonTextWidth);
+                    static ImGuiInputTextFlags_ kernelMatrixInputFlags{ ImGuiInputTextFlags_None };
+                    static int selectedKernelIndex{ 0 };
+                    const char* kernelNames[4] = { "Custom", "Blur", "Edge-Detection", "Sharpen" };
+                    ImGui::PushID("KernelEnumSlider");
+                    ImGui::SliderInt("", &selectedKernelIndex, 0, 3, [&]() -> const char* {
+
+                       if (selectedKernelIndex == 0) {
+
+                           kernelMatrixInputFlags = ImGuiInputTextFlags_None;
+                           selectedKernel = userKernel;
+                           return kernelNames[0];
+                       }
+                       else if (selectedKernelIndex == 1) {
+
+                           kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
+                           selectedKernel = Core::ImageProcessing::KernelBlur;
+                           return kernelNames[1];
+                       }
+                       else if (selectedKernelIndex == 2) {
+
+                           kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
+                           selectedKernel = Core::ImageProcessing::KernelEdgeDetection;
+                           return kernelNames[2];
+                       }
+                       else if (selectedKernelIndex == 3) {
+
+                           kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
+                           selectedKernel = Core::ImageProcessing::KernelSharpen;
+                           return kernelNames[3];
+                       }
+
+                    }());
+                    ImGui::PopID();
+                    ImGui::PopItemWidth();
+
+                    ImGui::SameLine();
+
+                    ImGui::PushID("KernelMatrixResetButton");
+                    if (ImGui::Button("Reset", { ImGui::GetContentRegionAvail().x, 0.0f })) {
+
+                        kernelMatrixInputFlags = ImGuiInputTextFlags_None;
+                        userKernel = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+                        selectedKernel = userKernel;
+                        selectedKernelIndex = 0;
+                    }
+                    ImGui::PopID();
+
+                    if (selectedKernelIndex == 0) {
+
+                        selectedKernel = userKernel;
                     }
 
-                    if (!textureList.empty()) {
+                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+                    ImGui::PushID("Kernel-Row-0");
+                    ImGui::InputFloat3("", selectedKernel.data(), "%.6f", kernelMatrixInputFlags);
+                    ImGui::PopID();
+                    ImGui::PushID("Kernel-Row-1");
+                    ImGui::InputFloat3("", selectedKernel.data() + 3, "%.6f", kernelMatrixInputFlags);
+                    ImGui::PopID();
+                    ImGui::PushID("Kernel-Row-2");
+                    ImGui::InputFloat3("", selectedKernel.data() + 6, "%.6f", kernelMatrixInputFlags);
+                    ImGui::PopID();
+                    ImGui::PopItemWidth();
 
-                        ImGui::NewLine();
-                        verticalButtonPosition = ImGui::GetCursorPosY();
+                    if (selectedKernelIndex == 0) {
+
+                        userKernel = selectedKernel;
                     }
-                    else {
 
-                        ImGui::SetCursorPosY(verticalButtonPosition);
-                    }
+                    kernelMatrixEditorHeight = ImGui::GetCursorPosY() - kernelMatrixEditorHeight;
+                }
 
-                    if (ImGui::Button("Select Images for Stacking", {availableSize.x / 2.0f, textSize * 1.4f })) {
+                // Buttons
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+
+                    if (ImGui::Button("Select Images for Stacking", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
 
                         const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
 
@@ -98,48 +189,17 @@ namespace StarTracker {
                             std::fprintf(stderr, "Unable to Stack Images!\n");
                         }
                     }
-                }
 
-                {   // Kernel
                     ImGui::TableSetColumnIndex(1);
 
-                    ImGui::PushFont(Core::UIFont::Medium);
-                    ImGui::Text("Kernel Matrix");
-                    ImGui::PopFont();
+                    if (ImGui::Button("Apply Kernel", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
 
-                    static std::array<float, 9> kernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-                    ImGui::PushItemWidth(availableSize.x / 2.0f);
-                    ImGui::PushID("Kernel-Row-0");
-                    ImGui::InputFloat3("", kernel.data(), "%.6f");
-                    ImGui::PopID();
-                    ImGui::Separator();
-                    ImGui::PushID("Kernel-Row-1");
-                    ImGui::InputFloat3("", kernel.data() + 3, "%.6f");
-                    ImGui::PopID();
-                    ImGui::Separator();
-                    ImGui::PushID("Kernel-Row-2");
-                    ImGui::InputFloat3("", kernel.data() + 6, "%.6f");
-                    ImGui::PopID();
-                    ImGui::PopItemWidth();
-
-                    if (!textureList.empty()) {
-
-                        ImGui::SetCursorPosY(verticalButtonPosition);
-                    }
-                    else {
-
-                        verticalButtonPosition = ImGui::GetCursorPosY();
-                    }
-
-                    if (ImGui::Button("Apply Kernel", {availableSize.x / 2.0f, textSize * 1.4f })) {
-
-                        if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, kernel)) {
+                        if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, selectedKernel)) {
 
                             std::fprintf(stderr, "Unable to Apply Kernel!\n");
                         }
                     }
                 }
-
                 ImGui::EndTable();
             }
             ImGui::PopID();

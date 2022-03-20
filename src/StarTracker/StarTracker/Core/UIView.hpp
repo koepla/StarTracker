@@ -36,6 +36,8 @@ namespace StarTracker::Core {
 		virtual void OnInit() noexcept override;
 		virtual void OnUpdate(float deltaTime) noexcept override;
 		virtual void OnDestroy() noexcept override;
+
+        static void SetupDarkTheme() noexcept;
 	};
 }
 

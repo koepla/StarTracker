@@ -33,7 +33,7 @@ namespace StarTracker {
 		void AddSeconds(std::int64_t seconds) noexcept;
 
 	private:
-		void addDays(std::int64_t days, const std::int32_t monthDays) noexcept;
+		void addDays(std::int64_t days, std::int32_t monthDays) noexcept;
 
 	public:
 		/*

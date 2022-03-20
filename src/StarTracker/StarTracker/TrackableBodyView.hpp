@@ -14,6 +14,7 @@
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>
 #include <StarTracker/Utils/Stopwatch.hpp>
+#include <StarTracker/Utils/File.hpp>
 
 #include <filesystem>
 #include <iostream>

@@ -19,7 +19,7 @@ namespace StarTracker::Core {
 			bool optFullscreen = optFullscreenPersistant;
 			static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
-			ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+            ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 			if (optFullscreen) {
 
 				ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -49,6 +49,7 @@ namespace StarTracker::Core {
 			ImGuiStyle& style = ImGui::GetStyle();
 			float minWinSizeX = style.WindowMinSize.x;
 			style.WindowMinSize.x = 200.0f;
+
 			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 			{
 				ImGuiID dockspaceId = ImGui::GetID("MainDockSpaceId");
@@ -57,7 +58,7 @@ namespace StarTracker::Core {
 
 			style.WindowMinSize.x = minWinSizeX;
 		}
-	}
+    }
 
 	void UIView::UIEnd() noexcept {
 
@@ -87,11 +88,21 @@ namespace StarTracker::Core {
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-		ImGui::StyleColorsLight();
+        ImGuiStyle& style = ImGui::GetStyle();
 
-		float fontSize = 22.0f;
+        ImGui::StyleColorsLight();
+        style.FrameRounding = 4.0f;
+        style.ChildRounding = 4.0f;
+        style.GrabRounding = 4.0f;
+        style.PopupRounding = 4.0f;
+        style.ScrollbarRounding = 4.0f;
+        style.TabRounding = 4.0f;
+        style.WindowRounding = 0.0f;
+        style.WindowBorderSize = 0.0f;
+
+		const auto fontSize = 22.0f;
 		UIFont::Light = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Light.ttf", fontSize);
 		UIFont::Regular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Regular.ttf", fontSize);
 		UIFont::Medium = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Medium.ttf", fontSize);
@@ -101,7 +112,6 @@ namespace StarTracker::Core {
 		UIFont::Italic = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSText-RegularItalic.ttf", fontSize);
 		io.FontDefault = UIFont::Regular;
 
-		ImGuiStyle& style = ImGui::GetStyle();
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 		{
 			style.WindowRounding = 0.0f;

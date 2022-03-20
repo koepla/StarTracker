@@ -68,7 +68,7 @@ namespace StarTracker {
         Core::OpenGL::Renderer::DrawIndexed(vertexArray, shader, Core::OpenGL::PrimitiveMode::Triangle);
         frameBuffer->Unbind();
 
-        if (ImGui::Begin("Experimental")) {
+        if (ImGui::Begin("3D-Construction")) {
 
             ImGui::Text("%s", std::format("FrameRate: {}", 1.0f / deltaTime).c_str());
             const auto viewPortSize = ImGui::GetContentRegionAvail();

@@ -23,6 +23,11 @@ namespace StarTracker::Core {
         static void initialize() noexcept;
 
     public:
+        static inline constexpr std::array<float, 9> KernelBlur = { 0.0625f, 0.125f, 0.0625f, 0.125f, 0.5f, 0.125f, 0.0625f, 0.125f, 0.0625f };
+        static inline constexpr std::array<float, 9> KernelEdgeDetection = { 1.0f, 1.0f, 1.0f, 1.0f, -8.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+        static inline constexpr std::array<float, 9> KernelSharpen = { 2.0f, 2.0f, 2.0f, 2.0f, -15.0f, 2.0f, 2.0f, 2.0f, 2.0f };
+
+    public:
         [[nodiscard]] static bool Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>>& textureList) noexcept;
         [[nodiscard]] static bool Kernel(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::shared_ptr<OpenGL::FrameBuffer>& source, const std::array<float, 9>& kernel) noexcept;
     };

@@ -33,7 +33,37 @@ namespace StarTracker {
 
 	void TrackableBodyView::OnUpdate(float deltaTime) noexcept {
 
-		if (ImGui::Begin("Trackable Bodies")) {
+        const auto application = Core::Application::GetInstance();
+        const auto reloadCelestialBodies = [&]() -> void {
+
+            const auto filePath = Utils::File::OpenFileDialog("Select CelestialBodes File", false);
+
+            if (!filePath.empty()) {
+
+                celestialBodies = Ephemeris::CelestialBody::LoadFromFile(filePath.at(0));
+            }
+        };
+
+        if (Core::Input::IsKeyPressed(Core::KeyCode::LeftControl) && Core::Input::IsKeyPressed(Core::KeyCode::L)) {
+
+            reloadCelestialBodies();
+        }
+
+        if (ImGui::BeginMainMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Load CelestialBodies", "CTRL+L")) {
+
+                    reloadCelestialBodies();
+                }
+                ImGui::EndMenu();
+            }
+
+            ImGui::EndMainMenuBar();
+        }
+
+		if (ImGui::Begin("Tracking")) {
 
 			const auto dateTimeInfo = std::format("{}", DateTime::Now().ToString());
 			const auto trackerInfo = std::format("Tracker: {}", tracker.IsConnected() ? "Connected" : "Not Connected");
@@ -60,21 +90,23 @@ namespace StarTracker {
 					{ observer.Latitude, observer.Longitude },
 					DateTime::Now()
 				);
-				
-				const auto bodyData = std::format("Name: {}, Designation: {}, Azimuth: {}, Elevation: {}", 
-					body->GetName(),
-					body->GetDesignation(),
-					positionPreview.Azimuth,
-					positionPreview.Altitude
-				);
 
 				const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
+                const auto availableSize = ImGui::GetContentRegionAvail().x;
+                const auto usedSize = availableSize / 4.0f;
 
 				bool selected = false;
-				if (ImGui::Selectable(bodyData.c_str(), &selected)) {
+				if (ImGui::Selectable(std::format("Name: {}", body->GetName()).c_str(), &selected)) {
 
 					ImGui::OpenPopup(windowId.c_str());					
 				}
+                ImGui::SameLine(1.0f * usedSize);
+                ImGui::Text("Designation: %s", body->GetDesignation().c_str());
+                ImGui::SameLine(2.0f * usedSize);
+                ImGui::Text("Azimuth: %6.2lf", positionPreview.Azimuth);
+                ImGui::SameLine(3.0f * usedSize);
+                ImGui::Text("Elevation: %6.2lf", positionPreview.Altitude);
+
 
 				bool popUpOpen = true;
 				if (ImGui::BeginPopupModal(windowId.c_str(), &popUpOpen, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -110,7 +142,6 @@ namespace StarTracker {
 				ImGui::Separator();
 			}
 		}
-		
 		ImGui::End();
 	}
 

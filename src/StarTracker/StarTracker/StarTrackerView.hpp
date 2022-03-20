@@ -10,9 +10,9 @@ namespace StarTracker {
     class StarTrackerView : public Core::View {
 
     private:
-        std::unique_ptr<ExperimentalView> experimentalView;
-        std::unique_ptr<ImageProcessingView> imageProcessingView;
-        std::unique_ptr<TrackableBodyView> trackableBodyView;
+        std::shared_ptr<ExperimentalView> experimentalView;
+        std::shared_ptr<ImageProcessingView> imageProcessingView;
+        std::shared_ptr<TrackableBodyView> trackableBodyView;
 
     public:
         explicit StarTrackerView(void* nativeWindowHandle) noexcept;
