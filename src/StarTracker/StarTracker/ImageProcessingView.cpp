@@ -16,7 +16,9 @@ namespace StarTracker {
     void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
 
         const auto textSize = ImGui::GetFontSize();
-        static float kernelMatrixEditorHeight{ 0.0f };
+        static auto kernelMatrixEditorHeight{ 0.0f };
+        const auto itemSpacing = ImGui::GetStyle().ItemSpacing;
+        const auto itemInnerSpacing = ImGui::GetStyle().ItemInnerSpacing;
 
         if (ImGui::Begin("Image Processing")) {
 
@@ -51,30 +53,39 @@ namespace StarTracker {
 
                 {   // Stacking
                     ImGui::TableSetColumnIndex(0);
+
                     ImGui::PushFont(Core::UIFont::Medium);
                     ImGui::Text("Loaded Images");
                     ImGui::PopFont();
 
-                    const auto availableWidth = ImGui::GetContentRegionAvail().x;
-                    ImGui::BeginChild("ImageListChildElement", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
-                    for (const auto& currentTexture : textureList) {
+                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
 
-                        const auto textureHeight = 5.0f * textSize;
-                        const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
+                    if (ImGui::BeginChild("ImageListChildElement", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar)) {
 
-                        if ((ImGui::GetCursorPosX() + textureWidth) >= (availableWidth)) {
+                        const auto cursorPosition = ImGui::GetCursorPos();
+                        ImGui::SetCursorPos({ cursorPosition.x + itemInnerSpacing.x, cursorPosition.y + itemInnerSpacing.y });
 
-                            ImGui::NewLine();
-                        }
+                        for (const auto& currentTexture : textureList) {
 
-                        ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+                            const auto textureHeight = 5.0f * textSize;
+                            const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
 
-                        if (currentTexture != textureList.back()) {
+                            if (textureWidth > ImGui::GetContentRegionAvail().x) {
 
-                            ImGui::SameLine();
+                                ImGui::NewLine();
+                            }
+
+                            ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+
+                            if (currentTexture != textureList.back()) {
+
+                                ImGui::SameLine();
+                            }
                         }
                     }
                     ImGui::EndChild();
+
+                    ImGui::PopStyleColor();
                 }
 
                 static std::array<float, 9> userKernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
@@ -164,7 +175,7 @@ namespace StarTracker {
                         userKernel = selectedKernel;
                     }
 
-                    kernelMatrixEditorHeight = ImGui::GetCursorPosY() - kernelMatrixEditorHeight;
+                    kernelMatrixEditorHeight = ImGui::GetCursorPosY() - kernelMatrixEditorHeight - itemSpacing.y;
                 }
 
                 // Buttons
