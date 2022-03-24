@@ -1,2 +1,5 @@
 http://ned.ipac.caltech.edu/
 https://www.physicsforums.com/threads/how-to-find-the-position-of-a-star-in-the-sky.327333/
+
+--Eagle libaries used
+https://www.snapeda.com/parts/XT60-M/AMASS/view-part/?ref=Recent%20Downloads
