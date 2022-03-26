@@ -40,7 +40,6 @@ namespace StarTracker {
 
 	void TrackableBodyView::OnUpdate(float deltaTime) noexcept {
 
-        const auto application = Core::Application::GetInstance();
         const auto reloadCelestialBodies = [&]() -> void {
 
             const auto filePath = Utils::File::OpenFileDialog("Select CelestialBodes File", false);
@@ -82,62 +81,66 @@ namespace StarTracker {
 
             drawTrackingDurationCard({ ImGui::GetContentRegionAvail().x, trackerInfoCardHeight });
 
-            if (ImGui::BeginTable("Trackable Bodies", 1)) {
+            if (ImGui::BeginChild("idChildTrackableBodiesList", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
 
-                for(const auto& body : celestialBodies) {
+                if (ImGui::BeginTable("Trackable Bodies", 1)) {
 
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
+                    for(const auto& body : celestialBodies) {
 
-                    const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
-                    const auto celestialBodyCardHeight = 4.0f * fontSize + (2.0f + 3 * 0.7f) * itemSpacing.y - 6.0f;
+                        ImGui::TableNextRow();
+                        ImGui::TableSetColumnIndex(0);
 
-                    static std::string trackingStatus{ "Not tracking" };
+                        const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
+                        const auto celestialBodyCardHeight = 4.0f * fontSize + (2.0f + 3 * 0.7f) * itemSpacing.y - 6.0f;
 
-                    if (drawCelestialBodyCard(body,
-                                          Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg"),
-                                          { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
+                        static std::string trackingStatus{ "Not tracking" };
 
-                        trackingStatus = "Not tracking";
-                        ImGui::OpenPopup(windowId.c_str());
-                    }
+                        if (drawCelestialBodyCard(body,
+                                                  Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg"),
+                                                  { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
 
-                    bool open = true;
-                    if (ImGui::BeginPopupModal(windowId.c_str(), &open, ImGuiWindowFlags_AlwaysAutoResize)) {
+                            trackingStatus = "Not tracking";
+                            ImGui::OpenPopup(windowId.c_str());
+                        }
 
-                        const auto size = ImGui::CalcTextSize(windowId.c_str());
+                        bool open = true;
+                        if (ImGui::BeginPopupModal(windowId.c_str(), &open, ImGuiWindowFlags_AlwaysAutoResize)) {
 
-                        ImGui::Text("%s", windowId.c_str());
-                        if (ImGui::Button("Track", { size.x * 2.0f, 1.4f * size.y })) {
+                            const auto size = ImGui::CalcTextSize(windowId.c_str());
 
-                            const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
+                            ImGui::Text("%s", windowId.c_str());
+                            if (ImGui::Button("Track", { size.x * 2.0f, 1.4f * size.y })) {
 
-                                if (status == Core::TrackerCallbackStatus::FAILURE) {
+                                const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
 
-                                    trackingStatus = "Failure on tracking";
+                                    if (status == Core::TrackerCallbackStatus::FAILURE) {
+
+                                        trackingStatus = "Failure on tracking";
+                                    }
+                                    else {
+
+                                        trackingStatus = "Finished tracking";
+                                    }
+                                };
+
+                                if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration, trackerCallback)) {
+
+                                    trackingStatus = "Started tracking";
                                 }
                                 else {
 
-                                    trackingStatus = "Finished tracking";
+                                    trackingStatus = "Failure on tracking";
                                 }
-                            };
-
-                            if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration, trackerCallback)) {
-
-                                trackingStatus = "Started tracking";
                             }
-                            else {
+                            ImGui::Text("Status: %s", trackingStatus.c_str());
 
-                                trackingStatus = "Failure on tracking";
-                            }
+                            ImGui::EndPopup();
                         }
-                        ImGui::Text("Status: %s", trackingStatus.c_str());
-
-                        ImGui::EndPopup();
                     }
+                    ImGui::EndTable();
                 }
-                ImGui::EndTable();
             }
+            ImGui::EndChild();
 		}
 		ImGui::End();
 	}
@@ -174,7 +177,7 @@ namespace StarTracker {
             const auto fontSize = ImGui::GetFontSize();
             auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x + itemInnerSpacing.x, windowPosition.y + cursorPosition.y };
             const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
-            
+
             // Current Date and Time
             drawList->AddText(Core::UIFont::Medium, fontSize, drawPosition, textColor, dateTimeInfo.c_str());
             drawPosition = { drawPosition.x, drawPosition.y + fontSize + regulatedItemSpacing };
@@ -297,8 +300,6 @@ namespace StarTracker {
         }
         ImGui::EndChild();
         ImGui::PopStyleColor();
-
-        std::fprintf(stdout, "Duration: %lf\n", trackingDuration);
     }
 
     bool TrackableBodyView::drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body,
