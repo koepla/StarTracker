@@ -32,9 +32,24 @@ namespace StarTracker {
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Exit", "ALT+F4")) {
+                ImGui::PushFont(Core::UIFont::Medium);
+                ImGui::Text("General");
+                ImGui::PopFont();
+                if (ImGui::MenuItem("Exit", "Alt+F4")) {
 
                     application->Close();
+                }
+                ImGui::EndMenu();
+            }
+            if (ImGui::BeginMenu("Settings")) {
+
+                ImGui::PushFont(Core::UIFont::Medium);
+                ImGui::Text("Appearance");
+                ImGui::PopFont();
+                static int selectedTheme { static_cast<int>(Core::UITheme::Light) };
+                if (ImGui::Combo("Theme", &selectedTheme, "Light\0Dark\0\0")) {
+
+                    Core::UIView::SetTheme(static_cast<Core::UITheme>(selectedTheme));
                 }
                 ImGui::EndMenu();
             }

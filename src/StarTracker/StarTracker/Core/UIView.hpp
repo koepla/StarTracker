@@ -23,6 +23,12 @@ namespace StarTracker::Core {
 		inline static ImFont* Italic = nullptr;
 	};
 
+    enum class UITheme : std::int16_t {
+
+        Light = 0,
+        Dark = 1
+    };
+
 	class UIView : public View {
 
 	private:
@@ -31,8 +37,9 @@ namespace StarTracker::Core {
 	public:
 		explicit UIView(void* nativeWindowHandle, bool enableDockSpace = true) noexcept;
 
-		void UIBegin() noexcept;
-		void UIEnd() noexcept;
+        static void SetTheme(UITheme theme) noexcept;
+		void UIBegin() const noexcept;
+		void UIEnd() const noexcept;
 		virtual void OnInit() noexcept override;
 		virtual void OnUpdate(float deltaTime) noexcept override;
 		virtual void OnDestroy() noexcept override;

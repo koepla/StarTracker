@@ -59,10 +59,14 @@ namespace StarTracker {
 
             if (ImGui::BeginMenu("File")) {
 
-                if (ImGui::MenuItem("Load CelestialBodies", "CTRL+L")) {
+                ImGui::PushFont(Core::UIFont::Medium);
+                ImGui::Text("Tracker");
+                ImGui::PopFont();
+                if (ImGui::MenuItem("Load CelestialBodies", "Ctrl+L")) {
 
                     reloadCelestialBodies();
                 }
+                ImGui::Separator();
                 ImGui::EndMenu();
             }
 
@@ -170,10 +174,11 @@ namespace StarTracker {
             const auto drawList = ImGui::GetWindowDrawList();
             const auto cursorPosition = ImGui::GetCursorPos();
             const auto windowPosition = ImGui::GetWindowPos();
-            const auto& itemInnerSpacing = style.ItemInnerSpacing;
-            const auto& itemSpacing = style.ItemSpacing;
-            const auto textColor = ImGui::GetColorU32(style.Colors[ImGuiCol_Text]);
-            const auto textLightColor = ImGui::GetColorU32(style.Colors[ImGuiCol_TextDisabled]);
+            const auto itemInnerSpacing = style.ItemInnerSpacing;
+            const auto itemSpacing = style.ItemSpacing;
+            const auto baseTextColor = style.Colors[ImGuiCol_Text];
+            const auto textColor = ImGui::GetColorU32(baseTextColor);
+            const auto textLightColor = ImGui::GetColorU32({ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w });
             const auto fontSize = ImGui::GetFontSize();
             auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x + itemInnerSpacing.x, windowPosition.y + cursorPosition.y };
             const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
@@ -257,8 +262,8 @@ namespace StarTracker {
             const auto drawList = ImGui::GetWindowDrawList();
             const auto cursorPosition = ImGui::GetCursorPos();
             const auto windowPosition = ImGui::GetWindowPos();
-            const auto& itemInnerSpacing = style.ItemInnerSpacing;
-            const auto& itemSpacing = style.ItemSpacing;
+            const auto itemInnerSpacing = style.ItemInnerSpacing;
+            const auto itemSpacing = style.ItemSpacing;
             const auto textColor = ImGui::GetColorU32(style.Colors[ImGuiCol_Text]);
             const auto fontSize = ImGui::GetFontSize();
             auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x + itemInnerSpacing.x, windowPosition.y + cursorPosition.y };
@@ -316,13 +321,14 @@ namespace StarTracker {
             const auto drawList = ImGui::GetWindowDrawList();
             const auto cursorPosition = ImGui::GetCursorPos();
             const auto windowPosition = ImGui::GetWindowPos();
-            const auto& itemSpacing = style.ItemSpacing;
+            const auto itemSpacing = style.ItemSpacing;
             const auto itemInnerSpacing = style.ItemInnerSpacing;
-            const auto textColor = ImGui::GetColorU32(style.Colors[ImGuiCol_Text]);
-            const auto textLightColor = ImGui::GetColorU32(style.Colors[ImGuiCol_TextDisabled]);
+            const auto baseTextColor = style.Colors[ImGuiCol_Text];
+            const auto textColor = ImGui::GetColorU32(baseTextColor);
+            const auto textLightColor = ImGui::GetColorU32({ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w });
             const auto imageColor = ImGui::GetColorU32(ImVec4{ 1.0f, 1.0f, 1.0f, 1.0f });
-            const auto& selectableActiveColor = style.Colors[ImGuiCol_FrameBgActive];
-            const auto& selectableHoveredColor = style.Colors[ImGuiCol_FrameBgHovered];
+            const auto selectableActiveColor = style.Colors[ImGuiCol_FrameBgActive];
+            const auto selectableHoveredColor = style.Colors[ImGuiCol_FrameBgHovered];
             const auto fontSize = ImGui::GetFontSize();
             auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x, windowPosition.y + cursorPosition.y };
             const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
