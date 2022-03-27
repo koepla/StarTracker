@@ -1,4 +1,6 @@
-
+build/
+Vendor/
+.vscode/
 # Created by https://www.toptal.com/developers/gitignore/api/clion,cmake
 # Edit at https://www.toptal.com/developers/gitignore?templates=clion,cmake
 
@@ -7,6 +9,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
 # User-specific stuff
+.idea/
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
