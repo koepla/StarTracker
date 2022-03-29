@@ -46,7 +46,7 @@ namespace StarTracker {
                 ImGui::PushFont(Core::UIFont::Medium);
                 ImGui::Text("Appearance");
                 ImGui::PopFont();
-                static int selectedTheme { static_cast<int>(Core::UITheme::Light) };
+                static int selectedTheme{ static_cast<int>(Core::UITheme::Light) };
                 if (ImGui::Combo("Theme", &selectedTheme, "Light\0Dark\0\0")) {
 
                     Core::UIView::SetTheme(static_cast<Core::UITheme>(selectedTheme));

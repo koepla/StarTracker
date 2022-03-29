@@ -100,7 +100,7 @@ namespace StarTracker {
                         static std::string trackingStatus{ "Not tracking" };
 
                         if (drawCelestialBodyCard(body,
-                                                  Core::AssetDataBase::LoadTexture("pillarsOfCreation.jpg"),
+                                                  Core::AssetDataBase::LoadTexture("blue.png"),
                                                   { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
 
                             trackingStatus = "Not tracking";

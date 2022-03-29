@@ -73,6 +73,7 @@ namespace StarTracker {
                             if (textureWidth > ImGui::GetContentRegionAvail().x) {
 
                                 ImGui::NewLine();
+                                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + itemInnerSpacing.x);
                             }
 
                             ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
