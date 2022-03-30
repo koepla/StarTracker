@@ -3,6 +3,7 @@
 
 #include <StarEngine/StarEngine.hpp>
 
+#include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Application.hpp>
 #include <StarTracker/Core/Assert.hpp>
 #include <StarTracker/Core/AssetDataBase.hpp>

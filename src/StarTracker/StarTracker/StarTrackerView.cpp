@@ -53,6 +53,14 @@ namespace StarTracker {
                 }
                 ImGui::EndMenu();
             }
+            if (ImGui::BeginMenu("Debug")) {
+
+                ImGui::PushFont(Core::UIFont::Medium);
+                ImGui::Text("Memory");
+                ImGui::PopFont();
+                ImGui::Text("Active Allocations: %d", static_cast<int>(Core::Allocator::GetAllocations()));
+                ImGui::EndMenu();
+            }
 
             ImGui::EndMainMenuBar();
         }

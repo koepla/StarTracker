@@ -1,8 +1,7 @@
 #ifndef STARTRACKER_SERIAL_SERIAL_H
 #define STARTRACKER_SERIAL_SERIAL_H
 
-#define NOMINMAX
-#include <Windows.h>
+#include <StarTracker/Core/Core.hpp>
 #include <string>
 #include <vector>
 

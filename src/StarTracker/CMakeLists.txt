@@ -50,10 +50,13 @@ add_executable(StarTracker
         StarTracker/StarTrackerApplication.cpp
         StarTracker/TrackableBodyView.hpp
         StarTracker/TrackableBodyView.cpp
+        StarTracker/Core/Allocator.hpp
+        StarTracker/Core/Allocator.cpp
         StarTracker/Core/Application.hpp
         StarTracker/Core/Application.cpp
         StarTracker/Core/Assert.hpp
         StarTracker/Core/Core.hpp
+        StarTracker/Core/Core.cpp
         StarTracker/Core/Input.hpp
         StarTracker/Core/Input.cpp
         StarTracker/Core/InputCode.hpp
@@ -112,7 +115,10 @@ add_executable(StarTracker
         StarTracker/Core/OpenGL/Camera.cpp
         StarTracker/Core/AssetDataBase.hpp
         StarTracker/Core/AssetDataBase.cpp
-        StarTracker/Core/OpenGL/Renderer.cpp StarTracker/Core/OpenGL/Renderer.hpp StarTracker/ImageProcessingView.cpp StarTracker/ImageProcessingView.hpp)
+        StarTracker/Core/OpenGL/Renderer.cpp 
+        StarTracker/Core/OpenGL/Renderer.hpp 
+        StarTracker/ImageProcessingView.cpp 
+        StarTracker/ImageProcessingView.hpp)
 
 
 target_include_directories(StarEngine PRIVATE ${CMAKE_CURRENT_LIST_DIR})

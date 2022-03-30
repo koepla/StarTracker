@@ -1,7 +1,7 @@
 #ifndef STARTRACKER_UTILS_HTTPREQUEST_H
 #define STARTRACKER_UTILS_HTTPREQUEST_H
 
-#include <Windows.h>
+#include <StarTracker/Core/Core.hpp>
 #include <WinInet.h>
 #include <string>
 

@@ -3,11 +3,11 @@
 namespace StarTracker::Core {
 
 
-    const std::shared_ptr<OpenGL::Shader>& AssetDataBase::LoadShader(const std::filesystem::path &vertexPath, const std::filesystem::path& fragmentPath) noexcept {
+    const std::shared_ptr<OpenGL::Shader>& AssetDataBase::LoadShader(const std::filesystem::path &vertexPath, const std::filesystem::path& fragmentPath, bool reload) noexcept {
 
         static const auto shaderRootPath = assetPath / std::filesystem::path{ "Shaders" };
 
-        if(shaderMap.find(vertexPath.string()) != shaderMap.end()) {
+        if (shaderMap.find(vertexPath.string()) != shaderMap.end() && !reload) {
 
             return shaderMap[vertexPath.string()];
         }
@@ -21,11 +21,11 @@ namespace StarTracker::Core {
         }
     }
 
-    const std::shared_ptr<OpenGL::Texture>& AssetDataBase::LoadTexture(const std::filesystem::path &filePath) noexcept {
+    const std::shared_ptr<OpenGL::Texture>& AssetDataBase::LoadTexture(const std::filesystem::path &filePath, bool reload) noexcept {
 
         static const auto textureRootPath = assetPath / std::filesystem::path{ "Textures" };
 
-        if(textureMap.find(filePath.string()) != textureMap.end()) {
+        if (textureMap.find(filePath.string()) != textureMap.end() && !reload) {
 
             return textureMap[filePath.string()];
         }
@@ -36,6 +36,33 @@ namespace StarTracker::Core {
             textureMap[filePath.string()] = texture;
 
             return textureMap[filePath.string()];
+        }
+    }
+
+    const std::vector<std::shared_ptr<Ephemeris::CelestialBody>>& AssetDataBase::LoadCelestialBodies(const std::filesystem::path& filePath, bool reload) noexcept {
+
+        static const auto celestialBodyRootPath = assetPath / std::filesystem::path{ "Ephemeris" };
+
+        if (celestialBodyMap.find(filePath.string()) != celestialBodyMap.end() && !reload) {
+
+            return celestialBodyMap[filePath.string()];
+        }
+        else {
+
+            auto celestialBodies = [&]() -> std::vector<std::shared_ptr<Ephemeris::CelestialBody>> {
+
+                try {
+
+                    return Ephemeris::CelestialBody::LoadFromFile(celestialBodyRootPath / filePath);
+                }
+                catch(const std::exception&) {
+
+                    return {};
+                }
+            }();
+            celestialBodyMap[filePath.string()] = celestialBodies;
+            
+            return celestialBodyMap[filePath.string()];
         }
     }
 }

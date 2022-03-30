@@ -1,10 +1,10 @@
 #ifndef STARTRACKER_EXPERIMENTALVIEW_H
 #define STARTRACKER_EXPERIMENTALVIEW_H
 
+#include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Application.hpp>
 #include <StarTracker/Core/Assert.hpp>
 #include <StarTracker/Core/AssetDataBase.hpp>
-#include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Input.hpp>
 #include <StarTracker/Core/ImageProcessing.hpp>
 #include <StarTracker/Core/OpenGL/Camera.hpp>
