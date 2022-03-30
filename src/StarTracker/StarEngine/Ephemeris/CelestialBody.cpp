@@ -45,6 +45,11 @@ namespace StarTracker::Ephemeris {
 
 		for (const auto& element : jObject["CelestialBodies"]) {
 
+			if(!isValidCelestialBody(element)) {
+
+				continue;
+			}
+
 			const auto type = element["Type"].get<std::string>();
 
 			if (type._Equal("SSB")) {
@@ -65,7 +70,8 @@ namespace StarTracker::Ephemeris {
 				orbitalRateElements.LonPerihelion = element["LonPerihelionCentury"].get<double>();
 				orbitalRateElements.LonAscendingNode = element["LonAscendingNodeCentury"].get<double>();
 
-				celestialBodies.emplace_back(std::make_shared<SolarSystemBody>(element["Name"].get<std::string>(), orbitalElements, orbitalRateElements));
+				auto solarSystemBody = std::make_shared<SolarSystemBody>(element["Name"].get<std::string>(), orbitalElements, orbitalRateElements);
+				celestialBodies.emplace_back(solarSystemBody);
 			}
 			else if (type._Equal("FB")) {
 
@@ -74,10 +80,52 @@ namespace StarTracker::Ephemeris {
 				sphericalCoordinates.Declination = element["Declination"].get<double>();
 				sphericalCoordinates.Radius = element["Radius"].get<double>();
 
-				celestialBodies.emplace_back(std::make_shared<FixedBody>(element["Name"].get<std::string>(), element["Designation"].get<std::string>(), sphericalCoordinates));
+				auto fixedBody = std::make_shared<FixedBody>(element["Name"].get<std::string>(), element["Designation"].get<std::string>(), sphericalCoordinates);
+				celestialBodies.emplace_back(fixedBody);
 			}
 		}
 
 		return celestialBodies;
+	}
+
+	bool CelestialBody::isValidCelestialBody(const nlohmann::json& entry) noexcept {
+
+		if (!entry.contains("Name") || !entry.contains("Type")) {
+
+			return false;
+		}
+
+		const auto type = entry["Type"].get<std::string>();
+
+		// SolarSystemBody
+		if (type._Equal("SSB")) {
+
+			return 
+				entry.contains("SemiMajorAxis") &&
+				entry.contains("SemiMajorAxisCentury") && 
+				entry.contains("Eccentricity") &&
+				entry.contains("EccentricityCentury") &&
+				entry.contains("Inclination") &&
+				entry.contains("InclinationCentury") &&
+				entry.contains("MeanLongitude") &&
+				entry.contains("MeanLongitudeCentury") &&
+				entry.contains("LonPerihelion") &&
+				entry.contains("LonPerihelionCentury") &&
+				entry.contains("LonAscendingNode") &&
+				entry.contains("LonAscendingNodeCentury");
+		}
+		// FixedBody
+		else if(type._Equal("FB")) {
+
+			return
+				entry.contains("Designation") &&
+				entry.contains("RightAscension") &&
+				entry.contains("Declination") &&
+				entry.contains("Radius");
+		}
+		else {
+
+			return false;
+		}
 	}
 }

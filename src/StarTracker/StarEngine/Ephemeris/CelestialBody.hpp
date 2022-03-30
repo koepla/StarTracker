@@ -63,6 +63,17 @@ namespace StarTracker::Ephemeris {
 		*
 		*/
 		[[nodiscard]] static std::vector<std::shared_ptr<CelestialBody>> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
+	
+	private:
+		/**
+		* Retrieves a list of celestial bodies from a .json file
+		*
+		* @param entry potential body entry
+		*
+		* @return true if the entry appears to be valid, false if the entry is malformed
+		*
+		*/
+		[[nodiscard]] static bool isValidCelestialBody(const nlohmann::json& entry) noexcept;
 	};
 }
 
