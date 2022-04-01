@@ -1,6 +1,6 @@
 #include <StarTracker/StarTrackerApplication.hpp>
 
-auto main(int, char**) -> int {
+int main(int, char**) {
 
 	StarTracker::Core::ApplicationData applicationData{};
 	applicationData.Title = "StarTracker";
@@ -22,3 +22,13 @@ auto main(int, char**) -> int {
 
 	return 0;
 }
+
+#ifdef _WIN32
+
+int WINAPI WinMain( _In_ HINSTANCE /*Instance*/, _In_opt_ HINSTANCE /*PrevInstance*/, _In_ LPSTR /*CmdLine*/, _In_ int /*ShowCmd*/ ) {
+
+	return main( __argc, __argv );
+
+}
+
+#endif // _WIN32

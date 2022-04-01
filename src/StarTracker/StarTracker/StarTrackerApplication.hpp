@@ -15,6 +15,5 @@ namespace StarTracker {
 	};
 }
 
-
 #endif // STARTRACKER_STARTRACKERAPPLICATION_H
 

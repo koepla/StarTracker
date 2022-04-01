@@ -39,6 +39,42 @@ namespace StarTracker::Core {
         }
     }
 
+    const std::shared_ptr<OpenGL::Model>& AssetDataBase::LoadModel(const std::filesystem::path& filePath, const glm::vec3& color, bool reload) noexcept {
+
+        static const auto modelRootPath = assetPath / std::filesystem::path{ "Models" };
+
+        if (modelMap.find(filePath.string()) != modelMap.end() && !reload) {
+
+            return modelMap[filePath.string()];
+        }
+        else {
+
+            auto model = std::make_shared<OpenGL::Model>();
+            model->LoadFromFile(modelRootPath / filePath, color);
+            modelMap[filePath.string()] = model;
+
+            return modelMap[filePath.string()];
+        }
+    }
+
+    const std::shared_ptr<OpenGL::Model>& AssetDataBase::LoadModel(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool reload) noexcept {
+
+        static const auto modelRootPath = assetPath / std::filesystem::path{ "Models" };
+
+        if (modelMap.find(filePath.string()) != modelMap.end() && !reload) {
+
+            return modelMap[filePath.string()];
+        }
+        else {
+
+            auto model = std::make_shared<OpenGL::Model>();
+            model->LoadFromFile(modelRootPath / filePath, texturePath);
+            modelMap[filePath.string()] = model;
+
+            return modelMap[filePath.string()];
+        }
+    }
+
     const std::vector<std::shared_ptr<Ephemeris::CelestialBody>>& AssetDataBase::LoadCelestialBodies(const std::filesystem::path& filePath, bool reload) noexcept {
 
         static const auto celestialBodyRootPath = assetPath / std::filesystem::path{ "Ephemeris" };

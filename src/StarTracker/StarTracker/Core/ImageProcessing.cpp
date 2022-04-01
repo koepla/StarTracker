@@ -18,10 +18,10 @@ namespace StarTracker::Core {
             // Fixed texture vertices
             const static std::array<OpenGL::TextureVertex, 4> vertices = {
 
-                    OpenGL::TextureVertex{ glm::vec3{ -1.0f, -1.0f, 0.0f }, glm::vec2{ 0.0f, 0.0f }},
-                    OpenGL::TextureVertex{ glm::vec3{  1.0f, -1.0f, 0.0f }, glm::vec2{ 1.0f, 0.0f }},
-                    OpenGL::TextureVertex{ glm::vec3{  1.0f,  1.0f, 0.0f }, glm::vec2{ 1.0f, 1.0f }},
-                    OpenGL::TextureVertex{ glm::vec3{ -1.0f,  1.0f, 0.0f }, glm::vec2{ 0.0f, 1.0f }},
+                    OpenGL::TextureVertex{ glm::vec3{ -1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f }},
+                    OpenGL::TextureVertex{ glm::vec3{  1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f }},
+                    OpenGL::TextureVertex{ glm::vec3{  1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 1.0f }},
+                    OpenGL::TextureVertex{ glm::vec3{ -1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 1.0f }}
             };
 
             // Fixed indices for drawing the rectangle
@@ -34,6 +34,7 @@ namespace StarTracker::Core {
             const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
                     Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
+                    Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aColor" },
                     Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float2, "aTextureCoordinates" }
             };
 

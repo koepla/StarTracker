@@ -2,6 +2,11 @@
 
 namespace StarTracker::Core::OpenGL {
 
+    void Renderer::Initialize() noexcept {
+
+        glEnable(GL_DEPTH_TEST);
+    }
+
     void Renderer::Clear() noexcept {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -19,5 +24,22 @@ namespace StarTracker::Core::OpenGL {
         shader->Bind();
         vertexArray->Bind();
         glDrawElements(static_cast<std::uint32_t>(mode), indexCount, GL_UNSIGNED_INT, nullptr);
+    }
+
+    void Renderer::DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept {
+
+        const auto& indexBuffer = model->GetIndexBuffer();
+        const auto& vertexBuffer = model->GetVertexBuffer();
+        const auto& vertexArray = model->GetVertexArray();
+        const auto& texture = model->GetTexture();
+
+        // In this case the Model has no texture
+        if (texture != nullptr) {
+
+            texture->Bind(0);
+            shader->SetInt("uTexture", 0);
+        }
+        
+        DrawIndexed(vertexArray, shader, PrimitiveMode::Triangle);
     }
 }

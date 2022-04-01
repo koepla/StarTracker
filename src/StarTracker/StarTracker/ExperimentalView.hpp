@@ -13,6 +13,7 @@
 #include <StarTracker/Core/OpenGL/Texture.hpp>
 #include <StarTracker/Core/OpenGL/FrameBuffer.hpp>
 #include <StarTracker/Core/OpenGL/Renderer.hpp>
+#include <StarTracker/Core/OpenGL/Model.hpp>
 		  
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>
@@ -24,11 +25,9 @@ namespace StarTracker {
 
 	private:
         std::shared_ptr<Core::OpenGL::Camera> camera;
-		std::shared_ptr<Core::OpenGL::VertexArray> vertexArray;
-		std::shared_ptr<Core::OpenGL::VertexBuffer> vertexBuffer;
-		std::shared_ptr<Core::OpenGL::IndexBuffer> indexBuffer;
 		std::shared_ptr<Core::OpenGL::Shader> shader;
         std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
+		std::shared_ptr<Core::OpenGL::Model> model;
 
 	public:
 		explicit ExperimentalView(void* nativeWindowHandle) noexcept;

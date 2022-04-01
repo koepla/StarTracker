@@ -2,7 +2,7 @@
 
 namespace StarTracker {
 
-	ExperimentalView::ExperimentalView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle } {
+	ExperimentalView::ExperimentalView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, camera{}, shader{}, frameBuffer{}, model{} {
 
 	}
 
@@ -14,38 +14,9 @@ namespace StarTracker {
 
         constexpr auto initialCameraPosition = glm::vec3{ 0.0f, 0.0f, 10.0f };
         camera = std::make_shared<Core::OpenGL::Camera>(initialCameraPosition);
-		vertexArray = std::make_shared<Core::OpenGL::VertexArray>();
-		vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
-		indexBuffer = std::make_shared<Core::OpenGL::IndexBuffer>();
         frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(windowWidth, windowHeight);
-        shader = Core::AssetDataBase::LoadShader("defaultVertex.glsl", "defaultFragment.glsl");
-
-        const static std::array<glm::vec3, 4> vertices = {
-
-			glm::vec3{ -0.5f, -0.5f, 0.0f },
-			glm::vec3{  0.5f, -0.5f, 0.0f },
-			glm::vec3{  0.5f,  0.5f, 0.0f },
-			glm::vec3{ -0.5f,  0.5f, 0.0f },
-		};
-
-        const static std::array<std::uint32_t, 6> indices = {
-
-			0, 1, 2, 2, 0, 3
-		};
-
-        const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
-
-			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
-		};
-
-		const static Core::OpenGL::BufferLayout vertexBufferLayout{ vertexBufferElements };
-
-		vertexArray->Bind();
-		vertexBuffer->SetLayout(vertexBufferLayout);
-		vertexBuffer->SetData(vertices.data(), static_cast<std::uint32_t>(vertices.size() * sizeof(glm::vec3)));
-		indexBuffer->SetData(indices.data(), static_cast<std::uint32_t>(indices.size()));
-		vertexArray->SetIndexBuffer(indexBuffer);
-		vertexArray->SetVertexBuffer(vertexBuffer);
+        shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
+        model = Core::AssetDataBase::LoadModel("starTracker.obj", { 1.0f, 1.0f, 1.0f });
 
         application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
@@ -56,6 +27,8 @@ namespace StarTracker {
                 frameBuffer->Resize(windowResize->GetWidth(), windowResize->GetHeight());
             }
         });
+
+        Core::OpenGL::Renderer::Initialize();
     }
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
@@ -65,7 +38,7 @@ namespace StarTracker {
         frameBuffer->Bind();
         Core::OpenGL::Renderer::SetClearColor({ 0.15f, 0.15f, 0.15f, 1.0f });
         Core::OpenGL::Renderer::Clear();
-        Core::OpenGL::Renderer::DrawIndexed(vertexArray, shader, Core::OpenGL::PrimitiveMode::Triangle);
+        Core::OpenGL::Renderer::DrawModel(model, shader);
         frameBuffer->Unbind();
 
         if (ImGui::Begin("3D-Construction")) {

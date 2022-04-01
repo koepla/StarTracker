@@ -19,7 +19,7 @@ namespace StarTracker::Core::OpenGL {
 
     glm::mat4 Camera::GetViewMatrix(float deltaTime) noexcept {
 
-        const auto speed = 2.5f * deltaTime;
+        const auto speed = 25.0f * deltaTime;
         if(Input::IsKeyPressed(KeyCode::W)) {
 
             position += front * speed;
@@ -69,6 +69,6 @@ namespace StarTracker::Core::OpenGL {
         const auto windowWidth = static_cast<float>(application->GetWindow().GetWidth());
         const auto windowHeight = static_cast<float>(application->GetWindow().GetHeight());
 
-        return glm::perspective(glm::radians(fov), windowWidth / windowHeight, 0.1f, 100.0f);
+        return glm::perspective(glm::radians(fov), windowWidth / windowHeight, 0.1f, 1000.0f);
     }
 }

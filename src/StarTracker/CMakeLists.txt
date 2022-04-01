@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
 project(StarTracker)
 
+if(MSVC)
+    add_compile_options(
+        $<$<CONFIG:>:/MT> #---------|
+        $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+        $<$<CONFIG:Release>:/MT> #--|
+    )
+endif()
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_PREFIX_PATH "Vendor/vcpkg/installed/x64-windows-static/share/")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR})
@@ -14,6 +22,7 @@ find_package(glfw3 CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_library(wininet wininet)
+find_package(tinyobjloader CONFIG REQUIRED)
 find_path(STB_INCLUDE_DIRS "../include/stb.h")
 
 add_library(StarEngine
@@ -115,11 +124,12 @@ add_executable(StarTracker
         StarTracker/Core/OpenGL/Camera.cpp
         StarTracker/Core/AssetDataBase.hpp
         StarTracker/Core/AssetDataBase.cpp
-        StarTracker/Core/OpenGL/Renderer.cpp 
         StarTracker/Core/OpenGL/Renderer.hpp 
-        StarTracker/ImageProcessingView.cpp 
-        StarTracker/ImageProcessingView.hpp)
-
+        StarTracker/Core/OpenGL/Renderer.cpp 
+        StarTracker/ImageProcessingView.hpp
+        StarTracker/ImageProcessingView.cpp
+        StarTracker/Core/OpenGL/Model.hpp
+        StarTracker/Core/OpenGL/Model.cpp)
 
 target_include_directories(StarEngine PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(StarTracker PRIVATE ${CMAKE_CURRENT_LIST_DIR})
@@ -132,6 +142,7 @@ target_link_libraries(StarTracker PRIVATE glfw)
 target_link_libraries(StarTracker PRIVATE nlohmann_json nlohmann_json::nlohmann_json)
 target_link_libraries(StarTracker PRIVATE imgui::imgui)
 target_link_libraries(StarTracker PRIVATE wininet)
+target_link_libraries(StarTracker PRIVATE tinyobjloader::tinyobjloader)
 
 # Set the Asset Directories
 set(ASSET_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/StarTracker/Assets)
@@ -148,12 +159,16 @@ configure_file(${ASSET_SOURCE_DIR}/Fonts/SFNSDisplay-Thin.ttf  ${ASSET_TARGET_DI
 configure_file(${ASSET_SOURCE_DIR}/Fonts/SFNSText-RegularItalic.ttf ${ASSET_TARGET_DIR}/Fonts/SFNSText-RegularItalic.ttf COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/defaultFragment.glsl ${ASSET_TARGET_DIR}/Shaders/defaultFragment.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/defaultVertex.glsl ${ASSET_TARGET_DIR}/Shaders/defaultVertex.glsl COPYONLY)
-configure_file(${ASSET_SOURCE_DIR}/Shaders/textureFragment.glsl ${ASSET_TARGET_DIR}/Shaders/textureFragment.glsl COPYONLY)
-configure_file(${ASSET_SOURCE_DIR}/Shaders/textureVertex.glsl ${ASSET_TARGET_DIR}/Shaders/textureVertex.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/textureStackFragment.glsl ${ASSET_TARGET_DIR}/Shaders/textureStackFragment.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/textureStackVertex.glsl ${ASSET_TARGET_DIR}/Shaders/textureStackVertex.glsl COPYONLY)
-configure_file(${ASSET_SOURCE_DIR}/Textures/pillarsOfCreation.jpg ${ASSET_TARGET_DIR}/Textures/pillarsOfCreation.jpg COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Textures/default.png ${ASSET_TARGET_DIR}/Textures/default.png COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Textures/blue.png ${ASSET_TARGET_DIR}/Textures/blue.png COPYONLY)
-configure_file(${ASSET_SOURCE_DIR}/Textures/yellow.png ${ASSET_TARGET_DIR}/Textures/yellow.png COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Textures/vikingRoom.png ${ASSET_TARGET_DIR}/Textures/vikingRoom.png COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/kernelFragment.glsl ${ASSET_TARGET_DIR}/Shaders/kernelFragment.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/kernelVertex.glsl ${ASSET_TARGET_DIR}/Shaders/kernelVertex.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Shaders/modelFragment.glsl ${ASSET_TARGET_DIR}/Shaders/modelFragment.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Shaders/modelVertex.glsl ${ASSET_TARGET_DIR}/Shaders/modelVertex.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Shaders/modelTextureFragment.glsl ${ASSET_TARGET_DIR}/Shaders/modelTextureFragment.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Shaders/modelTextureVertex.glsl ${ASSET_TARGET_DIR}/Shaders/modelTextureVertex.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Models/starTracker.obj ${ASSET_TARGET_DIR}/Models/starTracker.obj COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Models/vikingRoom.obj ${ASSET_TARGET_DIR}/Models/vikingRoom.obj COPYONLY)
