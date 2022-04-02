@@ -34,7 +34,7 @@ namespace StarTracker::Utils::Serial {
 		~SerialPort() noexcept(false);
 
 		/**
-		* Opens the specified COM port
+		* @brief Opens the specified COM port
 		*
 		* @param port name of the COM port
 		* 
@@ -46,7 +46,7 @@ namespace StarTracker::Utils::Serial {
 		void Open(const std::string& port, uint32_t baudRate) noexcept(false);
 
 		/**
-		* Closes the currently open COM port
+		* @brief Closes the currently open COM port
 		*
 		* @throws SerialException if the COM port could not be closed
 		* 
@@ -54,7 +54,7 @@ namespace StarTracker::Utils::Serial {
 		void Close() noexcept(false);
 
 		/**
-		* Reads from the currently open COM port
+		* @brief Reads from the currently open COM port
 		*
 		* @param buffer buffer where the read bytes are moved to
 		*
@@ -68,7 +68,7 @@ namespace StarTracker::Utils::Serial {
 		[[nodiscard]] uint32_t Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx = true) noexcept(false);
 
 		/**
-		* Writes to the currently open COM port
+		* @brief Writes to the currently open COM port
 		*
 		* @param buffer buffer for the to be written bytes
 		*
@@ -82,22 +82,23 @@ namespace StarTracker::Utils::Serial {
 		[[nodiscard]] uint32_t Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false);
 
 		/**
-		* Checks if the COM port is open
+		* @brief Checks if the COM port is open
 		* 
 		* @return bool if the port is open or not
 		*
 		*/
 		[[nodiscard]] bool IsOpen() noexcept;
 
-		/*
-		* Checks if the COM port still exists
+		/**
+		* @brief Checks if the COM port still exists
 		* 
 		* @return bool if the COM port exists or not
+		*
 		*/
 		[[nodiscard]] bool IsGood() noexcept;
 
 		/**
-		* Number of bytes that are in the serial buffer of the COM port
+		* @brief Number of bytes that are in the serial buffer of the COM port
 		*
 		* @return number of bytes
 		* 
@@ -107,7 +108,7 @@ namespace StarTracker::Utils::Serial {
 		[[nodiscard]] uint32_t Available() noexcept(false);
 
 		/**
-		* Waits for the COM port to receive bytes
+		* @brief Waits for the COM port to receive bytes
 		*
 		*/
 		void WaitComm() noexcept;
@@ -115,7 +116,7 @@ namespace StarTracker::Utils::Serial {
 
 	private:
 		/**
-		* Prefixes the portName with \\.\ due to windows weird port names
+		* @brief Prefixes the portName with \\.\ due to windows weird port names
 		*
 		* @param port name of the to be prefixed port
 		*
@@ -126,7 +127,7 @@ namespace StarTracker::Utils::Serial {
 
 	private:
 		/**
-		* Sets the baudRate
+		* @brief Sets the baudRate
 		*
 		* @param baudRate baudRate (self explaining)
 		*
@@ -136,7 +137,7 @@ namespace StarTracker::Utils::Serial {
 		void setBaudRate(uint32_t baudRate) noexcept(false);
 
 		/**
-		* Initializes the receive mask for WaitComm
+		* @brief Initializes the receive mask for WaitComm
 		*
 		* @throws SerialException if the receive mask could not be set
 		* 
@@ -144,7 +145,7 @@ namespace StarTracker::Utils::Serial {
 		void initReceiveMask() noexcept(false);
 
 		/**
-		* Sets the baudRate
+		* @brief Sets the baudRate
 		*
 		* @throws SerialException if the timeouts baudRate be set
 		* 
@@ -154,7 +155,7 @@ namespace StarTracker::Utils::Serial {
 	public:
 
 		/**
-		* List of available ports
+		* @brief List of available ports
 		* 
 		* @return list of available ports as std::vector
 		*

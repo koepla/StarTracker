@@ -37,11 +37,55 @@ namespace StarTracker::Core {
 	public:
 		explicit UIView(void* nativeWindowHandle, bool enableDockSpace = true) noexcept;
 
+		/**
+		* @brief Updates the theme
+		*
+		* @param theme UITheme enum
+		*
+		* @see UITheme
+		* 
+		*/
         static void SetTheme(UITheme theme) noexcept;
+
+		/**
+		* @brief Called every frame before the viewList of the owning application instance is updated
+		*        Is responsible for rendering the DockSpace
+		*
+		* @see Application
+		* 
+		*/
 		void UIBegin() const noexcept;
+
+		/**
+		* @brief Called every frame after the viewList of the owning application instance is updated
+		*
+		* @see Application
+		* 
+		*/
 		void UIEnd() const noexcept;
+
+		/**
+		* @brief Called once on startup before the viewList of the owning application instance is initialized
+		*        Creates the ImGui context 
+		*
+		* @see Application
+		* 
+		*/
 		virtual void OnInit() noexcept override;
+
+		/**
+		* @brief Does nothing
+		*		 
+		*/
 		virtual void OnUpdate(float deltaTime) noexcept override;
+
+		/**
+		* @brief Called once on destroy after the viewList of the owning application instance is destroyed
+		*        Destroys the ImGui context
+		*
+		* @see Application
+		* 
+		*/
 		virtual void OnDestroy() noexcept override;
     };
 }

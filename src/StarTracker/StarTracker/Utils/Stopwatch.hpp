@@ -16,19 +16,19 @@ namespace StarTracker::Utils::Diagnostics {
 		Stopwatch() noexcept;
 
 		/**
-		* Starts the stopwatch
+		* @brief Starts the stopwatch
 		* 
 		*/
 		void Start() noexcept;
 
 		/**
-		* Stops the stopwatch
+		* @brief Stops the stopwatch
 		*
 		*/
 		void Stop() noexcept;
 
 		/**
-		* Number of milliseconds that are ellapsed since start or the timespan between stop and start
+		* @brief Number of milliseconds that are ellapsed since start or the timespan between stop and start
 		* 
 		* @return number of ellapsed milliseconds
 		* 

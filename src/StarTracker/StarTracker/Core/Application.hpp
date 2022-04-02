@@ -34,15 +34,49 @@ namespace StarTracker::Core {
 		Application(const Application&) = delete;
 		explicit Application(const ApplicationData& applicationData) noexcept;
 
+        /**
+		* @brief Runs the application
+		* 
+		*/
 		void Run() noexcept;
+
+		/**
+		* @brief Closes the application
+		* 
+		*/
 		void Close() noexcept;
 
+		/**
+		* @brief Registers the view to the internal viewList
+		*
+		* @param view pointer to the view
+		* 
+		*/
 		void RegisterView(View* view) noexcept;
+
+		/**
+		* @brief Registers the eventHandler to the window-owned eventDispatcher
+		*
+		* @param eventHandler eventHandler function
+		* 
+		*/
 		void RegisterEventHandler(const Events::EventHandler& eventHandler) noexcept;
 
+		/**
+		* @brief Returns a reference to the window
+		*
+		* @return window instance
+		* 
+		*/
 		[[nodiscard]] Window& GetWindow() noexcept;
 
 	public:
+		/**
+		* @brief Returns a pointer to the singleton application instance
+		*
+		* @return application instance
+		* 
+		*/
 		[[nodiscard]] static Application* GetInstance() noexcept;
 	};
 }

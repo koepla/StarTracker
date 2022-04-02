@@ -43,13 +43,59 @@ namespace StarTracker::Core {
 		explicit Window(const WindowData& windowData) noexcept;
 		~Window() noexcept;
 
+		/**
+		* @brief Polls events and swaps front and back buffer
+		*
+		*/
 		void Update() noexcept;
 
+		/**
+		* @brief Returns a reference to the windowData member
+		*        WindowData contains the size, title and state of the window
+		*
+		* @return reference to windowData member
+		* 
+		*/
 		[[nodiscard]] WindowData& GetWindowData() noexcept;
+
+		/**
+		* @brief Returns the width of the window
+		*
+		* @return width of the window (obtained from windowData)
+		* 
+		*/
 		[[nodiscard]] std::int32_t GetWidth() const noexcept;
+
+		/**
+		* @brief Returns the height of the window
+		*
+		* @return height of the window (obtained from windowData)
+		* 
+		*/
 		[[nodiscard]] std::int32_t GetHeight() const noexcept;
+
+		/**
+		* @brief Returns the title of the window
+		*
+		* @return title of the window (obtained from windowData)
+		* 
+		*/
 		[[nodiscard]] std::string_view GetTitle() const noexcept;
+
+		/**
+		* @brief Returns the GLFW specific window handle
+		*
+		* @return GLFW-handle of the window
+		* 
+		*/
 		[[nodiscard]] GLFWwindow* GetNativeHandle() const noexcept;
+
+		/**
+		* @brief Returns if the window is running or wants to close
+		*
+		* @return true if the window is still running, false if the window wants to close
+		* 
+		*/
 		[[nodiscard]] bool IsRunning() const noexcept;
 	};
 }

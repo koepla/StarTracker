@@ -20,6 +20,10 @@ namespace StarTracker::Core {
         static inline std::shared_ptr<OpenGL::Shader> kernelShader;
 
     private:
+        /**
+		* @brief Initializes the rendering pipeline
+		* 
+		*/
         static void initialize() noexcept;
 
     public:
@@ -28,7 +32,31 @@ namespace StarTracker::Core {
         static inline constexpr std::array<float, 9> KernelSharpen = { 0.0f, -1.0f, 0.0f, -1.0f, 5.0f, -1.0f, 0.0f, -1.0f, 0.0f };
 
     public:
+    	/**
+		* @brief Stacks the passed textureList into the target framebuffer
+        *        Note that only 32 textures at a time are supported
+		*
+		* @param target target framebuffer where the textures are stacked into
+        *
+        * @param textureList list of the textures (max size is 32)
+		*
+		* @return true if the stacking was successful
+		* 
+		*/
         [[nodiscard]] static bool Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>>& textureList) noexcept;
+
+        /**
+		* @brief Renders the source framebuffer into the target framebuffer and attaching a kernel-filter to it
+		*
+		* @param target target framebuffer where the kernelled source framebuffer is rendered into
+        *
+        * @param source source framebuffer
+        * 
+        * @param kernel float array for the kernel
+		*
+		* @return true if the kernelled render was successful
+		* 
+		*/
         [[nodiscard]] static bool Kernel(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::shared_ptr<OpenGL::FrameBuffer>& source, const std::array<float, 9>& kernel) noexcept;
     };
 }

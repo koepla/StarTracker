@@ -61,7 +61,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Clears the buffer of the package
+		* @brief Clears the buffer of the package
 		*
 		* @return reference to this for chained function calls
 		* 
@@ -76,7 +76,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Sets the specified flag in the package header
+		* @brief Sets the specified flag in the package header
 		* 
 		* @param flag command flag that should be set
 		*
@@ -91,7 +91,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Pushes the specified data into the byte buffer
+		* @brief Pushes the specified data into the byte buffer
 		*
 		* @param data as const reference
 		*
@@ -116,7 +116,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Pushes the specified data array into the byte buffer
+		* @brief Pushes the specified data array into the byte buffer
 		*
 		* @param data pointer to base of data array
 		* 
@@ -142,7 +142,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Reads from the package buffer
+		* @brief Reads from the package buffer
 		*
 		* @param index for the read operation
 		*
@@ -163,7 +163,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Reads array from the package buffer
+		* @brief Reads array from the package buffer
 		*
 		* @param offset for the read operation
 		*
@@ -184,7 +184,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Number of bytes that fill up the package buffer
+		* @brief Number of bytes that fill up the package buffer
 		*
 		* @return number of bytes
 		*
@@ -195,7 +195,7 @@ namespace StarTracker::Utils::Serial {
 		}
 
 		/**
-		* Flag that is in the package header
+		* @brief Flag that is in the package header
 		*
 		* @return command flag
 		*

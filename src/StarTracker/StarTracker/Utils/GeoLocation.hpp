@@ -33,7 +33,7 @@ namespace StarTracker::Utils::LocationService {
 
 	public:
 		/**
-		* Retrieves the GeoLocation via IP address
+		* @brief Retrieves the GeoLocation via IP address
 		*
 		* @see Location
 		* 

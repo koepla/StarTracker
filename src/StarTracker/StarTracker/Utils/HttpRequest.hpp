@@ -22,7 +22,7 @@ namespace StarTracker::Utils::Http {
 
 	public:
 		/**
-		* Performs HttpRequest to the specified server and url
+		* @brief Performs HttpRequest to the specified server and url
 		*
 		* @param server name of the server (without the protocol name as http is the only supported one)
 		* 
