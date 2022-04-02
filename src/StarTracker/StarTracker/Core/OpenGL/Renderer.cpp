@@ -5,6 +5,8 @@ namespace StarTracker::Core::OpenGL {
     void Renderer::Initialize() noexcept {
 
         glEnable(GL_DEPTH_TEST);
+        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
     }
 
     void Renderer::Clear() noexcept {
@@ -19,11 +21,17 @@ namespace StarTracker::Core::OpenGL {
 
     void Renderer::DrawIndexed(const std::shared_ptr<VertexArray> &vertexArray, const std::shared_ptr<Shader> &shader, PrimitiveMode mode) noexcept {
 
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_POLYGON_SMOOTH);
+
         const auto indexCount = vertexArray->GetIndexBuffer()->GetIndexCount();
 
         shader->Bind();
         vertexArray->Bind();
         glDrawElements(static_cast<std::uint32_t>(mode), indexCount, GL_UNSIGNED_INT, nullptr);
+
+        glDisable(GL_LINE_SMOOTH);
+        glDisable(GL_POLYGON_SMOOTH);
     }
 
     void Renderer::DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept {
