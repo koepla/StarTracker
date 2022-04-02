@@ -50,7 +50,7 @@ namespace StarTracker {
             }
         };
 
-        if (Core::Input::IsKeyPressed(Core::KeyCode::LeftControl) && Core::Input::IsKeyPressed(Core::KeyCode::L)) {
+        if (Core::Input::IsKeyPressed(Core::KeyCode::LeftControl) && Core::Input::IsKeyPressed(Core::KeyCode::E)) {
 
             reloadCelestialBodies();
         }
@@ -62,14 +62,13 @@ namespace StarTracker {
                 ImGui::PushFont(Core::UIFont::Medium);
                 ImGui::Text("Tracker");
                 ImGui::PopFont();
-                if (ImGui::MenuItem("Load CelestialBodies", "Ctrl+L")) {
+                if (ImGui::MenuItem("Load CelestialBodies", "Ctrl+E")) {
 
                     reloadCelestialBodies();
                 }
                 ImGui::Separator();
                 ImGui::EndMenu();
             }
-
             ImGui::EndMainMenuBar();
         }
 
@@ -243,7 +242,6 @@ namespace StarTracker {
                 }};
                 connectJob.detach();
             }
-
             if (tracker.IsConnected()) {
 
                 ImGui::PopStyleColor(3);

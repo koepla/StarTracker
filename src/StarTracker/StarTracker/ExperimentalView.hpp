@@ -24,6 +24,7 @@ namespace StarTracker {
 	class ExperimentalView : public Core::View {
 
 	private:
+		bool invertedTextureCoordinates;
         std::shared_ptr<Core::OpenGL::Camera> camera;
 		std::shared_ptr<Core::OpenGL::Shader> shader;
         std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
@@ -35,6 +36,10 @@ namespace StarTracker {
 		virtual void OnInit() noexcept override;
 		virtual void OnUpdate(float deltaTime) noexcept override;
 		virtual void OnDestroy() noexcept override;
+
+	private:
+		void reloadModel() noexcept;
+		void drawModelInfoCard(const glm::vec2& size) noexcept;
 	};
 }
 

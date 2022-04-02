@@ -36,7 +36,16 @@ namespace StarTracker::Core {
 
         glfwSwapInterval(windowData.VerticalSync ? 1 : 0);
         glfwSetWindowUserPointer(nativeHandle, &this->windowData);
-        glfwSetWindowSizeCallback(nativeHandle, [](GLFWwindow* handle, int width, int height) -> void {
+        glfwSetFramebufferSizeCallback(nativeHandle, [](GLFWwindow* handle, int width, int height) -> void {
+        
+            /*
+             * In this case the window is minimized, we don't want to react to it,
+             * because it could mess with our code (it does in fact mess with our code)
+            */
+            if (width == 0 && height == 0) {
+
+                return;
+            }
 
             const auto windowData = reinterpret_cast<WindowData*>(glfwGetWindowUserPointer(handle));
             windowData->Width = width;

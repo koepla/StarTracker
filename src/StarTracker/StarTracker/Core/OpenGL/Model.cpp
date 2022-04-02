@@ -24,11 +24,11 @@ namespace std {
 
 namespace StarTracker::Core::OpenGL {
 
-    Model::Model() noexcept : hasTexture{}, filePath{}, indexBuffer{}, vertexBuffer{}, vertexArray{}, texture{} {
+    Model::Model() noexcept : hasTexture{}, geometryInfo{}, filePath{}, indexBuffer{}, vertexBuffer{}, vertexArray{}, texture{} {
 
     }
 
-    void Model::LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color) noexcept {
+    void Model::LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color, bool invertedTexCoords) noexcept {
 
         hasTexture = false;
         this->filePath = filePath;
@@ -58,10 +58,11 @@ namespace StarTracker::Core::OpenGL {
                     attrib.vertices[3 * index.vertex_index + 1],
                     attrib.vertices[3 * index.vertex_index + 2]
                 };
+                const auto texCoordsY = attrib.texcoords[2 * index.texcoord_index + 1];
                 vertex.TextureCoordinates = {
 
                     attrib.texcoords[2 * index.texcoord_index + 0],
-                    attrib.texcoords[2 * index.texcoord_index + 1]
+                    invertedTexCoords ? 1.0f - texCoordsY : texCoordsY
                 };
                 vertex.Color = color;
 
@@ -74,6 +75,8 @@ namespace StarTracker::Core::OpenGL {
             }
         }
 
+        geometryInfo.IndexCount = indices.size();
+        geometryInfo.VertexCount = vertices.size();
 
         const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
@@ -98,11 +101,21 @@ namespace StarTracker::Core::OpenGL {
         vertexArray->SetVertexBuffer(vertexBuffer);
     }
 
-    void Model::LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath) noexcept {
+    void Model::LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords) noexcept {
 
-        LoadFromFile(filePath, { 1.0f, 1.0f, 1.0f });
+        LoadFromFile(filePath, { 1.0f, 1.0f, 1.0f }, invertedTexCoords);
         texture = Core::AssetDataBase::LoadTexture(texturePath);
         hasTexture = true;
+    }
+
+    const std::filesystem::path& Model::GetFilePath() const noexcept {
+
+        return filePath;
+    }
+
+    const ModelGeometryInfo& Model::GetGeometryInfo() const noexcept {
+
+        return geometryInfo;
     }
 
     const std::shared_ptr<IndexBuffer>& Model::GetIndexBuffer() const noexcept {

@@ -15,10 +15,17 @@
 
 namespace StarTracker::Core::OpenGL {
 
+    struct ModelGeometryInfo {
+
+        std::size_t IndexCount;
+        std::size_t VertexCount;
+    };
+
     class Model {
 
     private:
         bool hasTexture;
+        ModelGeometryInfo geometryInfo;
         std::filesystem::path filePath;
         std::shared_ptr<IndexBuffer> indexBuffer;
         std::shared_ptr<VertexBuffer> vertexBuffer;
@@ -27,9 +34,11 @@ namespace StarTracker::Core::OpenGL {
 
     public:
         Model() noexcept;
-        void LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color) noexcept;
-        void LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath) noexcept;
+        void LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color, bool invertedTexCoords = false) noexcept;
+        void LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords = false) noexcept;
 
+        [[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
+        [[nodiscard]] const ModelGeometryInfo& GetGeometryInfo() const noexcept;
         [[nodiscard]] const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const noexcept;
         [[nodiscard]] const std::shared_ptr<VertexBuffer>& GetVertexBuffer() const noexcept;
         [[nodiscard]] const std::shared_ptr<VertexArray>& GetVertexArray() const noexcept;
