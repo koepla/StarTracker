@@ -48,15 +48,13 @@ namespace StarTracker::Core {
 		* @brief Loads the specified model
 		*
 		* @param filePath path to the .obj file of the model
-		*
-		* @param color color which is used for rendering
 		* 
 		* @param reload if true, the cache is not used and the model is being reloaded from disk
 		*
 		* @return std::shared_ptr to the model instance
 		* 
 		*/
-		[[nodiscard]] static const std::shared_ptr<OpenGL::Model>& LoadModel(const std::filesystem::path& filePath, const glm::vec3& color, bool reload = false) noexcept;
+		[[nodiscard]] static const std::shared_ptr<OpenGL::Model>& LoadModel(const std::filesystem::path& filePath, bool reload = false) noexcept;
 
 		/**
 		* @brief Loads the specified model

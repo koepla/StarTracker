@@ -21,6 +21,18 @@ namespace StarTracker::Core::OpenGL {
 		std::size_t VertexCount;
 	};
 
+	struct ModelVertex {
+
+		glm::vec3 Position;
+		glm::vec3 Normal;
+		glm::vec2 TextureCoordinates;
+
+		inline bool operator == (const ModelVertex& other) const noexcept {
+
+			return Position == other.Position && Normal == other.Normal && TextureCoordinates == other.TextureCoordinates;
+		}
+	};
+
 	class Model {
 
 	private:
@@ -34,7 +46,7 @@ namespace StarTracker::Core::OpenGL {
 
 	public:
 		Model() noexcept;
-		void LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color, bool invertedTexCoords = false) noexcept;
+		void LoadFromFile(const std::filesystem::path& filePath, bool invertedTexCoords = false) noexcept;
 		void LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords = false) noexcept;
 
 		[[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;

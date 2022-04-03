@@ -16,7 +16,7 @@ namespace StarTracker {
 		camera = std::make_shared<Core::OpenGL::Camera>(initialCameraPosition);
 		frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(windowWidth, windowHeight);
 		shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
-		model = Core::AssetDataBase::LoadModel("starTracker.obj", { 1.0f, 1.0f, 1.0f });
+		model = Core::AssetDataBase::LoadModel("starTracker.obj");
 		
 		application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
@@ -144,7 +144,7 @@ namespace StarTracker {
 			*/
 			if (texturePath.empty()) {
 
-				model->LoadFromFile(modelPath, { 1.0f, 1.0f, 1.0f }, invertedTextureCoordinates);
+				model->LoadFromFile(modelPath, invertedTextureCoordinates);
 				shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
 			}
 			else {

@@ -11,12 +11,12 @@ namespace std {
 	/*
 	*   We need this ugly mess in order to use vertex optimization
 	*/
-	template<> struct hash<StarTracker::Core::OpenGL::TextureVertex> {
+	template<> struct hash<StarTracker::Core::OpenGL::ModelVertex> {
 
-		std::size_t operator()(const StarTracker::Core::OpenGL::TextureVertex& vertex) const noexcept {
+		std::size_t operator()(const StarTracker::Core::OpenGL::ModelVertex& vertex) const noexcept {
 
 			return ((std::hash<glm::vec3>()(vertex.Position) ^
-				   (std::hash<glm::vec3>()(vertex.Color) << 1)) >> 1) ^
+				   (std::hash<glm::vec3>()(vertex.Normal) << 1)) >> 1) ^
 				   (std::hash<glm::vec2>()(vertex.TextureCoordinates) << 1);
 		}
 	};
@@ -28,7 +28,7 @@ namespace StarTracker::Core::OpenGL {
 
 	}
 
-	void Model::LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color, bool invertedTexCoords) noexcept {
+	void Model::LoadFromFile(const std::filesystem::path& filePath, bool invertedTexCoords) noexcept {
 
 		hasTexture = false;
 		this->filePath = filePath;
@@ -36,8 +36,8 @@ namespace StarTracker::Core::OpenGL {
 		tinyobj::attrib_t attrib{};
 		std::vector<tinyobj::shape_t> shapes{};
 		std::vector<tinyobj::material_t> materials{};
-		std::vector<TextureVertex> vertices{};
-		std::unordered_map<TextureVertex, std::uint32_t> uniqueVertices{};
+		std::vector<ModelVertex> vertices{};
+		std::unordered_map<ModelVertex, std::uint32_t> uniqueVertices{};
 		std::vector<std::uint32_t> indices{};
 		std::string warning{};
 		std::string error{};
@@ -51,7 +51,7 @@ namespace StarTracker::Core::OpenGL {
 
 			for (const auto& index : shape.mesh.indices) {
 
-				TextureVertex vertex{};
+				ModelVertex vertex{};
 				vertex.Position = {
 
 					attrib.vertices[3 * index.vertex_index + 0],
@@ -59,12 +59,17 @@ namespace StarTracker::Core::OpenGL {
 					attrib.vertices[3 * index.vertex_index + 2]
 				};
 				const auto texCoordsY = attrib.texcoords[2 * index.texcoord_index + 1];
+				vertex.Normal = {
+
+					attrib.normals[3 * index.normal_index + 0],
+					attrib.normals[3 * index.normal_index + 1],
+					attrib.normals[3 * index.normal_index + 2]
+				};
 				vertex.TextureCoordinates = {
 
 					attrib.texcoords[2 * index.texcoord_index + 0],
 					invertedTexCoords ? 1.0f - texCoordsY : texCoordsY
 				};
-				vertex.Color = color;
 
 				if (uniqueVertices.count(vertex) == 0) {
 
@@ -81,7 +86,7 @@ namespace StarTracker::Core::OpenGL {
 		const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
 			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
-			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aColor" },
+			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aNormal" },
 			Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float2, "aTextureCoordinates" }
 		};
 
@@ -103,7 +108,7 @@ namespace StarTracker::Core::OpenGL {
 
 	void Model::LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords) noexcept {
 
-		LoadFromFile(filePath, { 1.0f, 1.0f, 1.0f }, invertedTexCoords);
+		LoadFromFile(filePath, invertedTexCoords);
 		texture = Core::AssetDataBase::LoadTexture(texturePath);
 		hasTexture = true;
 	}

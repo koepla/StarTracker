@@ -39,7 +39,7 @@ namespace StarTracker::Core {
 		}
 	}
 
-	const std::shared_ptr<OpenGL::Model>& AssetDataBase::LoadModel(const std::filesystem::path& filePath, const glm::vec3& color, bool reload) noexcept {
+	const std::shared_ptr<OpenGL::Model>& AssetDataBase::LoadModel(const std::filesystem::path& filePath, bool reload) noexcept {
 
 		static const auto modelRootPath = assetPath / std::filesystem::path{ "Models" };
 
@@ -50,7 +50,7 @@ namespace StarTracker::Core {
 		else {
 
 			auto model = std::make_shared<OpenGL::Model>();
-			model->LoadFromFile(modelRootPath / filePath, color);
+			model->LoadFromFile(modelRootPath / filePath);
 			modelMap[filePath.string()] = model;
 
 			return modelMap[filePath.string()];
