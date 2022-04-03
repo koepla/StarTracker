@@ -5,12 +5,12 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-    struct Rectangular {
+	struct Rectangular {
 
-        double X;
-        double Y;
-        double Z;
-    };
+		double X;
+		double Y;
+		double Z;
+	};
 }
 
 #endif // STARENGINE_EPHEMERIS_COORDINATES_RECTANGULAR_H

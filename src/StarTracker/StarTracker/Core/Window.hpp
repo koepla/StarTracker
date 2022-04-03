@@ -50,6 +50,18 @@ namespace StarTracker::Core {
 		void Update() noexcept;
 
 		/**
+		* @brief Hides the mouse cursor
+		*
+		*/
+		void HideCursor() noexcept;
+
+		/**
+		* @brief Shows the mouse cursor
+		*
+		*/
+		void ShowCursor() noexcept;
+
+		/**
 		* @brief Returns a reference to the windowData member
 		*        WindowData contains the size, title and state of the window
 		*

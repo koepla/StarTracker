@@ -24,10 +24,11 @@ namespace StarTracker {
 	class ExperimentalView : public Core::View {
 
 	private:
+		bool isFocused;
 		bool invertedTextureCoordinates;
-        std::shared_ptr<Core::OpenGL::Camera> camera;
+		std::shared_ptr<Core::OpenGL::Camera> camera;
 		std::shared_ptr<Core::OpenGL::Shader> shader;
-        std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
+		std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
 		std::shared_ptr<Core::OpenGL::Model> model;
 
 	public:

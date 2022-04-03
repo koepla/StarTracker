@@ -37,7 +37,7 @@ namespace StarTracker::Utils {
 		* @return std::vector of the selected paths
 		* 
 		*/
-        [[nodiscard]] static std::vector<std::filesystem::path> OpenFileDialog(const std::string& title, bool allowMultiple) noexcept;
+		[[nodiscard]] static std::vector<std::filesystem::path> OpenFileDialog(const std::string& title, bool allowMultiple) noexcept;
 
 		/**
 		* @brief Opens an Save-File-Dialog and returns the paths of the selected file
@@ -47,7 +47,7 @@ namespace StarTracker::Utils {
 		* @return path of the selected file
 		* 
 		*/
-        [[nodiscard]] static std::filesystem::path SaveFileDialog(const std::string& title) noexcept;
+		[[nodiscard]] static std::filesystem::path SaveFileDialog(const std::string& title) noexcept;
 	};
 }
 

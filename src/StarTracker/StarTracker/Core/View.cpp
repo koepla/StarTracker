@@ -11,4 +11,3 @@ namespace StarTracker::Core {
 		this->nativeWindowHandle = nativeWindowHandle;
 	}
 }
-

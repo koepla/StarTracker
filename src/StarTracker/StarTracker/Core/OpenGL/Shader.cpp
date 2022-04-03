@@ -119,11 +119,11 @@ namespace StarTracker::Core::OpenGL {
 		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 
-    void Shader::SetMat3(const std::string &name, const glm::mat3 &value) noexcept {
+	void Shader::SetMat3(const std::string &name, const glm::mat3 &value) noexcept {
 
-        glUseProgram(nativeHandle);
-        glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
-    }
+		glUseProgram(nativeHandle);
+		glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
+	}
 
 	void Shader::SetMat4(const std::string& name, const glm::mat4& value) noexcept {
 
@@ -152,7 +152,7 @@ namespace StarTracker::Core::OpenGL {
 
 		if (location == -1) {
 
-            std::fprintf(stderr, "Name: %s\n", name.c_str());
+			std::fprintf(stderr, "Name: %s\n", name.c_str());
 			ASSERT(false && "Uniform `name` doesn't exist!");
 		}
 		else {
@@ -184,7 +184,7 @@ namespace StarTracker::Core::OpenGL {
 
 			glDeleteProgram(shaderProgram);
 
-            std::fprintf(stderr, "FailureInfo: %s\n", failureInfo.data());
+			std::fprintf(stderr, "FailureInfo: %s\n", failureInfo.data());
 			ASSERT(false && "Shader compilation failed, see `failureInfo`!");
 		}
 

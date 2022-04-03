@@ -2,227 +2,227 @@
 
 namespace StarTracker {
 
-    ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle}, textureList{} {
+	ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle}, textureList{} {
 
-    }
+	}
 
-    void ImageProcessingView::OnInit() noexcept {
+	void ImageProcessingView::OnInit() noexcept {
 
-        // Initialize ImageProcessing FrameBuffer
-        stackFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
-        kernelFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
-    }
+		// Initialize ImageProcessing FrameBuffer
+		stackFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
+		kernelFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
+	}
 
-    void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
+	void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
 
-        const auto textSize = ImGui::GetFontSize();
-        const auto itemSpacing = ImGui::GetStyle().ItemSpacing;
-        const auto itemInnerSpacing = ImGui::GetStyle().ItemInnerSpacing;
-        static auto kernelMatrixEditorHeight{ 0.0f };
+		const auto textSize = ImGui::GetFontSize();
+		const auto itemSpacing = ImGui::GetStyle().ItemSpacing;
+		const auto itemInnerSpacing = ImGui::GetStyle().ItemInnerSpacing;
+		static auto kernelMatrixEditorHeight{ 0.0f };
 
-        if (ImGui::Begin("Image Processing")) {
+		if (ImGui::Begin("Image Processing")) {
 
-            ImGui::PushID("idImageProcessingAlignmentTable");
-            if (ImGui::BeginTable("", 2))
-            {
-                // Row-0
-                ImGui::TableNextRow();
+			ImGui::PushID("idImageProcessingAlignmentTable");
+			if (ImGui::BeginTable("", 2))
+			{
+				// Row-0
+				ImGui::TableNextRow();
 
-                {   // Final Images
-                    ImGui::PushFont(Core::UIFont::Medium);
+				{   // Final Images
+					ImGui::PushFont(Core::UIFont::Medium);
 
-                    const auto stackedImageId = static_cast<std::intptr_t>(stackFrameBuffer->GetNativeTextureHandle());
-                    const auto kernelImageId = static_cast<std::intptr_t>(kernelFrameBuffer->GetNativeTextureHandle());
+					const auto stackedImageId = static_cast<std::intptr_t>(stackFrameBuffer->GetNativeTextureHandle());
+					const auto kernelImageId = static_cast<std::intptr_t>(kernelFrameBuffer->GetNativeTextureHandle());
 
-                    const auto textureWidth = ImGui::GetContentRegionAvail().x / 2.0f;
-                    const auto textureHeight = static_cast<float>(stackFrameBuffer->GetHeight()) / static_cast<float>(stackFrameBuffer->GetWidth()) * textureWidth;
+					const auto textureWidth = ImGui::GetContentRegionAvail().x / 2.0f;
+					const auto textureHeight = static_cast<float>(stackFrameBuffer->GetHeight()) / static_cast<float>(stackFrameBuffer->GetWidth()) * textureWidth;
 
-                    ImGui::TableSetColumnIndex(0);
-                    ImGui::Text("Stacked Image");
-                    ImGui::Image(reinterpret_cast<void*>(stackedImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+					ImGui::TableSetColumnIndex(0);
+					ImGui::Text("Stacked Image");
+					ImGui::Image(reinterpret_cast<void*>(stackedImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
 
-                    ImGui::TableSetColumnIndex(1);
-                    ImGui::Text("Kernel Image");
-                    ImGui::Image(reinterpret_cast<void*>(kernelImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+					ImGui::TableSetColumnIndex(1);
+					ImGui::Text("Kernel Image");
+					ImGui::Image(reinterpret_cast<void*>(kernelImageId), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
 
-                    ImGui::PopFont();
-                }
+					ImGui::PopFont();
+				}
 
-                // Row-1
-                ImGui::TableNextRow();
+				// Row-1
+				ImGui::TableNextRow();
 
-                {   // Stacking
-                    ImGui::TableSetColumnIndex(0);
+				{   // Stacking
+					ImGui::TableSetColumnIndex(0);
 
-                    ImGui::PushFont(Core::UIFont::Medium);
-                    ImGui::Text("Loaded Images");
-                    ImGui::PopFont();
+					ImGui::PushFont(Core::UIFont::Medium);
+					ImGui::Text("Loaded Images");
+					ImGui::PopFont();
 
-                    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
+					ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyle().Colors[ImGuiCol_FrameBg]);
 
-                    if (ImGui::BeginChild("idTextureList", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar)) {
+					if (ImGui::BeginChild("idTextureList", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar)) {
 
-                        const auto cursorPosition = ImGui::GetCursorPos();
-                        ImGui::SetCursorPos({ cursorPosition.x + itemInnerSpacing.x, cursorPosition.y + itemInnerSpacing.y });
+						const auto cursorPosition = ImGui::GetCursorPos();
+						ImGui::SetCursorPos({ cursorPosition.x + itemInnerSpacing.x, cursorPosition.y + itemInnerSpacing.y });
 
-                        for (const auto& currentTexture : textureList) {
+						for (const auto& currentTexture : textureList) {
 
-                            const auto textureHeight = kernelMatrixEditorHeight - 2.0f * itemInnerSpacing.y;
-                            const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
+							const auto textureHeight = kernelMatrixEditorHeight - 2.0f * itemInnerSpacing.y;
+							const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
 
-                            if (textureWidth > ImGui::GetContentRegionAvail().x) {
+							if (textureWidth > ImGui::GetContentRegionAvail().x) {
 
-                                ImGui::NewLine();
-                                ImGui::SetCursorPosX(ImGui::GetCursorPosX() + itemInnerSpacing.x);
-                            }
+								ImGui::NewLine();
+								ImGui::SetCursorPosX(ImGui::GetCursorPosX() + itemInnerSpacing.x);
+							}
 
-                            ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
+							ImGui::Image(reinterpret_cast<void*>(static_cast<std::intptr_t>(currentTexture->GetNativeHandle())), {textureWidth, textureHeight }, { 0, 1 }, { 1, 0 });
 
-                            if (currentTexture != textureList.back()) {
+							if (currentTexture != textureList.back()) {
 
-                                ImGui::SameLine();
-                            }
-                        }
-                    }
-                    ImGui::EndChild();
+								ImGui::SameLine();
+							}
+						}
+					}
+					ImGui::EndChild();
 
-                    ImGui::PopStyleColor();
-                }
+					ImGui::PopStyleColor();
+				}
 
-                static std::array<float, 9> userKernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-                static std::array<float, 9> selectedKernel{ userKernel };
+				static std::array<float, 9> userKernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+				static std::array<float, 9> selectedKernel{ userKernel };
 
-                {
-                    // Kernel
-                    ImGui::TableSetColumnIndex(1);
+				{
+					// Kernel
+					ImGui::TableSetColumnIndex(1);
 
-                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-                    ImGui::PushFont(Core::UIFont::Medium);
-                    ImGui::Text("Kernel Matrix");
-                    ImGui::PopFont();
-                    ImGui::PopItemWidth();
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+					ImGui::PushFont(Core::UIFont::Medium);
+					ImGui::Text("Kernel Matrix");
+					ImGui::PopFont();
+					ImGui::PopItemWidth();
 
-                    const auto availableWidth = ImGui::GetContentRegionAvail().x;
-                    const auto resetButtonTextWidth = ImGui::CalcTextSize("Reset").x * 2.5f;
+					const auto availableWidth = ImGui::GetContentRegionAvail().x;
+					const auto resetButtonTextWidth = ImGui::CalcTextSize("Reset").x * 2.5f;
 
-                    kernelMatrixEditorHeight = ImGui::GetCursorPosY();
-                    ImGui::PushItemWidth(availableWidth - resetButtonTextWidth);
-                    static ImGuiInputTextFlags_ kernelMatrixInputFlags{ ImGuiInputTextFlags_None };
-                    static int selectedKernelIndex{ 0 };
-                    const char* kernelNames[4] = { "Custom", "Blur", "Edge-Detection", "Sharpen" };
-                    ImGui::PushID("idKernelEnumSlider");
-                    ImGui::SliderInt("", &selectedKernelIndex, 0, 3, [&]() -> const char* {
+					kernelMatrixEditorHeight = ImGui::GetCursorPosY();
+					ImGui::PushItemWidth(availableWidth - resetButtonTextWidth);
+					static ImGuiInputTextFlags_ kernelMatrixInputFlags{ ImGuiInputTextFlags_None };
+					static int selectedKernelIndex{ 0 };
+					const char* kernelNames[4] = { "Custom", "Blur", "Edge-Detection", "Sharpen" };
+					ImGui::PushID("idKernelEnumSlider");
+					ImGui::SliderInt("", &selectedKernelIndex, 0, 3, [&]() -> const char* {
 
-                       if (selectedKernelIndex == 0) {
+					   if (selectedKernelIndex == 0) {
 
-                           kernelMatrixInputFlags = ImGuiInputTextFlags_None;
-                           selectedKernel = userKernel;
-                           return kernelNames[0];
-                       }
-                       else if (selectedKernelIndex == 1) {
+						   kernelMatrixInputFlags = ImGuiInputTextFlags_None;
+						   selectedKernel = userKernel;
+						   return kernelNames[0];
+					   }
+					   else if (selectedKernelIndex == 1) {
 
-                           kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
-                           selectedKernel = Core::ImageProcessing::KernelBlur;
-                           return kernelNames[1];
-                       }
-                       else if (selectedKernelIndex == 2) {
+						   kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
+						   selectedKernel = Core::ImageProcessing::KernelBlur;
+						   return kernelNames[1];
+					   }
+					   else if (selectedKernelIndex == 2) {
 
-                           kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
-                           selectedKernel = Core::ImageProcessing::KernelEdgeDetection;
-                           return kernelNames[2];
-                       }
-                       else if (selectedKernelIndex == 3) {
+						   kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
+						   selectedKernel = Core::ImageProcessing::KernelEdgeDetection;
+						   return kernelNames[2];
+					   }
+					   else if (selectedKernelIndex == 3) {
 
-                           kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
-                           selectedKernel = Core::ImageProcessing::KernelSharpen;
-                           return kernelNames[3];
-                       }
+						   kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
+						   selectedKernel = Core::ImageProcessing::KernelSharpen;
+						   return kernelNames[3];
+					   }
 
-                        return "Invalid";
-                    }());
-                    ImGui::PopID();
-                    ImGui::PopItemWidth();
+						return "Invalid";
+					}());
+					ImGui::PopID();
+					ImGui::PopItemWidth();
 
-                    ImGui::SameLine();
+					ImGui::SameLine();
 
-                    ImGui::PushID("idKernelMatrixReset");
-                    if (ImGui::Button("Reset", { ImGui::GetContentRegionAvail().x, 0.0f })) {
+					ImGui::PushID("idKernelMatrixReset");
+					if (ImGui::Button("Reset", { ImGui::GetContentRegionAvail().x, 0.0f })) {
 
-                        kernelMatrixInputFlags = ImGuiInputTextFlags_None;
-                        userKernel = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-                        selectedKernel = userKernel;
-                        selectedKernelIndex = 0;
-                    }
-                    ImGui::PopID();
+						kernelMatrixInputFlags = ImGuiInputTextFlags_None;
+						userKernel = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+						selectedKernel = userKernel;
+						selectedKernelIndex = 0;
+					}
+					ImGui::PopID();
 
-                    if (selectedKernelIndex == 0) {
+					if (selectedKernelIndex == 0) {
 
-                        selectedKernel = userKernel;
-                    }
+						selectedKernel = userKernel;
+					}
 
-                    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-                    ImGui::PushID("idKernelMatrixRow0");
-                    ImGui::InputFloat3("", selectedKernel.data(), "%.6f", kernelMatrixInputFlags);
-                    ImGui::PopID();
-                    ImGui::PushID("idKernelMatrixRow1");
-                    ImGui::InputFloat3("", selectedKernel.data() + 3, "%.6f", kernelMatrixInputFlags);
-                    ImGui::PopID();
-                    ImGui::PushID("idKernelMatrixRow2");
-                    ImGui::InputFloat3("", selectedKernel.data() + 6, "%.6f", kernelMatrixInputFlags);
-                    ImGui::PopID();
-                    ImGui::PopItemWidth();
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+					ImGui::PushID("idKernelMatrixRow0");
+					ImGui::InputFloat3("", selectedKernel.data(), "%.6f", kernelMatrixInputFlags);
+					ImGui::PopID();
+					ImGui::PushID("idKernelMatrixRow1");
+					ImGui::InputFloat3("", selectedKernel.data() + 3, "%.6f", kernelMatrixInputFlags);
+					ImGui::PopID();
+					ImGui::PushID("idKernelMatrixRow2");
+					ImGui::InputFloat3("", selectedKernel.data() + 6, "%.6f", kernelMatrixInputFlags);
+					ImGui::PopID();
+					ImGui::PopItemWidth();
 
-                    if (selectedKernelIndex == 0) {
+					if (selectedKernelIndex == 0) {
 
-                        userKernel = selectedKernel;
-                    }
+						userKernel = selectedKernel;
+					}
 
-                    kernelMatrixEditorHeight = ImGui::GetCursorPosY() - kernelMatrixEditorHeight - itemSpacing.y;
-                }
+					kernelMatrixEditorHeight = ImGui::GetCursorPosY() - kernelMatrixEditorHeight - itemSpacing.y;
+				}
 
-                // Buttons
-                {
-                    ImGui::TableNextRow();
-                    ImGui::TableSetColumnIndex(0);
+				// Buttons
+				{
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0);
 
-                    if (ImGui::Button("Select Images for Stacking", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
+					if (ImGui::Button("Select Images for Stacking", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
 
-                        const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
+						const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
 
-                        if(!selectedImages.empty()) {
+						if(!selectedImages.empty()) {
 
-                            textureList.clear();
-                            for(const auto& currentImagePath : selectedImages) {
+							textureList.clear();
+							for(const auto& currentImagePath : selectedImages) {
 
-                                const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
-                                currentTexture->LoadFromFile(currentImagePath);
-                                textureList.emplace_back(currentTexture);
-                            }
+								const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
+								currentTexture->LoadFromFile(currentImagePath);
+								textureList.emplace_back(currentTexture);
+							}
 
-                            if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
+							if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
 
-                            }
-                        }
-                    }
+							}
+						}
+					}
 
-                    ImGui::TableSetColumnIndex(1);
+					ImGui::TableSetColumnIndex(1);
 
-                    if (ImGui::Button("Apply Kernel", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
+					if (ImGui::Button("Apply Kernel", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
 
-                        if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, selectedKernel)) {
+						if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, selectedKernel)) {
 
-                        }
-                    }
-                }
-                ImGui::EndTable();
-            }
-            ImGui::PopID();
-        }
-        ImGui::End();
-    }
+						}
+					}
+				}
+				ImGui::EndTable();
+			}
+			ImGui::PopID();
+		}
+		ImGui::End();
+	}
 
-    void ImageProcessingView::OnDestroy() noexcept {
+	void ImageProcessingView::OnDestroy() noexcept {
 
-    }
+	}
 }
 

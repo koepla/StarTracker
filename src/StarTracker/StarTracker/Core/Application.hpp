@@ -34,7 +34,7 @@ namespace StarTracker::Core {
 		Application(const Application&) = delete;
 		explicit Application(const ApplicationData& applicationData) noexcept;
 
-        /**
+		/**
 		* @brief Runs the application
 		* 
 		*/

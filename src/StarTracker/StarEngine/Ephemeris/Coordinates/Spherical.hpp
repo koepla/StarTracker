@@ -5,12 +5,12 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-    struct Spherical {
+	struct Spherical {
 
-        double Radius;
-        double RightAscension;
-        double Declination;
-    };
+		double Radius;
+		double RightAscension;
+		double Declination;
+	};
 }
 
 #endif // STARENGINE_EPHEMERIS_COORDINATES_SPHERICAL_H

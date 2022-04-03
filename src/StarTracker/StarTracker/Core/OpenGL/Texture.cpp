@@ -18,21 +18,21 @@ namespace StarTracker::Core::OpenGL {
 
 	void Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
 
-        stbi_set_flip_vertically_on_load(1);
-        std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
+		stbi_set_flip_vertically_on_load(1);
+		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
 
-        if(data) {
+		if(data) {
 
-            glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
+			glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
+			glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+			glGenerateMipmap(GL_TEXTURE_2D);
 
-            stbi_image_free(data);
-        }
+			stbi_image_free(data);
+		}
 	}
 
 	void Texture::Bind(std::uint32_t slot) const noexcept {

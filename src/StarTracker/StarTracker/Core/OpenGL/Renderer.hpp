@@ -8,22 +8,22 @@
 
 namespace StarTracker::Core::OpenGL {
 
-    enum class PrimitiveMode : std::uint32_t {
+	enum class PrimitiveMode : std::uint32_t {
 
-        Point = GL_POINTS,
-        Line = GL_LINE_STRIP,
-        Triangle = GL_TRIANGLES
-    };
+		Point = GL_POINTS,
+		Line = GL_LINE_STRIP,
+		Triangle = GL_TRIANGLES
+	};
 
-    class Renderer {
+	class Renderer {
 
-    public:
-        static void Initialize() noexcept;
-        static void Clear() noexcept;
-        static void SetClearColor(const glm::vec4& color) noexcept;
-        static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, PrimitiveMode mode) noexcept;
-        static void DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept;
-    };
+	public:
+		static void Initialize() noexcept;
+		static void Clear() noexcept;
+		static void SetClearColor(const glm::vec4& color) noexcept;
+		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, PrimitiveMode mode) noexcept;
+		static void DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept;
+	};
 }
 
 #endif // STARTRACKER_CORE_OPENGL_RENDERER_H

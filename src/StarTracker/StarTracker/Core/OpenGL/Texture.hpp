@@ -10,17 +10,17 @@
 
 namespace StarTracker::Core::OpenGL {
 
-    struct TextureVertex {
+	struct TextureVertex {
 
-        glm::vec3 Position;
+		glm::vec3 Position;
 		glm::vec3 Color;
-        glm::vec2 TextureCoordinates;
+		glm::vec2 TextureCoordinates;
 
 		inline bool operator == (const TextureVertex& other) const noexcept {
 
 			return Position == other.Position && Color == other.Color && TextureCoordinates == other.TextureCoordinates;
 		}
-    };
+	};
 
 	class Texture {
 

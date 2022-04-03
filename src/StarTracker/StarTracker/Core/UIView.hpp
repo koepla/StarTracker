@@ -23,11 +23,11 @@ namespace StarTracker::Core {
 		inline static ImFont* Italic = nullptr;
 	};
 
-    enum class UITheme : std::int16_t {
+	enum class UITheme : std::int16_t {
 
-        Light = 0,
-        Dark = 1
-    };
+		Light = 0,
+		Dark = 1
+	};
 
 	class UIView : public View {
 
@@ -45,7 +45,7 @@ namespace StarTracker::Core {
 		* @see UITheme
 		* 
 		*/
-        static void SetTheme(UITheme theme) noexcept;
+		static void SetTheme(UITheme theme) noexcept;
 
 		/**
 		* @brief Called every frame before the viewList of the owning application instance is updated
@@ -87,9 +87,8 @@ namespace StarTracker::Core {
 		* 
 		*/
 		virtual void OnDestroy() noexcept override;
-    };
+	};
 }
 
 
 #endif // STARTRACKER_CORE_UIVIEW_H
-

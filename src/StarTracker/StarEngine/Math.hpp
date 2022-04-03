@@ -7,11 +7,11 @@
 
 namespace StarTracker {
 
-    class Math {
+	class Math {
 
-    public:
+	public:
 		static inline constexpr double PI = std::numbers::pi;
-        static inline constexpr double PI2 = (2.0 * PI);
+		static inline constexpr double PI2 = (2.0 * PI);
 		static inline constexpr double C0 = 299792458;
 		static inline constexpr double AU = 149597870700;
 

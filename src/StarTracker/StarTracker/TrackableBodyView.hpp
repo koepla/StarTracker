@@ -26,26 +26,27 @@
 namespace StarTracker {
 
 	class TrackableBodyView : public Core::View {
-
-    private:
-        double trackingDuration;
+	
+	private:
+		double trackingDuration;
 		Core::Tracker tracker;
 		Utils::LocationService::Location observer;
 		std::vector<std::shared_ptr<Ephemeris::CelestialBody>> celestialBodies;
-
+	
 	public:
 		explicit TrackableBodyView(void* nativeWindowHandle) noexcept;
-
+	
 		virtual void OnInit() noexcept override;
 		virtual void OnUpdate(float deltaTime) noexcept override;
 		virtual void OnDestroy() noexcept override;
-
-    private:
-        void drawTrackerInfoCard(const glm::vec2& size) noexcept;
-        void drawTrackingDurationCard(const glm::vec2& size) noexcept;
-        [[nodiscard]] bool drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body,
-                                          const std::shared_ptr<Core::OpenGL::Texture>& texture,
-                                          const glm::vec2& size) noexcept;
+	
+	private:
+		void drawTrackerInfoCard(const glm::vec2& size) noexcept;
+		void drawTrackingDurationCard(const glm::vec2& size) noexcept;
+		[[nodiscard]] bool drawCelestialBodyCard(
+			const std::shared_ptr<Ephemeris::CelestialBody>& body,
+			const std::shared_ptr<Core::OpenGL::Texture>& texture,
+			const glm::vec2& size) noexcept;
 	};
 }
 

@@ -2,52 +2,52 @@
 
 namespace StarTracker::Core::OpenGL {
 
-    void Renderer::Initialize() noexcept {
+	void Renderer::Initialize() noexcept {
 
-        glEnable(GL_DEPTH_TEST);
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    }
+		glEnable(GL_DEPTH_TEST);
+		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+	}
 
-    void Renderer::Clear() noexcept {
+	void Renderer::Clear() noexcept {
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    }
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 
-    void Renderer::SetClearColor(const glm::vec4 &color) noexcept {
+	void Renderer::SetClearColor(const glm::vec4 &color) noexcept {
 
-        glClearColor(color.r, color.g, color.b, color.a);
-    }
+		glClearColor(color.r, color.g, color.b, color.a);
+	}
 
-    void Renderer::DrawIndexed(const std::shared_ptr<VertexArray> &vertexArray, const std::shared_ptr<Shader> &shader, PrimitiveMode mode) noexcept {
+	void Renderer::DrawIndexed(const std::shared_ptr<VertexArray> &vertexArray, const std::shared_ptr<Shader> &shader, PrimitiveMode mode) noexcept {
 
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_POLYGON_SMOOTH);
+		glEnable(GL_LINE_SMOOTH);
+		glEnable(GL_POLYGON_SMOOTH);
 
-        const auto indexCount = vertexArray->GetIndexBuffer()->GetIndexCount();
+		const auto indexCount = vertexArray->GetIndexBuffer()->GetIndexCount();
 
-        shader->Bind();
-        vertexArray->Bind();
-        glDrawElements(static_cast<std::uint32_t>(mode), indexCount, GL_UNSIGNED_INT, nullptr);
+		shader->Bind();
+		vertexArray->Bind();
+		glDrawElements(static_cast<std::uint32_t>(mode), indexCount, GL_UNSIGNED_INT, nullptr);
 
-        glDisable(GL_LINE_SMOOTH);
-        glDisable(GL_POLYGON_SMOOTH);
-    }
+		glDisable(GL_LINE_SMOOTH);
+		glDisable(GL_POLYGON_SMOOTH);
+	}
 
-    void Renderer::DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept {
+	void Renderer::DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept {
 
-        const auto& indexBuffer = model->GetIndexBuffer();
-        const auto& vertexBuffer = model->GetVertexBuffer();
-        const auto& vertexArray = model->GetVertexArray();
-        const auto& texture = model->GetTexture();
+		const auto& indexBuffer = model->GetIndexBuffer();
+		const auto& vertexBuffer = model->GetVertexBuffer();
+		const auto& vertexArray = model->GetVertexArray();
+		const auto& texture = model->GetTexture();
 
-        // In this case the Model has no texture
-        if (texture != nullptr) {
+		// In this case the Model has no texture
+		if (texture != nullptr) {
 
-            texture->Bind(0);
-            shader->SetInt("uTexture", 0);
-        }
-        
-        DrawIndexed(vertexArray, shader, PrimitiveMode::Triangle);
-    }
+			texture->Bind(0);
+			shader->SetInt("uTexture", 0);
+		}
+		
+		DrawIndexed(vertexArray, shader, PrimitiveMode::Triangle);
+	}
 }

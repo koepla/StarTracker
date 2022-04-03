@@ -5,41 +5,41 @@
 
 namespace StarTracker::Core {
 
-    struct AllocationStats {
+	struct AllocationStats {
 
-        std::size_t ActiveAllocations;
-    };
+		std::size_t ActiveAllocations;
+	};
 
-    class Allocator {
+	class Allocator {
 
-    private:
-        static inline AllocationStats allocationStats{};
+	private:
+		static inline AllocationStats allocationStats{};
 
-    public:
-    	/**
+	public:
+		/**
 		* @brief Allocates the specified size on the heap
-        *        Tracks the allocation in the allocationStats member
+		*        Tracks the allocation in the allocationStats member
 		*
 		* @return pointer to the allocated memory-block
 		* 
 		*/
-        [[nodiscard]] static void* Reserve(std::size_t size) noexcept;
+		[[nodiscard]] static void* Reserve(std::size_t size) noexcept;
 
-        /**
+		/**
 		* @brief Deallocates the specified block
-        *        Tracks the deallocation in the allocationStats member
+		*        Tracks the deallocation in the allocationStats member
 		* 
 		*/
-        static void Free(void* block) noexcept;
+		static void Free(void* block) noexcept;
 
-        /**
+		/**
 		* @brief Returns the number of active allocations
-        *
-        * @return number of active allocations
+		*
+		* @return number of active allocations
 		* 
 		*/
-        [[nodiscard]] static std::size_t GetAllocations() noexcept;
-    };
+		[[nodiscard]] static std::size_t GetAllocations() noexcept;
+	};
 }
 
 #endif // STARTRACKER_CORE_ALLOCATER_H

@@ -21,20 +21,20 @@
 
 namespace StarTracker {
 
-    class ImageProcessingView : public Core::View {
+	class ImageProcessingView : public Core::View {
 
-    private:
-        std::shared_ptr<Core::OpenGL::FrameBuffer> stackFrameBuffer;
-        std::shared_ptr<Core::OpenGL::FrameBuffer> kernelFrameBuffer;
-        std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
+	private:
+		std::shared_ptr<Core::OpenGL::FrameBuffer> stackFrameBuffer;
+		std::shared_ptr<Core::OpenGL::FrameBuffer> kernelFrameBuffer;
+		std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
 
-    public:
-        explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
+	public:
+		explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
 
-        virtual void OnInit() noexcept override;
-        virtual void OnUpdate(float deltaTime) noexcept override;
-        virtual void OnDestroy() noexcept override;
-    };
+		virtual void OnInit() noexcept override;
+		virtual void OnUpdate(float deltaTime) noexcept override;
+		virtual void OnDestroy() noexcept override;
+	};
 }
 
 #endif // STARTRACKER_IMAGEPROCESSINGVIEW_H

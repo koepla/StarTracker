@@ -20,7 +20,7 @@ namespace StarTracker::Core {
 
 	class Tracker {
 
-    private:
+	private:
 		std::atomic<bool> tracking;
 		Utils::Serial::SerialPort serialPort;
 

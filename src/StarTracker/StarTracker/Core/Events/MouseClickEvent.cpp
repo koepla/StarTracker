@@ -2,29 +2,29 @@
 
 namespace StarTracker::Core::Events {
 
-    MouseClickEvent::MouseClickEvent(MouseCode mouseCode, MouseStatus mouseStatus) noexcept : mouseCode{ mouseCode }, mouseStatus{ mouseStatus }{
+	MouseClickEvent::MouseClickEvent(MouseCode mouseCode, MouseStatus mouseStatus) noexcept : mouseCode{ mouseCode }, mouseStatus{ mouseStatus }{
 
-    }
+	}
 
-    MouseCode MouseClickEvent::GetMouseCode() const noexcept {
+	MouseCode MouseClickEvent::GetMouseCode() const noexcept {
 
-        return mouseCode;
-    }
+		return mouseCode;
+	}
 
-    bool MouseClickEvent::IsPressed() const noexcept {
+	bool MouseClickEvent::IsPressed() const noexcept {
 
-        return mouseStatus == MouseStatus::Pressed;
-    }
+		return mouseStatus == MouseStatus::Pressed;
+	}
 
-    bool MouseClickEvent::IsReleased() const noexcept {
+	bool MouseClickEvent::IsReleased() const noexcept {
 
-        return mouseStatus == MouseStatus::Released;
-    }
+		return mouseStatus == MouseStatus::Released;
+	}
 
-    std::string_view MouseClickEvent::GetName() const noexcept {
+	std::string_view MouseClickEvent::GetName() const noexcept {
 
-        return std::string_view{ "MouseClickEvent" };
-    }
+		return std::string_view{ "MouseClickEvent" };
+	}
 }
 
 

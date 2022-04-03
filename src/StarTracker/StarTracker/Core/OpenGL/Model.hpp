@@ -15,35 +15,35 @@
 
 namespace StarTracker::Core::OpenGL {
 
-    struct ModelGeometryInfo {
+	struct ModelGeometryInfo {
 
-        std::size_t IndexCount;
-        std::size_t VertexCount;
-    };
+		std::size_t IndexCount;
+		std::size_t VertexCount;
+	};
 
-    class Model {
+	class Model {
 
-    private:
-        bool hasTexture;
-        ModelGeometryInfo geometryInfo;
-        std::filesystem::path filePath;
-        std::shared_ptr<IndexBuffer> indexBuffer;
-        std::shared_ptr<VertexBuffer> vertexBuffer;
-        std::shared_ptr<VertexArray> vertexArray;
-        std::shared_ptr<Texture> texture;
+	private:
+		bool hasTexture;
+		ModelGeometryInfo geometryInfo;
+		std::filesystem::path filePath;
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		std::shared_ptr<VertexBuffer> vertexBuffer;
+		std::shared_ptr<VertexArray> vertexArray;
+		std::shared_ptr<Texture> texture;
 
-    public:
-        Model() noexcept;
-        void LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color, bool invertedTexCoords = false) noexcept;
-        void LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords = false) noexcept;
+	public:
+		Model() noexcept;
+		void LoadFromFile(const std::filesystem::path& filePath, const glm::vec3& color, bool invertedTexCoords = false) noexcept;
+		void LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords = false) noexcept;
 
-        [[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
-        [[nodiscard]] const ModelGeometryInfo& GetGeometryInfo() const noexcept;
-        [[nodiscard]] const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const noexcept;
-        [[nodiscard]] const std::shared_ptr<VertexBuffer>& GetVertexBuffer() const noexcept;
-        [[nodiscard]] const std::shared_ptr<VertexArray>& GetVertexArray() const noexcept;
-        [[nodiscard]] const std::shared_ptr<Texture>& GetTexture() const noexcept;
-    };
+		[[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
+		[[nodiscard]] const ModelGeometryInfo& GetGeometryInfo() const noexcept;
+		[[nodiscard]] const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const noexcept;
+		[[nodiscard]] const std::shared_ptr<VertexBuffer>& GetVertexBuffer() const noexcept;
+		[[nodiscard]] const std::shared_ptr<VertexArray>& GetVertexArray() const noexcept;
+		[[nodiscard]] const std::shared_ptr<Texture>& GetTexture() const noexcept;
+	};
 }
 
 #endif // STARTRACKER_CORE_OPENGL_MODEL_H
