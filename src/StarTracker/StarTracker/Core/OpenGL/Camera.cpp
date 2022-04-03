@@ -17,6 +17,11 @@ namespace StarTracker::Core::OpenGL {
 		});
 	}
 
+	glm::vec3 Camera::GetPosition() const noexcept {
+
+		return position;
+	}
+
 	glm::mat4 Camera::GetViewMatrix(float deltaTime, bool blockMovement) noexcept {
 
 		static glm::vec2 lastMousePosition{};

@@ -16,7 +16,7 @@ namespace StarTracker {
 		camera = std::make_shared<Core::OpenGL::Camera>(initialCameraPosition);
 		frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(windowWidth, windowHeight);
 		shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
-		model = Core::AssetDataBase::LoadModel("starTracker.obj");
+		model = Core::AssetDataBase::LoadModel("StarTrackerMount.obj");
 		
 		application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 
@@ -60,8 +60,12 @@ namespace StarTracker {
 			ImGui::EndMainMenuBar();
 		}
 
-		const auto transformMatrix = camera->GetProjectionMatrix() * camera->GetViewMatrix(deltaTime, !isFocused);
-		shader->SetMat4("uTransform", transformMatrix);
+		shader->SetFloat3("uCameraPosition", camera->GetPosition());
+		shader->SetFloat3("uObjectColor", { 1.0f, 1.0f, 1.0f });
+		shader->SetFloat3("uLightColor", { 1.0f, 0.95f, 0.89f });
+		shader->SetMat4("uModel", glm::mat4(1.0f));
+		shader->SetMat4("uView", camera->GetViewMatrix(deltaTime, !isFocused));
+		shader->SetMat4("uProjection", camera->GetProjectionMatrix());
 
 		frameBuffer->Bind();
 		Core::OpenGL::Renderer::SetClearColor({ 0.15f, 0.15f, 0.15f, 1.0f });

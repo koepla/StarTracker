@@ -24,7 +24,7 @@ namespace StarTracker::Core::OpenGL {
 		if(data) {
 
 			glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
-			glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 			glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);

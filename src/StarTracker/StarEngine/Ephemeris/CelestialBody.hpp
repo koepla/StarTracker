@@ -21,12 +21,13 @@ namespace StarTracker::Ephemeris {
 	protected:
 		std::string name;
 		std::string designation;
+		std::string textureHandle;
 
-		CelestialBody(const std::string& name, const std::string& designation) noexcept;
+		CelestialBody(const std::string& name, const std::string& designation, const std::string& textureHandle) noexcept;
 
 	public:
 		/**
-		* Computes the spherical position of the celestial body
+		* @brief Computes the spherical position of the celestial body
 		*
 		* @param date date and time for the computation
 		*
@@ -36,7 +37,7 @@ namespace StarTracker::Ephemeris {
 		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept = 0;
 
 		/**
-		* Retrieves the name
+		* @brief Retrieves the name
 		*
 		* @return the name of the celestial body
 		*
@@ -44,12 +45,20 @@ namespace StarTracker::Ephemeris {
 		[[nodiscard]] std::string GetName() const noexcept;
 
 		/**
-		* Retrieves the designation
+		* @brief Retrieves the designation
 		*
 		* @return the name of the celestial body
 		*
 		*/
 		[[nodiscard]] std::string GetDesignation() const noexcept;
+
+		/**
+		* @brief Retrieves the texture-handle
+		* 
+		* @return texture-handle
+		*
+		*/
+		[[nodiscard]] std::string GetTextureHandle() const noexcept;
 
 	public:
 		/**

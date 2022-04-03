@@ -43,10 +43,7 @@ namespace StarTracker {
 	private:
 		void drawTrackerInfoCard(const glm::vec2& size) noexcept;
 		void drawTrackingDurationCard(const glm::vec2& size) noexcept;
-		[[nodiscard]] bool drawCelestialBodyCard(
-			const std::shared_ptr<Ephemeris::CelestialBody>& body,
-			const std::shared_ptr<Core::OpenGL::Texture>& texture,
-			const glm::vec2& size) noexcept;
+		[[nodiscard]] bool drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body, const glm::vec2& size) noexcept;
 	};
 }
 

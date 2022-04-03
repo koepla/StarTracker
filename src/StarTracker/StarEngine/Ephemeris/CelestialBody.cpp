@@ -4,7 +4,7 @@
 
 namespace StarTracker::Ephemeris {
 
-	CelestialBody::CelestialBody(const std::string& name, const std::string& designation) noexcept : name{ name }, designation{ designation } {
+	CelestialBody::CelestialBody(const std::string& name, const std::string& designation, const std::string& textureHandle) noexcept : name{ name }, designation{ designation }, textureHandle{ textureHandle } {
 
 	}
 
@@ -16,6 +16,11 @@ namespace StarTracker::Ephemeris {
 	std::string CelestialBody::GetDesignation() const noexcept {
 
 		return designation.empty() ? std::string{ "No Designation" } : designation;
+	}
+
+	std::string CelestialBody::GetTextureHandle() const noexcept {
+
+		return textureHandle;
 	}
 
 	std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
@@ -51,6 +56,7 @@ namespace StarTracker::Ephemeris {
 			}
 
 			const auto type = element["Type"].get<std::string>();
+			const auto textureHandle = element["TextureHandle"].get<std::string>();
 
 			if (type._Equal("SSB")) {
 
@@ -70,7 +76,7 @@ namespace StarTracker::Ephemeris {
 				orbitalRateElements.LonPerihelion = element["LonPerihelionCentury"].get<double>();
 				orbitalRateElements.LonAscendingNode = element["LonAscendingNodeCentury"].get<double>();
 
-				auto solarSystemBody = std::make_shared<SolarSystemBody>(element["Name"].get<std::string>(), orbitalElements, orbitalRateElements);
+				auto solarSystemBody = std::make_shared<SolarSystemBody>(element["Name"].get<std::string>(), textureHandle, orbitalElements, orbitalRateElements);
 				celestialBodies.emplace_back(solarSystemBody);
 			}
 			else if (type._Equal("FB")) {
@@ -80,7 +86,7 @@ namespace StarTracker::Ephemeris {
 				sphericalCoordinates.Declination = element["Declination"].get<double>();
 				sphericalCoordinates.Radius = element["Radius"].get<double>();
 
-				auto fixedBody = std::make_shared<FixedBody>(element["Name"].get<std::string>(), element["Designation"].get<std::string>(), sphericalCoordinates);
+				auto fixedBody = std::make_shared<FixedBody>(element["Name"].get<std::string>(), element["Designation"].get<std::string>(), textureHandle, sphericalCoordinates);
 				celestialBodies.emplace_back(fixedBody);
 			}
 		}
@@ -90,7 +96,7 @@ namespace StarTracker::Ephemeris {
 
 	bool CelestialBody::isValidCelestialBody(const nlohmann::json& entry) noexcept {
 
-		if (!entry.contains("Name") || !entry.contains("Type")) {
+		if (!entry.contains("Name") || !entry.contains("Type") || !entry.contains("TextureHandle")) {
 
 			return false;
 		}
