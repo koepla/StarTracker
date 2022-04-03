@@ -16,7 +16,7 @@ namespace StarTracker {
 		camera = std::make_shared<Core::OpenGL::Camera>(initialCameraPosition);
 		frameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(windowWidth, windowHeight);
 		shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
-		model = Core::AssetDataBase::LoadModel("starTracker.obj");
+		model = Core::AssetDataBase::LoadModel("StarTrackerMount.obj");
 		
 		application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
 

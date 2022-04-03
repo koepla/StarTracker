@@ -3,16 +3,11 @@
 namespace StarTracker::Ephemeris {
 
 	SolarSystemBody::SolarSystemBody(
+		const std::string& name,
+		const std::string& textureHandle,
 		const KeplerianElements& keplerElements, 
 		const KeplerianElements& keplerElementsCentury) noexcept : 
-		SolarSystemBody{ "Unnamed Celestial Body", keplerElements, keplerElementsCentury } {
-
-	}
-
-	SolarSystemBody::SolarSystemBody(
-		const std::string& name, const KeplerianElements& keplerElements, 
-		const KeplerianElements& keplerElementsCentury) noexcept : 
-		CelestialBody{ name, {} },
+		CelestialBody{ name, "", textureHandle },
 		keplerElements{ keplerElements }, keplerElementsCentury{ keplerElementsCentury } {
 
 	}

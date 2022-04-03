@@ -13,8 +13,7 @@ namespace StarTracker::Ephemeris {
 		KeplerianElements keplerElementsCentury;
 
 	public:
-		SolarSystemBody(const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
-		SolarSystemBody(const std::string& name, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
+		SolarSystemBody(const std::string& name, const std::string& textureHandle, const KeplerianElements& keplerElements, const KeplerianElements& keplerElementsCentury) noexcept;
 		
 		/**
 		* Computes the spherical position of the solar system body

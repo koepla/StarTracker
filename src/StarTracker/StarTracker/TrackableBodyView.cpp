@@ -98,9 +98,7 @@ namespace StarTracker {
 		
 						static std::string trackingStatus{ "Not tracking" };
 		
-						if (drawCelestialBodyCard(body,
-												  Core::AssetDataBase::LoadTexture("blue.png"),
-												  { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
+						if (drawCelestialBodyCard(body, { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
 		
 							trackingStatus = "Not tracking";
 							ImGui::OpenPopup(windowId.c_str());
@@ -305,9 +303,7 @@ namespace StarTracker {
 		ImGui::PopStyleColor();
 	}
 
-	bool TrackableBodyView::drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body,
-												  const std::shared_ptr<Core::OpenGL::Texture>& texture,
-												  const glm::vec2& size) noexcept {
+	bool TrackableBodyView::drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body, const glm::vec2& size) noexcept {
 
 		bool selected{ false };
 		const auto& style = ImGui::GetStyle();
@@ -315,6 +311,7 @@ namespace StarTracker {
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg]);
 		if (ImGui::BeginChild(childId.c_str(), ImVec2{ size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
 
+			const auto texture = Core::AssetDataBase::LoadTexture(body->GetTextureHandle());
 			const auto textureId = static_cast<std::intptr_t>(texture->GetNativeHandle());
 			const auto drawList = ImGui::GetWindowDrawList();
 			const auto cursorPosition = ImGui::GetCursorPos();
