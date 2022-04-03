@@ -9,12 +9,12 @@ vec4 textureColor(int index);
 
 void main() {
 
-    vec4 result = vec4(0.0f);
-    for(int i = 0; i < uNumberOfPassedTextures; i++) {
+	vec4 result = vec4(0.0f);
+	for(int i = 0; i < uNumberOfPassedTextures; i++) {
 
-        result += texture(uTextures[i], passedTextureCoordinates);
-    }
+		result += texture(uTextures[i], passedTextureCoordinates);
+	}
 
-    float weight = 1.0f / float(uNumberOfPassedTextures);
-    fragmentColor = result * weight;
+	float weight = 1.0f / float(uNumberOfPassedTextures);
+	fragmentColor = result * weight;
 }

@@ -27,7 +27,7 @@ int main(int, char**) {
 
 int WINAPI WinMain( _In_ HINSTANCE /*Instance*/, _In_opt_ HINSTANCE /*PrevInstance*/, _In_ LPSTR /*CmdLine*/, _In_ int /*ShowCmd*/ ) {
 
-	return main( __argc, __argv );
+	return main(__argc, __argv);
 }
 
 #endif // _WIN32

@@ -6,6 +6,6 @@ layout (location = 0) out vec2 passedTextureCoordinates;
 
 void main() {
 
-    gl_Position = vec4(aPosition, 1.0f);
-    passedTextureCoordinates = aTextureCoordinates;
+	gl_Position = vec4(aPosition, 1.0f);
+	passedTextureCoordinates = aTextureCoordinates;
 }
