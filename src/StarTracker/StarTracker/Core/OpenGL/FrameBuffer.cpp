@@ -38,6 +38,7 @@ namespace StarTracker::Core::OpenGL {
 
 		if(!IsValid()) {
 
+			STARTRACKER_ERROR("Invalid Framebuffer");
 			ASSERT(false && "Invalid Framebuffer!");
 		}
 

@@ -80,7 +80,8 @@ namespace StarTracker::Core::OpenGL {
 			}
 			default: {
 
-				ASSERT(false && "Unnowkn ShaderDataType!");
+				STARTRACKER_ERROR("Unkown ShaderDataType {} for {}", static_cast<int>(dataType), name);
+				ASSERT(false && "Unknown ShaderDataType!");
 				break;
 			}
 		}

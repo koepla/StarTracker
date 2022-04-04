@@ -2,6 +2,7 @@
 #define STARTRACKER_CORE_OPENGL_FRAMEBUFFER_H
 
 #include <StarTracker/Core/Assert.hpp>
+#include <StarTracker/Core/Core.hpp>
 
 #include <glad/glad.h>
 

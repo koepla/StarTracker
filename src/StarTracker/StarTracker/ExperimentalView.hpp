@@ -14,6 +14,7 @@
 #include <StarTracker/Core/OpenGL/FrameBuffer.hpp>
 #include <StarTracker/Core/OpenGL/Renderer.hpp>
 #include <StarTracker/Core/OpenGL/Model.hpp>
+#include <StarTracker/Core/Logger.hpp>
 		  
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>

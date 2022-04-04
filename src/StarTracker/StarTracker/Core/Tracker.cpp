@@ -10,6 +10,7 @@ namespace StarTracker::Core {
 		}
 
 		const auto availablePorts = Utils::Serial::SerialPort::GetPortNames();
+		STARTRACKER_INFO("Scanning available SerialPorts, found {}", availablePorts.size());
 
 		if (availablePorts.empty()) {
 

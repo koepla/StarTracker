@@ -59,7 +59,14 @@ namespace StarTracker {
 				ImGui::Text("Performance");
 				ImGui::PopFont();
 				ImGui::Text("FPS: %f", 1.0f / deltaTime);
+				ImGui::Separator();
 
+				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::Text("Logging");
+				ImGui::PopFont();
+				ImGui::Text("Info Messages: %d", static_cast<int>(Core::Logger::GetInfoSize()));
+				ImGui::Text("Warn Messages: %d", static_cast<int>(Core::Logger::GetWarnSize()));
+				ImGui::Text("Error Messages: %d", static_cast<int>(Core::Logger::GetErrorSize()));
 				ImGui::Separator();
 
 				const auto allocationStats = Core::Allocator::GetAllocationStats();
