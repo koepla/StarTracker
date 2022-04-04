@@ -79,4 +79,14 @@ Time spent:     5h
 Today I designed and printed a mount for standard 1/4ich threads witch you can find on almost every tripod.
 
 ---
+## :memo: updated top part of camera mount 
+
+```
+Date:           03.04.2022		
+Time spent:     8h 
+```
+
+Today I updated the top part of our camera mount to accomidate a bresser telescope.
+
+---
 
