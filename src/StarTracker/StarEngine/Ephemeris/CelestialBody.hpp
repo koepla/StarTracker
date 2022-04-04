@@ -68,10 +68,8 @@ namespace StarTracker::Ephemeris {
 		*
 		* @return list of the retrieved celestial bodies as std::vector
 		*
-		* @throws std::exception if the file doesn't exist or if the content is invalid formatted
-		*
 		*/
-		[[nodiscard]] static std::vector<std::shared_ptr<CelestialBody>> LoadFromFile(const std::filesystem::path& filePath) noexcept(false);
+		[[nodiscard]] static std::vector<std::shared_ptr<CelestialBody>> LoadFromFile(const std::filesystem::path& filePath) noexcept;
 	
 	private:
 		/**

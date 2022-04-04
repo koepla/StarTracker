@@ -89,18 +89,8 @@ namespace StarTracker::Core {
 		}
 		else {
 
-			auto celestialBodies = [&]() -> std::vector<std::shared_ptr<Ephemeris::CelestialBody>> {
-
-				try {
-
-					STARTRACKER_INFO("Loading CelestialBodies {} from disk", filePath.string());
-					return Ephemeris::CelestialBody::LoadFromFile(celestialBodyRootPath / filePath);
-				}
-				catch(const std::exception&) {
-
-					return {};
-				}
-			}();
+			STARTRACKER_INFO("Loading CelestialBodies {} from disk", filePath.string());
+			auto celestialBodies = Ephemeris::CelestialBody::LoadFromFile(celestialBodyRootPath / filePath);
 			celestialBodyMap[filePath.string()] = celestialBodies;
 			
 			return celestialBodyMap[filePath.string()];
