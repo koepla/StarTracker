@@ -28,7 +28,7 @@ namespace StarTracker::Core {
 
 			if (info.Mutex.try_lock()) {
 
-				std::string entry = std::format(args...);
+				std::string entry = std::format(std::forward<Args>(args)...);
 				std::string infoEntry = std::format("[INFO] {}", entry);
 				std::string format = formatEntry(infoEntry);
 				std::fprintf(stdout, "%s\n", format.c_str());
@@ -49,7 +49,7 @@ namespace StarTracker::Core {
 
 			if (warn.Mutex.try_lock()) {
 
-				std::string entry = std::format(args...);
+				std::string entry = std::format(std::forward<Args>(args)...);
 				std::string warnEntry = std::format("[WARN] {}", entry);
 				std::string format = formatEntry(warnEntry);
 				std::fprintf(stderr, "%s\n", format.c_str());
@@ -70,7 +70,7 @@ namespace StarTracker::Core {
 
 			if (error.Mutex.try_lock()) {
 
-				std::string entry = std::format(args...);
+				std::string entry = std::format(std::forward<Args>(args)...);
 				std::string errorEntry = std::format("[ERROR] {}", entry);
 				std::string format = formatEntry(errorEntry);
 				std::fprintf(stderr, "%s\n", format.c_str());
