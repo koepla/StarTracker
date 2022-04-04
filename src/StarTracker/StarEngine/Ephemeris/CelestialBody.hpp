@@ -24,7 +24,7 @@ namespace StarTracker::Ephemeris {
 		std::string textureHandle;
 
 		CelestialBody(const std::string& name, const std::string& designation, const std::string& textureHandle) noexcept;
-
+		virtual ~CelestialBody() noexcept;
 	public:
 		/**
 		* @brief Computes the spherical position of the celestial body

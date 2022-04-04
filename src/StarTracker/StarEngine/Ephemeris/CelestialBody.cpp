@@ -8,6 +8,10 @@ namespace StarTracker::Ephemeris {
 
 	}
 
+	CelestialBody::~CelestialBody() noexcept {
+
+	}
+
 	std::string CelestialBody::GetName() const noexcept {
 
 		return name;
