@@ -19,6 +19,7 @@
 #include <StarTracker/Utils/Stopwatch.hpp>
 #include <StarTracker/Utils/File.hpp>
 
+#include <algorithm>
 #include <filesystem>
 #include <iostream>
 #include <thread>

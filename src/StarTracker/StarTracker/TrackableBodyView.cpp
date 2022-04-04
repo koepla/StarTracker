@@ -83,12 +83,68 @@ namespace StarTracker {
 			ImGui::SameLine();
 		
 			drawTrackingDurationCard({ ImGui::GetContentRegionAvail().x, trackerInfoCardHeight });
+
+			/*
+			* TODO(Plank)
+			* Little inline search functionality, we will probably create a
+			* CelestialBody Library class, which can be loaded via the
+			* AssetDatabase, which provides its own Search-Engine.
+			* The CelestialBody Library could also house the texture-handles,
+			* so we don't have to perform a lookup every frame for every single body
+			*/
+			std::vector<std::shared_ptr<Ephemeris::CelestialBody>> filteredBodyList{};
+
+			constexpr auto searchBufferSize = std::size_t{ 128 };
+			std::vector<char> searchBuffer(searchBufferSize);
+			ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+			if (ImGui::InputTextWithHint("##idBodySearchEngine", "Search Celestial Body...", searchBuffer.data(), searchBufferSize)) {
+
+				if (!searchBuffer.empty()) {
+
+					for (const auto& body : celestialBodies) {
+
+						const auto toLower = [&](unsigned char c) {
+
+							return std::tolower(c);
+						};
+
+						auto name = body->GetName();
+						auto designation = body->GetDesignation();
+
+						std::transform(name.begin(), name.end(), name.begin(), toLower);
+						std::transform(designation.begin(), designation.end(), designation.begin(), toLower);
+						std::transform(searchBuffer.begin(), searchBuffer.end(), searchBuffer.begin(), toLower);
+
+						if (name.contains(searchBuffer.data())) {
+
+							filteredBodyList.emplace_back(body);
+						}
+						else if (designation.contains(searchBuffer.data())) {
+
+							filteredBodyList.emplace_back(body);
+						}
+					}
+				}
+				else {
+
+					filteredBodyList = celestialBodies;
+				}
+			}
+			else {
+
+				filteredBodyList = celestialBodies;
+			}
+			ImGui::PopItemWidth();
 		
 			if (ImGui::BeginChild("idChildTrackableBodiesList", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
 		
 				if (ImGui::BeginTable("Trackable Bodies", 1)) {
-		
-					for(const auto& body : celestialBodies) {
+
+					/*
+					* Note that making a copy isn't really a problem, the bodies are
+					* heap allocated and we are only accessing them via shared pointers
+					*/
+					for(const auto& body : filteredBodyList) {
 		
 						ImGui::TableNextRow();
 						ImGui::TableSetColumnIndex(0);

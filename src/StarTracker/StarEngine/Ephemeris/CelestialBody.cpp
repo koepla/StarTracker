@@ -8,6 +8,10 @@ namespace StarTracker::Ephemeris {
 
 	}
 
+	CelestialBody::~CelestialBody() noexcept {
+
+	}
+
 	std::string CelestialBody::GetName() const noexcept {
 
 		return name;
@@ -23,27 +27,27 @@ namespace StarTracker::Ephemeris {
 		return textureHandle;
 	}
 
-	std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept(false) {
+	std::vector<std::shared_ptr<CelestialBody>> CelestialBody::LoadFromFile(const std::filesystem::path& filePath)  noexcept {
 
 		std::ifstream fin{ filePath };
 
 		if (!fin.is_open()) {
 
-			throw std::exception{ "Couldn't open file!" };
+			return {};
 		}
 
 		const auto fileContent = std::string{ std::istreambuf_iterator<char>{ fin }, std::istreambuf_iterator<char>{ } };
 
 		if (fileContent.empty()) {
 
-			throw std::exception{ "File was empty!" };
+			return {};
 		}
 
 		const auto jObject = nlohmann::json::parse(fileContent, nullptr, false, true);
 
 		if (!jObject.contains("CelestialBodies") || !jObject["CelestialBodies"].is_array()) {
 
-			throw std::exception{ "Couldn't find CelestialBodies Array!" };
+			return {};
 		}
 
 		std::vector<std::shared_ptr<CelestialBody>> celestialBodies{};
