@@ -5,7 +5,9 @@ namespace StarTracker::Core {
 	void* Allocator::Reserve(std::size_t size) noexcept {
 
 		auto block = std::malloc(size);
+
 		allocationStats.ActiveAllocations++;
+
 		return block;
 	}
 
@@ -15,8 +17,8 @@ namespace StarTracker::Core {
 		allocationStats.ActiveAllocations--;
 	}
 
-	std::size_t Allocator::GetAllocations() noexcept {
+	const AllocationStats& Allocator::GetAllocationStats() noexcept {
 
-		return allocationStats.ActiveAllocations;
+		return allocationStats;
 	}
 }

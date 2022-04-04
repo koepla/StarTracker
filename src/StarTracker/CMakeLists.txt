@@ -6,6 +6,7 @@ if(MSVC)
 		$<$<CONFIG:>:/MT> #---------|
 		$<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
 		$<$<CONFIG:Release>:/MT> #--|
+		$<$<CONFIG:RelWithDebInfo>:/MT>
 	)
 endif()
 
@@ -191,6 +192,7 @@ configure_file(${ASSET_SOURCE_DIR}/Textures/Whirlpool.png ${ASSET_TARGET_DIR}/Te
 
 # Models
 configure_file(${ASSET_SOURCE_DIR}/Models/StarTrackerMount.obj ${ASSET_TARGET_DIR}/Models/StarTrackerMount.obj COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Models/StarTrackerTop.obj ${ASSET_TARGET_DIR}/Models/StarTrackerTop.obj COPYONLY)
 
 # Fonts
 configure_file(${ASSET_SOURCE_DIR}/Fonts/SFNSDisplay-Bold.ttf  ${ASSET_TARGET_DIR}/Fonts/SFNSDisplay-Bold.ttf COPYONLY)

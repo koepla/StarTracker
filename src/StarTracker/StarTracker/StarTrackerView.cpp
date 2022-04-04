@@ -56,9 +56,18 @@ namespace StarTracker {
 			if (ImGui::BeginMenu("Debug")) {
 
 				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::Text("Performance");
+				ImGui::PopFont();
+				ImGui::Text("FPS: %f", 1.0f / deltaTime);
+
+				ImGui::Separator();
+
+				const auto allocationStats = Core::Allocator::GetAllocationStats();
+
+				ImGui::PushFont(Core::UIFont::Medium);
 				ImGui::Text("Memory");
 				ImGui::PopFont();
-				ImGui::Text("Active Allocations: %d", static_cast<int>(Core::Allocator::GetAllocations()));
+				ImGui::Text("Active Allocations: %d", static_cast<int>(allocationStats.ActiveAllocations));
 				ImGui::EndMenu();
 			}
 

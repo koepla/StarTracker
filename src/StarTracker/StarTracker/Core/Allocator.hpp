@@ -33,12 +33,12 @@ namespace StarTracker::Core {
 		static void Free(void* block) noexcept;
 
 		/**
-		* @brief Returns the number of active allocations
+		* @brief Returns the allocation statistics
 		*
-		* @return number of active allocations
+		* @return allocation statistics
 		* 
 		*/
-		[[nodiscard]] static std::size_t GetAllocations() noexcept;
+		[[nodiscard]] static const AllocationStats& GetAllocationStats() noexcept;
 	};
 }
 
