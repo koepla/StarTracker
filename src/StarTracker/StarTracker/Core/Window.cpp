@@ -4,6 +4,8 @@ namespace StarTracker::Core {
 
 	Window::Window(const WindowData& windowData) noexcept : windowData{ windowData }, nativeHandle{ nullptr } {
 
+		STARTRACKER_INFO("Initializing Window");
+
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -20,7 +22,8 @@ namespace StarTracker::Core {
 
 		if (!nativeHandle) {
 
-			ASSERT(false && "Couldn't create window.");
+			STARTRACKER_ERROR("Couldn't create window");
+			ASSERT(false && "Couldn't create window");
 			glfwDestroyWindow(nativeHandle);
 			glfwTerminate();
 		}
@@ -30,7 +33,8 @@ namespace StarTracker::Core {
 
 		if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
 
-			ASSERT(false && "Couldn't load OpenGL functions.");
+			STARTRACKER_ERROR("Couldn't load OpenGL functions");
+			ASSERT(false && "Couldn't load OpenGL functions");
 			glfwDestroyWindow(nativeHandle);
 			glfwTerminate();
 		}

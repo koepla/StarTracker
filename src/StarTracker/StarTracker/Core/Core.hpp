@@ -2,6 +2,7 @@
 #define STARTRACKER_CORE_H
 
 #include <StarTracker/Core/Allocator.hpp>
+#include <StarTracker/Core/Logger.hpp>
 
 void* operator new(std::size_t size);
 void operator delete(void* block);

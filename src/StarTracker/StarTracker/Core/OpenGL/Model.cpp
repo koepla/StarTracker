@@ -44,6 +44,7 @@ namespace StarTracker::Core::OpenGL {
 
 		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warning, &error, filePath.string().c_str())) {
 
+			STARTRACKER_ERROR("Couldn't load Model {}", filePath.string());
 			ASSERT(false && "Couldn't load model!");
 		}
 
@@ -82,6 +83,9 @@ namespace StarTracker::Core::OpenGL {
 
 		geometryInfo.IndexCount = indices.size();
 		geometryInfo.VertexCount = vertices.size();
+
+		STARTRACKER_INFO("Found {} indices in Model {}", geometryInfo.IndexCount, filePath.string());
+		STARTRACKER_INFO("Found {} vertices in Model {}", geometryInfo.VertexCount, filePath.string());
 
 		const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 

@@ -38,6 +38,7 @@ namespace StarTracker::Core::OpenGL {
 			glDeleteProgram(vertexShaderProgram);
 			glDeleteProgram(fragmentShaderProgram);
 		
+			STARTRACKER_ERROR("Shader linking failed: {}", failureInfo.data());
 			ASSERT(false && "Shader linking failed, see `failureInfo`!");
 		}
 
@@ -61,10 +62,9 @@ namespace StarTracker::Core::OpenGL {
 				glGetActiveUniform(shaderProgram, i, maxUniformLength, &length, &size, &dataType, uniformNameBuffer.data());
 			
 				const auto location = glGetUniformLocation(shaderProgram, uniformNameBuffer.data());
-
 				uniformLocationCache[uniformNameBuffer.data()] = location;
 
-				std::fprintf(stdout, "Uniform %s has location '%d'\n", uniformNameBuffer.data(), location);
+				STARTRACKER_INFO("Uniform {} has location {} in {}, {}", uniformNameBuffer.data(), location, vertexShaderPath.string(), fragmentShaderPath.string());
 			}
 		}
 
@@ -152,8 +152,8 @@ namespace StarTracker::Core::OpenGL {
 
 		if (location == -1) {
 
-			std::fprintf(stderr, "Name: %s\n", name.c_str());
-			ASSERT(false && "Uniform `name` doesn't exist!");
+			STARTRACKER_ERROR("Uniform {} doesn't exist", name);
+			ASSERT(false && "Uniform `name` doesn't exist");
 		}
 		else {
 
@@ -184,7 +184,7 @@ namespace StarTracker::Core::OpenGL {
 
 			glDeleteProgram(shaderProgram);
 
-			std::fprintf(stderr, "FailureInfo: %s\n", failureInfo.data());
+			STARTRACKER_ERROR("Shader compilation failed: {}", failureInfo.data());
 			ASSERT(false && "Shader compilation failed, see `failureInfo`!");
 		}
 
