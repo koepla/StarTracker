@@ -176,9 +176,14 @@ namespace StarTracker::Core {
 				}
 			};
 
-			std::fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = %s, message = %s\n",
-						  ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-						  type, severityToString(severity), message );
+			if (type == GL_DEBUG_TYPE_ERROR) {
+
+				STARTRACKER_ERROR("[OpenGL]: type = {}, severity = {}, message = {}", type, severityToString(severity), message);
+			}
+			else {
+
+				STARTRACKER_WARN("[OpenGL]: type = {}, severity = {}, message = {}", type, severityToString(severity), message);
+			}
 		};
 
 		glEnable(GL_DEBUG_OUTPUT);
