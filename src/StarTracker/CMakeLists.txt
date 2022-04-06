@@ -132,7 +132,9 @@ add_executable(StarTracker
 		StarTracker/Core/OpenGL/Model.hpp
 		StarTracker/Core/OpenGL/Model.cpp
 		StarTracker/Core/Logger.hpp
-		StarTracker/Core/Logger.cpp)
+		StarTracker/Core/Logger.cpp
+		StarTracker/Core/CelestialBodyLibrary.hpp
+		StarTracker/Core/CelestialBodyLibrary.cpp)
 
 target_include_directories(StarEngine PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(StarTracker PRIVATE ${CMAKE_CURRENT_LIST_DIR})

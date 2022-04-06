@@ -2,13 +2,13 @@
 
 namespace StarTracker {
 
-	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, celestialBodies{}, tracker{}, trackingDuration{} {
+	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, tracker{}, library{}, trackingDuration{} {
 
 	}
-	
+
 	void TrackableBodyView::OnInit() noexcept {
-	
-		celestialBodies = Core::AssetDataBase::LoadCelestialBodies("CelestialBodies.json");
+
+		library.LoadFromFile("CelestialBodies.json");
 		observer = [&]() -> Utils::LocationService::Location {
 
 			try {
@@ -22,7 +22,7 @@ namespace StarTracker {
 		}();
 
 		try {
-			
+
 			constexpr auto maxConnectionTries = std::size_t{ 3 };
 			for (auto i = std::size_t{ 0 }; i < maxConnectionTries; i++) {
 
@@ -33,128 +33,52 @@ namespace StarTracker {
 			}
 		}
 		catch (const std::exception&) {
-		
+
 			ASSERT(false && "Failed to connect to tracker!");
 		}
 	}
 
 	void TrackableBodyView::OnUpdate(float deltaTime) noexcept {
 
-		const auto reloadCelestialBodies = [&]() -> void {
-
-			const auto filePath = Utils::File::OpenFileDialog("Select CelestialBodes File", false);
-
-			if (!filePath.empty()) {
-
-				celestialBodies = Ephemeris::CelestialBody::LoadFromFile(filePath.at(0));
-			}
-		};
-
-		if (Core::Input::IsKeyPressed(Core::KeyCode::LeftControl) && Core::Input::IsKeyPressed(Core::KeyCode::E)) {
-
-			reloadCelestialBodies();
-		}
-
-		if (ImGui::BeginMainMenuBar()) {
-
-			if (ImGui::BeginMenu("File")) {
-
-				ImGui::PushFont(Core::UIFont::Medium);
-				ImGui::Text("Tracker");
-				ImGui::PopFont();
-				if (ImGui::MenuItem("Load CelestialBodies", "Ctrl+E")) {
-
-					reloadCelestialBodies();
-				}
-				ImGui::Separator();
-				ImGui::EndMenu();
-			}
-			ImGui::EndMainMenuBar();
-		}
-
 		if (ImGui::Begin("Tracking")) {
-		
+
+			// Info UI
 			auto& style = ImGui::GetStyle();
 			const auto itemSpacing = style.ItemSpacing;
 			const auto fontSize = ImGui::GetFontSize();
 			const auto trackerInfoCardHeight = 3.0f * fontSize + (2.0f + 2.0f * 0.7f) * itemSpacing.y - 4.0f;
 			drawTrackerInfoCard({ ImGui::GetContentRegionAvail().x * 0.5f, trackerInfoCardHeight });
-		
 			ImGui::SameLine();
-		
 			drawTrackingDurationCard({ ImGui::GetContentRegionAvail().x, trackerInfoCardHeight });
 
-			/*
-			* TODO(Plank)
-			* Little inline search functionality, we will probably create a
-			* CelestialBody Library class, which can be loaded via the
-			* AssetDatabase, which provides its own Search-Engine.
-			* The CelestialBody Library could also house the texture-handles,
-			* so we don't have to perform a lookup every frame for every single body
-			*/
-			std::vector<std::shared_ptr<Ephemeris::CelestialBody>> filteredBodyList{};
-
+			// Filter Search Box
 			constexpr auto searchBufferSize = std::size_t{ 128 };
-			std::vector<char> searchBuffer(searchBufferSize);
+			static std::vector<char> searchBuffer(searchBufferSize);
 			ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-			if (ImGui::InputTextWithHint("##idBodySearchEngine", "Search Celestial Body...", searchBuffer.data(), searchBufferSize)) {
-
-				if (!searchBuffer.empty()) {
-
-					for (const auto& body : celestialBodies) {
-
-						const auto toLower = [&](unsigned char c) {
-
-							return std::tolower(c);
-						};
-
-						auto name = body->GetName();
-						auto designation = body->GetDesignation();
-
-						std::transform(name.begin(), name.end(), name.begin(), toLower);
-						std::transform(designation.begin(), designation.end(), designation.begin(), toLower);
-						std::transform(searchBuffer.begin(), searchBuffer.end(), searchBuffer.begin(), toLower);
-
-						if (name.contains(searchBuffer.data())) {
-
-							filteredBodyList.emplace_back(body);
-						}
-						else if (designation.contains(searchBuffer.data())) {
-
-							filteredBodyList.emplace_back(body);
-						}
-					}
-				}
-				else {
-
-					filteredBodyList = celestialBodies;
-				}
-			}
-			else {
-
-				filteredBodyList = celestialBodies;
-			}
+			if (ImGui::InputTextWithHint("##idBodySearchEngine", "Search Celestial Body...", searchBuffer.data(), searchBufferSize));
 			ImGui::PopItemWidth();
+
+			// Get the filtered library
+			const auto filter = std::string{ searchBuffer.data() };
+			const auto filteredLibrary = library.GetFilteredBodies(filter);
 		
+			// Very messy UI for Bodies
 			if (ImGui::BeginChild("idChildTrackableBodiesList", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
 		
 				if (ImGui::BeginTable("Trackable Bodies", 1)) {
 
-					/*
-					* Note that making a copy isn't really a problem, the bodies are
-					* heap allocated and we are only accessing them via shared pointers
-					*/
-					for(const auto& body : filteredBodyList) {
+					for(const auto& entry : filteredLibrary) {
 		
 						ImGui::TableNextRow();
 						ImGui::TableSetColumnIndex(0);
-		
+
+						const auto body = entry.Body;
 						const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
 						const auto celestialBodyCardHeight = 4.0f * fontSize + (2.0f + 3 * 0.7f) * itemSpacing.y - 6.0f;
 		
 						static std::string trackingStatus{ "Not tracking" };
 		
-						if (drawCelestialBodyCard(body, { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
+						if (drawCelestialBodyCard(entry, { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
 		
 							trackingStatus = "Not tracking";
 							ImGui::OpenPopup(windowId.c_str());
@@ -168,6 +92,7 @@ namespace StarTracker {
 							ImGui::Text("%s", windowId.c_str());
 							if (ImGui::Button("Track", { size.x * 2.0f, 1.4f * size.y })) {
 		
+								// Not optimal to have the callback defined here
 								const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
 		
 									if (status == Core::TrackerCallbackStatus::FAILURE) {
@@ -190,7 +115,6 @@ namespace StarTracker {
 								}
 							}
 							ImGui::Text("Status: %s", trackingStatus.c_str());
-		
 							ImGui::EndPopup();
 						}
 					}
@@ -359,7 +283,10 @@ namespace StarTracker {
 		ImGui::PopStyleColor();
 	}
 
-	bool TrackableBodyView::drawCelestialBodyCard(const std::shared_ptr<Ephemeris::CelestialBody>& body, const glm::vec2& size) noexcept {
+	bool TrackableBodyView::drawCelestialBodyCard(Core::LibraryEntry entry, const glm::vec2& size) noexcept {
+
+		const auto body = entry.Body;
+		const auto texture = entry.Texture;
 
 		bool selected{ false };
 		const auto& style = ImGui::GetStyle();
@@ -367,7 +294,6 @@ namespace StarTracker {
 		ImGui::PushStyleColor(ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg]);
 		if (ImGui::BeginChild(childId.c_str(), ImVec2{ size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
 
-			const auto texture = Core::AssetDataBase::LoadTexture(body->GetTextureHandle());
 			const auto textureId = static_cast<std::intptr_t>(texture->GetNativeHandle());
 			const auto drawList = ImGui::GetWindowDrawList();
 			const auto cursorPosition = ImGui::GetCursorPos();
