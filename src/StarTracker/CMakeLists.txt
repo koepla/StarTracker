@@ -49,8 +49,7 @@ add_library(StarEngine
 		StarEngine/Ephemeris/Coordinates/Terrestrial.hpp
 		StarEngine/Ephemeris/Coordinates/Terrestrial.cpp
 		StarEngine/Ephemeris/Coordinates/Transform.hpp
-		StarEngine/Ephemeris/Coordinates/Transform.cpp
-		StarTracker/Core/ImageProcessing.cpp StarTracker/Core/ImageProcessing.hpp)
+		StarEngine/Ephemeris/Coordinates/Transform.cpp)
 
 add_executable(StarTracker
 		StarTracker/ExperimentalView.hpp
@@ -127,6 +126,8 @@ add_executable(StarTracker
 		StarTracker/Core/AssetDataBase.cpp
 		StarTracker/Core/OpenGL/Renderer.hpp 
 		StarTracker/Core/OpenGL/Renderer.cpp 
+		StarTracker/Core/ImageProcessing.hpp
+		StarTracker/Core/ImageProcessing.cpp
 		StarTracker/ImageProcessingView.hpp
 		StarTracker/ImageProcessingView.cpp
 		StarTracker/Core/OpenGL/Model.hpp
@@ -134,7 +135,9 @@ add_executable(StarTracker
 		StarTracker/Core/Logger.hpp
 		StarTracker/Core/Logger.cpp
 		StarTracker/Core/CelestialBodyLibrary.hpp
-		StarTracker/Core/CelestialBodyLibrary.cpp)
+		StarTracker/Core/CelestialBodyLibrary.cpp 
+		StarTracker/UI/UI.hpp 
+		StarTracker/UI/UI.cpp)
 
 target_include_directories(StarEngine PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(StarTracker PRIVATE ${CMAKE_CURRENT_LIST_DIR})

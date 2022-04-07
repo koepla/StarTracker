@@ -36,6 +36,8 @@ namespace StarTracker {
 
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
 
+		// TODO(Plank): Update to new UI API
+
 		const auto application = Core::Application::GetInstance();
 
 		if (Core::Input::IsKeyPressed(Core::KeyCode::LeftControl) && Core::Input::IsKeyPressed(Core::KeyCode::M)) {
@@ -47,7 +49,7 @@ namespace StarTracker {
 
 			if (ImGui::BeginMenu("File")) {
 
-				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::PushFont(UI::Font::Medium);
 				ImGui::Text("3D-Model-Viewer");
 				ImGui::PopFont();
 				if (ImGui::MenuItem("Load Model", "Ctrl+M")) {
@@ -106,7 +108,7 @@ namespace StarTracker {
 				application->GetWindow().ShowCursor();
 			}
 
-			ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(frameBuffer->GetNativeTextureHandle())), imageSize, { 0, 1 }, { 1, 0 });
+			UI::Image::Draw(frameBuffer->GetNativeTextureHandle(), { imageSize.x, imageSize.y });
 		}
 		ImGui::End();
 	}
@@ -187,15 +189,15 @@ namespace StarTracker {
 			const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
 
 			// Model-Info
-			drawList->AddText(Core::UIFont::Medium, fontSize, drawPosition, textColor, cardInfo);
+			drawList->AddText(UI::Font::Medium, fontSize, drawPosition, textColor, cardInfo);
 			drawPosition = { drawPosition.x, drawPosition.y + fontSize + regulatedItemSpacing };
 
 			// Path-Info
-			drawList->AddText(Core::UIFont::Regular, fontSize - 2.0f, drawPosition, textLightColor, modelPathInfo.c_str());
+			drawList->AddText(UI::Font::Regular, fontSize - 2.0f, drawPosition, textLightColor, modelPathInfo.c_str());
 			drawPosition = { drawPosition.x, drawPosition.y + fontSize - 2.0f + regulatedItemSpacing };
 
 			// Geometry-Info
-			drawList->AddText(Core::UIFont::Regular, fontSize - 2.0f, drawPosition, textLightColor, modelGeometryInfo.c_str());
+			drawList->AddText(UI::Font::Regular, fontSize - 2.0f, drawPosition, textLightColor, modelGeometryInfo.c_str());
 
 
 			const auto reloadButtonWidth = ImGui::CalcTextSize("Reload Model").x * 2.5f;

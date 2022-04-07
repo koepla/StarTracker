@@ -32,7 +32,7 @@ namespace StarTracker {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::PushFont(UI::Font::Medium);
 				ImGui::Text("General");
 				ImGui::PopFont();
 				if (ImGui::MenuItem("Exit", "Alt+F4")) {
@@ -43,25 +43,25 @@ namespace StarTracker {
 			}
 			if (ImGui::BeginMenu("Settings")) {
 
-				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::PushFont(UI::Font::Medium);
 				ImGui::Text("Appearance");
 				ImGui::PopFont();
-				static int selectedTheme{ static_cast<int>(Core::UITheme::Light) };
+				static int selectedTheme{ static_cast<int>(UI::ThemeStyle::Light) };
 				if (ImGui::Combo("Theme", &selectedTheme, "Light\0Dark\0\0")) {
 
-					Core::UIView::SetTheme(static_cast<Core::UITheme>(selectedTheme));
+					UI::Theme::SetStyle(static_cast<UI::ThemeStyle>(selectedTheme));
 				}
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Debug")) {
 
-				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::PushFont(UI::Font::Medium);
 				ImGui::Text("Performance");
 				ImGui::PopFont();
 				ImGui::Text("FPS: %f", 1.0f / deltaTime);
 				ImGui::Separator();
 
-				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::PushFont(UI::Font::Medium);
 				ImGui::Text("Logging");
 				ImGui::PopFont();
 				ImGui::Text("Info Messages: %d", static_cast<int>(Core::Logger::GetInfoSize()));
@@ -71,7 +71,7 @@ namespace StarTracker {
 
 				const auto allocationStats = Core::Allocator::GetAllocationStats();
 
-				ImGui::PushFont(Core::UIFont::Medium);
+				ImGui::PushFont(UI::Font::Medium);
 				ImGui::Text("Memory");
 				ImGui::PopFont();
 				ImGui::Text("Active Allocations: %d", static_cast<int>(allocationStats.ActiveAllocations));

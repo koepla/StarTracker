@@ -3,31 +3,12 @@
 
 #include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/View.hpp>
+#include <StarTracker/UI/UI.hpp>
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <imgui.h>
-#include <imgui_impl_opengl3.h>
-#include <imgui_impl_glfw.h>
 
 namespace StarTracker::Core {
-
-	struct UIFont {
-
-		inline static ImFont* Light = nullptr;
-		inline static ImFont* Regular = nullptr;
-		inline static ImFont* Medium = nullptr;
-		inline static ImFont* SemiBold = nullptr;
-		inline static ImFont* Bold = nullptr;
-		inline static ImFont* Heavy = nullptr;
-		inline static ImFont* Italic = nullptr;
-	};
-
-	enum class UITheme : std::int16_t {
-
-		Light = 0,
-		Dark = 1
-	};
 
 	class UIView : public View {
 
@@ -36,16 +17,6 @@ namespace StarTracker::Core {
 
 	public:
 		explicit UIView(void* nativeWindowHandle, bool enableDockSpace = true) noexcept;
-
-		/**
-		* @brief Updates the theme
-		*
-		* @param theme UITheme enum
-		*
-		* @see UITheme
-		* 
-		*/
-		static void SetTheme(UITheme theme) noexcept;
 
 		/**
 		* @brief Called every frame before the viewList of the owning application instance is updated
