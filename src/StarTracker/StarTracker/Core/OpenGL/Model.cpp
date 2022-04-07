@@ -28,7 +28,7 @@ namespace StarTracker::Core::OpenGL {
 
 	}
 
-	void Model::LoadFromFile(const std::filesystem::path& filePath, bool invertedTexCoords) noexcept {
+	bool Model::LoadFromFile(const std::filesystem::path& filePath, bool invertedTexCoords) noexcept {
 
 		hasTexture = false;
 		this->filePath = filePath;
@@ -45,7 +45,7 @@ namespace StarTracker::Core::OpenGL {
 		if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warning, &error, filePath.string().c_str())) {
 
 			STARTRACKER_ERROR("Couldn't load Model {}", filePath.string());
-			ASSERT(false && "Couldn't load model!");
+			return false;
 		}
 
 		for (const auto& shape : shapes) {
@@ -108,13 +108,17 @@ namespace StarTracker::Core::OpenGL {
 		indexBuffer->SetData(indices.data(), static_cast<std::uint32_t>(indices.size()));
 		vertexArray->SetIndexBuffer(indexBuffer);
 		vertexArray->SetVertexBuffer(vertexBuffer);
+
+		return true;
 	}
 
-	void Model::LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords) noexcept {
+	bool Model::LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords) noexcept {
 
-		LoadFromFile(filePath, invertedTexCoords);
+		const auto returnValue = LoadFromFile(filePath, invertedTexCoords);
 		texture = Core::AssetDataBase::LoadTexture(texturePath);
 		hasTexture = true;
+
+		return returnValue;
 	}
 
 	const std::filesystem::path& Model::GetFilePath() const noexcept {

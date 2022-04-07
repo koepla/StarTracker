@@ -46,8 +46,8 @@ namespace StarTracker::Core::OpenGL {
 
 	public:
 		Model() noexcept;
-		void LoadFromFile(const std::filesystem::path& filePath, bool invertedTexCoords = false) noexcept;
-		void LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords = false) noexcept;
+		[[nodiscard]] bool LoadFromFile(const std::filesystem::path& filePath, bool invertedTexCoords = false) noexcept;
+		[[nodiscard]] bool LoadFromFile(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool invertedTexCoords = false) noexcept;
 
 		[[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
 		[[nodiscard]] const ModelGeometryInfo& GetGeometryInfo() const noexcept;

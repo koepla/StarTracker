@@ -195,8 +195,10 @@ namespace StarTracker {
 							for(const auto& currentImagePath : selectedImages) {
 
 								const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
-								currentTexture->LoadFromFile(currentImagePath);
-								textureList.emplace_back(currentTexture);
+								if (currentTexture->LoadFromFile(currentImagePath)) {
+
+									textureList.emplace_back(currentTexture);
+								}
 							}
 
 							if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {

@@ -34,7 +34,7 @@ namespace StarTracker::Core::OpenGL {
 		Texture() noexcept;
 		~Texture() noexcept;
 
-		void LoadFromFile(const std::filesystem::path& filePath) noexcept;
+		[[nodiscard]] bool LoadFromFile(const std::filesystem::path& filePath) noexcept;
 
 		void Bind(std::uint32_t slot) const noexcept;
 		

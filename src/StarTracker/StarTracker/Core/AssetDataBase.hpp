@@ -12,10 +12,10 @@ namespace StarTracker::Core {
 
 	private:
 		static inline std::filesystem::path assetPath{ std::filesystem::current_path() / "Assets" };
-		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Shader>> shaderMap{};
-		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Texture>> textureMap{};
-		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Model>> modelMap{};
-		static inline std::unordered_map<std::string, std::vector<std::shared_ptr<Ephemeris::CelestialBody>>> celestialBodyMap{};
+		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Shader>> shaderCache{};
+		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Texture>> textureCache{};
+		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Model>> modelCache{};
+		static inline std::unordered_map<std::string, std::vector<std::shared_ptr<Ephemeris::CelestialBody>>> celestialBodyCache{};
 
 	public:
 		/**
@@ -30,7 +30,7 @@ namespace StarTracker::Core {
 		* @return std::shared_ptr to the shader instance
 		* 
 		*/
-		[[nodiscard]] static const std::shared_ptr<OpenGL::Shader>& LoadShader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath, bool reload = false) noexcept;
+		[[nodiscard]] static std::shared_ptr<OpenGL::Shader> LoadShader(const std::filesystem::path& vertexPath, const std::filesystem::path& fragmentPath, bool reload = false) noexcept;
 
 		/**
 		* @brief Loads the specified texture
@@ -42,7 +42,7 @@ namespace StarTracker::Core {
 		* @return std::shared_ptr to the texture instance
 		* 
 		*/
-		[[nodiscard]] static const std::shared_ptr<OpenGL::Texture>& LoadTexture(const std::filesystem::path& filePath, bool reload = false) noexcept;
+		[[nodiscard]] static std::shared_ptr<OpenGL::Texture> LoadTexture(const std::filesystem::path& filePath, bool reload = false) noexcept;
 
 		/**
 		* @brief Loads the specified model
@@ -54,7 +54,7 @@ namespace StarTracker::Core {
 		* @return std::shared_ptr to the model instance
 		* 
 		*/
-		[[nodiscard]] static const std::shared_ptr<OpenGL::Model>& LoadModel(const std::filesystem::path& filePath, bool reload = false) noexcept;
+		[[nodiscard]] static std::shared_ptr<OpenGL::Model> LoadModel(const std::filesystem::path& filePath, bool reload = false) noexcept;
 
 		/**
 		* @brief Loads the specified model
@@ -68,7 +68,7 @@ namespace StarTracker::Core {
 		* @return std::shared_ptr to the model instance
 		* 
 		*/
-		[[nodiscard]] static const std::shared_ptr<OpenGL::Model>& LoadModel(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool reload = false) noexcept;
+		[[nodiscard]] static std::shared_ptr<OpenGL::Model> LoadModel(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool reload = false) noexcept;
 
 		/**
 		* @brief Loads the specified CelestialBody list

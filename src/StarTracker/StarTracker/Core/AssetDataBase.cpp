@@ -3,79 +3,94 @@
 namespace StarTracker::Core {
 
 
-	const std::shared_ptr<OpenGL::Shader>& AssetDataBase::LoadShader(const std::filesystem::path &vertexPath, const std::filesystem::path& fragmentPath, bool reload) noexcept {
+	std::shared_ptr<OpenGL::Shader> AssetDataBase::LoadShader(const std::filesystem::path &vertexPath, const std::filesystem::path& fragmentPath, bool reload) noexcept {
 
 		static const auto shaderRootPath = assetPath / std::filesystem::path{ "Shaders" };
 
-		if (shaderMap.find(vertexPath.string()) != shaderMap.end() && !reload) {
+		if (shaderCache.find(vertexPath.string()) != shaderCache.end() && !reload) {
 
-			return shaderMap[vertexPath.string()];
+			return shaderCache[vertexPath.string()];
 		}
 		else {
 
 			STARTRACKER_INFO("Loading Shader {} {} from disk", vertexPath.string(), fragmentPath.string());
 			auto shader = std::make_shared<OpenGL::Shader>();
 			shader->LoadFromFile(shaderRootPath / vertexPath, shaderRootPath / fragmentPath);
-			shaderMap[vertexPath.string()] = shader;
+			shaderCache[vertexPath.string()] = shader;
 
-			return shaderMap[vertexPath.string()];
+			return shaderCache[vertexPath.string()];
 		}
 	}
 
-	const std::shared_ptr<OpenGL::Texture>& AssetDataBase::LoadTexture(const std::filesystem::path &filePath, bool reload) noexcept {
+	std::shared_ptr<OpenGL::Texture> AssetDataBase::LoadTexture(const std::filesystem::path &filePath, bool reload) noexcept {
 
 		static const auto textureRootPath = assetPath / std::filesystem::path{ "Textures" };
 
-		if (textureMap.find(filePath.string()) != textureMap.end() && !reload) {
+		if (textureCache.find(filePath.string()) != textureCache.end() && !reload) {
 
-			return textureMap[filePath.string()];
+			return textureCache[filePath.string()];
 		}
 		else {
 
 			STARTRACKER_INFO("Loading Texture {} from disk", filePath.string());
 			auto texture = std::make_shared<OpenGL::Texture>();
-			texture->LoadFromFile(textureRootPath / filePath);
-			textureMap[filePath.string()] = texture;
+			if (texture->LoadFromFile(textureRootPath / filePath)) {
 
-			return textureMap[filePath.string()];
+				textureCache[filePath.string()] = texture;
+				return textureCache[filePath.string()];
+			}
+			else {
+
+				return nullptr;
+			}
 		}
 	}
 
-	const std::shared_ptr<OpenGL::Model>& AssetDataBase::LoadModel(const std::filesystem::path& filePath, bool reload) noexcept {
+	std::shared_ptr<OpenGL::Model> AssetDataBase::LoadModel(const std::filesystem::path& filePath, bool reload) noexcept {
 
 		static const auto modelRootPath = assetPath / std::filesystem::path{ "Models" };
 
-		if (modelMap.find(filePath.string()) != modelMap.end() && !reload) {
+		if (modelCache.find(filePath.string()) != modelCache.end() && !reload) {
 
-			return modelMap[filePath.string()];
+			return modelCache[filePath.string()];
 		}
 		else {
 
 			STARTRACKER_INFO("Loading Model {} from disk", filePath.string());
 			auto model = std::make_shared<OpenGL::Model>();
-			model->LoadFromFile(modelRootPath / filePath);
-			modelMap[filePath.string()] = model;
+			if (model->LoadFromFile(modelRootPath / filePath)) {
+				
+				modelCache[filePath.string()] = model;
+				return modelCache[filePath.string()];
+			}
+			else {
 
-			return modelMap[filePath.string()];
+				return nullptr;
+			}
 		}
 	}
 
-	const std::shared_ptr<OpenGL::Model>& AssetDataBase::LoadModel(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool reload) noexcept {
+	std::shared_ptr<OpenGL::Model> AssetDataBase::LoadModel(const std::filesystem::path& filePath, const std::filesystem::path& texturePath, bool reload) noexcept {
 
 		static const auto modelRootPath = assetPath / std::filesystem::path{ "Models" };
 
-		if (modelMap.find(filePath.string()) != modelMap.end() && !reload) {
+		if (modelCache.find(filePath.string()) != modelCache.end() && !reload) {
 
-			return modelMap[filePath.string()];
+			return modelCache[filePath.string()];
 		}
 		else {
 
 			STARTRACKER_INFO("Loading Model {} from disk", filePath.string());
 			auto model = std::make_shared<OpenGL::Model>();
-			model->LoadFromFile(modelRootPath / filePath, texturePath);
-			modelMap[filePath.string()] = model;
+			if (model->LoadFromFile(modelRootPath / filePath)) {
 
-			return modelMap[filePath.string()];
+				modelCache[filePath.string()] = model;
+				return modelCache[filePath.string()];
+			}
+			else {
+
+				return nullptr;
+			}
 		}
 	}
 
@@ -83,17 +98,17 @@ namespace StarTracker::Core {
 
 		static const auto celestialBodyRootPath = assetPath / std::filesystem::path{ "Ephemeris" };
 
-		if (celestialBodyMap.find(filePath.string()) != celestialBodyMap.end() && !reload) {
+		if (celestialBodyCache.find(filePath.string()) != celestialBodyCache.end() && !reload) {
 
-			return celestialBodyMap[filePath.string()];
+			return celestialBodyCache[filePath.string()];
 		}
 		else {
 
 			STARTRACKER_INFO("Loading CelestialBodies {} from disk", filePath.string());
 			auto celestialBodies = Ephemeris::CelestialBody::LoadFromFile(celestialBodyRootPath / filePath);
-			celestialBodyMap[filePath.string()] = celestialBodies;
+			celestialBodyCache[filePath.string()] = celestialBodies;
 			
-			return celestialBodyMap[filePath.string()];
+			return celestialBodyCache[filePath.string()];
 		}
 	}
 }

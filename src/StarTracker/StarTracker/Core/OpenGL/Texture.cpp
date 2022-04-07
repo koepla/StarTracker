@@ -16,7 +16,7 @@ namespace StarTracker::Core::OpenGL {
 		glDeleteTextures(1, &nativeHandle);
 	}
 
-	void Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
+	bool Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
 
 		stbi_set_flip_vertically_on_load(1);
 		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
@@ -32,6 +32,11 @@ namespace StarTracker::Core::OpenGL {
 			glGenerateMipmap(GL_TEXTURE_2D);
 
 			stbi_image_free(data);
+			return true;
+		}
+		else {
+
+			return false;
 		}
 	}
 

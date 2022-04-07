@@ -148,15 +148,18 @@ namespace StarTracker {
 			*/
 			if (texturePath.empty()) {
 
-				model->LoadFromFile(modelPath, invertedTextureCoordinates);
-				shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
+				if (model->LoadFromFile(modelPath, invertedTextureCoordinates)) {
+
+					shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
+				}
 			}
 			else {
 
-				model->LoadFromFile(modelPath, texturePath, invertedTextureCoordinates);
-				shader = Core::AssetDataBase::LoadShader("modelTextureVertex.glsl", "modelTextureFragment.glsl");
+				if (model->LoadFromFile(modelPath, texturePath, invertedTextureCoordinates)) {
+
+					shader = Core::AssetDataBase::LoadShader("modelTextureVertex.glsl", "modelTextureFragment.glsl");
+				}
 			}
-			
 		}   
 	}
 
