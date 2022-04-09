@@ -37,6 +37,21 @@ namespace StarTracker::Utils {
 		}
 	}
 
+	bool File::WriteFile(const std::filesystem::path& filePath, std::string_view data) noexcept {
+
+		std::ofstream fileOut{ filePath };
+
+		if (fileOut.is_open()) {
+
+			fileOut.write(data.data(), data.size());
+			return true;
+		}
+		else {
+
+			return false;
+		}
+	}
+
 	std::vector<std::filesystem::path> File::OpenFileDialog(const std::string& title, bool allowMultiple) noexcept {
 
 		char file[MAX_PATH] = { 0 };

@@ -26,6 +26,16 @@ namespace StarTracker::Utils {
 		[[nodiscard]] static std::string ReadFile(const std::filesystem::path& filePath) noexcept;
 
 		/**
+		* @brief Reads the content of the specified file and returns it as a std::string
+		*
+		* @param filePath path of the file
+		*
+		* @return content of the file
+		*
+		*/
+		[[nodiscard]] static bool WriteFile(const std::filesystem::path& filePath, std::string_view data) noexcept;
+
+		/**
 		* @brief Opens an Open-File-Dialog and returns the paths for the selected files
 		*        Note that if the parameter allowMultiple is set to true, only one path 
 		*        is in the resulting vector
