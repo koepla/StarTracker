@@ -1,15 +1,17 @@
-#include "CelestialBodyLibrary.hpp"
+#include "BodyLibrary.hpp"
+
+#include <StarTracker/Core/AssetDataBase.hpp>
 
 namespace StarTracker::Core {
 
-	CelestialBodyLibrary::CelestialBodyLibrary() noexcept : library{} {
+	BodyLibrary::BodyLibrary() noexcept : library{} {
 
 	}
 
-	void CelestialBodyLibrary::LoadFromFile(const std::filesystem::path& path) noexcept {
+	void BodyLibrary::LoadFromFile(const std::filesystem::path& path) noexcept {
 
 		// Load the basic Celestial Bodies
-		const auto baseLibrary = AssetDataBase::LoadCelestialBodies(path, true);
+		const auto baseLibrary = Ephemeris::CelestialBody::LoadFromFile(path);
 
 		for (const auto& body : baseLibrary) {
 
@@ -17,7 +19,7 @@ namespace StarTracker::Core {
 			const auto textureHandle = body->GetTextureHandle();
 			const auto texture = AssetDataBase::LoadTexture(textureHandle);
 
-			LibraryEntry entry{};
+			BodyLibraryEntry entry{};
 			entry.Body = body;
 			entry.Texture = texture;
 
@@ -25,7 +27,7 @@ namespace StarTracker::Core {
 		}
 	}
 
-	std::vector<LibraryEntry> CelestialBodyLibrary::GetBodies() const noexcept {
+	std::vector<BodyLibraryEntry> BodyLibrary::GetBodies() const noexcept {
 
 		return library;
 	}
@@ -51,7 +53,7 @@ namespace StarTracker::Core {
 		return result;
 	}
 
-	std::vector<LibraryEntry> CelestialBodyLibrary::GetFilteredBodies(std::string filter) const noexcept {
+	std::vector<BodyLibraryEntry> BodyLibrary::GetFilteredBodies(std::string filter) const noexcept {
 
 		// If no filter is specified, return the whole library
 		if (filter.empty()) {
@@ -87,7 +89,7 @@ namespace StarTracker::Core {
 		}();
 
 		// It is okay to make a copy, since we are only copying references anyway
-		std::vector<LibraryEntry> filteredLibrary{};
+		std::vector<BodyLibraryEntry> filteredLibrary{};
 
 		for (const auto& entry : library) {
 
@@ -121,5 +123,22 @@ namespace StarTracker::Core {
 		}
 
 		return filteredLibrary;
+	}
+
+	std::string BodyLibrary::GetSerializable() const noexcept {
+
+		nlohmann::json jObject{};
+		nlohmann::json jBodyArray{};
+
+		for (const auto& entry : library) {
+
+			const auto serializableEntry = entry.Body->GetSerializable();
+			nlohmann::json jEntry = nlohmann::json::parse(serializableEntry, nullptr, false);
+			jBodyArray.emplace_back(jEntry);
+		}
+
+		jObject["CelestialBodies"] = jBodyArray;
+
+		return jObject.dump(1, '\t');
 	}
 }

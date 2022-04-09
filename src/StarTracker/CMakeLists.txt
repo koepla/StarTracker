@@ -134,8 +134,8 @@ add_executable(StarTracker
 		StarTracker/Core/OpenGL/Model.cpp
 		StarTracker/Core/Logger.hpp
 		StarTracker/Core/Logger.cpp
-		StarTracker/Core/CelestialBodyLibrary.hpp
-		StarTracker/Core/CelestialBodyLibrary.cpp 
+		StarTracker/Core/BodyLibrary.hpp
+		StarTracker/Core/BodyLibrary.cpp
 		StarTracker/UI/UI.hpp 
 		StarTracker/UI/UI.cpp)
 

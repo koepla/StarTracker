@@ -3,26 +3,25 @@
 
 #include <StarEngine/Ephemeris/CelestialBody.hpp>
 #include <StarTracker/Core/Core.hpp>
-#include <StarTracker/Core/AssetDataBase.hpp>
 #include <StarTracker/Core/OpenGL/Texture.hpp>
 
 #include <memory>
 
 namespace StarTracker::Core {
 
-	struct LibraryEntry {
+	struct BodyLibraryEntry {
 
 		std::shared_ptr<Ephemeris::CelestialBody> Body;
 		std::shared_ptr<OpenGL::Texture> Texture;
 	};
 
-	class CelestialBodyLibrary {
+	class BodyLibrary {
 
 	private:
-		std::vector<LibraryEntry> library;
+		std::vector<BodyLibraryEntry> library;
 
 	public:
-		CelestialBodyLibrary() noexcept;
+		BodyLibrary() noexcept;
 		void LoadFromFile(const std::filesystem::path& path) noexcept;
 
 		/**
@@ -30,7 +29,7 @@ namespace StarTracker::Core {
 		* 
 		* @return Complete list of all stored Celestial Bodies
 		*/
-		[[nodiscard]] std::vector<LibraryEntry> GetBodies() const noexcept;
+		[[nodiscard]] std::vector<BodyLibraryEntry> GetBodies() const noexcept;
 
 		/**
 		* @brief Returns a filtered list of all stored Celestial Bodies
@@ -39,7 +38,15 @@ namespace StarTracker::Core {
 		* 
 		* @return Filtered list of Celestial Bodies
 		*/
-		[[nodiscard]] std::vector<LibraryEntry> GetFilteredBodies(std::string filter) const noexcept;
+		[[nodiscard]] std::vector<BodyLibraryEntry> GetFilteredBodies(std::string filter) const noexcept;
+
+		/**
+		* @brief Returns a JSON-formatted string of all stored Celestial Bodies
+		* 
+		* @return JSON-formatted BodyLibrary
+		* 
+		*/
+		[[nodiscard]] std::string GetSerializable() const noexcept;
 	};
 }
 
