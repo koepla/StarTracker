@@ -60,11 +60,10 @@ namespace StarTracker::Core::OpenGL {
 				std::uint32_t dataType{};
 
 				glGetActiveUniform(shaderProgram, i, maxUniformLength, &length, &size, &dataType, uniformNameBuffer.data());
-			
 				const auto location = glGetUniformLocation(shaderProgram, uniformNameBuffer.data());
 				uniformLocationCache[uniformNameBuffer.data()] = location;
 
-				STARTRACKER_INFO("Uniform {} has location {} in {}, {}", uniformNameBuffer.data(), location, vertexShaderPath.string(), fragmentShaderPath.string());
+				STARTRACKER_INFO("[{}, {}] Uniform {} has location {}", vertexShaderPath.filename().string(), fragmentShaderPath.filename().string(), uniformNameBuffer.data(), location);
 			}
 		}
 

@@ -13,7 +13,7 @@ namespace StarTracker::Core {
 		}
 		else {
 
-			STARTRACKER_INFO("Loading Shader {} {} from disk", vertexPath.string(), fragmentPath.string());
+			STARTRACKER_INFO("Loading Shader {} {} from disk", vertexPath.filename().string(), fragmentPath.filename().string());
 			auto shader = std::make_shared<OpenGL::Shader>();
 			shader->LoadFromFile(shaderRootPath / vertexPath, shaderRootPath / fragmentPath);
 			shaderCache[vertexPath.string()] = shader;
@@ -32,7 +32,7 @@ namespace StarTracker::Core {
 		}
 		else {
 
-			STARTRACKER_INFO("Loading Texture {} from disk", filePath.string());
+			STARTRACKER_INFO("Loading Texture {} from disk", filePath.filename().string());
 			auto texture = std::make_shared<OpenGL::Texture>();
 			if (texture->LoadFromFile(textureRootPath / filePath)) {
 
@@ -56,7 +56,7 @@ namespace StarTracker::Core {
 		}
 		else {
 
-			STARTRACKER_INFO("Loading Model {} from disk", filePath.string());
+			STARTRACKER_INFO("Loading Model {} from disk", filePath.filename().string());
 			auto model = std::make_shared<OpenGL::Model>();
 			if (model->LoadFromFile(modelRootPath / filePath)) {
 				
@@ -80,7 +80,7 @@ namespace StarTracker::Core {
 		}
 		else {
 
-			STARTRACKER_INFO("Loading Model {} from disk", filePath.string());
+			STARTRACKER_INFO("Loading Model {} from disk", filePath.filename().string());
 			auto model = std::make_shared<OpenGL::Model>();
 			if (model->LoadFromFile(modelRootPath / filePath)) {
 
@@ -104,7 +104,7 @@ namespace StarTracker::Core {
 		}
 		else {
 
-			STARTRACKER_INFO("Loading CelestialBodies {} from disk", filePath.string());
+			STARTRACKER_INFO("Loading CelestialBodies {} from disk", filePath.filename().string());
 			auto celestialBodies = Ephemeris::CelestialBody::LoadFromFile(celestialBodyRootPath / filePath);
 			celestialBodyCache[filePath.string()] = celestialBodies;
 			

@@ -84,8 +84,8 @@ namespace StarTracker::Core::OpenGL {
 		geometryInfo.IndexCount = indices.size();
 		geometryInfo.VertexCount = vertices.size();
 
-		STARTRACKER_INFO("Found {} indices in Model {}", geometryInfo.IndexCount, filePath.string());
-		STARTRACKER_INFO("Found {} vertices in Model {}", geometryInfo.VertexCount, filePath.string());
+		STARTRACKER_INFO("[{}] Found {} indices", filePath.filename().string(), geometryInfo.IndexCount);
+		STARTRACKER_INFO("[{}] Found {} vertices", filePath.filename().string(), geometryInfo.VertexCount);
 
 		const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
