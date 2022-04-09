@@ -49,9 +49,11 @@ namespace StarTracker {
 
 			if (ImGui::BeginMenu("File")) {
 
-				ImGui::PushFont(UI::Font::Medium);
-				ImGui::Text("3D-Model-Viewer");
-				ImGui::PopFont();
+				{
+					UI::ScopedFont mediumFont{ UI::Font::Medium };
+					ImGui::Text("3D-Model-Viewer");
+				}
+
 				if (ImGui::MenuItem("Load Model", "Ctrl+M")) {
 
 					reloadModel();
@@ -107,8 +109,12 @@ namespace StarTracker {
 				isFocused = false;
 				application->GetWindow().ShowCursor();
 			}
+			
+			if (ImGui::BeginChild("idChildModelFrameBuffer", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
 
-			UI::Image::Draw(frameBuffer->GetNativeTextureHandle(), { imageSize.x, imageSize.y });
+				UI::Image::DrawRounded(frameBuffer->GetNativeTextureHandle(), { imageSize.x, imageSize.y });
+			}
+			ImGui::EndChild();
 		}
 		ImGui::End();
 	}
@@ -168,57 +174,59 @@ namespace StarTracker {
 	void ExperimentalView::drawModelInfoCard(const glm::vec2& size) noexcept {
 
 		const auto style = ImGui::GetStyle();
-		ImGui::PushStyleColor(ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg]);
+		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
+
 		if (ImGui::BeginChild("idChildConstructionInfoCard", { size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
 
-			const auto cardInfo = "3D-Model-Viewer (Wavefront OBJ)";
-			const auto modelPathInfo = std::format("FilePath: {}", model->GetFilePath().string());
-			const auto modelGeometry = model->GetGeometryInfo();
-			const auto modelGeometryInfo = std::format("Geometry: {} indices, {} vertices", modelGeometry.IndexCount, modelGeometry.VertexCount);
+			// Initial Cursor Position
+			const auto initialCursor = UI::DrawCursor::Get();
 
-			const auto drawList = ImGui::GetWindowDrawList();
-			const auto cursorPosition = ImGui::GetCursorPos();
-			const auto windowPosition = ImGui::GetWindowPos();
-			const auto itemInnerSpacing = style.ItemInnerSpacing;
+			// Item Spacings
 			const auto itemSpacing = style.ItemSpacing;
-			const auto baseTextColor = style.Colors[ImGuiCol_Text];
-			const auto textColor = ImGui::GetColorU32(baseTextColor);
-			const auto textLightColor = ImGui::GetColorU32({ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w });
-			const auto fontSize = ImGui::GetFontSize();
-			auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x + itemInnerSpacing.x, windowPosition.y + cursorPosition.y };
+			const auto itemInnerSpacing = style.ItemInnerSpacing;
 			const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
 
+			// Text Colors
+			const auto baseTextColor = style.Colors[ImGuiCol_Text];
+			const auto baseTextLightColor = ImVec4{ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w };
+
+			// Font Sizes
+			const auto fontSize = ImGui::GetFontSize();
+			const auto smallFontSize = fontSize - 2.0f;
+
 			// Model-Info
-			drawList->AddText(UI::Font::Medium, fontSize, drawPosition, textColor, cardInfo);
-			drawPosition = { drawPosition.x, drawPosition.y + fontSize + regulatedItemSpacing };
+			const auto cardInfo = "3D-Model-Viewer (Wavefront OBJ)";
+			UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+			UI::Text::Draw(cardInfo, UI::Font::Medium, fontSize, baseTextColor);
 
 			// Path-Info
-			drawList->AddText(UI::Font::Regular, fontSize - 2.0f, drawPosition, textLightColor, modelPathInfo.c_str());
-			drawPosition = { drawPosition.x, drawPosition.y + fontSize - 2.0f + regulatedItemSpacing };
+			const auto modelPathInfo = std::format("File: {}", model->GetFilePath().filename().string());
+			UI::DrawCursor::Advance({ 0.0f, fontSize + regulatedItemSpacing });
+			UI::Text::Draw(modelPathInfo, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 			// Geometry-Info
-			drawList->AddText(UI::Font::Regular, fontSize - 2.0f, drawPosition, textLightColor, modelGeometryInfo.c_str());
-
+			const auto modelGeometry = model->GetGeometryInfo();
+			const auto modelGeometryInfo = std::format("Geometry: {} indices, {} vertices", modelGeometry.IndexCount, modelGeometry.VertexCount);
+			UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
+			UI::Text::Draw(modelGeometryInfo, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 			const auto reloadButtonWidth = ImGui::CalcTextSize("Reload Model").x * 2.5f;
-			ImGui::SetCursorPosX(cursorPosition.x + size.x - reloadButtonWidth - itemInnerSpacing.x);
-			ImGui::SetCursorPosY(cursorPosition.y + itemInnerSpacing.y);
+			UI::DrawCursor::Set(initialCursor);
+			UI::DrawCursor::Advance({ size.x - reloadButtonWidth - itemInnerSpacing.x, itemSpacing.y });
 
-			ImGui::PushStyleColor(ImGuiCol_FrameBg, style.Colors[ImGuiCol_MenuBarBg]);
+			{
+				UI::ScopedColor frameBackground{ ImGuiCol_FrameBg, style.Colors[ImGuiCol_MenuBarBg] };
+				ImGui::Checkbox("Inverted Texture Coordinates", &invertedTextureCoordinates);
+			}
 
-			ImGui::Checkbox("Inverted Texture Coordinates", &invertedTextureCoordinates);
-			ImGui::PopStyleColor();
-
-			ImGui::SetCursorPosX(cursorPosition.x + size.x - reloadButtonWidth - itemInnerSpacing.x);
-			ImGui::SetCursorPosY(cursorPosition.y + 3.0f * itemInnerSpacing.y + itemSpacing.y + fontSize);
-
-			if (ImGui::Button("Reload Model", { reloadButtonWidth, size.y - 3.0f * itemSpacing.y - 2.25f * itemInnerSpacing.y - fontSize })) {
+			const auto advanceOffset = itemSpacing.y + 2.0f * itemInnerSpacing.y + fontSize + regulatedItemSpacing;
+			UI::DrawCursor::Set(initialCursor);
+			UI::DrawCursor::Advance({ size.x - reloadButtonWidth - itemInnerSpacing.x, advanceOffset });
+			if (ImGui::Button("Reload Model", { reloadButtonWidth, size.y - advanceOffset - itemSpacing.y })) {
 
 				reloadModel();
 			}
-
-			ImGui::EndChild();
-			ImGui::PopStyleColor();
 		}
+		ImGui::EndChild();
 	}
 }
