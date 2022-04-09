@@ -8,7 +8,7 @@ namespace StarTracker {
 
 	void TrackableBodyView::OnInit() noexcept {
 
-		library.LoadFromFile("CelestialBodies.json");
+		library = Core::AssetDataBase::LoadBodyLibrary("CelestialBodies.json");
 		observer = [&]() -> Utils::LocationService::Location {
 
 			try {
@@ -62,7 +62,7 @@ namespace StarTracker {
 
 			// Get the filtered library
 			const auto filter = std::string{ searchBuffer.data() };
-			const auto filteredLibrary = library.GetFilteredBodies(filter);
+			const auto filteredLibrary = library->GetFilteredBodies(filter);
 		
 			// Very messy UI for Bodies
 			if (ImGui::BeginChild("idChildTrackableBodiesList", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
@@ -277,7 +277,7 @@ namespace StarTracker {
 		ImGui::EndChild();
 	}
 
-	bool TrackableBodyView::drawCelestialBodyCard(Core::LibraryEntry entry, const glm::vec2& size) noexcept {
+	bool TrackableBodyView::drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept {
 
 		const auto body = entry.Body;
 		const auto texture = entry.Texture;

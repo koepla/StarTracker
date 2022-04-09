@@ -10,7 +10,7 @@
 #include <StarTracker/Core/Core.hpp>
 #include <StarTracker/Core/Input.hpp>
 #include <StarTracker/Core/Tracker.hpp>
-#include <StarTracker/Core/CelestialBodyLibrary.hpp>
+#include <StarTracker/Core/BodyLibrary.hpp>
 #include <StarTracker/Core/OpenGL/Texture.hpp>
 #include <StarTracker/Utils/Serial/Package.hpp>
 #include <StarTracker/Utils/Serial/Serial.hpp>
@@ -32,8 +32,8 @@ namespace StarTracker {
 	private:
 		double trackingDuration;
 		Core::Tracker tracker;
-		Core::CelestialBodyLibrary library;
 		Utils::LocationService::Location observer;
+		std::shared_ptr<Core::BodyLibrary> library;
 	
 	public:
 		explicit TrackableBodyView(void* nativeWindowHandle) noexcept;
@@ -45,7 +45,7 @@ namespace StarTracker {
 	private:
 		void drawTrackerInfoCard(const glm::vec2& size) noexcept;
 		void drawTrackingDurationCard(const glm::vec2& size) noexcept;
-		[[nodiscard]] bool drawCelestialBodyCard(Core::LibraryEntry entry, const glm::vec2& size) noexcept;
+		[[nodiscard]] bool drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept;
 	};
 }
 

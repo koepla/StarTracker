@@ -94,21 +94,22 @@ namespace StarTracker::Core {
 		}
 	}
 
-	const std::vector<std::shared_ptr<Ephemeris::CelestialBody>>& AssetDataBase::LoadCelestialBodies(const std::filesystem::path& filePath, bool reload) noexcept {
+	std::shared_ptr<BodyLibrary> AssetDataBase::LoadBodyLibrary(const std::filesystem::path& filePath, bool reload) noexcept {
 
 		static const auto celestialBodyRootPath = assetPath / std::filesystem::path{ "Ephemeris" };
 
-		if (celestialBodyCache.find(filePath.string()) != celestialBodyCache.end() && !reload) {
+		if (bodyLibraryCache.find(filePath.string()) != bodyLibraryCache.end() && !reload) {
 
-			return celestialBodyCache[filePath.string()];
+			return bodyLibraryCache[filePath.string()];
 		}
 		else {
 
-			STARTRACKER_INFO("Loading CelestialBodies {} from disk", filePath.filename().string());
-			auto celestialBodies = Ephemeris::CelestialBody::LoadFromFile(celestialBodyRootPath / filePath);
-			celestialBodyCache[filePath.string()] = celestialBodies;
+			STARTRACKER_INFO("Loading CelestialBodyLibrary {} from disk", filePath.filename().string());
+			auto library = std::make_shared<BodyLibrary>();
+			library->BodyLibrary::LoadFromFile(celestialBodyRootPath / filePath);
+			bodyLibraryCache[filePath.string()] = library;
 			
-			return celestialBodyCache[filePath.string()];
+			return bodyLibraryCache[filePath.string()];
 		}
 	}
 }

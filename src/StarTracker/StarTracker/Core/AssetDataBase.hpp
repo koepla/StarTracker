@@ -2,6 +2,7 @@
 #define STARTRACKER_CORE_ASSETDATABASE_H
 
 #include <StarEngine/Ephemeris/CelestialBody.hpp>
+#include <StarTracker/Core/BodyLibrary.hpp>
 #include <StarTracker/Core/OpenGL/Shader.hpp>
 #include <StarTracker/Core/OpenGL/Texture.hpp>
 #include <StarTracker/Core/OpenGL/Model.hpp>
@@ -15,7 +16,7 @@ namespace StarTracker::Core {
 		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Shader>> shaderCache{};
 		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Texture>> textureCache{};
 		static inline std::unordered_map<std::string, std::shared_ptr<OpenGL::Model>> modelCache{};
-		static inline std::unordered_map<std::string, std::vector<std::shared_ptr<Ephemeris::CelestialBody>>> celestialBodyCache{};
+		static inline std::unordered_map<std::string, std::shared_ptr<BodyLibrary>> bodyLibraryCache{};
 
 	public:
 		/**
@@ -80,7 +81,7 @@ namespace StarTracker::Core {
 		* @return std::vector of std::shared_ptr to the CelestialBody instances
 		* 
 		*/
-		[[nodiscard]] static const std::vector<std::shared_ptr<Ephemeris::CelestialBody>>& LoadCelestialBodies(const std::filesystem::path& filePath, bool reload = false) noexcept;
+		[[nodiscard]] static std::shared_ptr<BodyLibrary> LoadBodyLibrary(const std::filesystem::path& filePath, bool reload = false) noexcept;
 	};
 }
 
