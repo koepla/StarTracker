@@ -2,14 +2,14 @@
 
 namespace StarTracker::Utils::Http {
 
-	HttpRequestException::HttpRequestException(std::string&& message) noexcept : message{ std::move(message) } {
+	HttpRequestException::HttpRequestException(std::string_view message) noexcept : message{ message } {
 	
 		
 	}
 
 	const char* HttpRequestException::what() const noexcept {
 
-		return message.c_str();
+		return message.data();
 	}
 
 	std::string HttpRequest::Get(const std::string& server, const std::string& url) noexcept(false) {

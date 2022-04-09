@@ -2,7 +2,7 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	BufferElement::BufferElement(ShaderDataType dataType, const std::string& name, bool normalized) noexcept : name{ name }, stride{}, primitiveCount{}, nativeType{}, normalized{ normalized } {
+	BufferElement::BufferElement(ShaderDataType dataType, std::string_view name, bool normalized) noexcept : name{ name }, stride{}, primitiveCount{}, nativeType{}, normalized{ normalized } {
 
 		switch (dataType) {
 

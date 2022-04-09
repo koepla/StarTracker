@@ -2,13 +2,13 @@
 
 namespace StarTracker::Utils::LocationService {
 
-	GeoLocationException::GeoLocationException(std::string&& message) noexcept : message{ std::move(message) } {
+	GeoLocationException::GeoLocationException(std::string_view message) noexcept : message{ message } {
 
 	}
 
 	const char* GeoLocationException::what() const noexcept {
 
-		return message.c_str();
+		return message.data();
 	}
 
 	Location GeoLocation::Get() noexcept(false) {

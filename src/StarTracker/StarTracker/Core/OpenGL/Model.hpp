@@ -51,10 +51,10 @@ namespace StarTracker::Core::OpenGL {
 
 		[[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
 		[[nodiscard]] const ModelGeometryInfo& GetGeometryInfo() const noexcept;
-		[[nodiscard]] const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const noexcept;
-		[[nodiscard]] const std::shared_ptr<VertexBuffer>& GetVertexBuffer() const noexcept;
-		[[nodiscard]] const std::shared_ptr<VertexArray>& GetVertexArray() const noexcept;
-		[[nodiscard]] const std::shared_ptr<Texture>& GetTexture() const noexcept;
+		[[nodiscard]] std::shared_ptr<IndexBuffer> GetIndexBuffer() const noexcept;
+		[[nodiscard]] std::shared_ptr<VertexBuffer> GetVertexBuffer() const noexcept;
+		[[nodiscard]] std::shared_ptr<VertexArray> GetVertexArray() const noexcept;
+		[[nodiscard]] std::shared_ptr<Texture> GetTexture() const noexcept;
 	};
 }
 

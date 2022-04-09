@@ -1,20 +1,12 @@
 #ifndef STARTRACKER_SERIAL_PACKAGE_H
 #define STARTRACKER_SERIAL_PACKAGE_H
 
+#include <StarTracker/Core/Assert.hpp>
+
 #include <vector>
 #include <string>
 
 namespace StarTracker::Utils::Serial {
-
-	class PackageException : public std::exception {
-
-	private:
-		std::string message;
-
-	public:
-		explicit PackageException(std::string&& message);
-		[[nodiscard]] virtual const char* what() const noexcept override;
-	};
 
 	enum class Command : uint8_t {
 
@@ -31,9 +23,6 @@ namespace StarTracker::Utils::Serial {
 
 		__declspec(align(1)) Command Flag;
 		__declspec(align(1)) uint8_t Size;
-
-		Header();
-		Header(Command flag, uint8_t size);
 	};
 
 	template <uint16_t N>
@@ -46,14 +35,14 @@ namespace StarTracker::Utils::Serial {
 		__declspec(align(1)) uint8_t buffer[BUFFER_SIZE];
 
 	public:
-		Package() : header{ Command::NONE, 0 } {
+		Package() noexcept : header{ Command::NONE, 0 } {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 
 			std::memset(buffer, 0, BUFFER_SIZE);
 		}
 
-		Package(Command flag) : header{ flag, 0 } {
+		Package(Command flag) noexcept : header{ flag, 0 } {
 
 			static_assert(BUFFER_SIZE >= 0, "Buffer size must not be negative!");
 
@@ -96,16 +85,14 @@ namespace StarTracker::Utils::Serial {
 		* @param data as const reference
 		*
 		* @return reference to this for chained function calls
-		*
-		* @throws PackageException if the push exceeds the remaining buffer size
 		* 
 		*/
 		template <typename T>
-		Package& Push(const T& data) noexcept(false) {
+		Package& Push(const T& data) noexcept {
 
 			if (sizeof(T) + header.Size > BUFFER_SIZE) {
 
-				throw PackageException("Push would exceed remaining buffer size");
+				ASSERT(false && "Push would exceed remaining buffer size");
 			}
 
 			uint8_t currentSize = header.Size;
@@ -124,15 +111,13 @@ namespace StarTracker::Utils::Serial {
 		*
 		* @return reference to this for chained function calls
 		*
-		* @throws PackageException if the push exceeds the remaining buffer size
-		*
 		*/
 		template <typename T>
-		Package& PushRange(const T* data, uint32_t count) noexcept(false) {
+		Package& PushRange(const T* data, uint32_t count) noexcept {
 
 			if ((sizeof(T) * count) + header.Size > BUFFER_SIZE) {
 
-				throw PackageException("Push would exceed remaining buffer size");
+				ASSERT(false && "Push would exceed remaining buffer size");
 			}
 
 			uint8_t currentSize = header.Size;
@@ -148,15 +133,13 @@ namespace StarTracker::Utils::Serial {
 		*
 		* @return read value
 		*
-		* @throws PackageException if the index is out of range
-		*
 		*/
 		template <typename T>
 		[[nodiscard]] T Read(uint32_t index) noexcept(false) {
 
 			if ((index) * sizeof(T) > (BUFFER_SIZE - sizeof(T))) {
 
-				throw PackageException("Index out of range");
+				ASSERT(false && "Index out of range");
 			}
 
 			return *reinterpret_cast<T*>(buffer + index * sizeof(T));
@@ -169,15 +152,13 @@ namespace StarTracker::Utils::Serial {
 		*
 		* @return pointer to offset
 		*
-		* @throws PackageException if the offset is out of range
-		*
 		*/
 		template <typename T>
 		[[nodiscard]] T* ReadRange(uint32_t offset) noexcept(false) {
 
 			if ((offset) * sizeof(T) > (BUFFER_SIZE - sizeof(T))) {
 
-				throw PackageException("Offset out of range");
+				ASSERT(false && "Offset out of range");
 			}
 
 			return reinterpret_cast<T*>(buffer + offset * sizeof(T));

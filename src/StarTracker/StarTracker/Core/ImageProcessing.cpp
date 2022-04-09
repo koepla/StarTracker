@@ -53,7 +53,7 @@ namespace StarTracker::Core {
 		}
 	}
 
-	bool ImageProcessing::Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
+	bool ImageProcessing::Stack(std::shared_ptr<OpenGL::FrameBuffer> target, const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
 
 		initialize();
 		if (textureList.empty() || !target->IsValid()) {
@@ -105,7 +105,7 @@ namespace StarTracker::Core {
 		return true;
 	}
 
-	bool ImageProcessing::Kernel(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::shared_ptr<OpenGL::FrameBuffer>& source, const std::array<float, 9>& kernel) noexcept {
+	bool ImageProcessing::Kernel(std::shared_ptr<OpenGL::FrameBuffer> target, std::shared_ptr<OpenGL::FrameBuffer> source, const std::array<float, 9>& kernel) noexcept {
 
 		initialize();
 

@@ -70,61 +70,61 @@ namespace StarTracker::Core::OpenGL {
 		nativeHandle = shaderProgram;
 	}
 
-	void Shader::SetInt(const std::string& name, int value) noexcept {
+	void Shader::SetInt(std::string_view name, int value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform1i(getUniformLocation(name), value);
 	}
 
-	void Shader::SetInt2(const std::string& name, const glm::ivec2& value) noexcept {
+	void Shader::SetInt2(std::string_view name, const glm::ivec2& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform2i(getUniformLocation(name), value.x, value.y);
 	}
 
-	void Shader::SetInt3(const std::string& name, const glm::ivec3& value) noexcept {
+	void Shader::SetInt3(std::string_view name, const glm::ivec3& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform3i(getUniformLocation(name), value.x, value.y, value.z);
 	}
 
-	void Shader::SetInt4(const std::string& name, const glm::ivec4& value) noexcept {
+	void Shader::SetInt4(std::string_view name, const glm::ivec4& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform4i(getUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::SetFloat(const std::string& name, float value) noexcept {
+	void Shader::SetFloat(std::string_view name, float value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform1f(getUniformLocation(name), value);
 	}
 
-	void Shader::SetFloat2(const std::string& name, const glm::vec2& value) noexcept {
+	void Shader::SetFloat2(std::string_view name, const glm::vec2& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform2f(getUniformLocation(name), value.x, value.y);
 	}
 
-	void Shader::SetFloat3(const std::string& name, const glm::vec3& value) noexcept {
+	void Shader::SetFloat3(std::string_view name, const glm::vec3& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform3f(getUniformLocation(name), value.x, value.y, value.z);
 	}
 
-	void Shader::SetFloat4(const std::string& name, const glm::vec4& value) noexcept {
+	void Shader::SetFloat4(std::string_view name, const glm::vec4& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniform4f(getUniformLocation(name), value.x, value.y, value.z, value.w);
 	}
 
-	void Shader::SetMat3(const std::string &name, const glm::mat3 &value) noexcept {
+	void Shader::SetMat3(std::string_view name, const glm::mat3 &value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniformMatrix3fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
 	}
 
-	void Shader::SetMat4(const std::string& name, const glm::mat4& value) noexcept {
+	void Shader::SetMat4(std::string_view name, const glm::mat4& value) noexcept {
 
 		glUseProgram(nativeHandle);
 		glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
@@ -140,14 +140,14 @@ namespace StarTracker::Core::OpenGL {
 		glUseProgram(0);
 	}
 
-	std::int32_t Shader::getUniformLocation(const std::string& name) noexcept {
+	std::int32_t Shader::getUniformLocation(std::string_view name) noexcept {
 
 		if (uniformLocationCache.find(name) != uniformLocationCache.end()) {
 
 			return uniformLocationCache[name];
 		}
 
-		const auto location = glGetUniformLocation(nativeHandle, name.c_str());
+		const auto location = glGetUniformLocation(nativeHandle, name.data());
 
 		if (location == -1) {
 
@@ -162,10 +162,10 @@ namespace StarTracker::Core::OpenGL {
 		return location;
 	}
 
-	std::uint32_t Shader::compileShader(const std::string& sourceCode, std::uint32_t type) noexcept {
+	std::uint32_t Shader::compileShader(std::string_view sourceCode, std::uint32_t type) noexcept {
 
 		const auto shaderProgram = glCreateShader(type);
-		const GLchar* shaderSourceCode = sourceCode.c_str();
+		const GLchar* shaderSourceCode = sourceCode.data();
 
 		glShaderSource(shaderProgram, 1, &shaderSourceCode, nullptr);
 		glCompileShader(shaderProgram);

@@ -19,7 +19,7 @@ namespace StarTracker::Core::OpenGL {
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
-	void Renderer::DrawIndexed(const std::shared_ptr<VertexArray> &vertexArray, const std::shared_ptr<Shader> &shader, PrimitiveMode mode) noexcept {
+	void Renderer::DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader, PrimitiveMode mode) noexcept {
 
 		glEnable(GL_LINE_SMOOTH);
 		glEnable(GL_POLYGON_SMOOTH);
@@ -34,7 +34,7 @@ namespace StarTracker::Core::OpenGL {
 		glDisable(GL_POLYGON_SMOOTH);
 	}
 
-	void Renderer::DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept {
+	void Renderer::DrawModel(std::shared_ptr<Model> model, std::shared_ptr<Shader> shader) noexcept {
 
 		const auto& indexBuffer = model->GetIndexBuffer();
 		const auto& vertexBuffer = model->GetVertexBuffer();

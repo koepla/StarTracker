@@ -131,22 +131,22 @@ namespace StarTracker::Core::OpenGL {
 		return geometryInfo;
 	}
 
-	const std::shared_ptr<IndexBuffer>& Model::GetIndexBuffer() const noexcept {
+	std::shared_ptr<IndexBuffer> Model::GetIndexBuffer() const noexcept {
 
 		return indexBuffer;
 	}
 
-	const std::shared_ptr<VertexBuffer>& Model::GetVertexBuffer() const noexcept {
+	std::shared_ptr<VertexBuffer> Model::GetVertexBuffer() const noexcept {
 
 		return vertexBuffer;
 	}
 
-	const std::shared_ptr<VertexArray>& Model::GetVertexArray() const noexcept {
+	std::shared_ptr<VertexArray> Model::GetVertexArray() const noexcept {
 
 		return vertexArray;
 	}
 
-	const std::shared_ptr<Texture>& Model::GetTexture() const noexcept {
+	std::shared_ptr<Texture> Model::GetTexture() const noexcept {
 
 		if (hasTexture) {
 

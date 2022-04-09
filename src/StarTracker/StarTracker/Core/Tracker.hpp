@@ -74,7 +74,7 @@ namespace StarTracker::Core {
 		* @throws SerialException if one of the SerialPort methods has failed
 		* 
 		*/
-		[[nodiscard]] bool Track(const std::shared_ptr<Ephemeris::CelestialBody>& object, const Ephemeris::Coordinates::Observer& observer, double duration, const TrackerCallback& callback) noexcept(false);
+		[[nodiscard]] bool Track(std::shared_ptr<Ephemeris::CelestialBody> object, const Ephemeris::Coordinates::Observer& observer, double duration, const TrackerCallback& callback) noexcept(false);
 	
 	private:
 		/**

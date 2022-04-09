@@ -63,12 +63,12 @@ namespace StarTracker::Core::OpenGL {
 		glBindVertexArray(0);
 	}
 
-	const std::shared_ptr<IndexBuffer> &VertexArray::GetIndexBuffer() const noexcept {
+	std::shared_ptr<IndexBuffer> VertexArray::GetIndexBuffer() const noexcept {
 
 		return indexBuffer;
 	}
 
-	const std::shared_ptr<VertexBuffer> &VertexArray::GetVertexBuffer() const noexcept {
+	std::shared_ptr<VertexBuffer> VertexArray::GetVertexBuffer() const noexcept {
 
 		return vertexBuffer;
 	}

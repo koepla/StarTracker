@@ -28,7 +28,7 @@ namespace StarTracker::Core::OpenGL {
 		bool normalized;
 
 	public:
-		BufferElement(ShaderDataType dataType, const std::string& name, bool normalized = false) noexcept;
+		BufferElement(ShaderDataType dataType, std::string_view name, bool normalized = false) noexcept;
 
 		[[nodiscard]] std::string_view GetName() const noexcept;
 		[[nodiscard]] std::uint32_t GetStride() const noexcept;

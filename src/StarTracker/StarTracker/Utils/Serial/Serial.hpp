@@ -14,10 +14,10 @@ namespace StarTracker::Utils::Serial {
 	class SerialException : public std::exception {
 
 	private:
-		std::string message;
+		std::string_view message;
 
 	public:
-		explicit SerialException(std::string&& message) noexcept;
+		explicit SerialException(std::string_view message) noexcept;
 
 		[[nodiscard]] virtual const char* what() const noexcept override;
 	};

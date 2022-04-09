@@ -21,8 +21,8 @@ namespace StarTracker::Core::OpenGL {
 		static void Initialize() noexcept;
 		static void Clear() noexcept;
 		static void SetClearColor(const glm::vec4& color) noexcept;
-		static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, const std::shared_ptr<Shader>& shader, PrimitiveMode mode) noexcept;
-		static void DrawModel(const std::shared_ptr<Model>& model, const std::shared_ptr<Shader>& shader) noexcept;
+		static void DrawIndexed(std::shared_ptr<VertexArray> vertexArray, std::shared_ptr<Shader> shader, PrimitiveMode mode) noexcept;
+		static void DrawModel(std::shared_ptr<Model> model, std::shared_ptr<Shader> shader) noexcept;
 	};
 }
 

@@ -2,13 +2,13 @@
 
 namespace StarTracker::Utils::Serial {
 
-	SerialException::SerialException(std::string&& message) noexcept : message{ std::move(message) } {
+	SerialException::SerialException(std::string_view message) noexcept : message{ message } {
 
 	}
 
 	const char* SerialException::what() const noexcept {
 
-		return message.c_str();
+		return message.data();
 	}
 
 	SerialPort::SerialPort() noexcept : hCom{ nullptr }, dwEventMask{ EV_RXCHAR }, fileName{} {

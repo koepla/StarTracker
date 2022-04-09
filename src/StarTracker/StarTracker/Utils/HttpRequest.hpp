@@ -10,10 +10,10 @@ namespace StarTracker::Utils::Http {
 	class HttpRequestException : public std::exception {
 
 	private:
-		std::string message;
+		std::string_view message;
 
 	public:
-		explicit HttpRequestException(std::string&& message) noexcept;
+		explicit HttpRequestException(std::string_view message) noexcept;
 
 		[[nodiscard]] virtual const char* what() const noexcept;
 	};

@@ -43,7 +43,7 @@ namespace StarTracker::Core {
 		* @return true if the stacking was successful
 		* 
 		*/
-		[[nodiscard]] static bool Stack(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::vector<std::shared_ptr<OpenGL::Texture>>& textureList) noexcept;
+		[[nodiscard]] static bool Stack(std::shared_ptr<OpenGL::FrameBuffer> target, const std::vector<std::shared_ptr<OpenGL::Texture>>& textureList) noexcept;
 
 		/**
 		* @brief Renders the source framebuffer into the target framebuffer and attaching a kernel-filter to it
@@ -57,7 +57,7 @@ namespace StarTracker::Core {
 		* @return true if the kernelled render was successful
 		* 
 		*/
-		[[nodiscard]] static bool Kernel(const std::shared_ptr<OpenGL::FrameBuffer>& target, const std::shared_ptr<OpenGL::FrameBuffer>& source, const std::array<float, 9>& kernel) noexcept;
+		[[nodiscard]] static bool Kernel(std::shared_ptr<OpenGL::FrameBuffer> target, std::shared_ptr<OpenGL::FrameBuffer> source, const std::array<float, 9>& kernel) noexcept;
 	};
 }
 

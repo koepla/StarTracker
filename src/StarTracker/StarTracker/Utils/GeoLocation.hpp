@@ -21,10 +21,10 @@ namespace StarTracker::Utils::LocationService {
 	class GeoLocationException : public std::exception {
 
 	private:
-		std::string message;
+		std::string_view message;
 
 	public:
-		explicit GeoLocationException(std::string&& message) noexcept;
+		explicit GeoLocationException(std::string_view message) noexcept;
 
 		[[nodiscard]] virtual const char* what() const noexcept override;
 	};
