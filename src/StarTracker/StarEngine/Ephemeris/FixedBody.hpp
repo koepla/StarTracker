@@ -23,6 +23,14 @@ namespace StarTracker::Ephemeris {
 		*
 		*/
 		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept override;
+
+		/**
+		* @brief Formats the FixedBody as JSON-Object
+		*
+		* @return JSON-formatted FixedBody
+		*
+		*/
+		[[nodiscard]] virtual std::string GetSerializable() const noexcept override;
 	};
 }
 

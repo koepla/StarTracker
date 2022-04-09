@@ -14,4 +14,18 @@ namespace StarTracker::Ephemeris {
 
 		return position;
 	}
+
+	std::string FixedBody::GetSerializable() const noexcept {
+
+		nlohmann::json jObject{};
+		jObject["Name"] = name;
+		jObject["Designation"] = designation;
+		jObject["Type"] = "FB";
+		jObject["TextureHandle"] = textureHandle;
+		jObject["RightAscension"] = position.RightAscension;
+		jObject["Declination"] = position.Declination;
+		jObject["Radius"] = position.Radius;
+
+		return jObject.dump();
+	}
 }

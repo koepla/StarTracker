@@ -25,6 +25,14 @@ namespace StarTracker::Ephemeris {
 		*/
 		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept override;
 
+		/**
+		* @brief Formats the SolarSystemBody as JSON-Object
+		*
+		* @return JSON-formatted SolarSystemBody
+		*
+		*/
+		[[nodiscard]] virtual std::string GetSerializable() const noexcept override;
+
 	private:
 		[[nodiscard]] double computeEccentricAnomaly(double meanAnomaly, double eccentricity, double eps = 1e-12) const noexcept;
 		[[nodiscard]] std::pair<double, double> computeTrueAnomalyAndDistance(double semiMajorAxis, double eccentricAnomaly, double eccentricity) const noexcept;

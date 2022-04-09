@@ -37,6 +37,14 @@ namespace StarTracker::Ephemeris {
 		[[nodiscard]] virtual Coordinates::Spherical GetSphericalPosition(const DateTime& date) const noexcept = 0;
 
 		/**
+		* @brief Formats the CelestialBody as JSON-Object
+		*
+		* @return JSON-formatted CelestialBody
+		*
+		*/
+		[[nodiscard]] virtual std::string GetSerializable() const noexcept = 0;
+
+		/**
 		* @brief Retrieves the name
 		*
 		* @return the name of the celestial body

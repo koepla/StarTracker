@@ -65,6 +65,28 @@ namespace StarTracker::Ephemeris {
 		return sphericalCoords;
 	}
 
+	std::string SolarSystemBody::GetSerializable() const noexcept {
+
+		nlohmann::json jObject{};
+		jObject["Name"] = name;
+		jObject["Type"] = "SSB";
+		jObject["TextureHandle"] = textureHandle;
+		jObject["SemiMajorAxis"] = keplerElements.SemiMajorAxis;
+		jObject["SemiMajorAxisCentury"] = keplerElementsCentury.SemiMajorAxis;
+		jObject["Eccentricity"] = keplerElements.Eccentricity;
+		jObject["EccentricityCentury"] = keplerElementsCentury.Eccentricity;
+		jObject["Inclination"] = keplerElements.Inclination;
+		jObject["InclinationCentury"] = keplerElementsCentury.Inclination;
+		jObject["MeanLongitude"] = keplerElements.MeanLongitude;
+		jObject["MeanLongitudeCentury"] = keplerElementsCentury.MeanLongitude;
+		jObject["LonPerihelion"] = keplerElements.LonPerihelion;
+		jObject["LonPerihelionCentury"] = keplerElementsCentury.LonPerihelion;
+		jObject["LonAscendingNode"] = keplerElements.LonAscendingNode;
+		jObject["LonAscendingNodeCentury"] = keplerElements.LonAscendingNode;
+		
+		return jObject.dump();
+	}
+
 	double SolarSystemBody::computeEccentricAnomaly(double meanAnomaly, double eccentricity, double eps) const noexcept {
 
 		const auto eccentricityDegrees = Math::Degrees(eccentricity);
