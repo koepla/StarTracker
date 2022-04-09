@@ -9,7 +9,7 @@
 #include <imgui.h>
 #include <imgui_impl_opengl3.h>
 #include <imgui_impl_glfw.h>
-#pragma warning(enable : 26812)
+#pragma warning(default : 26812)
 
 namespace StarTracker::UI {
 
