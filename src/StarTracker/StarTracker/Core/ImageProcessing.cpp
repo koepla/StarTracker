@@ -108,7 +108,6 @@ namespace StarTracker::Core {
 	bool ImageProcessing::Kernel(std::shared_ptr<OpenGL::FrameBuffer> target, std::shared_ptr<OpenGL::FrameBuffer> source, const std::array<float, 9>& kernel) noexcept {
 
 		initialize();
-
 		target->Resize(source->GetWidth(), source->GetHeight());
 
 		for (auto i = std::size_t{ 0 }; i < 9; i++) {
