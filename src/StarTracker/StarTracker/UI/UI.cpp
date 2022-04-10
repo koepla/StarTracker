@@ -17,7 +17,7 @@ namespace StarTracker::UI {
 			colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 
 			// Buttons
-			colors[ImGuiCol_Button] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
+			colors[ImGuiCol_Button] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 			colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
 			colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 
@@ -79,7 +79,7 @@ namespace StarTracker::UI {
 		return { cursorPosition.x, cursorPosition.y };
 	}
 
-	void Text::Draw(const std::string& text, ImFont* font, float fontSize, const ImVec4& color) noexcept {
+	void Text::Draw(std::string_view text, ImFont* font, float fontSize, const ImVec4& color) noexcept {
 
 		const auto drawList = ImGui::GetWindowDrawList();
 		const auto cursorPosition = ImGui::GetCursorPos();
@@ -87,7 +87,7 @@ namespace StarTracker::UI {
 		const auto textColor = ImGui::GetColorU32(color);
 
 		const auto drawPosition = ImVec2{ windowPosition.x + cursorPosition.x, windowPosition.y + cursorPosition.y };
-		drawList->AddText(font, fontSize, drawPosition, textColor, text.c_str());
+		drawList->AddText(font, fontSize, drawPosition, textColor, text.data());
 	}
 
 	ScopedColor::ScopedColor(ImGuiCol index, const ImVec4& color) noexcept {
@@ -100,9 +100,9 @@ namespace StarTracker::UI {
 		ImGui::PopStyleColor();
 	}
 
-	ScopedID::ScopedID(const std::string& id) noexcept {
+	ScopedID::ScopedID(std::string_view id) noexcept {
 
-		ImGui::PushID(id.c_str());
+		ImGui::PushID(id.data());
 	}
 
 	ScopedID::~ScopedID() noexcept {

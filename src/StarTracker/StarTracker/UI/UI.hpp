@@ -80,13 +80,13 @@ namespace StarTracker::UI {
 	class Text {
 
 	public:
-		static void Draw(const std::string& text, ImFont* font, float fontSize, const ImVec4& color) noexcept;
+		static void Draw(std::string_view text, ImFont* font, float fontSize, const ImVec4& color) noexcept;
 	};
 
 	class ScopedID {
 
 	public:
-		explicit ScopedID(const std::string& id) noexcept;
+		explicit ScopedID(std::string_view id) noexcept;
 		~ScopedID() noexcept;
 	};
 
