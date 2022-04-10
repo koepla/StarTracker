@@ -92,14 +92,14 @@ namespace StarTracker::Core {
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		UI::Theme::SetStyle(UI::ThemeStyle::Light);
+		UI::Theme::SetStyle(UI::ThemeStyle::Dark);
 		style.FrameRounding = 4.0f;
 		style.ChildRounding = 4.0f;
 		style.GrabRounding = 4.0f;
 		style.PopupRounding = 4.0f;
 		style.ScrollbarRounding = 4.0f;
 		style.TabRounding = 4.0f;
-		style.WindowRounding = 0.0f;
+		style.WindowRounding = 4.0f;
 		style.WindowBorderSize = 0.0f;
 
 		const auto fontSize = 18.0f;
