@@ -93,8 +93,8 @@ namespace StarTracker::Core {
 
 		for (const auto& entry : library) {
 
-			auto name = entry.Body->GetName();
-			auto designation = entry.Body->GetDesignation();
+			std::string name{ entry.Body->GetName() };
+			std::string designation{ entry.Body->GetDesignation() };
 
 			// Transform name and designation to lower
 			std::transform(name.begin(), name.end(), name.begin(), lower);
