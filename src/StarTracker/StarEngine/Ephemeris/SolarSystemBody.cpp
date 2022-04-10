@@ -3,11 +3,11 @@
 namespace StarTracker::Ephemeris {
 
 	SolarSystemBody::SolarSystemBody(
-		const std::string& name,
-		const std::string& textureHandle,
+		std::string_view name,
+		std::string_view textureHandle,
 		const KeplerianElements& keplerElements, 
 		const KeplerianElements& keplerElementsCentury) noexcept : 
-		CelestialBody{ name, "", textureHandle },
+		CelestialBody{ name, "No Designation", textureHandle },
 		keplerElements{ keplerElements }, keplerElementsCentury{ keplerElementsCentury } {
 
 	}
@@ -93,8 +93,8 @@ namespace StarTracker::Ephemeris {
 		const auto eccentricityRadians = eccentricity;
 
 		auto eccentricAnomaly = meanAnomaly + eccentricityDegrees * Math::Sine(meanAnomaly);
-		auto deltaEccentric = double{ 0.0 };
-		auto iteration = std::size_t{ 0 };
+		double deltaEccentric{ 0.0 };
+		std::size_t iteration{ 0 };
 
 		do {
 

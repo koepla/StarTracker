@@ -23,7 +23,7 @@ namespace StarTracker::Ephemeris {
 		std::string designation;
 		std::string textureHandle;
 
-		CelestialBody(const std::string& name, const std::string& designation, const std::string& textureHandle) noexcept;
+		CelestialBody(std::string_view name, std::string_view designation, std::string_view textureHandle) noexcept;
 		virtual ~CelestialBody() noexcept;
 	public:
 		/**
@@ -50,7 +50,7 @@ namespace StarTracker::Ephemeris {
 		* @return the name of the celestial body
 		*
 		*/
-		[[nodiscard]] std::string GetName() const noexcept;
+		[[nodiscard]] std::string_view GetName() const noexcept;
 
 		/**
 		* @brief Retrieves the designation
@@ -58,7 +58,7 @@ namespace StarTracker::Ephemeris {
 		* @return the name of the celestial body
 		*
 		*/
-		[[nodiscard]] std::string GetDesignation() const noexcept;
+		[[nodiscard]] std::string_view GetDesignation() const noexcept;
 
 		/**
 		* @brief Retrieves the texture-handle
@@ -66,7 +66,7 @@ namespace StarTracker::Ephemeris {
 		* @return texture-handle
 		*
 		*/
-		[[nodiscard]] std::string GetTextureHandle() const noexcept;
+		[[nodiscard]] std::string_view GetTextureHandle() const noexcept;
 
 	public:
 		/**

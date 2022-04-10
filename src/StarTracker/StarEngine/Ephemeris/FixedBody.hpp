@@ -11,8 +11,8 @@ namespace StarTracker::Ephemeris {
 		Coordinates::Spherical position;
 
 	public:
-		FixedBody(const std::string& name, const std::string& textureHandle, const Coordinates::Spherical& position) noexcept;
-		FixedBody(const std::string& name, const std::string& designation, const std::string& textureHandle, const Coordinates::Spherical& position) noexcept;
+		FixedBody(std::string_view name, std::string_view textureHandle, const Coordinates::Spherical& position) noexcept;
+		FixedBody(std::string_view name, std::string_view designation, std::string_view textureHandle, const Coordinates::Spherical& position) noexcept;
 
 		/**
 		* Computes the spherical position of the celestial body

@@ -4,7 +4,7 @@
 
 namespace StarTracker::Ephemeris {
 
-	CelestialBody::CelestialBody(const std::string& name, const std::string& designation, const std::string& textureHandle) noexcept : name{ name }, designation{ designation }, textureHandle{ textureHandle } {
+	CelestialBody::CelestialBody(std::string_view name, std::string_view designation, std::string_view textureHandle) noexcept : name{ name }, designation{ designation }, textureHandle{ textureHandle } {
 
 	}
 
@@ -12,17 +12,17 @@ namespace StarTracker::Ephemeris {
 
 	}
 
-	std::string CelestialBody::GetName() const noexcept {
+	std::string_view CelestialBody::GetName() const noexcept {
 
 		return name;
 	}
 
-	std::string CelestialBody::GetDesignation() const noexcept {
+	std::string_view CelestialBody::GetDesignation() const noexcept {
 
-		return designation.empty() ? std::string{ "No Designation" } : designation;
+		return designation;
 	}
 
-	std::string CelestialBody::GetTextureHandle() const noexcept {
+	std::string_view CelestialBody::GetTextureHandle() const noexcept {
 
 		return textureHandle;
 	}

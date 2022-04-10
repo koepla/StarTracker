@@ -2,11 +2,11 @@
 
 namespace StarTracker::Ephemeris {
 
-	FixedBody::FixedBody(const std::string& name, const std::string& textureHandle, const Coordinates::Spherical& position) noexcept : FixedBody{ name, "", textureHandle, position } {
+	FixedBody::FixedBody(std::string_view name, std::string_view textureHandle, const Coordinates::Spherical& position) noexcept : FixedBody{ name, "", textureHandle, position } {
 
 	}
 
-	FixedBody::FixedBody(const std::string& name, const std::string& designation, const std::string& textureHandle, const Coordinates::Spherical& position) noexcept : CelestialBody{ name, designation, textureHandle }, position{ position } {
+	FixedBody::FixedBody(std::string_view name, std::string_view designation, std::string_view textureHandle, const Coordinates::Spherical& position) noexcept : CelestialBody{ name, designation, textureHandle }, position{ position } {
 
 	}
 
