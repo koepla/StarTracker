@@ -2,13 +2,13 @@
 
 namespace StarTracker {
 
-	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, tracker{}, library{}, trackingDuration{} {
-
+	TrackableBodyView::TrackableBodyView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, observer{}, tracker{}, bodyLibrary{}, trackingDuration{} {
+	
 	}
 
 	void TrackableBodyView::OnInit() noexcept {
 
-		library = Core::AssetDataBase::LoadBodyLibrary("CelestialBodies.json");
+		bodyLibrary = Core::AssetDataBase::LoadBodyLibrary("CelestialBodies.json");
 		observer = [&]() -> Utils::LocationService::Location {
 
 			try {
@@ -43,7 +43,7 @@ namespace StarTracker {
 		if (ImGui::Begin("Tracking")) {
 
 			// Info UI
-			auto& style = ImGui::GetStyle();
+			const auto& style = ImGui::GetStyle();
 			const auto itemSpacing = style.ItemSpacing;
 			const auto fontSize = ImGui::GetFontSize();
 			const auto trackerInfoCardHeight = 3.0f * fontSize + (2.0f + 2.0f * 0.7f) * itemSpacing.y - 4.0f;
@@ -62,11 +62,11 @@ namespace StarTracker {
 
 			// Get the filtered library
 			const auto filter = std::string{ searchBuffer.data() };
-			const auto filteredLibrary = library->GetFilteredBodies(filter);
+			const auto& filteredLibrary = bodyLibrary->GetFilteredBodies(filter);
 		
 			// Very messy UI for Bodies
 			if (ImGui::BeginChild("idChildTrackableBodiesList", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_AlwaysVerticalScrollbar)) {
-		
+
 				if (ImGui::BeginTable("Trackable Bodies", 1)) {
 
 					for(const auto& entry : filteredLibrary) {
@@ -74,51 +74,15 @@ namespace StarTracker {
 						ImGui::TableNextRow();
 						ImGui::TableSetColumnIndex(0);
 
-						const auto body = entry.Body;
+						const auto& body = entry.Body;
 						const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
 						const auto celestialBodyCardHeight = 4.0f * fontSize + (2.0f + 3 * 0.7f) * itemSpacing.y - 6.0f;
-		
-						static std::string trackingStatus{ "Not tracking" };
-		
+
 						if (drawCelestialBodyCard(entry, { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
 		
-							trackingStatus = "Not tracking";
 							ImGui::OpenPopup(windowId.c_str());
 						}
-		
-						bool open = true;
-						if (ImGui::BeginPopupModal(windowId.c_str(), &open, ImGuiWindowFlags_AlwaysAutoResize)) {
-		
-							const auto size = ImGui::CalcTextSize(windowId.c_str());
-		
-							ImGui::Text("%s", windowId.c_str());
-							if (ImGui::Button("Track", { size.x * 2.0f, 1.4f * size.y })) {
-		
-								// Not optimal to have the callback defined here
-								const auto trackerCallback = [&](Core::TrackerCallbackStatus status) -> void {
-		
-									if (status == Core::TrackerCallbackStatus::FAILURE) {
-		
-										trackingStatus = "Failure on tracking";
-									}
-									else {
-		
-										trackingStatus = "Finished tracking";
-									}
-								};
-		
-								if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration, trackerCallback)) {
-		
-									trackingStatus = "Started tracking";
-								}
-								else {
-		
-									trackingStatus = "Failure on tracking";
-								}
-							}
-							ImGui::Text("Status: %s", trackingStatus.c_str());
-							ImGui::EndPopup();
-						}
+						drawTrackingMenu(entry, windowId);
 					}
 					ImGui::EndTable();
 				}
@@ -157,8 +121,8 @@ namespace StarTracker {
 			const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
 
 			// Text Colors
-			const auto baseTextColor = style.Colors[ImGuiCol_Text];
-			const auto baseTextLightColor = ImVec4{ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w };
+			const auto& baseTextColor = style.Colors[ImGuiCol_Text];
+			const auto& baseTextLightColor = ImVec4{ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w };
 
 			// Font Sizes
 			const auto fontSize = ImGui::GetFontSize();
@@ -236,7 +200,7 @@ namespace StarTracker {
 			const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
 
 			// Text Colors
-			const auto baseTextColor = style.Colors[ImGuiCol_Text];
+			const auto& baseTextColor = style.Colors[ImGuiCol_Text];
 
 			// Font Size
 			const auto fontSize = ImGui::GetFontSize();
@@ -281,11 +245,11 @@ namespace StarTracker {
 
 		const auto body = entry.Body;
 		const auto texture = entry.Texture;
-		const auto name = body->GetName();
-		const auto designation = body->GetDesignation();
+		std::string name{ body->GetName() };
+		std::string designation{ body->GetDesignation() };
 
 		bool selected{ false };
-		const auto& style = ImGui::GetStyle();
+		const auto style = ImGui::GetStyle();
 		
 		{
 			UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
@@ -321,11 +285,11 @@ namespace StarTracker {
 
 				// Name of Celestial Body
 				UI::DrawCursor::Advance({ size.y + itemSpacing.x, 0.0f });
-				UI::Text::Draw(name.c_str(), UI::Font::Medium, fontSize, baseTextColor);
+				UI::Text::Draw(name, UI::Font::Medium, fontSize, baseTextColor);
 
 				// Designation of Celestial Body
 				UI::DrawCursor::Advance({ 0.0f, fontSize + regulatedItemSpacing });
-				UI::Text::Draw(designation.c_str(), UI::Font::Regular, smallFontSize, baseTextLightColor);
+				UI::Text::Draw(designation, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 				// Compute the position preview
 				const auto now = DateTime::Now();
@@ -338,16 +302,76 @@ namespace StarTracker {
 				// Azimuth-Angle of the Celestial Body
 				const auto azimuthText = std::format("Azimuth: {}", positionPreview.Azimuth);
 				UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
-				UI::Text::Draw(azimuthText.c_str(), UI::Font::Regular, smallFontSize, baseTextLightColor);
+				UI::Text::Draw(azimuthText, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 				// Elevation-Angle of the Celestial Body
 				const auto elevationText = std::format("Elevation: {}", positionPreview.Altitude);
 				UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
-				UI::Text::Draw(elevationText.c_str(), UI::Font::Regular, smallFontSize, baseTextLightColor);
+				UI::Text::Draw(elevationText, UI::Font::Regular, smallFontSize, baseTextLightColor);
 			}
 			ImGui::EndChild();
 		}
 
 		return selected;
+	}
+
+	void TrackableBodyView::drawTrackingMenu(Core::BodyLibraryEntry entry, std::string_view title) noexcept {
+
+		const auto& body = entry.Body;
+		const auto& name = body->GetName();
+		const auto& designation = body->GetDesignation();
+		const auto& texture = entry.Texture;
+		bool open{ true };
+
+		if (ImGui::BeginPopupModal(title.data(), &open, ImGuiWindowFlags_Modal)) {
+
+			{
+				UI::ScopedFont mediumFont{ UI::Font::Medium };
+
+				const auto headerText = std::format("Tracking {} ({} s)", name, trackingDuration);
+				ImGui::Text("%s", headerText.c_str());
+				ImGui::Separator();
+			}
+
+			const auto now = DateTime::Now();
+			const auto positionPreview = Ephemeris::Coordinates::Transform::TerrestrialObserverToHorizontal(
+				body->GetSphericalPosition(now),
+				{ observer.Latitude, observer.Longitude },
+				now
+			);
+
+			const auto azimuthText = std::format("Azimuth: {}", positionPreview.Azimuth);
+			ImGui::Text("%s", azimuthText.c_str());
+
+			const auto elevationText = std::format("Elevation: {}", positionPreview.Altitude);
+			ImGui::Text("%s", elevationText.c_str());
+
+			static std::string trackingStatus{ "Not Tracking" };
+			ImGui::Text("Status: %s", trackingStatus.c_str());
+
+			if (ImGui::Button("Start", { ImGui::GetContentRegionAvail().x, 0.0f })) {
+
+				if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration * 1000, 
+					
+					[&](Core::TrackerCallbackStatus status) {
+
+						switch (status) {
+
+						case Core::TrackerCallbackStatus::FAILURE: trackingStatus = "Failed"; break;
+						case Core::TrackerCallbackStatus::SUCCESS: trackingStatus = "Finished"; break;
+						default: ASSERT(false && "Invalid Tracking Status"); break;
+						}
+					}
+				)) {
+
+					trackingStatus = "Started";
+				}
+				else {
+
+					trackingStatus = "Failed";
+				}
+			}
+			ImGui::EndPopup();
+		}
 	}
 }

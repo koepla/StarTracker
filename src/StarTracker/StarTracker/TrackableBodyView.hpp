@@ -33,7 +33,7 @@ namespace StarTracker {
 		double trackingDuration;
 		Core::Tracker tracker;
 		Utils::LocationService::Location observer;
-		std::shared_ptr<Core::BodyLibrary> library;
+		std::shared_ptr<Core::BodyLibrary> bodyLibrary;
 	
 	public:
 		explicit TrackableBodyView(void* nativeWindowHandle) noexcept;
@@ -45,7 +45,10 @@ namespace StarTracker {
 	private:
 		void drawTrackerInfoCard(const glm::vec2& size) noexcept;
 		void drawTrackingDurationCard(const glm::vec2& size) noexcept;
+		
 		[[nodiscard]] bool drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept;
+
+		void drawTrackingMenu(Core::BodyLibraryEntry entry, std::string_view title) noexcept;
 	};
 }
 
