@@ -2,6 +2,21 @@
 
 namespace StarTracker::Core {
 
+	void Logger::ClearInfoList() noexcept {
+
+		info.List.clear();
+	}
+
+	void Logger::ClearWarnList() noexcept {
+
+		warn.List.clear();
+	}
+
+	void Logger::ClearErrorList() noexcept {
+
+		error.List.clear();
+	}
+
 	std::vector<std::string> Logger::GetInfoList() noexcept {
 
 		if (info.Mutex.try_lock()) {

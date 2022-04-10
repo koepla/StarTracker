@@ -86,6 +86,10 @@ namespace StarTracker::Core {
 			}
 		}
 
+		static void ClearInfoList() noexcept;
+		static void ClearWarnList() noexcept;
+		static void ClearErrorList() noexcept;
+
 		[[nodiscard]] static std::vector<std::string> GetInfoList() noexcept;
 		[[nodiscard]] static std::vector<std::string> GetWarnList() noexcept;
 		[[nodiscard]] static std::vector<std::string> GetErrorList() noexcept;
