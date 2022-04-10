@@ -5,7 +5,7 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	Texture::Texture() noexcept : nativeHandle{}, width{}, height{}, channels{} {
+	Texture::Texture() noexcept : path{}, nativeHandle {}, width{}, height{}, channels{} {
 	
 		glCreateTextures(GL_TEXTURE_2D, 1, &nativeHandle);
 		glBindTextureUnit(0, nativeHandle);
@@ -20,6 +20,7 @@ namespace StarTracker::Core::OpenGL {
 
 		stbi_set_flip_vertically_on_load(1);
 		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
+		path = filePath;
 
 		if(data) {
 
@@ -43,6 +44,11 @@ namespace StarTracker::Core::OpenGL {
 	void Texture::Bind(std::uint32_t slot) const noexcept {
 
 		glBindTextureUnit(slot, nativeHandle);
+	}
+
+	const std::filesystem::path& Texture::GetFilePath() const noexcept {
+
+		return path;
 	}
 
 	std::uint32_t Texture::GetNativeHandle() const noexcept {

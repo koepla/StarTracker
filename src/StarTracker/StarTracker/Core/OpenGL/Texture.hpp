@@ -15,16 +15,12 @@ namespace StarTracker::Core::OpenGL {
 		glm::vec3 Position;
 		glm::vec3 Color;
 		glm::vec2 TextureCoordinates;
-
-		inline bool operator == (const TextureVertex& other) const noexcept {
-
-			return Position == other.Position && Color == other.Color && TextureCoordinates == other.TextureCoordinates;
-		}
 	};
 
 	class Texture {
 
 	private:
+		std::filesystem::path path;
 		std::uint32_t nativeHandle;
 		std::int32_t width;
 		std::int32_t height;
@@ -38,6 +34,7 @@ namespace StarTracker::Core::OpenGL {
 
 		void Bind(std::uint32_t slot) const noexcept;
 		
+		[[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
 		[[nodiscard]] std::uint32_t GetNativeHandle() const noexcept;
 		[[nodiscard]] std::int32_t GetWidth() const noexcept;
 		[[nodiscard]] std::int32_t GetHeight() const noexcept;
