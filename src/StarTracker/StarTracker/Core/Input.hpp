@@ -11,6 +11,13 @@ namespace StarTracker::Core {
 	class Input {
 
 	public:
+		enum class CursorMode : std::uint16_t {
+
+			Default,
+			Disabled
+		};
+
+	public:
 		/**
 		* @brief Checks if the specified key is pressed
 		*
@@ -38,6 +45,14 @@ namespace StarTracker::Core {
 		* 
 		*/
 		[[nodiscard]] static glm::vec2 GetMousePosition() noexcept;
+
+		/**
+		* @brief Sets the status of the mouse-cursor
+		* 
+		* @param cursor Mode of the cursor
+		* 
+		*/
+		static void SetCursorMode(CursorMode mode) noexcept;
 	};
 }
 

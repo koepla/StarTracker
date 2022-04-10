@@ -202,16 +202,6 @@ namespace StarTracker::Core {
 		glfwSwapBuffers(nativeHandle);
 	}
 
-	void Window::HideCursor() noexcept {
-
-		glfwSetInputMode(nativeHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	}
-
-	void Window::ShowCursor() noexcept {
-
-		glfwSetInputMode(nativeHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-	}
-
 	WindowData& Window::GetWindowData() noexcept {
 
 		return windowData;
