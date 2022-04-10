@@ -24,8 +24,8 @@ namespace StarTracker {
 	class ImageProcessingView : public Core::View {
 
 	private:
-		std::shared_ptr<Core::OpenGL::FrameBuffer> stackFrameBuffer;
-		std::shared_ptr<Core::OpenGL::FrameBuffer> kernelFrameBuffer;
+		std::shared_ptr<Core::OpenGL::FrameBuffer> renderFrameBuffer;
+		std::vector<std::shared_ptr<Core::OpenGL::FrameBuffer>> layerList;
 		std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
 
 	public:
@@ -34,6 +34,10 @@ namespace StarTracker {
 		virtual void OnInit() noexcept override;
 		virtual void OnUpdate(float deltaTime) noexcept override;
 		virtual void OnDestroy() noexcept override;
+
+	private:
+		void drawTextureListPanel() noexcept;
+		void drawRenderFrameBufferPanel() noexcept;
 	};
 }
 

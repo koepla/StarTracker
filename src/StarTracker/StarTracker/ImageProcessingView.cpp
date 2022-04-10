@@ -2,223 +2,76 @@
 
 namespace StarTracker {
 
-	ImageProcessingView::ImageProcessingView(void *nativeWindowHandle) noexcept : Core::View{nativeWindowHandle}, textureList{} {
+	ImageProcessingView::ImageProcessingView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, textureList{}, renderFrameBuffer{} {
 
 	}
 
 	void ImageProcessingView::OnInit() noexcept {
 
 		// Initialize ImageProcessing FrameBuffer
-		stackFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
-		kernelFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
+		renderFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(160, 90);
 	}
 
 	void ImageProcessingView::OnUpdate(float deltaTime) noexcept {
 
-		const auto style = ImGui::GetStyle();
+		const auto& style = ImGui::GetStyle();
 		const auto textSize = ImGui::GetFontSize();
 		const auto itemSpacing = ImGui::GetStyle().ItemSpacing;
 		const auto itemInnerSpacing = ImGui::GetStyle().ItemInnerSpacing;
-		static auto kernelMatrixEditorHeight{ 0.0f };
 
-		if (ImGui::Begin("Image Processing")) {
+		const auto stackAll = [&]() -> void {
 
-			if (ImGui::BeginTable("##idImageProcessingAlignmentTable", 2))
-			{
-				// Row-0
-				ImGui::TableNextRow();
+			if (!Core::ImageProcessing::Stack(renderFrameBuffer, textureList)) {
 
-				{   // Final Images
-					UI::ScopedFont mediumFont{ UI::Font::Medium };
+				STARTRACKER_WARN("Couldn't stack images");
+			}
+		};
 
-					const auto textureWidth = ImGui::GetContentRegionAvail().x / 2.0f;
-					const auto textureHeight = static_cast<float>(stackFrameBuffer->GetHeight()) / static_cast<float>(stackFrameBuffer->GetWidth()) * textureWidth;
+		if (Core::Input::IsKeyPressed(Core::KeyCode::LeftAlt) && Core::Input::IsKeyPressed(Core::KeyCode::S)) {
 
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Text("Stacked Image");
-					if (ImGui::BeginChild("idChildStackFrameBuffer", { textureWidth, textureHeight}, false, ImGuiWindowFlags_NoScrollbar)) {
+			stackAll();
+		}
 
-						UI::Image::DrawRounded(stackFrameBuffer->GetNativeTextureHandle(), { textureWidth - itemInnerSpacing.x, textureHeight });
-					}
-					ImGui::EndChild();
+		if (ImGui::BeginMainMenuBar()) {
 
-					ImGui::TableSetColumnIndex(1);
-					ImGui::Text("Kernel Image");
-					if (ImGui::BeginChild("idChildKernelFrameBuffer", { textureWidth, textureHeight }, false, ImGuiWindowFlags_NoScrollbar)) {
-
-						UI::Image::DrawRounded(kernelFrameBuffer->GetNativeTextureHandle(), { textureWidth - itemInnerSpacing.x, textureHeight });
-					}
-					ImGui::EndChild();
-				}
-
-				// Row-1
-				ImGui::TableNextRow();
-
-				{   // Stacking
-					UI::ScopedFont mediumFont{ UI::Font::Medium };
-					UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
-
-					ImGui::TableSetColumnIndex(0);
-					ImGui::Text("Loaded Images");
-
-					if (ImGui::BeginChild("idTextureList", ImVec2(ImGui::GetContentRegionAvail().x, kernelMatrixEditorHeight), false, ImGuiWindowFlags_HorizontalScrollbar)) {
-
-						UI::DrawCursor::Advance({ itemInnerSpacing.x, itemInnerSpacing.y });
-
-						for (const auto& currentTexture : textureList) {
-
-							const auto textureHeight = kernelMatrixEditorHeight - 2.0f * itemInnerSpacing.y;
-							const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
-
-							if (textureWidth > ImGui::GetContentRegionAvail().x) {
-
-								ImGui::NewLine();
-								UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
-							}
-
-							UI::Image::Draw(currentTexture->GetNativeHandle(), { textureWidth, textureHeight });
-
-							if (currentTexture != textureList.back()) {
-
-								ImGui::SameLine();
-							}
-						}
-					}
-					ImGui::EndChild();
-				}
-
-				static std::array<float, 9> userKernel{ 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-				static std::array<float, 9> selectedKernel{ userKernel };
+			if (ImGui::BeginMenu("Edit")) {
 
 				{
-					// Kernel
-					ImGui::TableSetColumnIndex(1);
-
-					{
-						UI::ScopedWidth textWidth{ ImGui::GetContentRegionAvail().x };
-						UI::ScopedFont mediumFont{ UI::Font::Medium };
-						ImGui::Text("Kernel Matrix");
-					}
-
-					const auto availableWidth = ImGui::GetContentRegionAvail().x;
-					const auto resetButtonTextWidth = ImGui::CalcTextSize("Reset").x * 2.5f;
-
-					kernelMatrixEditorHeight = UI::DrawCursor::Get().y;
-					
-					static ImGuiInputTextFlags_ kernelMatrixInputFlags{ ImGuiInputTextFlags_None };
-					static int selectedKernelIndex{ 0 };
-					const char* kernelNames[4] = { "Custom", "Blur", "Edge-Detection", "Sharpen" };
-
-					{
-						UI::ScopedWidth sliderWidth{ availableWidth - resetButtonTextWidth };
-						ImGui::SliderInt("##idKernelEnumSlider", &selectedKernelIndex, 0, 3, [&]() -> const char* {
-
-						if (selectedKernelIndex == 0) {
-
-							kernelMatrixInputFlags = ImGuiInputTextFlags_None;
-							selectedKernel = userKernel;
-							return kernelNames[0];
-						}
-						else if (selectedKernelIndex == 1) {
-
-							kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
-							selectedKernel = Core::ImageProcessing::KernelBlur;
-							return kernelNames[1];
-						}
-						else if (selectedKernelIndex == 2) {
-
-							kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
-							selectedKernel = Core::ImageProcessing::KernelEdgeDetection;
-							return kernelNames[2];
-						}
-						else if (selectedKernelIndex == 3) {
-
-							kernelMatrixInputFlags = ImGuiInputTextFlags_ReadOnly;
-							selectedKernel = Core::ImageProcessing::KernelSharpen;
-							return kernelNames[3];
-						}
-
-						return "Invalid";
-						}());
-					}
-
-					ImGui::SameLine();
-
-					{
-						UI::ScopedID kernelMatrixResetId{ "idKernelMatrixReset" };
-						if (ImGui::Button("Reset", { ImGui::GetContentRegionAvail().x, 0.0f })) {
-
-							kernelMatrixInputFlags = ImGuiInputTextFlags_None;
-							userKernel = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-							selectedKernel = userKernel;
-							selectedKernelIndex = 0;
-						}
-						if (selectedKernelIndex == 0) {
-
-							selectedKernel = userKernel;
-						}
-					}
-
-					{
-						UI::ScopedWidth inputWidth{ ImGui::GetContentRegionAvail().x };
-						{
-							UI::ScopedID kernelMatrixRowId{ "idKernelMatrixRow0" };
-							ImGui::InputFloat3("", selectedKernel.data(), "%.6f", kernelMatrixInputFlags);
-						}
-						{
-							UI::ScopedID kernelMatrixRowId{ "idKernelMatrixRow1" };
-							ImGui::InputFloat3("", selectedKernel.data() + 3, "%.6f", kernelMatrixInputFlags);
-						}
-						{
-							UI::ScopedID kernelMatrixRowId{ "idKernelMatrixRow2" };
-							ImGui::InputFloat3("", selectedKernel.data() + 6, "%.6f", kernelMatrixInputFlags);
-						}
-
-						if (selectedKernelIndex == 0) {
-
-							userKernel = selectedKernel;
-						}
-					}
-
-					kernelMatrixEditorHeight = ImGui::GetCursorPosY() - kernelMatrixEditorHeight - itemSpacing.y;
+					UI::ScopedFont mediumFont{ UI::Font::Medium };
+					ImGui::Text("Image Processing");
 				}
+				if (ImGui::MenuItem("Stack All", "Alt+S")) {
 
-				// Buttons
+					stackAll();
+				}
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMainMenuBar();
+		}
+
+		if (ImGui::Begin("Image Processing", nullptr, ImGuiWindowFlags_NoScrollbar)) {
+
+			const auto flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_RowBg | ImGuiTableFlags_Resizable;
+			if (ImGui::BeginTable("##idChildImageProcessingAlignmentTable", 2, flags)) {
+
+				const auto totalWidth = ImGui::GetContentRegionAvail().x;
+				ImGui::TableSetupColumn("##idColumnTextureListPanel", ImGuiTableColumnFlags_WidthStretch, 0.25f * totalWidth);
+				ImGui::TableSetupColumn("##idColumnRenderFrameBufferPanel", ImGuiTableColumnFlags_WidthStretch);
+
+				ImGui::TableNextRow();
 				{
-					ImGui::TableNextRow();
 					ImGui::TableSetColumnIndex(0);
-
-					if (ImGui::Button("Select Images for Stacking", { ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
-
-						const auto selectedImages = Utils::File::OpenFileDialog("Select Images", true);
-
-						if(!selectedImages.empty()) {
-
-							textureList.clear();
-							for(const auto& currentImagePath : selectedImages) {
-
-								const auto currentTexture = std::make_shared<Core::OpenGL::Texture>();
-								if (currentTexture->LoadFromFile(currentImagePath)) {
-
-									textureList.emplace_back(currentTexture);
-								}
-							}
-
-							if(!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
-
-							}
-						}
+					{
+						drawTextureListPanel();
 					}
 
 					ImGui::TableSetColumnIndex(1);
-
-					if (ImGui::Button("Apply Kernel", {ImGui::GetContentRegionAvail().x, textSize * 1.4f })) {
-
-						if (!Core::ImageProcessing::Kernel(kernelFrameBuffer, stackFrameBuffer, selectedKernel)) {
-
-						}
+					{
+						drawRenderFrameBufferPanel();
 					}
 				}
+
 				ImGui::EndTable();
 			}
 		}
@@ -227,5 +80,173 @@ namespace StarTracker {
 
 	void ImageProcessingView::OnDestroy() noexcept {
 
+	}
+
+	void ImageProcessingView::drawTextureListPanel() noexcept {
+
+		const auto& style = ImGui::GetStyle();
+		const auto fontSize = ImGui::GetFontSize();
+		const auto itemSpacing = style.ItemSpacing;
+		const auto itemInnerSpacing = style.ItemInnerSpacing;
+		const auto& baseTextColor = style.Colors[ImGuiCol_Text];
+		const auto infoCardHeight = 3.0f * fontSize + (2.0f + 2.0f * 0.7f) * itemSpacing.y - 4.0f;
+		const auto& baseChildBackground = style.Colors[ImGuiCol_FrameBg];
+		const auto& darkerChildBackground = ImVec4{ baseChildBackground.x, baseChildBackground.y, baseChildBackground.z, 0.5f * baseChildBackground.w };
+
+		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, darkerChildBackground };
+
+		// We need this because we want to dynamically remove textures from the textureList
+		// due to the fact that the UI function for drawing Images
+		// expects the native texture handle, we cannot keep textures alive
+		// by simply passing the texture handle.
+		// Therefore we have to add textures that are meant to be removed to this list,
+		// as their presence keeps them alive after being erased from textureList,
+		// so the texture is not destroyed and ImGui can draw it in its draw call
+		static std::vector<std::shared_ptr<Core::OpenGL::Texture>> keepAliveTextureList{};
+		keepAliveTextureList.clear();
+
+		if (ImGui::BeginChild("idChildTextureListPanel", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
+
+			{
+				UI::ScopedColor headerChildBackground{ ImGuiCol_ChildBg, baseChildBackground };
+				if (ImGui::BeginChild("idChildTextureListPanelHeader", { ImGui::GetContentRegionAvail().x, infoCardHeight }, false, ImGuiWindowFlags_HorizontalScrollbar)) {
+
+					UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+					UI::Text::Draw("Image List", UI::Font::Medium, fontSize, baseTextColor);
+					UI::DrawCursor::Advance({ 0.0f, fontSize + itemSpacing.y });
+
+					const auto totalSize = ImGui::GetContentRegionAvail();
+					const auto buttonWidth = totalSize.x - itemInnerSpacing.x;
+					const auto buttonHeight = totalSize.y - itemInnerSpacing.y;
+
+					if (ImGui::Button("Import", { buttonWidth, buttonHeight })) {
+
+						const auto paths = Utils::File::OpenFileDialog("Select Images", true);
+
+						if (!paths.empty()) {
+
+							for (const auto& path : paths) {
+
+								auto texture = std::make_shared<Core::OpenGL::Texture>();
+								if (texture->LoadFromFile(path)) {
+
+									textureList.emplace_back(texture);
+								}
+								else {
+
+									STARTRACKER_WARN("Failed to load texture {}", path.filename().string());
+								}
+							}
+						}
+					}
+				}
+				ImGui::EndChild();
+			}
+
+			UI::ScopedColor transparentBackground{ ImGuiCol_ChildBg, { 0.0f, 0.0f, 0.0f, 0.0f} };
+
+			if (ImGui::BeginChild("idChildTextureList", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_HorizontalScrollbar)) {
+
+				UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+
+				for (auto i = std::size_t{ 0 }; i < textureList.size(); i++) {
+
+					const auto& currentTexture = textureList.at(i);
+
+					const auto textureHeight = 4.0f * fontSize;
+					const auto textureWidth = static_cast<float>(currentTexture->GetWidth()) / static_cast<float>(currentTexture->GetHeight()) * textureHeight;
+
+					if (textureWidth > ImGui::GetContentRegionAvail().x) {
+
+						ImGui::NewLine();
+						UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+					}
+
+					const auto textureChildContainerId = std::format("idChildTexture{}", currentTexture->GetNativeHandle());
+					if (ImGui::BeginChild(textureChildContainerId.c_str(), { textureWidth, textureHeight }, false, ImGuiWindowFlags_NoScrollbar)) {
+
+						UI::Image::DrawRounded(currentTexture->GetNativeHandle(), { textureWidth, textureHeight });
+					}
+					ImGui::EndChild();
+
+					const auto textureRemovePopupId = std::format("idRemoveTexturePopup{}", currentTexture->GetNativeHandle());
+
+					if (ImGui::IsItemHovered()) {
+
+						if (Core::Input::IsMousePressed(Core::MouseCode::ButtonRight)) {
+
+							ImGui::OpenPopup(textureRemovePopupId.c_str());
+						}
+
+						ImGui::BeginTooltip();
+
+						const auto& path = currentTexture->GetFilePath();
+						const auto width = currentTexture->GetWidth();
+						const auto height = currentTexture->GetHeight();
+						const auto tooltip = std::format("{} - {}x{}", path.filename().string(), width, height);
+						ImGui::Text("%s", tooltip.c_str());
+
+						ImGui::EndTooltip();
+					}
+
+					if (ImGui::BeginPopup(textureRemovePopupId.c_str())) {
+
+						if (ImGui::MenuItem("Remove")) {
+
+							keepAliveTextureList.emplace_back(currentTexture);
+							textureList.erase(textureList.begin() + i);
+						}
+						ImGui::EndPopup();
+					}
+
+					/*
+					* We have to check if the textureList is empty because the user can
+					* remove images while the textureList is iterated through
+					*/ 
+					if (!textureList.empty()) {
+
+						if (currentTexture != textureList.back()) {
+
+							ImGui::SameLine();
+						}
+					}
+				}
+			}
+			ImGui::EndChild();
+		}
+		ImGui::EndChild();
+	}
+
+	void ImageProcessingView::drawRenderFrameBufferPanel() noexcept {
+
+		const auto& style = ImGui::GetStyle();
+		const auto fontSize = ImGui::GetFontSize();
+		const auto itemSpacing = style.ItemSpacing;
+		const auto itemInnerSpacing = style.ItemInnerSpacing;
+		const auto& baseTextColor = style.Colors[ImGuiCol_Text];
+		const auto infoCardHeight = fontSize;
+		const auto& baseChildBackground = style.Colors[ImGuiCol_FrameBg];
+		const auto& darkerChildBackground = ImVec4{ baseChildBackground.x, baseChildBackground.y, baseChildBackground.z, 0.5f * baseChildBackground.w };
+
+		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, baseChildBackground };
+
+		if (ImGui::BeginChild("idChildFrameBufferPanel", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
+
+			{
+				UI::ScopedColor headerChildBackground{ ImGuiCol_ChildBg, baseChildBackground };
+				if (ImGui::BeginChild("idChildFrameBufferPanelHeader", { ImGui::GetContentRegionAvail().x, infoCardHeight }, false, ImGuiWindowFlags_NoScrollbar)) {
+
+					UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+					UI::Text::Draw("Result", UI::Font::Medium, fontSize, baseTextColor);
+				}
+				ImGui::EndChild();
+			}
+
+			const auto textureHandle = renderFrameBuffer->GetNativeTextureHandle();
+			const auto textureWidth = ImGui::GetContentRegionAvail().x;
+			const auto textureHeight = ImGui::GetContentRegionAvail().y;
+			UI::Image::DrawRounded(textureHandle, { textureWidth, textureHeight });
+		}
+		ImGui::EndChild();
 	}
 }
