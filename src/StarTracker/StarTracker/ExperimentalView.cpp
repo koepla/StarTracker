@@ -37,7 +37,6 @@ namespace StarTracker {
 	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
 
 		// TODO(Plank): Update to new UI API
-
 		const auto application = Core::Application::GetInstance();
 
 		if (Core::Input::IsKeyPressed(Core::KeyCode::LeftControl) && Core::Input::IsKeyPressed(Core::KeyCode::M)) {
@@ -79,16 +78,16 @@ namespace StarTracker {
 
 		if (ImGui::Begin("3D-Model-Viewer")) {
 
-			auto& style = ImGui::GetStyle();
+			const auto& style = ImGui::GetStyle();
 			const auto itemSpacing = style.ItemSpacing;
 			const auto fontSize = ImGui::GetFontSize();
 			const auto modelInfoCardHeight = 3.0f * fontSize + (2.0f + 2.0f * 0.7f) * itemSpacing.y - 4.0f;
 			drawModelInfoCard({ ImGui::GetContentRegionAvail().x , modelInfoCardHeight });
 		
-			const auto imageSize = ImGui::GetContentRegionAvail();
-			const auto cursorPosition = ImGui::GetCursorPos();
-			const auto windowPosition = ImGui::GetWindowPos();
-			const auto mousePosition = Core::Input::GetMousePosition();
+			const auto& imageSize = ImGui::GetContentRegionAvail();
+			const auto& cursorPosition = ImGui::GetCursorPos();
+			const auto& windowPosition = ImGui::GetWindowPos();
+			const auto& mousePosition = Core::Input::GetMousePosition();
 			const auto imagePosition = glm::vec2{ windowPosition.x + cursorPosition.x, windowPosition.y + cursorPosition.y };
 
 			const auto mouseInBoundsX = mousePosition.x >= imagePosition.x && mousePosition.x <= imagePosition.x + imageSize.x;
@@ -100,14 +99,14 @@ namespace StarTracker {
 				if (Core::Input::IsMousePressed(Core::MouseCode::ButtonLeft)) {
 
 					isFocused = true;
-					application->GetWindow().HideCursor();
+					Core::Input::SetCursorMode(Core::Input::CursorMode::Disabled);
 				}
 			}
 
 			if (Core::Input::IsMousePressed(Core::MouseCode::ButtonRight)) {
 
 				isFocused = false;
-				application->GetWindow().ShowCursor();
+				Core::Input::SetCursorMode(Core::Input::CursorMode::Default);
 			}
 			
 			if (ImGui::BeginChild("idChildModelFrameBuffer", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
@@ -173,13 +172,13 @@ namespace StarTracker {
 
 	void ExperimentalView::drawModelInfoCard(const glm::vec2& size) noexcept {
 
-		const auto style = ImGui::GetStyle();
+		const auto& style = ImGui::GetStyle();
 		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
 
 		if (ImGui::BeginChild("idChildConstructionInfoCard", { size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
 
 			// Initial Cursor Position
-			const auto initialCursor = UI::DrawCursor::Get();
+			const auto& initialCursor = UI::DrawCursor::Get();
 
 			// Item Spacings
 			const auto itemSpacing = style.ItemSpacing;
@@ -187,8 +186,8 @@ namespace StarTracker {
 			const auto regulatedItemSpacing = 0.7f * itemInnerSpacing.x;
 
 			// Text Colors
-			const auto baseTextColor = style.Colors[ImGuiCol_Text];
-			const auto baseTextLightColor = ImVec4{ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w };
+			const auto& baseTextColor = style.Colors[ImGuiCol_Text];
+			const auto& baseTextLightColor = ImVec4{ baseTextColor.x, baseTextColor.y, baseTextColor.z, 0.5f * baseTextColor.w };
 
 			// Font Sizes
 			const auto fontSize = ImGui::GetFontSize();
@@ -205,7 +204,7 @@ namespace StarTracker {
 			UI::Text::Draw(modelPathInfo, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 			// Geometry-Info
-			const auto modelGeometry = model->GetGeometryInfo();
+			const auto& modelGeometry = model->GetGeometryInfo();
 			const auto modelGeometryInfo = std::format("Geometry: {} indices, {} vertices", modelGeometry.IndexCount, modelGeometry.VertexCount);
 			UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 			UI::Text::Draw(modelGeometryInfo, UI::Font::Regular, smallFontSize, baseTextLightColor);
