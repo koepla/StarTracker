@@ -212,8 +212,6 @@ configure_file(${ASSET_SOURCE_DIR}/Fonts/SFNSDisplay-Thin.ttf  ${ASSET_TARGET_DI
 configure_file(${ASSET_SOURCE_DIR}/Fonts/SFNSText-RegularItalic.ttf ${ASSET_TARGET_DIR}/Fonts/SFNSText-RegularItalic.ttf COPYONLY)
 
 # Shaders
-configure_file(${ASSET_SOURCE_DIR}/Shaders/defaultFragment.glsl ${ASSET_TARGET_DIR}/Shaders/defaultFragment.glsl COPYONLY)
-configure_file(${ASSET_SOURCE_DIR}/Shaders/defaultVertex.glsl ${ASSET_TARGET_DIR}/Shaders/defaultVertex.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/textureStackFragment.glsl ${ASSET_TARGET_DIR}/Shaders/textureStackFragment.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/textureStackVertex.glsl ${ASSET_TARGET_DIR}/Shaders/textureStackVertex.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/kernelFragment.glsl ${ASSET_TARGET_DIR}/Shaders/kernelFragment.glsl COPYONLY)
@@ -222,3 +220,5 @@ configure_file(${ASSET_SOURCE_DIR}/Shaders/modelFragment.glsl ${ASSET_TARGET_DIR
 configure_file(${ASSET_SOURCE_DIR}/Shaders/modelVertex.glsl ${ASSET_TARGET_DIR}/Shaders/modelVertex.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/modelTextureFragment.glsl ${ASSET_TARGET_DIR}/Shaders/modelTextureFragment.glsl COPYONLY)
 configure_file(${ASSET_SOURCE_DIR}/Shaders/modelTextureVertex.glsl ${ASSET_TARGET_DIR}/Shaders/modelTextureVertex.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Shaders/copyTextureFragment.glsl ${ASSET_TARGET_DIR}/Shaders/copyTextureFragment.glsl COPYONLY)
+configure_file(${ASSET_SOURCE_DIR}/Shaders/copyTextureVertex.glsl ${ASSET_TARGET_DIR}/Shaders/copyTextureVertex.glsl COPYONLY)

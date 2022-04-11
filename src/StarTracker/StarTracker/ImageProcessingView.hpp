@@ -24,9 +24,24 @@ namespace StarTracker {
 	class ImageProcessingView : public Core::View {
 
 	private:
-		std::shared_ptr<Core::OpenGL::FrameBuffer> renderFrameBuffer;
-		std::vector<std::shared_ptr<Core::OpenGL::FrameBuffer>> layerList;
+		struct Filter {
+
+			std::string Name;
+			std::shared_ptr<Core::OpenGL::FrameBuffer> Target;
+		};
+
+	private:
+		std::vector<Filter> filterList;
 		std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
+
+		// FrameBuffer for rendering
+		std::shared_ptr<Core::OpenGL::FrameBuffer> renderFrameBuffer;
+		std::shared_ptr<Core::OpenGL::Shader> copyShader;
+
+		// OpenGL Buffers for showing a specific Texture
+		std::shared_ptr<Core::OpenGL::VertexArray> renderVertexArray;
+		std::shared_ptr<Core::OpenGL::VertexBuffer> renderVertexBuffer;
+		std::shared_ptr<Core::OpenGL::IndexBuffer> renderIndexBuffer;
 
 	public:
 		explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
@@ -36,8 +51,14 @@ namespace StarTracker {
 		virtual void OnDestroy() noexcept override;
 
 	private:
+		void initializeBuffers() noexcept;
 		void drawTextureListPanel() noexcept;
 		void drawRenderFrameBufferPanel() noexcept;
+		void drawFilterPanel() noexcept;
+		void drawFilterHierarchyPanel() noexcept;
+		void drawFilterKernel() noexcept;
+
+		void showTexture(std::uint32_t textureNativeHandle, const glm::vec2& size) noexcept;
 	};
 }
 
