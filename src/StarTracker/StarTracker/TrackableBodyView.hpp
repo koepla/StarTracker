@@ -43,12 +43,14 @@ namespace StarTracker {
 		virtual void OnDestroy() noexcept override;
 	
 	private:
+		void reconnectToTracker() noexcept;
+
 		void drawTrackerInfoCard(const glm::vec2& size) noexcept;
 		void drawTrackingDurationCard(const glm::vec2& size) noexcept;
-		
-		[[nodiscard]] bool drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept;
-
 		void drawTrackingMenu(Core::BodyLibraryEntry entry, std::string_view title) noexcept;
+		void drawAddEntryMenu(std::string_view title) noexcept;
+
+		[[nodiscard]] bool drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept;
 	};
 }
 

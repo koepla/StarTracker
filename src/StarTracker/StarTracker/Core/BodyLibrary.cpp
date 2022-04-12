@@ -141,4 +141,18 @@ namespace StarTracker::Core {
 
 		return jObject.dump(1, '\t');
 	}
+
+	void BodyLibrary::AddEntry(BodyLibraryEntry entry) noexcept {
+
+		if (entry.Body != nullptr) {
+
+			// Load default texture
+			if (entry.Texture == nullptr) {
+
+				entry.Texture = Core::AssetDataBase::LoadTexture("Default.png");
+			}
+
+			library.emplace_back(entry);
+		}
+	}
 }

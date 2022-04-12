@@ -47,6 +47,14 @@ namespace StarTracker::Core {
 		* 
 		*/
 		[[nodiscard]] std::string GetSerializable() const noexcept;
+
+		/**
+		* @brief Adds a new Entry to the library
+		* 
+		* @param entry Instance of BodyLibraryEntry, if the texture is not set a default-texture is used
+		* 
+		*/
+		void AddEntry(BodyLibraryEntry entry) noexcept;
 	};
 }
 

@@ -17,9 +17,9 @@ namespace StarTracker::UI {
 			colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 
 			// Buttons
-			colors[ImGuiCol_Button] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-			colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-			colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+			colors[ImGuiCol_Button] = colors[ImGuiCol_SliderGrab];
+			colors[ImGuiCol_ButtonHovered] = colors[ImGuiCol_SliderGrabActive];
+			colors[ImGuiCol_ButtonActive] = colors[ImGuiCol_SliderGrab];
 
 			// Frame BG
 			colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };

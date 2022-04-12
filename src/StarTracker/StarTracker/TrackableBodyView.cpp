@@ -21,24 +21,12 @@ namespace StarTracker {
 			}
 		}();
 
-		try {
-
-			constexpr auto maxConnectionTries = std::size_t{ 3 };
-			for (auto i = std::size_t{ 0 }; i < maxConnectionTries; i++) {
-
-				if (tracker.Connect()) {
-
-					break;
-				}
-			}
-		}
-		catch (const std::exception&) {
-
-			ASSERT(false && "Failed to connect to tracker!");
-		}
+		reconnectToTracker();
 	}
 
 	void TrackableBodyView::OnUpdate(float deltaTime) noexcept {
+
+		ImGui::ShowDemoWindow();
 
 		if (ImGui::Begin("Tracking")) {
 
@@ -52,13 +40,22 @@ namespace StarTracker {
 			drawTrackingDurationCard({ ImGui::GetContentRegionAvail().x, trackerInfoCardHeight });
 
 			// Filter Search Box
+			const auto entryButtonWidth = ImGui::CalcTextSize("Add Entry").x * 1.4f;
 			constexpr auto searchBufferSize = std::size_t{ 128 };
 			static std::vector<char> searchBuffer(searchBufferSize);
-
 			{
-				UI::ScopedWidth inputTextWidth{ ImGui::GetContentRegionAvail().x };
+				UI::ScopedWidth inputTextWidth{ ImGui::GetContentRegionAvail().x - entryButtonWidth - itemSpacing.x };
 				ImGui::InputTextWithHint("##idBodySearchEngine", "Search Celestial Body...", searchBuffer.data(), searchBufferSize);
 			}
+			
+			ImGui::SameLine();
+
+			constexpr const auto addEntryPopupId = "Add Library Entry";
+			if (ImGui::Button("Add Entry", { ImGui::GetContentRegionAvail().x, 0.0f })) {
+
+				ImGui::OpenPopup(addEntryPopupId);
+			}
+			drawAddEntryMenu(addEntryPopupId);
 
 			// Get the filtered library
 			const auto filter = std::string{ searchBuffer.data() };
@@ -101,6 +98,28 @@ namespace StarTracker {
 		catch (const std::exception&) {
 		
 			ASSERT(false && "Failed to disconnect from tracker!");
+		}
+	}
+
+	void TrackableBodyView::reconnectToTracker() noexcept {
+
+		try {
+
+			constexpr auto maxConnectionTries = std::size_t{ 3 };
+			for (auto i = std::size_t{ 0 }; i < maxConnectionTries; i++) {
+
+				if (tracker.Connect()) {
+
+					if (tracker.IsConnected()) {
+
+						break;
+					}
+				}
+			}
+		}
+		catch (const std::exception& e) {
+
+			STARTRACKER_ERROR("Couldn't connect to tracker: {}", e.what());
 		}
 	}
 
@@ -164,24 +183,7 @@ namespace StarTracker {
 
 			if (ImGui::Button("Reconnect", { reconnectButtonWidth, size.y - 2.0f * itemSpacing.y })) {
 
-				std::thread connectJob{ [&]() -> void {
-
-					for (auto i = std::size_t{ 0 }; i < 10; i++) {
-
-						if (tracker.Connect()) {
-
-							return;
-						}
-						else {
-
-							Utils::Diagnostics::Stopwatch stopwatch{};
-							stopwatch.Start();
-							while (stopwatch.GetEllapsedMilliseconds() != 500.0);
-							stopwatch.Stop();
-						}
-					}
-				} };
-				connectJob.detach();
+				reconnectToTracker();
 			}
 		}
 		ImGui::EndChild();
@@ -351,25 +353,211 @@ namespace StarTracker {
 
 			if (ImGui::Button("Start", { ImGui::GetContentRegionAvail().x, 0.0f })) {
 
-				if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration * 1000, 
-					
-					[&](Core::TrackerCallbackStatus status) {
+				try {
 
-						switch (status) {
+					if (tracker.Track(body, { observer.Latitude, observer.Longitude }, trackingDuration * 1000,
 
-						case Core::TrackerCallbackStatus::FAILURE: trackingStatus = "Failed"; break;
-						case Core::TrackerCallbackStatus::SUCCESS: trackingStatus = "Finished"; break;
-						default: ASSERT(false && "Invalid Tracking Status"); break;
+						[&](Core::TrackerCallbackStatus status) {
+
+							switch (status) {
+
+							case Core::TrackerCallbackStatus::FAILURE: trackingStatus = "Failed"; break;
+							case Core::TrackerCallbackStatus::SUCCESS: trackingStatus = "Finished"; break;
+							default: ASSERT(false && "Invalid Tracking Status"); break;
+							}
 						}
-					}
-				)) {
+					)) {
 
-					trackingStatus = "Started";
+						trackingStatus = "Started";
+					}
+					else {
+
+						trackingStatus = "Failed";
+					}
 				}
-				else {
+				catch (const std::exception& e) {
 
 					trackingStatus = "Failed";
+					STARTRACKER_ERROR("Cannot track: {}", e.what());
 				}
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	void TrackableBodyView::drawAddEntryMenu(std::string_view title) noexcept {
+
+		const auto& style = ImGui::GetStyle();
+		const auto itemSpacing = style.ItemSpacing;
+
+		bool open{ true };
+		if (ImGui::BeginPopupModal(title.data(), &open, ImGuiWindowFlags_Modal)) {
+
+			constexpr static auto bufferSize = std::size_t{ 64 };
+
+			// Name, Designation and Type
+			static std::vector<char> nameBuffer(bufferSize);
+			static std::vector<char> designationBuffer(bufferSize);
+			static int selectedType{ 0 };
+
+			// Spherical Position
+			static double rightAscensionHour{ 0.0 };
+			static double rightAscensionMinute{ 0.0 };
+			static double rightAscensionSecond{ 0.0 };
+			static double declinationDeg{ 0.0 };
+			static double declinationArcMinute{ 0.0 };
+			static double declinationArcSecond{ 0.0 };
+			static double radius{ 0.0 };
+
+			const auto clearInputs = [&]() -> void {
+
+				nameBuffer.clear();
+				nameBuffer.resize(bufferSize);
+				designationBuffer.clear();
+				designationBuffer.resize(bufferSize);
+
+				rightAscensionHour = 0.0;
+				rightAscensionMinute = 0.0;
+				rightAscensionSecond = 0.0;
+				declinationDeg = 0.0;
+				declinationArcMinute = 0.0;
+				declinationArcSecond = 0.0;
+				radius = 0.0;
+			};
+
+			if (ImGui::BeginTable("##idAddEntryMenuAlignmentTable", 2)) {
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(0);
+					{
+						ImGui::Text("Name");
+					}
+					ImGui::TableSetColumnIndex(1);
+					{
+						UI::ScopedWidth nameInputWidth{ ImGui::GetContentRegionAvail().x };
+						ImGui::InputTextWithHint("##idAddEntryMenuName", "Pluto", nameBuffer.data(), nameBuffer.size());
+					}
+				}
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(0);
+					{
+						ImGui::Text("Designation");
+					}
+					ImGui::TableSetColumnIndex(1);
+					{
+						UI::ScopedWidth nameInputWidth{ ImGui::GetContentRegionAvail().x };
+						ImGui::InputTextWithHint("##idAddEntryMenuDesignation", "No Designation", designationBuffer.data(), designationBuffer.size());
+					}
+				}
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(0);
+					{
+						ImGui::Text("Type");
+					}
+					ImGui::TableSetColumnIndex(1);
+					{
+						UI::ScopedWidth typeComboWidth{ ImGui::GetContentRegionAvail().x };
+						ImGui::Combo("##idAddEntryMenuType", &selectedType, "Fixed Body\0Solar System Body\0\0");
+					}
+				}
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(0);
+					{
+						ImGui::Text("Right Ascension");
+					}
+					ImGui::TableSetColumnIndex(1);
+					{
+						UI::ScopedWidth rightAscensionInputWidth{ ImGui::GetContentRegionAvail().x * 0.33f - 0.5f * itemSpacing.x };
+						ImGui::InputDouble("##idAddEntryMenuRightAscHour", &rightAscensionHour, 0.0, 0.0, "%.1f h");
+						ImGui::SameLine();
+						ImGui::InputDouble("##idAddEntryMenuRightAscMinute", &rightAscensionMinute, 0.0, 0.0, "%.1f m");
+						ImGui::SameLine();
+						ImGui::InputDouble("##idAddEntryMenuRightAscSecond", &rightAscensionSecond, 0.0, 0.0, "%.1f s");
+					}
+				}
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(0);
+					{
+						ImGui::Text("Declination");
+					}
+					ImGui::TableSetColumnIndex(1);
+					{
+						UI::ScopedWidth declinationInputWidth{ ImGui::GetContentRegionAvail().x * 0.33f - 0.5f * itemSpacing.x };
+						ImGui::InputDouble("##idAddEntryMenuDeclDeg", &declinationDeg, 0.0, 0.0, "%.1f deg");
+						ImGui::SameLine();
+						ImGui::InputDouble("##idAddEntryMenuDeclArcMinute", &declinationArcMinute, 0.0, 0.0, "%.1f '");
+						ImGui::SameLine();
+						ImGui::InputDouble("##idAddEntryMenuDeclArcSecond", &declinationArcSecond, 0.0, 0.0, "%.1f ''");
+					}
+				}
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(0);
+					{
+						ImGui::Text("Radius");
+					}
+					ImGui::TableSetColumnIndex(1);
+					{
+						UI::ScopedWidth radiusInputWidth{ ImGui::GetContentRegionAvail().x };
+						ImGui::InputDouble("##idAddEntryMenuRadius", &radius, 0.0, 0.0, "%.6f AE");
+					}
+				}
+
+				ImGui::TableNextRow();
+				{
+					ImGui::TableSetColumnIndex(1);
+					{
+						const auto buttonWidth = ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x;
+
+						if (ImGui::Button("Cancel", { buttonWidth, 0.0f })) {
+
+							clearInputs();
+							ImGui::CloseCurrentPopup();
+						}
+						ImGui::SameLine();
+						if (ImGui::Button("Save", { buttonWidth, 0.0f })) {
+
+							Ephemeris::Coordinates::Spherical position{};
+							position.RightAscension = Math::HmsToDegrees(rightAscensionHour, rightAscensionMinute, rightAscensionSecond);
+							position.Declination = Math::DaaToDegrees(declinationDeg, declinationArcMinute, declinationArcSecond);
+							position.Radius = radius;
+
+							const auto designation = [&]() -> const char* {
+
+								for (const auto ch : designationBuffer) {
+
+									if (ch != ' ' && ch != '\0') {
+
+										return designationBuffer.data();
+									}
+								}
+
+								return "No Designation";
+							}();
+
+							Core::BodyLibraryEntry entry{};
+							entry.Body = std::make_shared<Ephemeris::FixedBody>(nameBuffer.data(), designation, "Default.png", position);
+							entry.Texture = nullptr;
+
+							bodyLibrary->AddEntry(entry);
+
+							clearInputs();
+							ImGui::CloseCurrentPopup();
+						}
+					}
+				}
+				
+				ImGui::EndTable();
 			}
 			ImGui::EndPopup();
 		}
