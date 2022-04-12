@@ -1,4 +1,5 @@
 build/
+Binaries/
 Vendor/
 .vscode/
 # Created by https://www.toptal.com/developers/gitignore/api/clion,cmake
