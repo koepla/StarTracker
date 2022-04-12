@@ -302,12 +302,12 @@ namespace StarTracker {
 				);
 
 				// Azimuth-Angle of the Celestial Body
-				const auto azimuthText = std::format("Azimuth: {}", positionPreview.Azimuth);
+				const auto azimuthText = std::format("Azimuth: {} deg", positionPreview.Azimuth);
 				UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 				UI::Text::Draw(azimuthText, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 				// Elevation-Angle of the Celestial Body
-				const auto elevationText = std::format("Elevation: {}", positionPreview.Altitude);
+				const auto elevationText = std::format("Elevation: {} deg", positionPreview.Altitude);
 				UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 				UI::Text::Draw(elevationText, UI::Font::Regular, smallFontSize, baseTextLightColor);
 			}
@@ -519,7 +519,7 @@ namespace StarTracker {
 						ImGui::TableSetColumnIndex(1);
 						{
 							UI::ScopedWidth radiusInputWidth{ ImGui::GetContentRegionAvail().x };
-							ImGui::InputDouble("##idAddEntryMenuRadius", &radius, 0.0, 0.0, "%.6f au");
+							ImGui::InputDouble("##idAddEntryMenuRadius", &radius, 0.0, 0.0, "%.8f au");
 						}
 					}
 				}
