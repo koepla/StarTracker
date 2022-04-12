@@ -400,7 +400,7 @@ namespace StarTracker {
 			static std::vector<char> designationBuffer(bufferSize);
 			static int selectedType{ 0 };
 
-			// Spherical Position
+			// Fixed Body
 			static double rightAscensionHour{ 0.0 };
 			static double rightAscensionMinute{ 0.0 };
 			static double rightAscensionSecond{ 0.0 };
@@ -408,6 +408,10 @@ namespace StarTracker {
 			static double declinationArcMinute{ 0.0 };
 			static double declinationArcSecond{ 0.0 };
 			static double radius{ 0.0 };
+
+			// Solar System Body
+			static Ephemeris::KeplerianElements elements{};
+			static Ephemeris::KeplerianElements elementsCentury{};
 
 			const auto clearInputs = [&]() -> void {
 
@@ -423,6 +427,9 @@ namespace StarTracker {
 				declinationArcMinute = 0.0;
 				declinationArcSecond = 0.0;
 				radius = 0.0;
+
+				elements = { 0.0 };
+				elementsCentury = { 0.0 };
 			};
 
 			if (ImGui::BeginTable("##idAddEntryMenuAlignmentTable", 2)) {
@@ -466,50 +473,142 @@ namespace StarTracker {
 					}
 				}
 
-				ImGui::TableNextRow();
-				{
-					ImGui::TableSetColumnIndex(0);
+				if (selectedType == 0) {
+
+					// Fixed Body
+					ImGui::TableNextRow();
 					{
-						ImGui::Text("Right Ascension");
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Right Ascension");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth rightAscensionInputWidth{ ImGui::GetContentRegionAvail().x * 0.33f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuRightAscHour", &rightAscensionHour, 0.0, 0.0, "%.1f h");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuRightAscMinute", &rightAscensionMinute, 0.0, 0.0, "%.1f m");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuRightAscSecond", &rightAscensionSecond, 0.0, 0.0, "%.1f s");
+						}
 					}
-					ImGui::TableSetColumnIndex(1);
+
+					ImGui::TableNextRow();
 					{
-						UI::ScopedWidth rightAscensionInputWidth{ ImGui::GetContentRegionAvail().x * 0.33f - 0.5f * itemSpacing.x };
-						ImGui::InputDouble("##idAddEntryMenuRightAscHour", &rightAscensionHour, 0.0, 0.0, "%.1f h");
-						ImGui::SameLine();
-						ImGui::InputDouble("##idAddEntryMenuRightAscMinute", &rightAscensionMinute, 0.0, 0.0, "%.1f m");
-						ImGui::SameLine();
-						ImGui::InputDouble("##idAddEntryMenuRightAscSecond", &rightAscensionSecond, 0.0, 0.0, "%.1f s");
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Declination");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth declinationInputWidth{ ImGui::GetContentRegionAvail().x * 0.33f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuDeclDeg", &declinationDeg, 0.0, 0.0, "%.1f deg");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuDeclArcMinute", &declinationArcMinute, 0.0, 0.0, "%.1f '");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuDeclArcSecond", &declinationArcSecond, 0.0, 0.0, "%.1f ''");
+						}
+					}
+
+					ImGui::TableNextRow();
+					{
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Radius");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth radiusInputWidth{ ImGui::GetContentRegionAvail().x };
+							ImGui::InputDouble("##idAddEntryMenuRadius", &radius, 0.0, 0.0, "%.6f au");
+						}
 					}
 				}
+				else if (selectedType == 1) {
 
-				ImGui::TableNextRow();
-				{
-					ImGui::TableSetColumnIndex(0);
+					// Solar System Body
+					ImGui::TableNextRow();
 					{
-						ImGui::Text("Declination");
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Semi-Major Axis");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth semiMajorAxisInputWidth{ ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuSemiMajorAxis", &elements.SemiMajorAxis, 0.0, 0.0, "%.8f au");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuSemiMajorAxisCentury", &elementsCentury.SemiMajorAxis, 0.0, 0.0, "%.8f au/century");
+						}
 					}
-					ImGui::TableSetColumnIndex(1);
+					ImGui::TableNextRow();
 					{
-						UI::ScopedWidth declinationInputWidth{ ImGui::GetContentRegionAvail().x * 0.33f - 0.5f * itemSpacing.x };
-						ImGui::InputDouble("##idAddEntryMenuDeclDeg", &declinationDeg, 0.0, 0.0, "%.1f deg");
-						ImGui::SameLine();
-						ImGui::InputDouble("##idAddEntryMenuDeclArcMinute", &declinationArcMinute, 0.0, 0.0, "%.1f '");
-						ImGui::SameLine();
-						ImGui::InputDouble("##idAddEntryMenuDeclArcSecond", &declinationArcSecond, 0.0, 0.0, "%.1f ''");
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Eccentricity");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth semiMajorAxisInputWidth{ ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuEccentricity", &elements.Eccentricity, 0.0, 0.0, "%.8f rad");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuEccentricityCentury", &elementsCentury.Eccentricity, 0.0, 0.0, "%.8f rad/century");
+						}
 					}
-				}
-
-				ImGui::TableNextRow();
-				{
-					ImGui::TableSetColumnIndex(0);
+					ImGui::TableNextRow();
 					{
-						ImGui::Text("Radius");
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Inclination");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth semiMajorAxisInputWidth{ ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuInclination", &elements.Inclination, 0.0, 0.0, "%.8f deg");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuInclinationCentury", &elementsCentury.Inclination, 0.0, 0.0, "%.8f deg/century");
+						}
 					}
-					ImGui::TableSetColumnIndex(1);
+					ImGui::TableNextRow();
 					{
-						UI::ScopedWidth radiusInputWidth{ ImGui::GetContentRegionAvail().x };
-						ImGui::InputDouble("##idAddEntryMenuRadius", &radius, 0.0, 0.0, "%.6f AE");
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Mean Longitude");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth semiMajorAxisInputWidth{ ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuMeanLongitude", &elements.MeanLongitude, 0.0, 0.0, "%.8f deg");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuMeanLongitudeCentury", &elementsCentury.MeanLongitude, 0.0, 0.0, "%.8f deg/century");
+						}
+					}
+					ImGui::TableNextRow();
+					{
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Longitude of Perihelion");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth semiMajorAxisInputWidth{ ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryLongitudeOfPerihelion", &elements.LonPerihelion, 0.0, 0.0, "%.8f deg");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryLongitudeOfPerihelionCentury", &elementsCentury.LonPerihelion, 0.0, 0.0, "%.8f deg/century");
+						}
+					}
+					ImGui::TableNextRow();
+					{
+						ImGui::TableSetColumnIndex(0);
+						{
+							ImGui::Text("Longitude of the Ascending Node");
+						}
+						ImGui::TableSetColumnIndex(1);
+						{
+							UI::ScopedWidth semiMajorAxisInputWidth{ ImGui::GetContentRegionAvail().x * 0.5f - 0.5f * itemSpacing.x };
+							ImGui::InputDouble("##idAddEntryMenuLongitudeOfTheAscendingNode", &elements.LonAscendingNode, 0.0, 0.0, "%.8f deg");
+							ImGui::SameLine();
+							ImGui::InputDouble("##idAddEntryMenuLongitudeOfTheAscendingNodeCentury", &elementsCentury.LonAscendingNode, 0.0, 0.0, "%.8f deg/century");
+						}
 					}
 				}
 
@@ -527,11 +626,6 @@ namespace StarTracker {
 						ImGui::SameLine();
 						if (ImGui::Button("Save", { buttonWidth, 0.0f })) {
 
-							Ephemeris::Coordinates::Spherical position{};
-							position.RightAscension = Math::HmsToDegrees(rightAscensionHour, rightAscensionMinute, rightAscensionSecond);
-							position.Declination = Math::DaaToDegrees(declinationDeg, declinationArcMinute, declinationArcSecond);
-							position.Radius = radius;
-
 							const auto designation = [&]() -> const char* {
 
 								for (const auto ch : designationBuffer) {
@@ -545,11 +639,31 @@ namespace StarTracker {
 								return "No Designation";
 							}();
 
-							Core::BodyLibraryEntry entry{};
-							entry.Body = std::make_shared<Ephemeris::FixedBody>(nameBuffer.data(), designation, "Default.png", position);
-							entry.Texture = nullptr;
+							if (selectedType == 0) {
 
-							bodyLibrary->AddEntry(entry);
+								// Fixed Body
+
+								Ephemeris::Coordinates::Spherical position{};
+								position.RightAscension = Math::HmsToDegrees(rightAscensionHour, rightAscensionMinute, rightAscensionSecond);
+								position.Declination = Math::DaaToDegrees(declinationDeg, declinationArcMinute, declinationArcSecond);
+								position.Radius = radius;
+
+								Core::BodyLibraryEntry entry{};
+								entry.Body = std::make_shared<Ephemeris::FixedBody>(nameBuffer.data(), designation, "Default.png", position);
+								entry.Texture = nullptr;
+
+								bodyLibrary->AddEntry(entry);
+							}
+							else if (selectedType == 1) {
+
+								// Solar System Body
+
+								Core::BodyLibraryEntry entry{};
+								entry.Body = std::make_shared<Ephemeris::SolarSystemBody>(nameBuffer.data(), "Default.png", elements, elementsCentury);
+								entry.Texture = nullptr;
+
+								bodyLibrary->AddEntry(entry);
+							}
 
 							clearInputs();
 							ImGui::CloseCurrentPopup();
