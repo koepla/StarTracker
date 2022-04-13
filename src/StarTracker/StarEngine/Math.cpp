@@ -1,73 +1,73 @@
 #include "Math.hpp"
 
-namespace StarTracker {
+namespace StarTracker::Math {
 
-	double Math::Abs(double x) {
+	double Abs(double x) {
 
 		return x < 0 ? -x : x;
 	}
 
-	double Math::Degrees(double radians) {
+	double Degrees(double radians) {
 
 		return radians * 180.0 / Math::PI;
 	}
 
-	double Math::Radians(double degrees) {
+	double Radians(double degrees) {
 
 		return degrees * Math::PI / 180.0;
 	}
 
-	double Math::Frac(double x) {
+	double Frac(double x) {
 
 		return x - std::floor(x);
 	}
 
-	double Math::Mod(double a, double b) {
+	double Mod(double a, double b) {
 
 		return b * Math::Frac(a / b);
 	}
 
-	double Math::Sine(double angle) {
+	double Sine(double angle) {
 
 		return std::sin(Math::Radians(angle));
 	}
 
-	double Math::Cosine(double angle) {
+	double Cosine(double angle) {
 
 		return std::cos(Math::Radians(angle));
 	}
 
-	double Math::Tangent(double angle) {
+	double Tangent(double angle) {
 
 		return std::tan(Math::Radians(angle));
 	}
 
-	double Math::ArcSine(double angle) {
+	double ArcSine(double angle) {
 
-		return Math::Degrees(std::asin(angle));
+		return Degrees(std::asin(angle));
 	}
 
-	double Math::ArcCosine(double angle) {
+	double ArcCosine(double angle) {
 
-		return Math::Degrees(std::acos(angle));
+		return Degrees(std::acos(angle));
 	}
 
-	double Math::ArcTangent(double angle) {
+	double ArcTangent(double angle) {
 
-		return Math::Degrees(std::atan(angle));
+		return Degrees(std::atan(angle));
 	}
 
-	double Math::ArcTangent2(double y, double x) {
+	double ArcTangent2(double y, double x) {
 
-		return Math::Degrees(std::atan2(y, x));
+		return Degrees(std::atan2(y, x));
 	}
 
-	double Math::DaaToDegrees(double degree, double arcMinute, double arcSecond) {
+	double DaaToDegrees(double degree, double arcMinute, double arcSecond) {
 
 		return (degree + arcMinute / 60.0 + arcSecond / 3600.0);
 	}
 
-	double Math::HmsToDegrees(double hour, double minute, double second) {
+	double HmsToDegrees(double hour, double minute, double second) {
 
 		return 15.0 * (hour + minute / 60.0 + second / 3600.0);
 	}

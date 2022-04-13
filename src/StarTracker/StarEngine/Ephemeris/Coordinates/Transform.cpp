@@ -1,8 +1,8 @@
 #include "Transform.hpp"
 
-namespace StarTracker::Ephemeris::Coordinates {
+namespace StarTracker::Ephemeris::Coordinates::Transform {
 
-	Rectangular Transform::SphericalToRectangular(const Spherical& coords) noexcept {
+	Rectangular SphericalToRectangular(const Spherical& coords) noexcept {
 
 		Rectangular rectCoords{};
 		rectCoords.X = coords.Radius * Math::Cosine(coords.RightAscension) * Math::Cosine(coords.Declination);
@@ -12,7 +12,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 		return rectCoords;
 	}
 
-	Spherical Transform::RectangularToSpherical(const Rectangular& coords) noexcept {
+	Spherical RectangularToSpherical(const Rectangular& coords) noexcept {
 
 		const auto x = coords.X;
 		const auto y = coords.Y;
@@ -26,7 +26,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 		return sphericalCoords;
 	}
 
-	Rectangular Transform::RotateRectangular(const Rectangular& rectCoords, double angle) noexcept {
+	Rectangular RotateRectangular(const Rectangular& rectCoords, double angle) noexcept {
 
 		const auto x = rectCoords.X * Math::Sine(angle) - rectCoords.Z * Math::Cosine(angle);
 		const auto y = rectCoords.Y;
@@ -40,7 +40,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 		return rectangularCoords;
 	}
 
-	Horizontal Transform::EquatorialToHorizontal(double declination, double hourAngle, double latitude) noexcept {
+	Horizontal EquatorialToHorizontal(double declination, double hourAngle, double latitude) noexcept {
 		
 		Spherical sphericalPosition{};
 		sphericalPosition.RightAscension = hourAngle;
@@ -58,7 +58,7 @@ namespace StarTracker::Ephemeris::Coordinates {
 		return horizontalCoords;
 	}
 
-	Horizontal Transform::TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) noexcept {
+	Horizontal TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) noexcept {
 		
 		DateTime relativeUtcTime = date;
 		relativeUtcTime.AddHours(-DateTime::UtcDiff());

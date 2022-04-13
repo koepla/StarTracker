@@ -5,33 +5,29 @@
 #include <cmath>
 #include <numbers>
 
-namespace StarTracker {
+namespace StarTracker::Math {
 
-	class Math {
+	constexpr double PI = std::numbers::pi;
+	constexpr double PI2 = (2.0 * PI);
+	constexpr double C0 = 299792458;
+	constexpr double AU = 149597870700;
 
-	public:
-		static inline constexpr double PI = std::numbers::pi;
-		static inline constexpr double PI2 = (2.0 * PI);
-		static inline constexpr double C0 = 299792458;
-		static inline constexpr double AU = 149597870700;
+	[[nodiscard]] double Abs(double x);
+	[[nodiscard]] double Degrees(double radians);
+	[[nodiscard]] double Radians(double degrees);
 
-		[[nodiscard]] static double Abs(double x);
-		[[nodiscard]] static double Degrees(double radians);
-		[[nodiscard]] static double Radians(double degrees);
+	[[nodiscard]] double Frac(double x);
+	[[nodiscard]] double Mod(double a, double b);
+	[[nodiscard]] double Sine(double angle);
+	[[nodiscard]] double Cosine(double angle);
+	[[nodiscard]] double Tangent(double angle);
+	[[nodiscard]] double ArcSine(double angle);
+	[[nodiscard]] double ArcCosine(double angle);
+	[[nodiscard]] double ArcTangent(double angle);
+	[[nodiscard]] double ArcTangent2(double y, double x);
 
-		[[nodiscard]] static double Frac(double x);
-		[[nodiscard]] static double Mod(double a, double b);
-		[[nodiscard]] static double Sine(double angle);
-		[[nodiscard]] static double Cosine(double angle);
-		[[nodiscard]] static double Tangent(double angle);
-		[[nodiscard]] static double ArcSine(double angle);
-		[[nodiscard]] static double ArcCosine(double angle);
-		[[nodiscard]] static double ArcTangent(double angle);
-		[[nodiscard]] static double ArcTangent2(double y, double x);
-
-		[[nodiscard]] static double DaaToDegrees(double degree, double arcMinute, double arcSecond);
-		[[nodiscard]] static double HmsToDegrees(double hour, double minute, double second);
-	};
+	[[nodiscard]] double DaaToDegrees(double degree, double arcMinute, double arcSecond);
+	[[nodiscard]] double HmsToDegrees(double hour, double minute, double second);
 }
 
 #endif // STARENGINE_MATH_H
