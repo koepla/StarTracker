@@ -3,47 +3,22 @@
 Official repository for the diploma thesis of Ilja Koehler and Elias Plank
 
 ## Installing from source
+It shall be noted that only x64 Windows is supported at the current time.
 
 ### Prerequisites
 
-First of all, you must have Visual Studio 2022 or CLion and vcpkg installed. I recommend to place vcpkg in a folder like C:/tools. You can download it via git:
+First of all, you must have **git**, **python3** and **cmake** installed. It is necessary to run the **Setup.py** file in the *scripts* folder. The script downloads **vcpkg** and installs the required dependencies. If one wants to maintain a local copy of **vcpkg**, it is not necessary to run the setup script. However in this case the *CMAKE_PREFIX_PATH* variable in *src/StarTracker/CMakeLists.txt* has to be adjusted accordingly.
+
+### Building
+
+After running the setup script, you should be good to go to build the desktop application with **cmake** . Open a terminal in the *src/StarTracker* folder, and run the following commands:
 
 ```psh
-git clone https://github.com/microsoft/vcpkg.git
-```
-After you installed vcpkg, you have to run the following commands in the vcpkg folder:
-
-```psh
-.\bootstrap-vcpkg.bat
-```
-
-```psh
-.\vcpkg integrate install
+mkdir build
+cd build
+cd build
+cmake ..
+cmake --build .
 ```
 
-```psh
-.\vcpkg install glad:x64-windows-static
-```
-```psh
-.\vcpkg install glfw3:x64-windows-static
-```
-```psh
-.\vcpkg install glm:x64-windows-static
-```
-```psh
-.\vcpkg install nlohmann-json:x64-windows-static
-```
-```psh
-.\vcpkg install imgui[core,docking-experimental,opengl3-binding,glfw-binding]:x64-windows-static
-```
-```psh
-.\vcpkg install stb:x64-windows-static
-```
-
-In order to proceed, you have to run the following command:
-
-```psh
-.\vcpkg integrate install
-```
-
-When the installation is finished, you have to tell your IDE your CMake Toolchain file, and the target triplet (x64-windows-static). Once these steps are complete, you can build the Application.
+This should place the executable and the required Assets folder into a folder called *Binaries*.
