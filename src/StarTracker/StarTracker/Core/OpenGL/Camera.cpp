@@ -72,12 +72,8 @@ namespace StarTracker::Core::OpenGL {
 		return glm::lookAt(position, position + front, up);
 	}
 
-	glm::mat4 Camera::GetProjectionMatrix() const noexcept {
+	glm::mat4 Camera::GetProjectionMatrix(const glm::vec2& viewportSize) const noexcept {
 
-		const auto application = Application::GetInstance();
-		const auto windowWidth = static_cast<float>(application->GetWindow().GetWidth());
-		const auto windowHeight = static_cast<float>(application->GetWindow().GetHeight());
-
-		return glm::perspective(glm::radians(fov), windowWidth / windowHeight, 0.1f, 1000.0f);
+		return glm::perspective(glm::radians(fov), viewportSize.x / viewportSize.y, 0.1f, 1000.0f);
 	}
 }

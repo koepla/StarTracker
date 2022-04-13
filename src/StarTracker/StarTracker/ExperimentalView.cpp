@@ -18,19 +18,6 @@ namespace StarTracker {
 		shader = Core::AssetDataBase::LoadShader("modelVertex.glsl", "modelFragment.glsl");
 		model = Core::AssetDataBase::LoadModel("StarTrackerMount.obj");
 		
-		application->RegisterEventHandler([this](const Core::Events::Event& event) -> void {
-
-			const auto windowResize = dynamic_cast<const Core::Events::WindowResizeEvent*>(&event);
-
-			if(windowResize) {
-				
-				if (windowResize->GetWidth() && windowResize->GetHeight()) {
-
-					frameBuffer->Resize(windowResize->GetWidth(), windowResize->GetHeight());
-				}
-			}
-		});
-
 		Core::OpenGL::Renderer::Initialize();
 	}
 
@@ -62,19 +49,6 @@ namespace StarTracker {
 			}
 			ImGui::EndMainMenuBar();
 		}
-
-		shader->SetFloat3("uCameraPosition", camera->GetPosition());
-		shader->SetFloat3("uObjectColor", { 1.0f, 1.0f, 1.0f });
-		shader->SetFloat3("uLightColor", { 1.0f, 0.95f, 0.89f });
-		shader->SetMat4("uModel", glm::mat4(1.0f));
-		shader->SetMat4("uView", camera->GetViewMatrix(deltaTime, !isFocused));
-		shader->SetMat4("uProjection", camera->GetProjectionMatrix());
-
-		frameBuffer->Bind();
-		Core::OpenGL::Renderer::SetClearColor({ 0.15f, 0.15f, 0.15f, 1.0f });
-		Core::OpenGL::Renderer::Clear();
-		Core::OpenGL::Renderer::DrawModel(model, shader);
-		frameBuffer->Unbind();
 
 		if (ImGui::Begin("3D-Model-Viewer")) {
 
@@ -108,8 +82,30 @@ namespace StarTracker {
 				isFocused = false;
 				Core::Input::SetCursorMode(Core::Input::CursorMode::Default);
 			}
+
+			shader->SetFloat3("uCameraPosition", camera->GetPosition());
+			shader->SetFloat3("uObjectColor", { 1.0f, 1.0f, 1.0f });
+			shader->SetFloat3("uLightColor", { 1.0f, 0.95f, 0.89f });
+			shader->SetMat4("uModel", glm::mat4(1.0f));
+			shader->SetMat4("uView", camera->GetViewMatrix(deltaTime, !isFocused));
+			shader->SetMat4("uProjection", camera->GetProjectionMatrix({ imageSize.x, imageSize.y }));
+
+			frameBuffer->Bind();
+			Core::OpenGL::Renderer::SetClearColor({ 0.15f, 0.15f, 0.15f, 1.0f });
+			Core::OpenGL::Renderer::Clear();
+			Core::OpenGL::Renderer::DrawModel(model, shader);
+			frameBuffer->Unbind();
 			
 			if (ImGui::BeginChild("idChildModelFrameBuffer", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
+
+				static ImVec2 lastImageSize{};
+
+				if (lastImageSize.x != imageSize.x || lastImageSize.y != lastImageSize.y) {
+
+					frameBuffer->Resize(static_cast<std::int32_t>(imageSize.x), static_cast<std::int32_t>(imageSize.y));
+					lastImageSize.x = imageSize.x;
+					lastImageSize.y = imageSize.y;
+				}
 
 				UI::Image::DrawRounded(frameBuffer->GetNativeTextureHandle(), { imageSize.x, imageSize.y });
 			}

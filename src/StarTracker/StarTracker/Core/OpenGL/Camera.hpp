@@ -25,7 +25,7 @@ namespace StarTracker::Core::OpenGL {
 		explicit Camera(const glm::vec3& position) noexcept;
 
 		[[nodiscard]] glm::vec3 GetPosition() const noexcept;
-		[[nodiscard]] glm::mat4 GetProjectionMatrix() const noexcept;
+		[[nodiscard]] glm::mat4 GetProjectionMatrix(const glm::vec2& viewportSize) const noexcept;
 		[[nodiscard]] glm::mat4 GetViewMatrix(float deltaTime, bool blockMovement = false) noexcept;
 	};
 }
