@@ -14,6 +14,14 @@ namespace StarTracker {
 
 	void DateTime::AddMonths(std::int64_t months) noexcept {
 
+		const auto potentialYears = months / 12;
+		if (Math::Abs(potentialYears) > 0) {
+
+			AddYears(potentialYears);
+			AddMonths(months % 12);
+			return;
+		}
+
 		if (months > 0) {
 
 			if (Month + months > 12) {
@@ -87,6 +95,14 @@ namespace StarTracker {
 
 	void DateTime::AddHours(std::int64_t hours) noexcept {
 
+		const auto potentialDays = hours / 24;
+		if (Math::Abs(potentialDays) > 0) {
+
+			AddDays(potentialDays);
+			AddHours(hours % 24);
+			return;
+		}
+
 		if (hours > 0) {
 
 			if (Hour + hours > 23) {
@@ -115,6 +131,14 @@ namespace StarTracker {
 
 	void DateTime::AddMinutes(std::int64_t minutes) noexcept {
 
+		const auto potentialHours = minutes / 60;
+		if (Math::Abs(potentialHours) > 0) {
+
+			AddHours(potentialHours);
+			AddMinutes(minutes % 60);
+			return;
+		}
+
 		if (minutes > 0) {
 
 			if (Minute + minutes > 59) {
@@ -142,6 +166,14 @@ namespace StarTracker {
 	}
 
 	void DateTime::AddSeconds(std::int64_t seconds) noexcept {
+
+		const auto potentialMinutes = seconds / 60;
+		if (Math::Abs(potentialMinutes) > 0) {
+
+			AddMinutes(potentialMinutes);
+			AddSeconds(seconds % 60);
+			return;
+		}
 
 		if (seconds > 0) {
 
