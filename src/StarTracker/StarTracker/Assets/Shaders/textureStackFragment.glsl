@@ -10,7 +10,7 @@ vec4 textureColor(int index);
 void main() {
 
 	vec4 result = vec4(0.0f);
-	for(int i = 0; i < uNumberOfPassedTextures; i++) {
+	for (int i = 0; i < uNumberOfPassedTextures; i++) {
 
 		result += texture(uTextures[i], passedTextureCoordinates);
 	}

@@ -14,7 +14,7 @@ namespace StarTracker::Core::OpenGL {
 
 	void FrameBuffer::Invalidate() noexcept {
 
-		if(nativeHandle) {
+		if (nativeHandle) {
 
 			glDeleteFramebuffers(1, &nativeHandle);
 			glDeleteTextures(1, &nativeTextureHandle);
@@ -36,7 +36,7 @@ namespace StarTracker::Core::OpenGL {
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, nativeRenderHandle);
 
-		if(!IsValid()) {
+		if (!IsValid()) {
 
 			STARTRACKER_ERROR("Invalid Framebuffer");
 			ASSERT(false && "Invalid Framebuffer!");

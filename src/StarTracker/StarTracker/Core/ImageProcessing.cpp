@@ -68,11 +68,11 @@ namespace StarTracker::Core {
 			std::int32_t maxTextureHeight{ textureList.at(0)->GetHeight() };
 			for (const auto& currentTexture : textureList) {
 
-				if(currentTexture->GetWidth() > maxTextureWidth) {
+				if (currentTexture->GetWidth() > maxTextureWidth) {
 
 					maxTextureWidth = currentTexture->GetWidth();
 				}
-				if(currentTexture->GetHeight() > maxTextureHeight) {
+				if (currentTexture->GetHeight() > maxTextureHeight) {
 
 					maxTextureHeight = currentTexture->GetHeight();
 				}
@@ -86,7 +86,7 @@ namespace StarTracker::Core {
 		stackShader->SetInt("uNumberOfPassedTextures", static_cast<int>(textureList.size()));
 
 		// Bind the Textures to their corresponding slot
-		for (auto i = std::size_t{ 0 }; i < textureList.size(); i++) {
+		for (std::size_t i = 0; i < textureList.size(); i++) {
 
 			const auto& currentTexture = textureList.at(i);
 			currentTexture->Bind(i);
@@ -110,7 +110,7 @@ namespace StarTracker::Core {
 		initialize();
 		target->Resize(source->GetWidth(), source->GetHeight());
 
-		for (auto i = std::size_t{ 0 }; i < 9; i++) {
+		for (std::size_t i = 0; i < 9; i++) {
 
 			const auto kernelElement = kernel.at(i);
 			const auto uniformName = std::format("uKernel[{}]", i);

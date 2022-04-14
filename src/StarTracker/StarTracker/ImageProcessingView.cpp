@@ -202,7 +202,7 @@ namespace StarTracker {
 
 				UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
 
-				for (auto i = std::size_t{ 0 }; i < textureList.size(); i++) {
+				for (std::size_t i = 0; i < textureList.size(); i++) {
 
 					const auto& currentTexture = textureList.at(i);
 
@@ -363,7 +363,7 @@ namespace StarTracker {
 
 			if (ImGui::BeginChild("idChildFilterHierarchyPanel", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_HorizontalScrollbar)) {
 
-				for (auto i = std::size_t{ 0 }; i < filterList.size(); i++) {
+				for (std::size_t i = 0; i < filterList.size(); i++) {
 
 					const auto& filter = filterList.at(i);
 					const auto label = std::format("{}", filter.Name);

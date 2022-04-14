@@ -66,7 +66,7 @@ namespace StarTracker {
 
 				if (ImGui::BeginTable("Trackable Bodies", 1)) {
 
-					for(const auto& entry : filteredLibrary) {
+					for (const auto& entry : filteredLibrary) {
 		
 						ImGui::TableNextRow();
 						ImGui::TableSetColumnIndex(0);
@@ -106,7 +106,7 @@ namespace StarTracker {
 		try {
 
 			constexpr auto maxConnectionTries = std::size_t{ 3 };
-			for (auto i = std::size_t{ 0 }; i < maxConnectionTries; i++) {
+			for (std::size_t i = 0; i < maxConnectionTries; i++) {
 
 				if (tracker.Connect()) {
 

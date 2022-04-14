@@ -35,7 +35,7 @@ namespace StarTracker::Core {
 
 				return GLFW_CURSOR_NORMAL;
 			}
-			else if(mode == CursorMode::Disabled) {
+			else if (mode == CursorMode::Disabled) {
 
 				return GLFW_CURSOR_DISABLED;
 			}

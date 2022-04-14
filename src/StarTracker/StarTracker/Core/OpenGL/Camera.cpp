@@ -10,7 +10,7 @@ namespace StarTracker::Core::OpenGL {
 
 			const auto mouseScrollEvent = dynamic_cast<const Events::MouseScrollEvent*>(&event);
 
-			if(mouseScrollEvent) {
+			if (mouseScrollEvent) {
 
 				fov = glm::clamp(fov - static_cast<float>(mouseScrollEvent->GetDeltaY()), 1.0f, 45.0f);
 			}
@@ -28,19 +28,19 @@ namespace StarTracker::Core::OpenGL {
 		if (!blockMovement) {
 
 			const auto speed = 5.0f * deltaTime;
-			if(Input::IsKeyPressed(KeyCode::W)) {
+			if (Input::IsKeyPressed(KeyCode::W)) {
 
 				position += front * speed;
 			}
-			if(Input::IsKeyPressed(KeyCode::S)) {
+			if (Input::IsKeyPressed(KeyCode::S)) {
 
 				position -= front * speed;
 			}
-			if(Input::IsKeyPressed(KeyCode::A)) {
+			if (Input::IsKeyPressed(KeyCode::A)) {
 
 				position -= right * speed;
 			}
-			if(Input::IsKeyPressed(KeyCode::D)) {
+			if (Input::IsKeyPressed(KeyCode::D)) {
 
 				position += right * speed;
 			}

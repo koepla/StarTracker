@@ -144,7 +144,7 @@ namespace StarTracker::Core {
 									  const GLchar* message,
 									  const void* userParam )-> void {
 
-			if(severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
+			if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
 
 				return;
 			}

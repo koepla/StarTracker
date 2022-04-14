@@ -54,7 +54,7 @@ namespace StarTracker::Ephemeris {
 
 		for (const auto& element : jObject["CelestialBodies"]) {
 
-			if(!isValidCelestialBody(element)) {
+			if (!isValidCelestialBody(element)) {
 
 				continue;
 			}
@@ -125,7 +125,7 @@ namespace StarTracker::Ephemeris {
 				entry.contains("LonAscendingNodeCentury");
 		}
 		// FixedBody
-		else if(type._Equal("FB")) {
+		else if (type._Equal("FB")) {
 
 			return
 				entry.contains("Designation") &&

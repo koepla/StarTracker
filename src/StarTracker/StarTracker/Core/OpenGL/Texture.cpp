@@ -22,7 +22,7 @@ namespace StarTracker::Core::OpenGL {
 		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
 		path = filePath;
 
-		if(data) {
+		if (data) {
 
 			glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
 			glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);

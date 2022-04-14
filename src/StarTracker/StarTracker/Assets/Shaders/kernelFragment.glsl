@@ -22,13 +22,13 @@ void main() {
 	);
 
 	vec3 textureSamples[9];
-	for(int i = 0; i < 9; i++) {
+	for (int i = 0; i < 9; i++) {
 
 		textureSamples[i] = vec3(texture(uTexture, passedTextureCoordinates + offsets[i]));
 	}
 
 	vec3 color = vec3(0.0f);
-	for(int i = 0; i < 9; i++) {
+	for (int i = 0; i < 9; i++) {
 
 		color += textureSamples[i] * uKernel[i];
 	}
