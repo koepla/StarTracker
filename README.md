@@ -16,7 +16,6 @@ After running the setup script, you should be good to go to build the desktop ap
 ```psh
 mkdir build
 cd build
-cd build
 cmake ..
 cmake --build .
 ```
