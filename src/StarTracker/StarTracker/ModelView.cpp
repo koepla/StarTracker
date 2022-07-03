@@ -1,12 +1,12 @@
-#include "ExperimentalView.hpp"
+#include "ModelView.hpp"
 
 namespace StarTracker {
 
-	ExperimentalView::ExperimentalView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, isFocused{ false }, invertedTextureCoordinates{ false }, camera{}, shader{}, frameBuffer{}, model{} {
+	ModelView::ModelView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle }, isFocused{ false }, invertedTextureCoordinates{ false }, camera{}, shader{}, frameBuffer{}, model{} {
 
 	}
 
-	void ExperimentalView::OnInit() noexcept {
+	void ModelView::OnInit() noexcept {
 
 		const auto application = Core::Application::GetInstance();
 		const auto windowWidth = application->GetWindow().GetWidth();
@@ -21,7 +21,7 @@ namespace StarTracker {
 		Core::OpenGL::Renderer::Initialize();
 	}
 
-	void ExperimentalView::OnUpdate(float deltaTime) noexcept {
+	void ModelView::OnUpdate(float deltaTime) noexcept {
 
 		// TODO(Plank): Update to new UI API
 		const auto application = Core::Application::GetInstance();
@@ -114,11 +114,11 @@ namespace StarTracker {
 		ImGui::End();
 	}
 
-	void ExperimentalView::OnDestroy() noexcept {
+	void ModelView::OnDestroy() noexcept {
 
 	}
 
-	void ExperimentalView::reloadModel() noexcept {
+	void ModelView::reloadModel() noexcept {
 
 		const auto paths = Utils::File::OpenFileDialog("Select Model", true);
 
@@ -166,7 +166,7 @@ namespace StarTracker {
 		}   
 	}
 
-	void ExperimentalView::drawModelInfoCard(const glm::vec2& size) noexcept {
+	void ModelView::drawModelInfoCard(const glm::vec2& size) noexcept {
 
 		const auto& style = ImGui::GetStyle();
 		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
@@ -195,13 +195,13 @@ namespace StarTracker {
 			UI::Text::Draw(cardInfo, UI::Font::Medium, fontSize, baseTextColor);
 
 			// Path-Info
-			const auto modelPathInfo = std::format("File: {}", model->GetFilePath().filename().string());
+			const auto modelPathInfo = fmt::format("File: {}", model->GetFilePath().filename().string());
 			UI::DrawCursor::Advance({ 0.0f, fontSize + regulatedItemSpacing });
 			UI::Text::Draw(modelPathInfo, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 			// Geometry-Info
 			const auto& modelGeometry = model->GetGeometryInfo();
-			const auto modelGeometryInfo = std::format("Geometry: {} indices, {} vertices", modelGeometry.IndexCount, modelGeometry.VertexCount);
+			const auto modelGeometryInfo = fmt::format("Geometry: {} indices, {} vertices", modelGeometry.IndexCount, modelGeometry.VertexCount);
 			UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 			UI::Text::Draw(modelGeometryInfo, UI::Font::Regular, smallFontSize, baseTextLightColor);
 

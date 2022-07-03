@@ -22,7 +22,7 @@
 
 namespace StarTracker {
 
-	class ExperimentalView : public Core::View {
+	class ModelView : public Core::View {
 
 	private:
 		bool isFocused;
@@ -33,7 +33,7 @@ namespace StarTracker {
 		std::shared_ptr<Core::OpenGL::Model> model;
 
 	public:
-		explicit ExperimentalView(void* nativeWindowHandle) noexcept;
+		explicit ModelView(void* nativeWindowHandle) noexcept;
 
 		virtual void OnInit() noexcept override;
 		virtual void OnUpdate(float deltaTime) noexcept override;

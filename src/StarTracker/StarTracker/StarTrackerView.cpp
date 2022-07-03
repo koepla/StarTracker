@@ -4,14 +4,16 @@ namespace StarTracker {
 
 	StarTrackerView::StarTrackerView(void* nativeWindowHandle) noexcept : Core::View{ nativeWindowHandle } {
 
-		experimentalView = std::make_shared<ExperimentalView>(nativeWindowHandle);
-		imageProcessingView = std::make_shared<ImageProcessingView>(nativeWindowHandle);
 		trackableBodyView = std::make_shared<TrackableBodyView>(nativeWindowHandle);
+		modelView = std::make_shared<ModelView>(nativeWindowHandle);
+		imageProcessingView = std::make_shared<ImageProcessingView>(nativeWindowHandle);
+		astronomicalView = std::make_shared<AstronomicalView>(nativeWindowHandle);
 
 		const auto application = Core::Application::GetInstance();
 		application->RegisterView(trackableBodyView.get());
-		application->RegisterView(experimentalView.get());
+		application->RegisterView(modelView.get());
 		application->RegisterView(imageProcessingView.get());
+		application->RegisterView(astronomicalView.get());
 	}
 
 	void StarTrackerView::OnInit() noexcept {
@@ -22,7 +24,6 @@ namespace StarTracker {
 
 		const auto application = Core::Application::GetInstance();
 
-		// Multiple KeyCode Detection for Generic ShortCuts
 		if (Core::Input::IsKeyPressed(Core::KeyCode::LeftAlt) && Core::Input::IsKeyPressed(Core::KeyCode::F4)) {
 
 			application->Close();
