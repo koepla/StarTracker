@@ -3,9 +3,11 @@
 
 #include <StarEngine/DateTime.hpp>
 
+#include <fmt/format.h>
+
 #include <vector>
 #include <mutex>
-#include <format>
+#include <string_view>
 
 namespace StarTracker::Core {
 
@@ -23,68 +25,9 @@ namespace StarTracker::Core {
 		static inline LoggerData error{};
 
 	public:
-		template <typename ...Args>
-		[[nodiscard]] static bool Info(Args&& ...args) noexcept {
-
-			if (info.Mutex.try_lock()) {
-
-				std::string entry = std::format(std::forward<Args>(args)...);
-				std::string infoEntry = std::format("[INFO] {}", entry);
-				std::string format = formatEntry(infoEntry);
-				std::fprintf(stdout, "%s\n", format.c_str());
-				
-				info.List.emplace_back(format);
-				info.Mutex.unlock();
-
-				return true;
-			}
-			else {
-
-				return false;
-			}
-		}
-
-		template <typename ...Args>
-		[[nodiscard]] static bool Warn(Args&& ...args) noexcept {
-
-			if (warn.Mutex.try_lock()) {
-
-				std::string entry = std::format(std::forward<Args>(args)...);
-				std::string warnEntry = std::format("[WARN] {}", entry);
-				std::string format = formatEntry(warnEntry);
-				std::fprintf(stderr, "%s\n", format.c_str());
-
-				warn.List.emplace_back(format);
-				warn.Mutex.unlock();
-
-				return true;
-			}
-			else {
-
-				return false;
-			}
-		}
-
-		template <typename ...Args>
-		[[nodiscard]] static bool Error(Args&& ...args) noexcept {
-
-			if (error.Mutex.try_lock()) {
-
-				std::string entry = std::format(std::forward<Args>(args)...);
-				std::string errorEntry = std::format("[ERROR] {}", entry);
-				std::string format = formatEntry(errorEntry);
-				std::fprintf(stderr, "%s\n", format.c_str());
-
-				error.List.emplace_back(formatEntry(format));
-				error.Mutex.unlock();
-
-				return true;
-			}
-			else {
-
-				return false;
-			}
-		}
+		[[nodiscard]] static bool Info(std::string_view message) noexcept;
+		[[nodiscard]] static bool Warn(std::string_view message) noexcept;
+		[[nodiscard]] static bool Error(std::string_view message) noexcept;
 
 		static void ClearInfoList() noexcept;
 		static void ClearWarnList() noexcept;
@@ -103,8 +46,8 @@ namespace StarTracker::Core {
 	};
 }
 
-#define STARTRACKER_INFO(...) (void)StarTracker::Core::Logger::Info(__VA_ARGS__) 
-#define STARTRACKER_WARN(...) (void)StarTracker::Core::Logger::Warn(__VA_ARGS__) 
-#define STARTRACKER_ERROR(...) (void)StarTracker::Core::Logger::Error(__VA_ARGS__) 
+#define STARTRACKER_INFO(...) (void)StarTracker::Core::Logger::Info(fmt::format(__VA_ARGS__)) 
+#define STARTRACKER_WARN(...) (void)StarTracker::Core::Logger::Warn(fmt::format(__VA_ARGS__)) 
+#define STARTRACKER_ERROR(...) (void)StarTracker::Core::Logger::Error(fmt::format(__VA_ARGS__)) 
 
 #endif // STARTRACKER_CORE_LOGGER_H

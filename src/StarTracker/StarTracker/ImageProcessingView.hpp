@@ -57,6 +57,7 @@ namespace StarTracker {
 		void drawFilterPanel() noexcept;
 		void drawFilterHierarchyPanel() noexcept;
 		void drawFilterKernel() noexcept;
+		void drawFilterStack() noexcept;
 
 		void showTexture(std::uint32_t textureNativeHandle, const glm::vec2& size) noexcept;
 	};

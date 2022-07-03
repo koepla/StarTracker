@@ -160,41 +160,40 @@ namespace StarTracker {
 
 		if (ImGui::BeginChild("idChildTextureListPanel", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
 
-			{
-				UI::ScopedColor headerChildBackground{ ImGuiCol_ChildBg, baseChildBackground };
-				if (ImGui::BeginChild("idChildTextureListPanelHeader", { ImGui::GetContentRegionAvail().x, infoCardHeight }, false, ImGuiWindowFlags_HorizontalScrollbar)) {
+			UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
 
-					UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
-					UI::Text::Draw("Image List", UI::Font::Medium, fontSize, baseTextColor);
-					UI::DrawCursor::Advance({ 0.0f, fontSize + itemSpacing.y });
+			if (ImGui::BeginChild("idChildTextureListPanelHeader", { ImGui::GetContentRegionAvail().x, infoCardHeight }, false, ImGuiWindowFlags_HorizontalScrollbar)) {
 
-					const auto totalSize = ImGui::GetContentRegionAvail();
-					const auto buttonWidth = totalSize.x - itemInnerSpacing.x;
-					const auto buttonHeight = totalSize.y - itemInnerSpacing.y;
+				UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+				UI::Text::Draw("Image List", UI::Font::Medium, fontSize, baseTextColor);
+				UI::DrawCursor::Advance({ 0.0f, fontSize + itemSpacing.y });
 
-					if (ImGui::Button("Import", { buttonWidth, buttonHeight })) {
+				const auto totalSize = ImGui::GetContentRegionAvail();
+				const auto buttonWidth = totalSize.x - itemInnerSpacing.x;
+				const auto buttonHeight = totalSize.y - itemInnerSpacing.y;
 
-						const auto paths = Utils::File::OpenFileDialog("Select Images", true);
+				if (ImGui::Button("Import", { buttonWidth, buttonHeight })) {
 
-						if (!paths.empty()) {
+					const auto paths = Utils::File::OpenFileDialog("Select Images", true);
 
-							for (const auto& path : paths) {
+					if (!paths.empty()) {
 
-								auto texture = std::make_shared<Core::OpenGL::Texture>();
-								if (texture->LoadFromFile(path)) {
+						for (const auto& path : paths) {
 
-									textureList.emplace_back(texture);
-								}
-								else {
+							auto texture = std::make_shared<Core::OpenGL::Texture>();
+							if (texture->LoadFromFile(path)) {
 
-									STARTRACKER_WARN("Failed to load texture {}", path.filename().string());
-								}
+								textureList.emplace_back(texture);
+							}
+							else {
+
+								STARTRACKER_WARN("Failed to load texture {}", path.filename().string());
 							}
 						}
 					}
 				}
-				ImGui::EndChild();
 			}
+			ImGui::EndChild();
 
 			UI::ScopedColor transparentBackground{ ImGuiCol_ChildBg, { 0.0f, 0.0f, 0.0f, 0.0f} };
 
@@ -215,14 +214,14 @@ namespace StarTracker {
 						UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
 					}
 
-					const auto textureChildContainerId = std::format("idChildTexture{}", currentTexture->GetNativeHandle());
+					const auto textureChildContainerId = fmt::format("idChildTexture{}", currentTexture->GetNativeHandle());
 					if (ImGui::BeginChild(textureChildContainerId.c_str(), { textureWidth, textureHeight }, false, ImGuiWindowFlags_NoScrollbar)) {
 
 						UI::Image::DrawRounded(currentTexture->GetNativeHandle(), { textureWidth, textureHeight });
 					}
 					ImGui::EndChild();
 
-					const auto textureRemovePopupId = std::format("idRemoveTexturePopup{}", currentTexture->GetNativeHandle());
+					const auto textureRemovePopupId = fmt::format("idRemoveTexturePopup{}", currentTexture->GetNativeHandle());
 
 					if (ImGui::IsItemHovered()) {
 
@@ -236,7 +235,7 @@ namespace StarTracker {
 						const auto& path = currentTexture->GetFilePath();
 						const auto width = currentTexture->GetWidth();
 						const auto height = currentTexture->GetHeight();
-						const auto tooltip = std::format("{} - {}x{}", path.filename().string(), width, height);
+						const auto tooltip = fmt::format("{} - {}x{}", path.filename().string(), width, height);
 						ImGui::Text("%s", tooltip.c_str());
 
 						ImGui::EndTooltip();
@@ -284,23 +283,15 @@ namespace StarTracker {
 		const auto itemSpacing = style.ItemSpacing;
 		const auto itemInnerSpacing = style.ItemInnerSpacing;
 		const auto& baseTextColor = style.Colors[ImGuiCol_Text];
-		const auto infoCardHeight = fontSize;
-		const auto& baseChildBackground = style.Colors[ImGuiCol_FrameBg];
-		const auto& darkerChildBackground = ImVec4{ baseChildBackground.x, baseChildBackground.y, baseChildBackground.z, 0.5f * baseChildBackground.w };
-
-		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, baseChildBackground };
 
 		if (ImGui::BeginChild("idChildFrameBufferPanel", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
 
-			{
-				UI::ScopedColor headerChildBackground{ ImGuiCol_ChildBg, baseChildBackground };
-				if (ImGui::BeginChild("idChildFrameBufferPanelHeader", { ImGui::GetContentRegionAvail().x, infoCardHeight }, false, ImGuiWindowFlags_NoScrollbar)) {
+			if (ImGui::BeginChild("idChildFrameBufferPanelHeader", { ImGui::GetContentRegionAvail().x, fontSize }, false, ImGuiWindowFlags_NoScrollbar)) {
 
-					UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
-					UI::Text::Draw("Result", UI::Font::Medium, fontSize, baseTextColor);
-				}
-				ImGui::EndChild();
+				UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+				UI::Text::Draw("Result", UI::Font::Medium, fontSize, baseTextColor);
 			}
+			ImGui::EndChild();
 
 			const auto textureHandle = renderFrameBuffer->GetNativeTextureHandle();
 			const auto textureWidth = ImGui::GetContentRegionAvail().x;
@@ -313,14 +304,8 @@ namespace StarTracker {
 	void ImageProcessingView::drawFilterPanel() noexcept {
 
 		const auto& style = ImGui::GetStyle();
-		const auto fontSize = ImGui::GetFontSize();
 		const auto itemSpacing = style.ItemSpacing;
 		const auto itemInnerSpacing = style.ItemInnerSpacing;
-		const auto& baseTextColor = style.Colors[ImGuiCol_Text];
-		const auto& baseChildBackground = style.Colors[ImGuiCol_FrameBg];
-		const auto& darkerChildBackground = ImVec4{ baseChildBackground.x, baseChildBackground.y, baseChildBackground.z, 0.5f * baseChildBackground.w };
-
-		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, darkerChildBackground };
 
 		if (ImGui::BeginChild("idChildFilterPanel", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoScrollbar)) {
 
@@ -329,6 +314,10 @@ namespace StarTracker {
 			if (ImGui::CollapsingHeader("Kernel", ImGuiTreeNodeFlags_DefaultOpen)) {
 
 				drawFilterKernel();
+			}
+			if (ImGui::CollapsingHeader("Stack", ImGuiTreeNodeFlags_DefaultOpen)) {
+
+				drawFilterStack();
 			}
 		}
 		ImGui::EndChild();
@@ -340,8 +329,6 @@ namespace StarTracker {
 		const auto itemSpacing = style.ItemSpacing;
 		const auto itemInnerSpacing = style.ItemInnerSpacing;
 		const auto& baseTextColor = style.Colors[ImGuiCol_Text];
-		const auto& baseChildBackground = style.Colors[ImGuiCol_FrameBg];
-		const auto& darkerChildBackground = ImVec4{ baseChildBackground.x, baseChildBackground.y, baseChildBackground.z, 0.5f * baseChildBackground.w };
 		const auto size = ImGui::GetContentRegionAvail();
 
 		// We need this because we want to dynamically remove textures from the textureList
@@ -354,7 +341,8 @@ namespace StarTracker {
 		static std::vector<std::shared_ptr<Core::OpenGL::FrameBuffer>> keepAliveTargetList{};
 		keepAliveTargetList.clear();
 
-		UI::ScopedColor headerChildBackground{ ImGuiCol_ChildBg, baseChildBackground };
+		UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
+
 		if (ImGui::BeginChild("idChildFilterHierarchyPanelHeader", { size.x, 0.45f * size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
 
 			UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
@@ -366,12 +354,12 @@ namespace StarTracker {
 				for (std::size_t i = 0; i < filterList.size(); i++) {
 
 					const auto& filter = filterList.at(i);
-					const auto label = std::format("{}", filter.Name);
-					const auto treeNodeId = std::format("idTreeNodeFilterHierarchyPanel{}", i);
+					const auto label = fmt::format("{}", filter.Name);
+					const auto treeNodeId = fmt::format("idTreeNodeFilterHierarchyPanel{}", i);
 
 					if (ImGui::TreeNode(treeNodeId.c_str(), label.c_str())) {
 
-						const auto childId = std::format("idChildFilterHierarchyPanelFilterElem{}", i);
+						const auto childId = fmt::format("idChildFilterHierarchyPanelFilterElem{}", i);
 						const auto size = ImGui::GetContentRegionAvail();
 						const auto targetWidth = filter.Target->GetWidth();
 						const auto targetHeight = filter.Target->GetHeight();
@@ -387,7 +375,7 @@ namespace StarTracker {
 						ImGui::TreePop();
 					}
 
-					const auto treeNodePopupId = std::format("idTreeNodePopupFilterHierarchyPanelFilterElem{}", i);
+					const auto treeNodePopupId = fmt::format("idTreeNodePopupFilterHierarchyPanelFilterElem{}", i);
 					if (ImGui::IsItemHovered()) {
 
 						if (Core::Input::IsMousePressed(Core::MouseCode::ButtonRight)) {
@@ -514,10 +502,41 @@ namespace StarTracker {
 			if (Core::ImageProcessing::Kernel(kernelFrameBuffer, renderFrameBuffer, selectedKernel)) {
 
 				Filter kernel{};
-				kernel.Name = std::format("Kernel - {}", kernelNames[selectedKernelIndex]);
+				kernel.Name = fmt::format("Kernel - {}", kernelNames[selectedKernelIndex]);
 				kernel.Target = kernelFrameBuffer;
 
 				filterList.emplace_back(kernel);
+			}
+		}
+	}
+
+	void ImageProcessingView::drawFilterStack() noexcept {
+
+		const auto& style = ImGui::GetStyle();
+		const auto itemSpacing = style.ItemSpacing;
+		const auto itemInnerSpacing = style.ItemInnerSpacing;
+
+		const auto totalWidth = ImGui::GetContentRegionAvail().x - 2.0f * itemInnerSpacing.x;
+
+		{
+			UI::ScopedWidth textWidth{ totalWidth };
+			UI::ScopedFont mediumFont{ UI::Font::Medium };
+			UI::DrawCursor::Advance({ itemInnerSpacing.x, 0.0f });
+			if (ImGui::Button("Stack All", { totalWidth, 0.0f })) {
+
+				const auto width = renderFrameBuffer->GetWidth();
+				const auto height = renderFrameBuffer->GetHeight();
+				auto stackFrameBuffer = std::make_shared<Core::OpenGL::FrameBuffer>(width, height);
+				if (!Core::ImageProcessing::Stack(stackFrameBuffer, textureList)) {
+
+					STARTRACKER_WARN("Couldn't stack images");
+				}
+
+				Filter stack{};
+				stack.Name = "Stack";
+				stack.Target = stackFrameBuffer;
+
+				filterList.emplace_back(stack);
 			}
 		}
 	}

@@ -18,24 +18,24 @@ namespace StarTracker::Core {
 			// Fixed texture vertices
 			const static std::array<OpenGL::TextureVertex, 4> vertices = {
 
-					OpenGL::TextureVertex{ glm::vec3{ -1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f }},
-					OpenGL::TextureVertex{ glm::vec3{  1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f }},
-					OpenGL::TextureVertex{ glm::vec3{  1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 1.0f }},
-					OpenGL::TextureVertex{ glm::vec3{ -1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 1.0f }}
+				OpenGL::TextureVertex{ glm::vec3{ -1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f }},
+				OpenGL::TextureVertex{ glm::vec3{  1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f }},
+				OpenGL::TextureVertex{ glm::vec3{  1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 1.0f }},
+				OpenGL::TextureVertex{ glm::vec3{ -1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 1.0f }}
 			};
 
 			// Fixed indices for drawing the rectangle
 			const static std::array<std::uint32_t, 6> indices = {
 
-					0, 1, 2, 2, 0, 3
+				0, 1, 2, 2, 0, 3
 			};
 
 			// Buffer elements that match the Shader
 			const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
-					Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
-					Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aColor" },
-					Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float2, "aTextureCoordinates" }
+				Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
+				Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aColor" },
+				Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float2, "aTextureCoordinates" }
 			};
 
 			// BufferLayout containing the elements
@@ -91,7 +91,7 @@ namespace StarTracker::Core {
 			const auto& currentTexture = textureList.at(i);
 			currentTexture->Bind(i);
 
-			const auto uniformName = std::format("uTextures[{}]", i);
+			const auto uniformName = fmt::format("uTextures[{}]", i);
 			stackShader->SetInt(uniformName, static_cast<int>(i));
 		}
 
@@ -113,7 +113,7 @@ namespace StarTracker::Core {
 		for (std::size_t i = 0; i < 9; i++) {
 
 			const auto kernelElement = kernel.at(i);
-			const auto uniformName = std::format("uKernel[{}]", i);
+			const auto uniformName = fmt::format("uKernel[{}]", i);
 			kernelShader->SetFloat(uniformName, kernelElement);
 		}
 

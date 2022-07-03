@@ -26,8 +26,6 @@ namespace StarTracker {
 
 	void TrackableBodyView::OnUpdate(float deltaTime) noexcept {
 
-		ImGui::ShowDemoWindow();
-
 		if (ImGui::Begin("Tracking")) {
 
 			// Info UI
@@ -41,7 +39,7 @@ namespace StarTracker {
 
 			// Filter Search Box
 			const auto entryButtonWidth = ImGui::CalcTextSize("Add Entry").x * 1.4f;
-			constexpr auto searchBufferSize = std::size_t{ 128 };
+			constexpr std::size_t searchBufferSize = 128;
 			static std::vector<char> searchBuffer(searchBufferSize);
 			{
 				UI::ScopedWidth inputTextWidth{ ImGui::GetContentRegionAvail().x - entryButtonWidth - itemSpacing.x };
@@ -56,6 +54,9 @@ namespace StarTracker {
 				ImGui::OpenPopup(addEntryPopupId);
 			}
 			drawAddEntryMenu(addEntryPopupId);
+
+			Utils::Diagnostics::Stopwatch stopwatch{};
+			stopwatch.Start();
 
 			// Get the filtered library
 			const auto filter = std::string{ searchBuffer.data() };
@@ -72,7 +73,7 @@ namespace StarTracker {
 						ImGui::TableSetColumnIndex(0);
 
 						const auto& body = entry.Body;
-						const auto windowId = std::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
+						const auto windowId = fmt::format("Tracking {} ({})", body->GetName(), body->GetDesignation());
 						const auto celestialBodyCardHeight = 4.0f * fontSize + (2.0f + 3 * 0.7f) * itemSpacing.y - 6.0f;
 
 						if (drawCelestialBodyCard(entry, { ImGui::GetContentRegionAvail().x, celestialBodyCardHeight })) {
@@ -80,6 +81,7 @@ namespace StarTracker {
 							ImGui::OpenPopup(windowId.c_str());
 						}
 						drawTrackingMenu(entry, windowId);
+						
 					}
 					ImGui::EndTable();
 				}
@@ -105,7 +107,7 @@ namespace StarTracker {
 
 		try {
 
-			constexpr auto maxConnectionTries = std::size_t{ 3 };
+			constexpr std::size_t maxConnectionTries = 3;
 			for (std::size_t i = 0; i < maxConnectionTries; i++) {
 
 				if (tracker.Connect()) {
@@ -153,7 +155,7 @@ namespace StarTracker {
 			UI::Text::Draw(dateTimeInfo.c_str(), UI::Font::Medium, fontSize, baseTextColor);
 
 			// Status of the Tracker
-			const auto trackerConnectionInfo = std::format("{}", tracker.IsConnected() ? "Connected" : "Not Connected");
+			const auto trackerConnectionInfo = fmt::format("{}", tracker.IsConnected() ? "Connected" : "Not Connected");
 			const auto trackerStatusTextWidth = ImGui::CalcTextSize("Tracker:").x;
 			const auto trackerStatusTextColor = [&]() -> ImVec4 {
 
@@ -173,7 +175,7 @@ namespace StarTracker {
 			UI::DrawCursor::Advance({ -1.0f * trackerStatusTextWidth, 0.0f });
 
 			// Location of the Observer
-			const auto locationInfo = std::format("Location: {}, {}, {}", observer.City, observer.RegionName, observer.Country);
+			const auto locationInfo = fmt::format("Location: {}, {}, {}", observer.City, observer.RegionName, observer.Country);
 			UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 			UI::Text::Draw(locationInfo.c_str(), UI::Font::Regular, smallFontSize, baseTextLightColor);
 
@@ -255,7 +257,7 @@ namespace StarTracker {
 		
 		{
 			UI::ScopedColor childBackground{ ImGuiCol_ChildBg, style.Colors[ImGuiCol_FrameBg] };
-			if (ImGui::BeginChild(std::format("idChildElement{}{}", name, designation).c_str(), ImVec2{ size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
+			if (ImGui::BeginChild(fmt::format("idChildElement{}{}", name, designation).c_str(), ImVec2{ size.x, size.y }, false, ImGuiWindowFlags_NoScrollbar)) {
 
 				// Item Spacings
 				const auto itemSpacing = style.ItemSpacing;
@@ -272,7 +274,7 @@ namespace StarTracker {
 
 				const auto cursor = UI::DrawCursor::Get();
 				{
-					UI::ScopedID selectable{ std::format("idSelectable{}{}", name, designation) };
+					UI::ScopedID selectable{ fmt::format("idSelectable{}{}", name, designation) };
 					UI::ScopedColor headerActive{ ImGuiCol_HeaderActive, style.Colors[ImGuiCol_FrameBgActive] };
 					UI::ScopedColor headerHovered{ ImGuiCol_HeaderHovered, style.Colors[ImGuiCol_FrameBgHovered] };
 					if (ImGui::Selectable("", false, ImGuiSelectableFlags_None, { size.x, size.y })) {
@@ -302,12 +304,12 @@ namespace StarTracker {
 				);
 
 				// Azimuth-Angle of the Celestial Body
-				const auto azimuthText = std::format("Azimuth: {} deg", positionPreview.Azimuth);
+				const auto azimuthText = fmt::format("Azimuth: {} deg", positionPreview.Azimuth);
 				UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 				UI::Text::Draw(azimuthText, UI::Font::Regular, smallFontSize, baseTextLightColor);
 
 				// Elevation-Angle of the Celestial Body
-				const auto elevationText = std::format("Elevation: {} deg", positionPreview.Altitude);
+				const auto elevationText = fmt::format("Elevation: {} deg", positionPreview.Altitude);
 				UI::DrawCursor::Advance({ 0.0f, smallFontSize + regulatedItemSpacing });
 				UI::Text::Draw(elevationText, UI::Font::Regular, smallFontSize, baseTextLightColor);
 			}
@@ -330,7 +332,7 @@ namespace StarTracker {
 			{
 				UI::ScopedFont mediumFont{ UI::Font::Medium };
 
-				const auto headerText = std::format("Tracking {} ({} s)", name, trackingDuration);
+				const auto headerText = fmt::format("Tracking {} ({} s)", name, trackingDuration);
 				ImGui::Text("%s", headerText.c_str());
 				ImGui::Separator();
 			}
@@ -342,10 +344,10 @@ namespace StarTracker {
 				now
 			);
 
-			const auto azimuthText = std::format("Azimuth: {}", positionPreview.Azimuth);
+			const auto azimuthText = fmt::format("Azimuth: {}", positionPreview.Azimuth);
 			ImGui::Text("%s", azimuthText.c_str());
 
-			const auto elevationText = std::format("Elevation: {}", positionPreview.Altitude);
+			const auto elevationText = fmt::format("Elevation: {}", positionPreview.Altitude);
 			ImGui::Text("%s", elevationText.c_str());
 
 			static std::string trackingStatus{ "Not Tracking" };

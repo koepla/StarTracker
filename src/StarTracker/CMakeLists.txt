@@ -17,9 +17,11 @@ find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(imgui CONFIG REQUIRED)
+find_package(implot CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_library(wininet wininet)
 find_package(tinyobjloader CONFIG REQUIRED)
+find_package(fmt CONFIG REQUIRED)
 find_path(STB_INCLUDE_DIRS "../include/stb.h")
 
 add_library(StarEngine
@@ -48,8 +50,8 @@ add_library(StarEngine
 		StarEngine/Ephemeris/Coordinates/Transform.cpp)
 
 add_executable(StarTracker
-		StarTracker/ExperimentalView.hpp
-		StarTracker/ExperimentalView.cpp
+		StarTracker/ModelView.hpp
+		StarTracker/ModelView.cpp
 		StarTracker/StarTrackerMain.cpp
 		StarTracker/StarTrackerApplication.hpp
 		StarTracker/StarTrackerApplication.cpp
@@ -120,8 +122,8 @@ add_executable(StarTracker
 		StarTracker/Core/OpenGL/Camera.cpp
 		StarTracker/Core/AssetDataBase.hpp
 		StarTracker/Core/AssetDataBase.cpp
-		StarTracker/Core/OpenGL/Renderer.hpp 
-		StarTracker/Core/OpenGL/Renderer.cpp 
+		StarTracker/Core/OpenGL/Renderer.hpp
+		StarTracker/Core/OpenGL/Renderer.cpp
 		StarTracker/Core/ImageProcessing.hpp
 		StarTracker/Core/ImageProcessing.cpp
 		StarTracker/ImageProcessingView.hpp
@@ -132,8 +134,10 @@ add_executable(StarTracker
 		StarTracker/Core/Logger.cpp
 		StarTracker/Core/BodyLibrary.hpp
 		StarTracker/Core/BodyLibrary.cpp
-		StarTracker/UI/UI.hpp 
-		StarTracker/UI/UI.cpp)
+		StarTracker/UI/UI.hpp
+		StarTracker/UI/UI.cpp
+		StarTracker/AstronomicalView.hpp 
+		StarTracker/AstronomicalView.cpp)
 
 target_include_directories(StarEngine PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 target_include_directories(StarTracker PRIVATE ${CMAKE_CURRENT_LIST_DIR})
@@ -145,8 +149,10 @@ target_link_libraries(StarTracker PRIVATE glm::glm)
 target_link_libraries(StarTracker PRIVATE glfw)
 target_link_libraries(StarTracker PRIVATE nlohmann_json nlohmann_json::nlohmann_json)
 target_link_libraries(StarTracker PRIVATE imgui::imgui)
+target_link_libraries(StarTracker PRIVATE implot::implot)
 target_link_libraries(StarTracker PRIVATE wininet)
 target_link_libraries(StarTracker PRIVATE tinyobjloader::tinyobjloader)
+target_link_libraries(StarTracker PRIVATE fmt::fmt)
 
 # Set the Binary Output Directory
 set_property(TARGET StarTracker PROPERTY RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Binaries)
