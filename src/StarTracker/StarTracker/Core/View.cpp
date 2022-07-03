@@ -2,12 +2,12 @@
 
 namespace StarTracker::Core {
 
-	View::View(void* nativeWindowHandle) noexcept : nativeWindowHandle{ nativeWindowHandle } {
+	View::View(void* windowHandle) noexcept : nativeWindowHandle{ windowHandle } {
 
 	}
 
-	void View::SetNativeWindowHandle(void* nativeWindowHandle) noexcept {
+	void View::SetNativeWindowHandle(void* windowHandle) noexcept {
 
-		this->nativeWindowHandle = nativeWindowHandle;
+		nativeWindowHandle = windowHandle;
 	}
 }
