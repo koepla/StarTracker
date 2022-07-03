@@ -1,11 +1,10 @@
 import os
 import subprocess
-import platform
 import errno
 
 def panic(message):
-        print(message)
-        exit()
+    print(message)
+    exit()
 
 def self_path():
     return os.path.dirname(os.path.abspath(__file__))
@@ -39,4 +38,5 @@ subprocess.call(["vcpkg", "install", "nlohmann-json:x64-windows-static"])
 subprocess.call(["vcpkg", "install", "imgui[core,docking-experimental,opengl3-binding,glfw-binding]:x64-windows-static"])
 subprocess.call(["vcpkg", "install", "tinyobjloader:x64-windows-static"])
 subprocess.call(["vcpkg", "install", "stb:x64-windows-static"])
+subprocess.call(["vcpkg"], "install", "fmt:x64-windows-static")
 subprocess.call(["vcpkg", "integrate", "install"])
