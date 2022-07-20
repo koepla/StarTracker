@@ -21,46 +21,46 @@
 
 namespace StarTracker {
 
-	class ImageProcessingView : public Core::View {
+    class ImageProcessingView : public Core::View {
 
-	private:
-		struct Filter {
+    private:
+        struct Filter {
 
-			std::string Name;
-			std::shared_ptr<Core::OpenGL::FrameBuffer> Target;
-		};
+            std::string Name;
+            std::shared_ptr<Core::OpenGL::FrameBuffer> Target;
+        };
 
-	private:
-		std::vector<Filter> filterList;
-		std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
+    private:
+        std::vector<Filter> filterList;
+        std::vector<std::shared_ptr<Core::OpenGL::Texture>> textureList;
 
-		// FrameBuffer for rendering
-		std::shared_ptr<Core::OpenGL::FrameBuffer> renderFrameBuffer;
-		std::shared_ptr<Core::OpenGL::Shader> copyShader;
+        // FrameBuffer for rendering
+        std::shared_ptr<Core::OpenGL::FrameBuffer> renderFrameBuffer;
+        std::shared_ptr<Core::OpenGL::Shader> copyShader;
 
-		// OpenGL Buffers for showing a specific Texture
-		std::shared_ptr<Core::OpenGL::VertexArray> renderVertexArray;
-		std::shared_ptr<Core::OpenGL::VertexBuffer> renderVertexBuffer;
-		std::shared_ptr<Core::OpenGL::IndexBuffer> renderIndexBuffer;
+        // OpenGL Buffers for showing a specific Texture
+        std::shared_ptr<Core::OpenGL::VertexArray> renderVertexArray;
+        std::shared_ptr<Core::OpenGL::VertexBuffer> renderVertexBuffer;
+        std::shared_ptr<Core::OpenGL::IndexBuffer> renderIndexBuffer;
 
-	public:
-		explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
+    public:
+        explicit ImageProcessingView(void* nativeWindowHandle) noexcept;
 
-		virtual void OnInit() noexcept override;
-		virtual void OnUpdate(float deltaTime) noexcept override;
-		virtual void OnDestroy() noexcept override;
+        virtual void OnInit() noexcept override;
+        virtual void OnUpdate(float deltaTime) noexcept override;
+        virtual void OnDestroy() noexcept override;
 
-	private:
-		void initializeBuffers() noexcept;
-		void drawTextureListPanel() noexcept;
-		void drawRenderFrameBufferPanel() noexcept;
-		void drawFilterPanel() noexcept;
-		void drawFilterHierarchyPanel() noexcept;
-		void drawFilterKernel() noexcept;
-		void drawFilterStack() noexcept;
+    private:
+        void initializeBuffers() noexcept;
+        void drawTextureListPanel() noexcept;
+        void drawRenderFrameBufferPanel() noexcept;
+        void drawFilterPanel() noexcept;
+        void drawFilterHierarchyPanel() noexcept;
+        void drawFilterKernel() noexcept;
+        void drawFilterStack() noexcept;
 
-		void showTexture(std::uint32_t textureNativeHandle, const glm::vec2& size) noexcept;
-	};
+        void showTexture(std::uint32_t textureNativeHandle, const glm::vec2& size) noexcept;
+    };
 }
 
 #endif // STARTRACKER_IMAGEPROCESSINGVIEW_H

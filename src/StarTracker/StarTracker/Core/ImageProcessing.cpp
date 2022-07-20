@@ -2,130 +2,122 @@
 
 namespace StarTracker::Core {
 
-	void ImageProcessing::initialize() noexcept {
+    void ImageProcessing::Initialize() noexcept {
 
-		static bool firstPass{ true };
-		if (firstPass) {
+        vertexArray = std::make_shared<Core::OpenGL::VertexArray>();
+        vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
+        indexBuffer = std::make_shared<Core::OpenGL::IndexBuffer>();
 
-			vertexArray = std::make_shared<Core::OpenGL::VertexArray>();
-			vertexBuffer = std::make_shared<Core::OpenGL::VertexBuffer>();
-			indexBuffer = std::make_shared<Core::OpenGL::IndexBuffer>();
+        // Stacking shader from AssetDataBase
+        stackShader = AssetDataBase::LoadShader("textureStackVertex.glsl", "textureStackFragment.glsl");
+        kernelShader = AssetDataBase::LoadShader("kernelVertex.glsl", "kernelFragment.glsl");
 
-			// Stacking shader from AssetDataBase
-			stackShader = AssetDataBase::LoadShader("textureStackVertex.glsl", "textureStackFragment.glsl");
-			kernelShader = AssetDataBase::LoadShader("kernelVertex.glsl", "kernelFragment.glsl");
+        // Fixed texture vertices
+        const static std::array<OpenGL::TextureVertex, 4> vertices = {
 
-			// Fixed texture vertices
-			const static std::array<OpenGL::TextureVertex, 4> vertices = {
+            OpenGL::TextureVertex{ glm::vec3{ -1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f }},
+            OpenGL::TextureVertex{ glm::vec3{  1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f }},
+            OpenGL::TextureVertex{ glm::vec3{  1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 1.0f }},
+            OpenGL::TextureVertex{ glm::vec3{ -1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 1.0f }}
+        };
 
-				OpenGL::TextureVertex{ glm::vec3{ -1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 0.0f }},
-				OpenGL::TextureVertex{ glm::vec3{  1.0f, -1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 0.0f }},
-				OpenGL::TextureVertex{ glm::vec3{  1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 1.0f, 1.0f }},
-				OpenGL::TextureVertex{ glm::vec3{ -1.0f,  1.0f, 0.0f }, glm::vec3{ 1.0f, 1.0f, 1.0f }, glm::vec2{ 0.0f, 1.0f }}
-			};
+        // Fixed indices for drawing the rectangle
+        const static std::array<std::uint32_t, 6> indices = {
 
-			// Fixed indices for drawing the rectangle
-			const static std::array<std::uint32_t, 6> indices = {
+            0, 1, 2, 2, 0, 3
+        };
 
-				0, 1, 2, 2, 0, 3
-			};
+        // Buffer elements that match the Shader
+        const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
 
-			// Buffer elements that match the Shader
-			const static std::vector<Core::OpenGL::BufferElement> vertexBufferElements = {
+            Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
+            Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aColor" },
+            Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float2, "aTextureCoordinates" }
+        };
 
-				Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aPosition" },
-				Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float3, "aColor" },
-				Core::OpenGL::BufferElement{ Core::OpenGL::ShaderDataType::Float2, "aTextureCoordinates" }
-			};
+        // BufferLayout containing the elements
+        const static Core::OpenGL::BufferLayout vertexBufferLayout{ vertexBufferElements };
 
-			// BufferLayout containing the elements
-			const static Core::OpenGL::BufferLayout vertexBufferLayout{ vertexBufferElements };
+        // Set up the VertexArray
+        vertexArray->Bind();
+        vertexBuffer->SetLayout(vertexBufferLayout);
+        vertexBuffer->SetData(vertices.data(), static_cast<std::uint32_t>(vertices.size() * sizeof(OpenGL::TextureVertex)));
+        indexBuffer->SetData(indices.data(), static_cast<std::uint32_t>(indices.size()));
+        vertexArray->SetIndexBuffer(indexBuffer);
+        vertexArray->SetVertexBuffer(vertexBuffer);
+    }
 
-			// Set up the VertexArray
-			vertexArray->Bind();
-			vertexBuffer->SetLayout(vertexBufferLayout);
-			vertexBuffer->SetData(vertices.data(), static_cast<std::uint32_t>(vertices.size() * sizeof(OpenGL::TextureVertex)));
-			indexBuffer->SetData(indices.data(), static_cast<std::uint32_t>(indices.size()));
-			vertexArray->SetIndexBuffer(indexBuffer);
-			vertexArray->SetVertexBuffer(vertexBuffer);
+    bool ImageProcessing::Stack(std::shared_ptr<OpenGL::FrameBuffer> target, const std::vector<std::shared_ptr<OpenGL::Texture>>& textureList) noexcept {
 
-			firstPass = false;
-		}
-	}
+        if (textureList.empty() || !target->IsValid()) {
 
-	bool ImageProcessing::Stack(std::shared_ptr<OpenGL::FrameBuffer> target, const std::vector<std::shared_ptr<OpenGL::Texture>> &textureList) noexcept {
+            return false;
+        }
 
-		initialize();
-		if (textureList.empty() || !target->IsValid()) {
+        // find max texture Resolution
+        const auto [textureWidth, textureHeight] = [&]() -> std::pair<std::int32_t, std::int32_t> {
 
-			return false;
-		}
+            std::int32_t maxTextureWidth{ textureList.at(0)->GetWidth() };
+            std::int32_t maxTextureHeight{ textureList.at(0)->GetHeight() };
+            for (const auto& currentTexture : textureList) {
 
-		// find max texture Resolution
-		const auto[textureWidth, textureHeight] = [&]() -> std::pair<std::int32_t, std::int32_t> {
+                if (currentTexture->GetWidth() > maxTextureWidth) {
 
-			std::int32_t maxTextureWidth{ textureList.at(0)->GetWidth() };
-			std::int32_t maxTextureHeight{ textureList.at(0)->GetHeight() };
-			for (const auto& currentTexture : textureList) {
+                    maxTextureWidth = currentTexture->GetWidth();
+                }
+                if (currentTexture->GetHeight() > maxTextureHeight) {
 
-				if (currentTexture->GetWidth() > maxTextureWidth) {
+                    maxTextureHeight = currentTexture->GetHeight();
+                }
+            }
 
-					maxTextureWidth = currentTexture->GetWidth();
-				}
-				if (currentTexture->GetHeight() > maxTextureHeight) {
+            return { maxTextureWidth, maxTextureHeight };
+        }();
+        target->Resize(textureWidth, textureHeight);
 
-					maxTextureHeight = currentTexture->GetHeight();
-				}
-			}
+        // Pass the number of textures to the Shader
+        stackShader->SetInt("uNumberOfPassedTextures", static_cast<int>(textureList.size()));
 
-			return { maxTextureWidth, maxTextureHeight };
-		}();
-		target->Resize(textureWidth, textureHeight);
+        // Bind the Textures to their corresponding slot
+        for (std::size_t i = 0; i < textureList.size(); i++) {
 
-		// Pass the number of textures to the Shader
-		stackShader->SetInt("uNumberOfPassedTextures", static_cast<int>(textureList.size()));
+            const auto& currentTexture = textureList.at(i);
+            currentTexture->Bind(i);
 
-		// Bind the Textures to their corresponding slot
-		for (std::size_t i = 0; i < textureList.size(); i++) {
+            const auto uniformName = fmt::format("uTextures[{}]", i);
+            stackShader->SetInt(uniformName, static_cast<int>(i));
+        }
 
-			const auto& currentTexture = textureList.at(i);
-			currentTexture->Bind(i);
+        // Draw call which stacks the textures
+        target->Bind();
+        OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+        OpenGL::Renderer::Clear();
+        OpenGL::Renderer::DrawIndexed(vertexArray, stackShader, OpenGL::PrimitiveMode::Triangle);
+        target->Unbind();
 
-			const auto uniformName = fmt::format("uTextures[{}]", i);
-			stackShader->SetInt(uniformName, static_cast<int>(i));
-		}
+        return true;
+    }
 
-		// Draw call which stacks the textures
-		target->Bind();
-		OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-		OpenGL::Renderer::Clear();
-		OpenGL::Renderer::DrawIndexed(vertexArray, stackShader, OpenGL::PrimitiveMode::Triangle);
-		target->Unbind();
+    bool ImageProcessing::Kernel(std::shared_ptr<OpenGL::FrameBuffer> target, std::shared_ptr<OpenGL::FrameBuffer> source, const std::array<float, 9>& kernel) noexcept {
 
-		return true;
-	}
+        target->Resize(source->GetWidth(), source->GetHeight());
 
-	bool ImageProcessing::Kernel(std::shared_ptr<OpenGL::FrameBuffer> target, std::shared_ptr<OpenGL::FrameBuffer> source, const std::array<float, 9>& kernel) noexcept {
+        for (std::size_t i = 0; i < 9; i++) {
 
-		initialize();
-		target->Resize(source->GetWidth(), source->GetHeight());
+            const auto kernelElement = kernel.at(i);
+            const auto uniformName = fmt::format("uKernel[{}]", i);
+            kernelShader->SetFloat(uniformName, kernelElement);
+        }
 
-		for (std::size_t i = 0; i < 9; i++) {
+        kernelShader->SetInt("uTexture", 0);
+        glBindTextureUnit(0, source->GetNativeTextureHandle());
 
-			const auto kernelElement = kernel.at(i);
-			const auto uniformName = fmt::format("uKernel[{}]", i);
-			kernelShader->SetFloat(uniformName, kernelElement);
-		}
+        target->Bind();
+        OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
+        OpenGL::Renderer::Clear();
+        OpenGL::Renderer::DrawIndexed(vertexArray, kernelShader, OpenGL::PrimitiveMode::Triangle);
+        target->Unbind();
 
-		kernelShader->SetInt("uTexture", 0);
-		glBindTextureUnit(0, source->GetNativeTextureHandle());
-
-		target->Bind();
-		OpenGL::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-		OpenGL::Renderer::Clear();
-		OpenGL::Renderer::DrawIndexed(vertexArray, kernelShader, OpenGL::PrimitiveMode::Triangle);
-		target->Unbind();
-
-		return true;
-	}
+        return true;
+    }
 }

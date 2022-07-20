@@ -3,15 +3,15 @@
 
 namespace StarTracker::Ephemeris {
 
-	struct KeplerianElements {
+    struct KeplerianElements {
 
-		double SemiMajorAxis;
-		double Eccentricity;
-		double Inclination;
-		double MeanLongitude;
-		double LonPerihelion;
-		double LonAscendingNode;
-	};
+        double SemiMajorAxis;
+        double Eccentricity;
+        double Inclination;
+        double MeanLongitude;
+        double LonPerihelion;
+        double LonAscendingNode;
+    };
 }
 
 #endif // STARENGINE_EPHEMERIS_KEPLERIANELEMENTS_H

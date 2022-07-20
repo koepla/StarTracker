@@ -2,69 +2,69 @@
 
 namespace StarTracker::Ephemeris::Coordinates::Transform {
 
-	Rectangular SphericalToRectangular(const Spherical& coords) noexcept {
+    Rectangular SphericalToRectangular(const Spherical& coords) noexcept {
 
-		Rectangular rectCoords{};
-		rectCoords.X = coords.Radius * Math::Cosine(coords.RightAscension) * Math::Cosine(coords.Declination);
-		rectCoords.Y = coords.Radius * Math::Sine(coords.RightAscension) * Math::Cosine(coords.Declination);
-		rectCoords.Z = coords.Radius * Math::Sine(coords.Declination);
-		
-		return rectCoords;
-	}
+        Rectangular rectCoords{};
+        rectCoords.X = coords.Radius * Math::Cosine(coords.RightAscension) * Math::Cosine(coords.Declination);
+        rectCoords.Y = coords.Radius * Math::Sine(coords.RightAscension) * Math::Cosine(coords.Declination);
+        rectCoords.Z = coords.Radius * Math::Sine(coords.Declination);
 
-	Spherical RectangularToSpherical(const Rectangular& coords) noexcept {
+        return rectCoords;
+    }
 
-		const auto x = coords.X;
-		const auto y = coords.Y;
-		const auto z = coords.Z;
-		
-		Spherical sphericalCoords{};
-		sphericalCoords.Radius = sqrt(x * x + y * y + z * z);
-		sphericalCoords.RightAscension = (x == 0 && y == 0) ? 0 : Math::ArcTangent2(y, x);
-		sphericalCoords.Declination = Math::ArcTangent2(z, sqrt(x * x + y * y));
-		
-		return sphericalCoords;
-	}
+    Spherical RectangularToSpherical(const Rectangular& coords) noexcept {
 
-	Rectangular RotateRectangular(const Rectangular& rectCoords, double angle) noexcept {
+        const auto x = coords.X;
+        const auto y = coords.Y;
+        const auto z = coords.Z;
 
-		const auto x = rectCoords.X * Math::Sine(angle) - rectCoords.Z * Math::Cosine(angle);
-		const auto y = rectCoords.Y;
-		const auto z = rectCoords.X * Math::Cosine(angle) + rectCoords.Z * Math::Sine(angle);
+        Spherical sphericalCoords{};
+        sphericalCoords.Radius = sqrt(x * x + y * y + z * z);
+        sphericalCoords.RightAscension = (x == 0 && y == 0) ? 0 : Math::ArcTangent2(y, x);
+        sphericalCoords.Declination = Math::ArcTangent2(z, sqrt(x * x + y * y));
 
-		Rectangular rectangularCoords{};
-		rectangularCoords.X = x;
-		rectangularCoords.Y = y;
-		rectangularCoords.Z = z;
+        return sphericalCoords;
+    }
 
-		return rectangularCoords;
-	}
+    Rectangular RotateRectangular(const Rectangular& rectCoords, double angle) noexcept {
 
-	Horizontal EquatorialToHorizontal(double declination, double hourAngle, double latitude) noexcept {
-		
-		Spherical sphericalPosition{};
-		sphericalPosition.RightAscension = hourAngle;
-		sphericalPosition.Declination = declination;
-		sphericalPosition.Radius = 1.0;
-		
-		const auto rectangularPosition = SphericalToRectangular(sphericalPosition);
-		const auto rotatedRectangularPosition = RotateRectangular(rectangularPosition, latitude);
-		
-		// add 180 to get the angle from north to east to south and so on
-		Horizontal horizontalCoords{};
-		horizontalCoords.Azimuth = Math::ArcTangent2(rotatedRectangularPosition.Y, rotatedRectangularPosition.X) + 180.0;
-		horizontalCoords.Altitude = Math::ArcSine(rotatedRectangularPosition.Z);
+        const auto x = rectCoords.X * Math::Sine(angle) - rectCoords.Z * Math::Cosine(angle);
+        const auto y = rectCoords.Y;
+        const auto z = rectCoords.X * Math::Cosine(angle) + rectCoords.Z * Math::Sine(angle);
 
-		return horizontalCoords;
-	}
+        Rectangular rectangularCoords{};
+        rectangularCoords.X = x;
+        rectangularCoords.Y = y;
+        rectangularCoords.Z = z;
 
-	Horizontal TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) noexcept {
-		
-		DateTime relativeUtcTime = date;
-		relativeUtcTime.AddHours(-DateTime::UtcDiff());
+        return rectangularCoords;
+    }
 
-		const auto localMeanSiderealTime = DateTime::Gmst(relativeUtcTime) + observer.Longitude;
-		const auto hourAngle = localMeanSiderealTime - sphericalCoords.RightAscension;
-		return EquatorialToHorizontal(sphericalCoords.Declination, hourAngle, observer.Latitude);
-	}
+    Horizontal EquatorialToHorizontal(double declination, double hourAngle, double latitude) noexcept {
+
+        Spherical sphericalPosition{};
+        sphericalPosition.RightAscension = hourAngle;
+        sphericalPosition.Declination = declination;
+        sphericalPosition.Radius = 1.0;
+
+        const auto rectangularPosition = SphericalToRectangular(sphericalPosition);
+        const auto rotatedRectangularPosition = RotateRectangular(rectangularPosition, latitude);
+
+        // add 180 to get the angle from north to east to south and so on
+        Horizontal horizontalCoords{};
+        horizontalCoords.Azimuth = Math::ArcTangent2(rotatedRectangularPosition.Y, rotatedRectangularPosition.X) + 180.0;
+        horizontalCoords.Altitude = Math::ArcSine(rotatedRectangularPosition.Z);
+
+        return horizontalCoords;
+    }
+
+    Horizontal TerrestrialObserverToHorizontal(const Spherical& sphericalCoords, const Terrestrial& observer, const DateTime& date) noexcept {
+
+        DateTime relativeUtcTime = date;
+        relativeUtcTime.AddHours(-DateTime::UtcDiff());
+
+        const auto localMeanSiderealTime = DateTime::Gmst(relativeUtcTime) + observer.Longitude;
+        const auto hourAngle = localMeanSiderealTime - sphericalCoords.RightAscension;
+        return EquatorialToHorizontal(sphericalCoords.Declination, hourAngle, observer.Latitude);
+    }
 }

@@ -6,25 +6,25 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	class VertexBuffer {
+    class VertexBuffer {
 
-	private:
-		std::uint32_t nativeHandle;
-		BufferLayout bufferLayout;
+    private:
+        std::uint32_t nativeHandle;
+        BufferLayout bufferLayout;
 
-	public:
-		VertexBuffer() noexcept;
-		VertexBuffer(const void* data, std::uint32_t size) noexcept;
-		~VertexBuffer() noexcept;
+    public:
+        VertexBuffer() noexcept;
+        VertexBuffer(const void* data, std::uint32_t size) noexcept;
+        ~VertexBuffer() noexcept;
 
-		void SetData(const void* data, std::uint32_t size) noexcept;
-		void SetLayout(const BufferLayout& bufferLayout) noexcept;
+        void SetData(const void* data, std::uint32_t size) noexcept;
+        void SetLayout(const BufferLayout& bufferLayout) noexcept;
 
-		void Bind() const noexcept;
-		void Unbind() const noexcept;
+        void Bind() const noexcept;
+        void Unbind() const noexcept;
 
-		[[nodiscard]] const BufferLayout& GetLayout() const noexcept;
-	};
+        [[nodiscard]] const BufferLayout& GetLayout() const noexcept;
+    };
 }
 
 #endif // STARTRACKER_CORE_OPENGL_VERTEXBUFFER_H

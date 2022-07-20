@@ -14,24 +14,24 @@
 
 namespace StarTracker {
 
-	class AstronomicalView : public Core::View {
+    class AstronomicalView : public Core::View {
 
-	private:
-		Utils::LocationService::Location observer;
-		std::shared_ptr<Core::BodyLibrary> bodyLibrary;
+    private:
+        Utils::LocationService::Location observer;
+        std::shared_ptr<Core::BodyLibrary> bodyLibrary;
 
-	public:
-		explicit AstronomicalView(void* nativeWindowHandle) noexcept;
+    public:
+        explicit AstronomicalView(void* nativeWindowHandle) noexcept;
 
-		virtual void OnInit() noexcept override;
-		virtual void OnUpdate(float deltaTime) noexcept override;
-		virtual void OnDestroy() noexcept override;
+        virtual void OnInit() noexcept override;
+        virtual void OnUpdate(float deltaTime) noexcept override;
+        virtual void OnDestroy() noexcept override;
 
-	private:
-		void drawPositions() noexcept;
-		void drawEphemeris() noexcept;
-		void drawGraph() noexcept;;
-	};
+    private:
+        void drawPositions() noexcept;
+        void drawEphemeris() noexcept;
+        void drawGraph() noexcept;;
+    };
 }
 
 #endif // STARTRACKER_ASTRONOMICALVIEW_H

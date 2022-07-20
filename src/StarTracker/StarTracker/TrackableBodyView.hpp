@@ -27,31 +27,31 @@
 
 namespace StarTracker {
 
-	class TrackableBodyView : public Core::View {
-	
-	private:
-		double trackingDuration;
-		Core::Tracker tracker;
-		Utils::LocationService::Location observer;
-		std::shared_ptr<Core::BodyLibrary> bodyLibrary;
-	
-	public:
-		explicit TrackableBodyView(void* nativeWindowHandle) noexcept;
-	
-		virtual void OnInit() noexcept override;
-		virtual void OnUpdate(float deltaTime) noexcept override;
-		virtual void OnDestroy() noexcept override;
-	
-	private:
-		void reconnectToTracker() noexcept;
+    class TrackableBodyView : public Core::View {
 
-		void drawTrackerInfoCard(const glm::vec2& size) noexcept;
-		void drawTrackingDurationCard(const glm::vec2& size) noexcept;
-		void drawTrackingMenu(Core::BodyLibraryEntry entry, std::string_view title) noexcept;
-		void drawAddEntryMenu(std::string_view title) noexcept;
+    private:
+        double trackingDuration;
+        Core::Tracker tracker;
+        Utils::LocationService::Location observer;
+        std::shared_ptr<Core::BodyLibrary> bodyLibrary;
 
-		[[nodiscard]] bool drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept;
-	};
+    public:
+        explicit TrackableBodyView(void* nativeWindowHandle) noexcept;
+
+        virtual void OnInit() noexcept override;
+        virtual void OnUpdate(float deltaTime) noexcept override;
+        virtual void OnDestroy() noexcept override;
+
+    private:
+        void reconnectToTracker() noexcept;
+
+        void drawTrackerInfoCard(const glm::vec2& size) noexcept;
+        void drawTrackingDurationCard(const glm::vec2& size) noexcept;
+        void drawTrackingMenu(Core::BodyLibraryEntry entry, std::string_view title) noexcept;
+        void drawAddEntryMenu(std::string_view title) noexcept;
+
+        [[nodiscard]] bool drawCelestialBodyCard(Core::BodyLibraryEntry entry, const glm::vec2& size) noexcept;
+    };
 }
 
 #endif // STARTRACKER_TRACKABLEBODYVIEW_H

@@ -2,44 +2,44 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	IndexBuffer::IndexBuffer() noexcept : nativeHandle{}, indexCount{} {
+    IndexBuffer::IndexBuffer() noexcept : nativeHandle{}, indexCount{} {
 
-		glGenBuffers(1, &nativeHandle);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
-	}
+        glGenBuffers(1, &nativeHandle);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
+    }
 
-	IndexBuffer::IndexBuffer(const void* data, std::uint32_t count) noexcept : nativeHandle{}, indexCount{ count } {
+    IndexBuffer::IndexBuffer(const void* data, std::uint32_t count) noexcept : nativeHandle{}, indexCount{ count } {
 
-		glGenBuffers(1, &nativeHandle);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(std::uint32_t), data, GL_DYNAMIC_DRAW);
-	}
+        glGenBuffers(1, &nativeHandle);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(std::uint32_t), data, GL_DYNAMIC_DRAW);
+    }
 
-	IndexBuffer::~IndexBuffer() noexcept {
+    IndexBuffer::~IndexBuffer() noexcept {
 
-		glDeleteBuffers(1, &nativeHandle);
-	}
+        glDeleteBuffers(1, &nativeHandle);
+    }
 
-	void IndexBuffer::SetData(const void* data, std::uint32_t count) noexcept {
+    void IndexBuffer::SetData(const void* data, std::uint32_t count) noexcept {
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(std::uint32_t), data, GL_DYNAMIC_DRAW);
-		
-		this->indexCount = count;
-	}
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(std::uint32_t), data, GL_DYNAMIC_DRAW);
 
-	void IndexBuffer::Bind() const noexcept {
+        this->indexCount = count;
+    }
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
-	}
+    void IndexBuffer::Bind() const noexcept {
 
-	void IndexBuffer::Unbind() const noexcept {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, nativeHandle);
+    }
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	}
+    void IndexBuffer::Unbind() const noexcept {
 
-	std::uint32_t IndexBuffer::GetIndexCount() const noexcept {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
 
-		return indexCount;
-	}
+    std::uint32_t IndexBuffer::GetIndexCount() const noexcept {
+
+        return indexCount;
+    }
 }

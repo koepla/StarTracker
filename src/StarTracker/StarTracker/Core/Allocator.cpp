@@ -2,23 +2,23 @@
 
 namespace StarTracker::Core {
 
-	void* Allocator::Reserve(std::size_t size) noexcept {
+    void* Allocator::Reserve(std::size_t size) noexcept {
 
-		auto block = std::malloc(size);
+        auto block = std::malloc(size);
 
-		allocationStats.ActiveAllocations++;
+        allocationStats.ActiveAllocations++;
 
-		return block;
-	}
+        return block;
+    }
 
-	void Allocator::Free(void* block) noexcept {
+    void Allocator::Free(void* block) noexcept {
 
-		std::free(block);
-		allocationStats.ActiveAllocations--;
-	}
+        std::free(block);
+        allocationStats.ActiveAllocations--;
+    }
 
-	const AllocationStats& Allocator::GetAllocationStats() noexcept {
+    const AllocationStats& Allocator::GetAllocationStats() noexcept {
 
-		return allocationStats;
-	}
+        return allocationStats;
+    }
 }

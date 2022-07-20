@@ -10,36 +10,36 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	struct TextureVertex {
+    struct TextureVertex {
 
-		glm::vec3 Position;
-		glm::vec3 Color;
-		glm::vec2 TextureCoordinates;
-	};
+        glm::vec3 Position;
+        glm::vec3 Color;
+        glm::vec2 TextureCoordinates;
+    };
 
-	class Texture {
+    class Texture {
 
-	private:
-		std::filesystem::path path;
-		std::uint32_t nativeHandle;
-		std::int32_t width;
-		std::int32_t height;
-		std::int32_t channels;
+    private:
+        std::filesystem::path path;
+        std::uint32_t nativeHandle;
+        std::int32_t width;
+        std::int32_t height;
+        std::int32_t channels;
 
-	public:
-		Texture() noexcept;
-		~Texture() noexcept;
+    public:
+        Texture() noexcept;
+        ~Texture() noexcept;
 
-		[[nodiscard]] bool LoadFromFile(const std::filesystem::path& filePath) noexcept;
+        [[nodiscard]] bool LoadFromFile(const std::filesystem::path& filePath) noexcept;
 
-		void Bind(std::uint32_t slot) const noexcept;
-		
-		[[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
-		[[nodiscard]] std::uint32_t GetNativeHandle() const noexcept;
-		[[nodiscard]] std::int32_t GetWidth() const noexcept;
-		[[nodiscard]] std::int32_t GetHeight() const noexcept;
-		[[nodiscard]] std::int32_t GetChannels() const noexcept;
-	};
+        void Bind(std::uint32_t slot) const noexcept;
+
+        [[nodiscard]] const std::filesystem::path& GetFilePath() const noexcept;
+        [[nodiscard]] std::uint32_t GetNativeHandle() const noexcept;
+        [[nodiscard]] std::int32_t GetWidth() const noexcept;
+        [[nodiscard]] std::int32_t GetHeight() const noexcept;
+        [[nodiscard]] std::int32_t GetChannels() const noexcept;
+    };
 }
 
 #endif // STARTRACKER_CORE_OPENGL_TEXTURE_H

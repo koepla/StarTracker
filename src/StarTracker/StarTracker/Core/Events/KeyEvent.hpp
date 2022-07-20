@@ -6,29 +6,29 @@
 
 namespace StarTracker::Core::Events {
 
-	enum class KeyStatus : std::uint16_t {
+    enum class KeyStatus : std::uint16_t {
 
-		None = 0,
-		Pressed,
-		Repeated,
-		Released
-	};
+        None = 0,
+        Pressed,
+        Repeated,
+        Released
+    };
 
-	class KeyEvent : public Event {
+    class KeyEvent : public Event {
 
-	private:
-		KeyCode keyCode;
-		KeyStatus keyStatus;
+    private:
+        KeyCode keyCode;
+        KeyStatus keyStatus;
 
-	public:
-		KeyEvent(KeyCode keyCode, KeyStatus keyStatus) noexcept;
+    public:
+        KeyEvent(KeyCode keyCode, KeyStatus keyStatus) noexcept;
 
-		[[nodiscard]] KeyCode GetKeyCode() const noexcept;
-		[[nodiscard]] bool IsPressed() const noexcept;
-		[[nodiscard]] bool IsRepeated() const noexcept;
-		[[nodiscard]] bool IsReleased() const noexcept;
-		[[nodiscard]] virtual std::string_view GetName() const noexcept override;
-	};
+        [[nodiscard]] KeyCode GetKeyCode() const noexcept;
+        [[nodiscard]] bool IsPressed() const noexcept;
+        [[nodiscard]] bool IsRepeated() const noexcept;
+        [[nodiscard]] bool IsReleased() const noexcept;
+        [[nodiscard]] virtual std::string_view GetName() const noexcept override;
+    };
 }
 
 #endif // STARTRACKER_CORE_EVENTS_KEYEVENT_H

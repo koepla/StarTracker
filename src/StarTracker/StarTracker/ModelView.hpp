@@ -15,34 +15,33 @@
 #include <StarTracker/Core/OpenGL/Renderer.hpp>
 #include <StarTracker/Core/OpenGL/Model.hpp>
 #include <StarTracker/Core/Logger.hpp>
-		  
+
 #include <StarTracker/Utils/GeoLocation.hpp>
 #include <StarTracker/Utils/HttpRequest.hpp>
 #include <StarTracker/Utils/Stopwatch.hpp>
 
 namespace StarTracker {
 
-	class ModelView : public Core::View {
+    class ModelView : public Core::View {
 
-	private:
-		bool isFocused;
-		bool invertedTextureCoordinates;
-		std::shared_ptr<Core::OpenGL::Camera> camera;
-		std::shared_ptr<Core::OpenGL::Shader> shader;
-		std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
-		std::shared_ptr<Core::OpenGL::Model> model;
+    private:
+        bool isFocused;
+        bool invertedTextureCoordinates;
+        std::shared_ptr<Core::OpenGL::Camera> camera;
+        std::shared_ptr<Core::OpenGL::Shader> shader;
+        std::shared_ptr<Core::OpenGL::FrameBuffer> frameBuffer;
+        std::shared_ptr<Core::OpenGL::Model> model;
 
-	public:
-		explicit ModelView(void* nativeWindowHandle) noexcept;
+    public:
+        explicit ModelView(void* nativeWindowHandle) noexcept;
 
-		virtual void OnInit() noexcept override;
-		virtual void OnUpdate(float deltaTime) noexcept override;
-		virtual void OnDestroy() noexcept override;
+        virtual void OnInit() noexcept override;
+        virtual void OnUpdate(float deltaTime) noexcept override;
+        virtual void OnDestroy() noexcept override;
 
-	private:
-		void reloadModel() noexcept;
-		void drawModelInfoCard(const glm::vec2& size) noexcept;
-	};
+    private:
+        void drawModelInfoCard(const glm::vec2& size) noexcept;
+    };
 }
 
 #endif // STARTRACKER_EXPERIMENTALVIEW_H

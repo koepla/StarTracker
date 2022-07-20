@@ -5,14 +5,14 @@
 
 namespace StarTracker {
 
-	class StarTrackerApplication : public Core::Application {
+    class StarTrackerApplication : public Core::Application {
 
-	private:
-		std::unique_ptr<StarTrackerView> starTrackerView;
+    private:
+        std::unique_ptr<StarTrackerView> starTrackerView;
 
-	public:
-		explicit StarTrackerApplication(const Core::ApplicationData& applicationData) noexcept;
-	};
+    public:
+        explicit StarTrackerApplication(const Core::ApplicationData& applicationData) noexcept;
+    };
 }
 
 #endif // STARTRACKER_STARTRACKERAPPLICATION_H

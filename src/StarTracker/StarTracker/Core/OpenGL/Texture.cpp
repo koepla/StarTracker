@@ -5,69 +5,69 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	Texture::Texture() noexcept : path{}, nativeHandle {}, width{}, height{}, channels{} {
-	
-		glCreateTextures(GL_TEXTURE_2D, 1, &nativeHandle);
-		glBindTextureUnit(0, nativeHandle);
-	}
+    Texture::Texture() noexcept : path{}, nativeHandle{}, width{}, height{}, channels{} {
 
-	Texture::~Texture() noexcept {
+        glCreateTextures(GL_TEXTURE_2D, 1, &nativeHandle);
+        glBindTextureUnit(0, nativeHandle);
+    }
 
-		glDeleteTextures(1, &nativeHandle);
-	}
+    Texture::~Texture() noexcept {
 
-	bool Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
+        glDeleteTextures(1, &nativeHandle);
+    }
 
-		stbi_set_flip_vertically_on_load(1);
-		std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
-		path = filePath;
+    bool Texture::LoadFromFile(const std::filesystem::path& filePath) noexcept {
 
-		if (data) {
+        stbi_set_flip_vertically_on_load(1);
+        std::uint8_t* data = stbi_load(filePath.string().c_str(), &width, &height, &channels, 4);
+        path = filePath;
 
-			glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
-			glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-			glGenerateMipmap(GL_TEXTURE_2D);
+        if (data) {
 
-			stbi_image_free(data);
-			return true;
-		}
-		else {
+            glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
 
-			return false;
-		}
-	}
+            stbi_image_free(data);
+            return true;
+        }
+        else {
 
-	void Texture::Bind(std::uint32_t slot) const noexcept {
+            return false;
+        }
+    }
 
-		glBindTextureUnit(slot, nativeHandle);
-	}
+    void Texture::Bind(std::uint32_t slot) const noexcept {
 
-	const std::filesystem::path& Texture::GetFilePath() const noexcept {
+        glBindTextureUnit(slot, nativeHandle);
+    }
 
-		return path;
-	}
+    const std::filesystem::path& Texture::GetFilePath() const noexcept {
 
-	std::uint32_t Texture::GetNativeHandle() const noexcept {
+        return path;
+    }
 
-		return nativeHandle;
-	}
+    std::uint32_t Texture::GetNativeHandle() const noexcept {
 
-	std::int32_t Texture::GetWidth() const noexcept {
+        return nativeHandle;
+    }
 
-		return width;
-	}
+    std::int32_t Texture::GetWidth() const noexcept {
 
-	std::int32_t Texture::GetHeight() const noexcept {
+        return width;
+    }
 
-		return height;
-	}
+    std::int32_t Texture::GetHeight() const noexcept {
 
-	std::int32_t Texture::GetChannels() const noexcept {
+        return height;
+    }
 
-		return channels;
-	}
+    std::int32_t Texture::GetChannels() const noexcept {
+
+        return channels;
+    }
 }

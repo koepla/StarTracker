@@ -11,39 +11,39 @@
 
 namespace StarTracker::Core {
 
-	class Logger {
+    class Logger {
 
-	private:
-		struct LoggerData {
+    private:
+        struct LoggerData {
 
-			std::mutex Mutex;
-			std::vector<std::string> List;
-		};
+            std::mutex Mutex;
+            std::vector<std::string> List;
+        };
 
-		static inline LoggerData info{};
-		static inline LoggerData warn{};
-		static inline LoggerData error{};
+        static inline LoggerData info{};
+        static inline LoggerData warn{};
+        static inline LoggerData error{};
 
-	public:
-		[[nodiscard]] static bool Info(std::string_view message) noexcept;
-		[[nodiscard]] static bool Warn(std::string_view message) noexcept;
-		[[nodiscard]] static bool Error(std::string_view message) noexcept;
+    public:
+        [[nodiscard]] static bool Info(std::string_view message) noexcept;
+        [[nodiscard]] static bool Warn(std::string_view message) noexcept;
+        [[nodiscard]] static bool Error(std::string_view message) noexcept;
 
-		static void ClearInfoList() noexcept;
-		static void ClearWarnList() noexcept;
-		static void ClearErrorList() noexcept;
+        static void ClearInfoList() noexcept;
+        static void ClearWarnList() noexcept;
+        static void ClearErrorList() noexcept;
 
-		[[nodiscard]] static std::vector<std::string> GetInfoList() noexcept;
-		[[nodiscard]] static std::vector<std::string> GetWarnList() noexcept;
-		[[nodiscard]] static std::vector<std::string> GetErrorList() noexcept;
+        [[nodiscard]] static std::vector<std::string> GetInfoList() noexcept;
+        [[nodiscard]] static std::vector<std::string> GetWarnList() noexcept;
+        [[nodiscard]] static std::vector<std::string> GetErrorList() noexcept;
 
-		[[nodiscard]] static std::size_t GetInfoSize() noexcept;
-		[[nodiscard]] static std::size_t GetWarnSize() noexcept;
-		[[nodiscard]] static std::size_t GetErrorSize() noexcept;
+        [[nodiscard]] static std::size_t GetInfoSize() noexcept;
+        [[nodiscard]] static std::size_t GetWarnSize() noexcept;
+        [[nodiscard]] static std::size_t GetErrorSize() noexcept;
 
-	private:
-		[[nodiscard]] static std::string formatEntry(std::string_view entry) noexcept;
-	};
+    private:
+        [[nodiscard]] static std::string formatEntry(std::string_view entry) noexcept;
+    };
 }
 
 #define STARTRACKER_INFO(...) (void)StarTracker::Core::Logger::Info(fmt::format(__VA_ARGS__)) 

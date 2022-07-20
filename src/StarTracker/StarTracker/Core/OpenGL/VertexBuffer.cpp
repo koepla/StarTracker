@@ -2,47 +2,47 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	VertexBuffer::VertexBuffer() noexcept : nativeHandle{}, bufferLayout{} {
+    VertexBuffer::VertexBuffer() noexcept : nativeHandle{}, bufferLayout{} {
 
-		glGenBuffers(1, &nativeHandle);
-		glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
-	}
+        glGenBuffers(1, &nativeHandle);
+        glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
+    }
 
-	VertexBuffer::VertexBuffer(const void* data, std::uint32_t size) noexcept : nativeHandle{}, bufferLayout{} {
-	
-		glGenBuffers(1, &nativeHandle);
-		glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
-	}
+    VertexBuffer::VertexBuffer(const void* data, std::uint32_t size) noexcept : nativeHandle{}, bufferLayout{} {
 
-	VertexBuffer::~VertexBuffer() noexcept {
+        glGenBuffers(1, &nativeHandle);
+        glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
+        glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
+    }
 
-		glDeleteBuffers(1, &nativeHandle);
-	}
+    VertexBuffer::~VertexBuffer() noexcept {
 
-	void VertexBuffer::SetData(const void* data, std::uint32_t size) noexcept {
+        glDeleteBuffers(1, &nativeHandle);
+    }
 
-		glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
-		glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
-	}
+    void VertexBuffer::SetData(const void* data, std::uint32_t size) noexcept {
 
-	void VertexBuffer::SetLayout(const BufferLayout& bufferLayout) noexcept {
+        glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
+        glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
+    }
 
-		this->bufferLayout = bufferLayout;
-	}
+    void VertexBuffer::SetLayout(const BufferLayout& bufferLayout) noexcept {
 
-	const BufferLayout& VertexBuffer::GetLayout() const noexcept {
+        this->bufferLayout = bufferLayout;
+    }
 
-		return bufferLayout;
-	}
+    const BufferLayout& VertexBuffer::GetLayout() const noexcept {
 
-	void VertexBuffer::Bind() const noexcept {
+        return bufferLayout;
+    }
 
-		glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
-	}
+    void VertexBuffer::Bind() const noexcept {
 
-	void VertexBuffer::Unbind() const noexcept {
+        glBindBuffer(GL_ARRAY_BUFFER, nativeHandle);
+    }
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	}
+    void VertexBuffer::Unbind() const noexcept {
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
 }

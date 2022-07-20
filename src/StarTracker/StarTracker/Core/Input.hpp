@@ -8,52 +8,52 @@
 
 namespace StarTracker::Core {
 
-	class Input {
+    class Input {
 
-	public:
-		enum class CursorMode : std::uint16_t {
+    public:
+        enum class CursorMode : std::uint16_t {
 
-			Default,
-			Disabled
-		};
+            Default,
+            Disabled
+        };
 
-	public:
-		/**
-		* @brief Checks if the specified key is pressed
-		*
-		* @param keyCode keyCode of the key
-		*
-		* @return true if the key is currently being pressed
-		* 
-		*/
-		[[nodiscard]] static bool IsKeyPressed(KeyCode keyCode) noexcept;
+    public:
+        /**
+        * @brief Checks if the specified key is pressed
+        *
+        * @param keyCode keyCode of the key
+        *
+        * @return true if the key is currently being pressed
+        *
+        */
+        [[nodiscard]] static bool IsKeyPressed(KeyCode keyCode) noexcept;
 
-		/**
-		* @brief Checks if the specified mousebutton is pressed
-		*
-		* @param mouseCode mouseCode of the mousebutton
-		*
-		* @return true if the mousebutton is currently being pressed
-		* 
-		*/
-		[[nodiscard]] static bool IsMousePressed(MouseCode mouseCode) noexcept;
+        /**
+        * @brief Checks if the specified mousebutton is pressed
+        *
+        * @param mouseCode mouseCode of the mousebutton
+        *
+        * @return true if the mousebutton is currently being pressed
+        *
+        */
+        [[nodiscard]] static bool IsMousePressed(MouseCode mouseCode) noexcept;
 
-		/**
-		* @brief Gathers the position of the mouse in screen-space
-		*
-		* @return position of the mouse
-		* 
-		*/
-		[[nodiscard]] static glm::vec2 GetMousePosition() noexcept;
+        /**
+        * @brief Gathers the position of the mouse in screen-space
+        *
+        * @return position of the mouse
+        *
+        */
+        [[nodiscard]] static glm::vec2 GetMousePosition() noexcept;
 
-		/**
-		* @brief Sets the status of the mouse-cursor
-		* 
-		* @param cursor Mode of the cursor
-		* 
-		*/
-		static void SetCursorMode(CursorMode mode) noexcept;
-	};
+        /**
+        * @brief Sets the status of the mouse-cursor
+        *
+        * @param cursor Mode of the cursor
+        *
+        */
+        static void SetCursorMode(CursorMode mode) noexcept;
+    };
 }
 
 #endif // STARTRACKER_CORE_INPUT_H

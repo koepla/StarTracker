@@ -2,22 +2,22 @@
 
 namespace StarTracker::Core::Events {
 
-	MouseMoveEvent::MouseMoveEvent(double x, double y) noexcept : x{ x }, y{ y } {
+    MouseMoveEvent::MouseMoveEvent(double x, double y) noexcept : x{ x }, y{ y } {
 
-	}
+    }
 
-	double MouseMoveEvent::GetX() const noexcept {
+    double MouseMoveEvent::GetX() const noexcept {
 
-		return x;
-	}
+        return x;
+    }
 
-	double MouseMoveEvent::GetY() const noexcept {
+    double MouseMoveEvent::GetY() const noexcept {
 
-		return y;
-	}
+        return y;
+    }
 
-	std::string_view MouseMoveEvent::GetName() const noexcept {
+    std::string_view MouseMoveEvent::GetName() const noexcept {
 
-		return std::string_view{ "MouseMoveEvent" };
-	}
+        return std::string_view{ "MouseMoveEvent" };
+    }
 }

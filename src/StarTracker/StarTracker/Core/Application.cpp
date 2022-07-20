@@ -2,82 +2,82 @@
 
 namespace StarTracker::Core {
 
-	Application::Application(const ApplicationData& applicationData) noexcept : 
-		window{ 
-			WindowData { 
-				.Width = applicationData.Width,
-				.Height = applicationData.Height,
-				.Title = applicationData.Title,
-				.Running = true,
-				.Fullscreen = applicationData.Fullscreen,
-				.VerticalSync = applicationData.VerticalSync,
-				.EventDispatcher = Events::EventDispatcher{}
-			} 
-		}, 
-		userInterfaceView{ nullptr, applicationData.EnableDockSpace }
-	{
-		viewList = std::vector<View*>{};
-		userInterfaceView.SetNativeWindowHandle(window.GetNativeHandle());
-		instance = this;
-	}
+    Application::Application(const ApplicationData& applicationData) noexcept :
+        window{
+            WindowData {
+                .Width = applicationData.Width,
+                .Height = applicationData.Height,
+                .Title = applicationData.Title,
+                .Running = true,
+                .Fullscreen = applicationData.Fullscreen,
+                .VerticalSync = applicationData.VerticalSync,
+                .EventDispatcher = Events::EventDispatcher{}
+            }
+    },
+        userInterfaceView{ nullptr, applicationData.EnableDockSpace }
+    {
+        viewList = std::vector<View*>{};
+        userInterfaceView.SetNativeWindowHandle(window.GetNativeHandle());
+        instance = this;
+    }
 
-	void Application::Run() noexcept {
+    void Application::Run() noexcept {
 
-		userInterfaceView.OnInit();
-		for (auto* view : viewList) {
+        userInterfaceView.OnInit();
+        for (auto* view : viewList) {
 
-			view->OnInit();
-		}
+            view->OnInit();
+        }
 
-		auto lastFrameTime = glfwGetTime();
+        auto lastFrameTime = glfwGetTime();
 
-		while (window.IsRunning()) {
+        while (window.IsRunning()) {
 
-			glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT);
 
-			const auto time = glfwGetTime();
-			const auto deltaTime = time - lastFrameTime;
-			lastFrameTime = time;
+            const auto time = glfwGetTime();
+            const auto deltaTime = time - lastFrameTime;
+            lastFrameTime = time;
 
-			userInterfaceView.UIBegin();
-			for (auto* view : viewList) {
+            userInterfaceView.UIBegin();
+            for (auto* view : viewList) {
 
-				view->OnUpdate(static_cast<float>(deltaTime));
-			}
-			userInterfaceView.UIEnd();
+                view->OnUpdate(static_cast<float>(deltaTime));
+            }
+            userInterfaceView.UIEnd();
 
-			window.Update();
-		}
+            window.Update();
+        }
 
-		for (auto* view : viewList) {
+        for (auto* view : viewList) {
 
-			view->OnDestroy();
-		}
-		userInterfaceView.OnDestroy();
-	}
+            view->OnDestroy();
+        }
+        userInterfaceView.OnDestroy();
+    }
 
-	void Application::Close() noexcept {
+    void Application::Close() noexcept {
 
-		window.GetWindowData().Running = false;
-	}
+        window.GetWindowData().Running = false;
+    }
 
-	void Application::RegisterView(View* view) noexcept {
+    void Application::RegisterView(View* view) noexcept {
 
-		viewList.emplace_back(view);
-	}
+        viewList.emplace_back(view);
+    }
 
-	void Application::RegisterEventHandler(const Events::EventHandler& eventHandler) noexcept {
+    void Application::RegisterEventHandler(const Events::EventHandler& eventHandler) noexcept {
 
-		window.GetWindowData().EventDispatcher.RegisterEventHandler(eventHandler);
-	}
+        window.GetWindowData().EventDispatcher.RegisterEventHandler(eventHandler);
+    }
 
-	Window& Application::GetWindow() noexcept {
+    Window& Application::GetWindow() noexcept {
 
-		return window;
-	}
+        return window;
+    }
 
-	Application* Application::GetInstance() noexcept {
+    Application* Application::GetInstance() noexcept {
 
-		return instance;
-	}
+        return instance;
+    }
 }

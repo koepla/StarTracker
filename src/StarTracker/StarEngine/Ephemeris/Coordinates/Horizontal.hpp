@@ -5,11 +5,11 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-	struct Horizontal {
+    struct Horizontal {
 
-		double Azimuth;
-		double Altitude;
-	};
+        double Azimuth;
+        double Altitude;
+    };
 }
 
 #endif // STARENGINE_EPHEMERIS_COORDINATES_HORIZONTAL_H

@@ -2,246 +2,245 @@
 
 namespace StarTracker::Utils::Serial {
 
-	SerialException::SerialException(std::string_view message) noexcept : message{ message } {
+    SerialException::SerialException(std::string_view message) noexcept : message{ message } {
 
-	}
+    }
 
-	const char* SerialException::what() const noexcept {
+    const char* SerialException::what() const noexcept {
 
-		return message.data();
-	}
+        return message.data();
+    }
 
-	SerialPort::SerialPort() noexcept : hCom{ nullptr }, dwEventMask{ EV_RXCHAR }, fileName{} {
+    SerialPort::SerialPort() noexcept : hCom{ nullptr }, fileName{} {
 
-	}
+    }
 
-	SerialPort::~SerialPort() noexcept(false) {
+    SerialPort::~SerialPort() noexcept(false) {
 
-		if (IsOpen()) {
+        if (IsOpen()) {
 
-			Close();
-		}
-	}
+            Close();
+        }
+    }
 
-	void SerialPort::Open(const std::string& port, uint32_t baudRate) noexcept(false) {
+    void SerialPort::Open(const std::string& port, uint32_t baudRate) noexcept(false) {
 
-		const auto prefixed = prefixPort(port);
-		
-		hCom = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        const auto prefixed = prefixPort(port);
 
-		if (hCom == INVALID_HANDLE_VALUE) {
+        hCom = CreateFileA(prefixed.c_str(), GENERIC_READ | GENERIC_WRITE, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
 
-			fileName = prefixed;
-			throw SerialException{ "Couldn't open Serial Port " + prefixed };
-		}
+        if (hCom == INVALID_HANDLE_VALUE) {
 
-		setBaudRate(baudRate);
-		initReceiveMask();
-		initTimeouts();
-	}
+            fileName = prefixed;
+            throw SerialException{ "Couldn't open Serial Port " + prefixed };
+        }
 
-	void SerialPort::Close() noexcept(false) {
+        setBaudRate(baudRate);
+        initReceiveMask();
+        initTimeouts();
+    }
 
-		if (CloseHandle(hCom) == 0) {
+    void SerialPort::Close() noexcept(false) {
 
-			throw SerialException{ "Couldn't close Serial Port" };
-		}
+        if (CloseHandle(hCom) == 0) {
 
-		hCom = INVALID_HANDLE_VALUE;
-	}
+            throw SerialException{ "Couldn't close Serial Port" };
+        }
 
-	uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx) noexcept(false) {
+        hCom = INVALID_HANDLE_VALUE;
+    }
 
-		// Number of bytes read
-		DWORD dwRead{};
+    uint32_t SerialPort::Read(uint8_t* buffer, uint32_t bytes2read, bool waitForRx) noexcept(false) {
 
-		// Check if port is open
-		if (!IsOpen()) {
+        // Number of bytes read
+        DWORD dwRead{};
 
-			throw SerialException{ "Port is not open" };
-		}
+        // Check if port is open
+        if (!IsOpen()) {
 
-		if (waitForRx) {
+            throw SerialException{ "Port is not open" };
+        }
 
-			WaitComm();
-		}
+        if (waitForRx) {
 
-		// Read operation
-		if (!ReadFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwRead, nullptr)) {
+            WaitComm();
+        }
 
-			throw SerialException{ "Couldn't read from port" };
-		}
-		else {
+        // Read operation
+        if (!ReadFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2read), &dwRead, nullptr)) {
 
-			return static_cast<uint32_t>(dwRead);
-		}
-	}
+            throw SerialException{ "Couldn't read from port" };
+        }
+        else {
 
-	uint32_t SerialPort::Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false) {
+            return static_cast<uint32_t>(dwRead);
+        }
+    }
 
-		// Number of bytes written
-		DWORD dwWritten{};
+    uint32_t SerialPort::Write(uint8_t* buffer, uint32_t bytes2write) noexcept(false) {
 
-		// Check if port is open
-		if (!IsOpen()) {
+        // Number of bytes written
+        DWORD dwWritten{};
 
-			throw SerialException{ "Port is not open" };
-		}
+        // Check if port is open
+        if (!IsOpen()) {
 
-		// Write operation
-		if (!WriteFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2write), &dwWritten, nullptr)) {
+            throw SerialException{ "Port is not open" };
+        }
 
-			throw SerialException{ "Couldn't write to port" };
-		}
-		else {
+        // Write operation
+        if (!WriteFile(hCom, reinterpret_cast<LPVOID>(buffer), static_cast<DWORD>(bytes2write), &dwWritten, nullptr)) {
 
-			return static_cast<uint32_t>(dwWritten);
-		}
-	}
+            throw SerialException{ "Couldn't write to port" };
+        }
+        else {
 
-	bool SerialPort::IsOpen() noexcept {
+            return static_cast<uint32_t>(dwWritten);
+        }
+    }
 
-		return (hCom != INVALID_HANDLE_VALUE) && IsGood();
-	}
+    bool SerialPort::IsOpen() noexcept {
 
-	bool SerialPort::IsGood() noexcept {
+        return (hCom != INVALID_HANDLE_VALUE) && IsGood();
+    }
 
-		COMSTAT stat{};
+    bool SerialPort::IsGood() noexcept {
 
-		// In order to check if the COM-Port is still valid, we can check its status
-		if (ClearCommError(hCom, nullptr, &stat)) {
+        COMSTAT stat{};
 
-			return true;
-		}
-		else {
+        // In order to check if the COM-Port is still valid, we can check its status
+        if (ClearCommError(hCom, nullptr, &stat)) {
 
-			hCom = INVALID_HANDLE_VALUE;
-			return false;
-		}
-	}
+            return true;
+        }
+        else {
 
-	void SerialPort::WaitComm() noexcept {
+            hCom = INVALID_HANDLE_VALUE;
+            return false;
+        }
+    }
 
-		WaitCommEvent(hCom, &dwEventMask, nullptr);
-	}
+    void SerialPort::WaitComm() noexcept {
 
-	uint32_t SerialPort::Available() noexcept(false)
-	{
-		if (!IsOpen()) {
+        DWORD eventMask = EV_RXCHAR;
+        WaitCommEvent(hCom, &eventMask, nullptr);
+    }
 
-			throw SerialException{ "Port is not open" };
-		}
+    uint32_t SerialPort::Available() noexcept(false)
+    {
+        if (!IsOpen()) {
 
-		COMSTAT stat{};
-		if (!ClearCommError(hCom, nullptr, &stat)) {
+            throw SerialException{ "Port is not open" };
+        }
 
-			throw SerialException{ "Cannot check status of serial port." };
-		}
+        COMSTAT stat{};
+        if (!ClearCommError(hCom, nullptr, &stat)) {
 
-		return static_cast<uint32_t>(stat.cbInQue);
-	}
+            throw SerialException{ "Cannot check status of serial port." };
+        }
 
-	inline std::string SerialPort::prefixPort(const std::string& port) noexcept {
+        return static_cast<uint32_t>(stat.cbInQue);
+    }
 
-		if (port.find("\\\\.\\") != std::string::npos) {
+    inline std::string SerialPort::prefixPort(const std::string& port) noexcept {
 
-			return port;
-		}
-		else {
+        if (port.find("\\\\.\\") != std::string::npos) {
 
-			return "\\\\.\\" + port;
-		}
-	}
+            return port;
+        }
+        else {
 
-	void SerialPort::setBaudRate(uint32_t baudRate) noexcept(false) {
+            return "\\\\.\\" + port;
+        }
+    }
 
-		DWORD baud{ 0 };
+    void SerialPort::setBaudRate(uint32_t baudRate) noexcept(false) {
 
-		switch (baudRate) {
-		case 110: baud = CBR_110; break;
-		case 300: baud = CBR_300; break;
-		case 600: baud = CBR_600; break;
-		case 1200: baud = CBR_1200; break;
-		case 2400: baud = CBR_2400; break;
-		case 4800: baud = CBR_4800; break;
-		case 9600: baud = CBR_9600; break;
-		case 14400: baud = CBR_14400; break;
-		case 19200: baud = CBR_19200; break;
-		case 38400: baud = CBR_38400; break;
-		case 57600: baud = CBR_57600; break;
-		case 115200: baud = CBR_115200; break;
-		case 128000: baud = CBR_128000; break;
-		case 256000: baud = CBR_256000; break;
+        DWORD baud{ 0 };
 
-		default: {
+        switch (baudRate) {
+        case 110: baud = CBR_110; break;
+        case 300: baud = CBR_300; break;
+        case 600: baud = CBR_600; break;
+        case 1200: baud = CBR_1200; break;
+        case 2400: baud = CBR_2400; break;
+        case 4800: baud = CBR_4800; break;
+        case 9600: baud = CBR_9600; break;
+        case 14400: baud = CBR_14400; break;
+        case 19200: baud = CBR_19200; break;
+        case 38400: baud = CBR_38400; break;
+        case 57600: baud = CBR_57600; break;
+        case 115200: baud = CBR_115200; break;
+        case 128000: baud = CBR_128000; break;
+        case 256000: baud = CBR_256000; break;
 
-			throw SerialException{ "Invalid baudRate" };
-		}
-		}
+        default: {
 
-		DCB dcb{ 0 };
+            throw SerialException{ "Invalid baudRate" };
+        }
+        }
 
-		FillMemory(&dcb, sizeof(dcb), 0);
-		if (!GetCommState(hCom, &dcb)) {
+        DCB dcb{ 0 };
 
-			throw SerialException{ "Couldn't set baudRate" };
-		}
+        FillMemory(&dcb, sizeof(dcb), 0);
+        if (!GetCommState(hCom, &dcb)) {
 
-		// 8N1
-		dcb.BaudRate = baud;
-		dcb.ByteSize = 8;
-		dcb.StopBits = ONESTOPBIT;
-		dcb.Parity = NOPARITY;
+            throw SerialException{ "Couldn't set baudRate" };
+        }
 
-		if (!SetCommState(hCom, &dcb)) {
+        // 8N1
+        dcb.BaudRate = baud;
+        dcb.ByteSize = 8;
+        dcb.StopBits = ONESTOPBIT;
+        dcb.Parity = NOPARITY;
 
-			throw SerialException{ "Couldn't set baudRate" };
-		}
-	}
+        if (!SetCommState(hCom, &dcb)) {
 
-	void SerialPort::initReceiveMask() noexcept(false) {
-		
-		dwEventMask = EV_RXCHAR;
+            throw SerialException{ "Couldn't set baudRate" };
+        }
+    }
 
-		if (!SetCommMask(hCom, dwEventMask)) {
+    void SerialPort::initReceiveMask() noexcept(false) {
 
-			throw SerialException{ "Couldn't set Comm mask" };
-		}
-	}
+        if (!SetCommMask(hCom, EV_RXCHAR)) {
 
-	void SerialPort::initTimeouts() noexcept(false) {
+            throw SerialException{ "Couldn't set Comm mask" };
+        }
+    }
 
-		COMMTIMEOUTS timeouts = { 0 };
-		timeouts.ReadIntervalTimeout = 1;
-		timeouts.ReadTotalTimeoutConstant = 1;
-		timeouts.ReadTotalTimeoutMultiplier = 1;
-		timeouts.WriteTotalTimeoutConstant = 1;
-		timeouts.WriteTotalTimeoutMultiplier = 1;
+    void SerialPort::initTimeouts() noexcept(false) {
 
-		if (!SetCommTimeouts(hCom, &timeouts)) {
+        COMMTIMEOUTS timeouts = { 0 };
+        timeouts.ReadIntervalTimeout = 1;
+        timeouts.ReadTotalTimeoutConstant = 1;
+        timeouts.ReadTotalTimeoutMultiplier = 1;
+        timeouts.WriteTotalTimeoutConstant = 1;
+        timeouts.WriteTotalTimeoutMultiplier = 1;
 
-			throw SerialException{ "Couldn't set timeouts" };
-		}
-	}
+        if (!SetCommTimeouts(hCom, &timeouts)) {
 
-	std::vector<std::string> SerialPort::GetPortNames() noexcept(false) {
+            throw SerialException{ "Couldn't set timeouts" };
+        }
+    }
 
-		std::vector<std::string> ports{};
-		char target[4096];
+    std::vector<std::string> SerialPort::GetPortNames() noexcept {
 
-		for (int i = 0; i < 255; i++) {
+        std::vector<std::string> ports{};
+        char target[4096];
 
-			std::string p = "COM" + std::to_string(i);
-			if (QueryDosDeviceA(p.c_str(), target, 4096) != 0) {
+        for (int i = 0; i < 255; i++) {
 
-				ports.push_back(p);
-			}
-			if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
+            std::string p = "COM" + std::to_string(i);
+            if (QueryDosDeviceA(p.c_str(), target, 4096) != 0) {
 
-				throw SerialException{ "Insufficient buffer size (programmer's fault)" };
-			}
-		}
+                ports.push_back(p);
+            }
+            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
-		return ports;
-	}
+                ASSERT(false && "Insufficient buffer size (programmer's fault)");
+            }
+        }
+
+        return ports;
+    }
 }

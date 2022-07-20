@@ -2,20 +2,20 @@
 
 namespace StarTracker::Core::Events {
 
-	EventDispatcher::EventDispatcher() noexcept : eventHandlerList{} {
+    EventDispatcher::EventDispatcher() noexcept : eventHandlerList{} {
 
-	}
+    }
 
-	void EventDispatcher::DispatchEvent(const Event& event) noexcept {
+    void EventDispatcher::DispatchEvent(const Event& event) noexcept {
 
-		for (auto& handler : eventHandlerList) {
+        for (auto& handler : eventHandlerList) {
 
-			handler(event);
-		}
-	}
+            handler(event);
+        }
+    }
 
-	void EventDispatcher::RegisterEventHandler(const EventHandler& eventHandler) noexcept {
+    void EventDispatcher::RegisterEventHandler(const EventHandler& eventHandler) noexcept {
 
-		eventHandlerList.emplace_back(eventHandler);
-	}
+        eventHandlerList.emplace_back(eventHandler);
+    }
 }

@@ -7,17 +7,17 @@
 
 namespace StarTracker::Core::Events {
 
-	class EventDispatcher {
+    class EventDispatcher {
 
-	private:
-		std::vector<EventHandler> eventHandlerList;
+    private:
+        std::vector<EventHandler> eventHandlerList;
 
-	public:
-		EventDispatcher() noexcept;
+    public:
+        EventDispatcher() noexcept;
 
-		void DispatchEvent(const Event& event) noexcept;
-		void RegisterEventHandler(const EventHandler& eventHandler) noexcept;
-	};
+        void DispatchEvent(const Event& event) noexcept;
+        void RegisterEventHandler(const EventHandler& eventHandler) noexcept;
+    };
 }
 
 #endif // STARTRACKER_CORE_EVENTS_EVENTDISPATCHER_H

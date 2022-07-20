@@ -9,41 +9,41 @@
 
 namespace StarTracker::Utils::LocationService {
 
-	struct Location {
+    struct Location {
 
-		std::string Country;
-		std::string RegionName;
-		std::string City;
-		double Latitude;
-		double Longitude;
-	};
+        std::string Country;
+        std::string RegionName;
+        std::string City;
+        double Latitude;
+        double Longitude;
+    };
 
-	class GeoLocationException : public std::exception {
+    class GeoLocationException : public std::exception {
 
-	private:
-		std::string_view message;
+    private:
+        std::string_view message;
 
-	public:
-		explicit GeoLocationException(std::string_view message) noexcept;
+    public:
+        explicit GeoLocationException(std::string_view message) noexcept;
 
-		[[nodiscard]] virtual const char* what() const noexcept override;
-	};
+        [[nodiscard]] virtual const char* what() const noexcept override;
+    };
 
-	class GeoLocation {
+    class GeoLocation {
 
-	public:
-		/**
-		* @brief Retrieves the GeoLocation via IP address
-		*
-		* @see Location
-		* 
-		* @return Location struct
-		*
-		* @throws GeoLocationException if the HttpRequest fails
-		* 
-		*/
-		[[nodiscard]] static Location Get() noexcept(false);
-	};
+    public:
+        /**
+        * @brief Retrieves the GeoLocation via IP address
+        *
+        * @see Location
+        *
+        * @return Location struct
+        *
+        * @throws GeoLocationException if the HttpRequest fails
+        *
+        */
+        [[nodiscard]] static Location Get() noexcept(false);
+    };
 }
 
 #endif // STARTRACKER_UTILS_GEOLOCATION_H

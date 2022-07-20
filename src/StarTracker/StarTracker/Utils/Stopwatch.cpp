@@ -2,31 +2,31 @@
 
 namespace StarTracker::Utils::Diagnostics {
 
-	Stopwatch::Stopwatch() noexcept : running{ false }, startTime{}, stopTime{} {
+    Stopwatch::Stopwatch() noexcept : running{ false }, startTime{}, stopTime{} {
 
-	}
+    }
 
-	void Stopwatch::Start() noexcept {
+    void Stopwatch::Start() noexcept {
 
-		startTime = std::chrono::high_resolution_clock::now();
-		running = true;
-	}
+        startTime = std::chrono::high_resolution_clock::now();
+        running = true;
+    }
 
-	void Stopwatch::Stop() noexcept {
+    void Stopwatch::Stop() noexcept {
 
-		stopTime = std::chrono::high_resolution_clock::now();
-		running = false;
-	}
+        stopTime = std::chrono::high_resolution_clock::now();
+        running = false;
+    }
 
-	double Stopwatch::GetEllapsedMilliseconds() const noexcept {
+    double Stopwatch::GetEllapsedMilliseconds() const noexcept {
 
-		if (running) {
+        if (running) {
 
-			return static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - startTime).count() / 1000.0);
-		}
-		else {
+            return static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - startTime).count() / 1000.0);
+        }
+        else {
 
-			return static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime).count() / 1000.0);
-		}
-	}
+            return static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime).count() / 1000.0);
+        }
+    }
 }

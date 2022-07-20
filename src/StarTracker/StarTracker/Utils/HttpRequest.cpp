@@ -2,61 +2,61 @@
 
 namespace StarTracker::Utils::Http {
 
-	HttpRequestException::HttpRequestException(std::string_view message) noexcept : message{ message } {
-	
-		
-	}
+    HttpRequestException::HttpRequestException(std::string_view message) noexcept : message{ message } {
 
-	const char* HttpRequestException::what() const noexcept {
 
-		return message.data();
-	}
+    }
 
-	std::string HttpRequest::Get(const std::string& server, const std::string& url) noexcept(false) {
+    const char* HttpRequestException::what() const noexcept {
 
-		std::string requestData = "";
+        return message.data();
+    }
 
-		HINTERNET hIntSession = InternetOpenA("", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
+    std::string HttpRequest::Get(const std::string& server, const std::string& url) noexcept(false) {
 
-		if (!hIntSession) {
+        std::string requestData = "";
 
-			throw HttpRequestException("Couldn't start internet session");
-		}
+        HINTERNET hIntSession = InternetOpenA("", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
 
-		HINTERNET hHttpSession = InternetConnectA(hIntSession, server.c_str(), 80, 0, 0, INTERNET_SERVICE_HTTP, 0, NULL);
+        if (!hIntSession) {
 
-		if (!hHttpSession) {
+            throw HttpRequestException("Couldn't start internet session");
+        }
 
-			throw HttpRequestException("Couldn't start HTTP session");
-		}
+        HINTERNET hHttpSession = InternetConnectA(hIntSession, server.c_str(), 80, 0, 0, INTERNET_SERVICE_HTTP, 0, NULL);
 
-		HINTERNET hHttpRequest = HttpOpenRequestA(hHttpSession, "GET", url.c_str(), 0, 0, 0, INTERNET_FLAG_RELOAD, 0);
+        if (!hHttpSession) {
 
-		if (!hHttpRequest) {
+            throw HttpRequestException("Couldn't start HTTP session");
+        }
 
-			throw HttpRequestException("Couldn't open HTTP Request");
-		}
+        HINTERNET hHttpRequest = HttpOpenRequestA(hHttpSession, "GET", url.c_str(), 0, 0, 0, INTERNET_FLAG_RELOAD, 0);
 
-		const char* szHeaders = "Content-Type: text/html\r\n";
-		char szRequest[1024] = { 0 };
+        if (!hHttpRequest) {
 
-		if (!HttpSendRequestA(hHttpRequest, szHeaders, static_cast<DWORD>(strlen(szHeaders)), szRequest, static_cast<DWORD>(strlen(szRequest)))) {
+            throw HttpRequestException("Couldn't open HTTP Request");
+        }
 
-			throw HttpRequestException("Couldn't send HTTP Request");
-		}
+        const char* szHeaders = "Content-Type: text/html\r\n";
+        char szRequest[1024] = { 0 };
 
-		CHAR szBuffer[1024] = { 0 };
-		DWORD dwRead = 0;
+        if (!HttpSendRequestA(hHttpRequest, szHeaders, static_cast<DWORD>(strlen(szHeaders)), szRequest, static_cast<DWORD>(strlen(szRequest)))) {
 
-		while (InternetReadFile(hHttpRequest, szBuffer, sizeof(szBuffer) - 1, &dwRead) && dwRead) {
+            throw HttpRequestException("Couldn't send HTTP Request");
+        }
 
-			requestData.append(szBuffer, static_cast<size_t>(dwRead));
-		}
+        CHAR szBuffer[1024] = { 0 };
+        DWORD dwRead = 0;
 
-		InternetCloseHandle(hHttpRequest);
-		InternetCloseHandle(hHttpSession);
-		InternetCloseHandle(hIntSession);
+        while (InternetReadFile(hHttpRequest, szBuffer, sizeof(szBuffer) - 1, &dwRead) && dwRead) {
 
-		return requestData;
-	}
+            requestData.append(szBuffer, static_cast<size_t>(dwRead));
+        }
+
+        InternetCloseHandle(hHttpRequest);
+        InternetCloseHandle(hHttpSession);
+        InternetCloseHandle(hIntSession);
+
+        return requestData;
+    }
 }

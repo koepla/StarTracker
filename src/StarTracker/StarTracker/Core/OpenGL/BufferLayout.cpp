@@ -2,134 +2,134 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	BufferElement::BufferElement(ShaderDataType dataType, std::string_view name, bool normalized) noexcept : name{ name }, stride{}, primitiveCount{}, nativeType{}, normalized{ normalized } {
+    BufferElement::BufferElement(ShaderDataType dataType, std::string_view name, bool normalized) noexcept : name{ name }, stride{}, primitiveCount{}, nativeType{}, normalized{ normalized } {
 
-		switch (dataType) {
+        switch (dataType) {
 
-			case ShaderDataType::Int: {
+        case ShaderDataType::Int: {
 
-				nativeType = GL_INT;
-				primitiveCount = 1;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_INT;
+            primitiveCount = 1;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Int2: {
+            break;
+        }
+        case ShaderDataType::Int2: {
 
-				nativeType = GL_INT;
-				primitiveCount = 2;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_INT;
+            primitiveCount = 2;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Int3: {
+            break;
+        }
+        case ShaderDataType::Int3: {
 
-				nativeType = GL_INT;
-				primitiveCount = 3;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_INT;
+            primitiveCount = 3;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Int4: {
+            break;
+        }
+        case ShaderDataType::Int4: {
 
-				nativeType = GL_INT;
-				primitiveCount = 4;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_INT;
+            primitiveCount = 4;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Float: {
+            break;
+        }
+        case ShaderDataType::Float: {
 
-				nativeType = GL_FLOAT;
-				primitiveCount = 1;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_FLOAT;
+            primitiveCount = 1;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Float2: {
+            break;
+        }
+        case ShaderDataType::Float2: {
 
-				nativeType = GL_FLOAT;
-				primitiveCount = 2;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_FLOAT;
+            primitiveCount = 2;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Float3: {
+            break;
+        }
+        case ShaderDataType::Float3: {
 
-				nativeType = GL_FLOAT;
-				primitiveCount = 3;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_FLOAT;
+            primitiveCount = 3;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Float4: {
+            break;
+        }
+        case ShaderDataType::Float4: {
 
-				nativeType = GL_FLOAT;
-				primitiveCount = 4;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_FLOAT;
+            primitiveCount = 4;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			case ShaderDataType::Mat4: {
+            break;
+        }
+        case ShaderDataType::Mat4: {
 
-				nativeType = GL_FLOAT;
-				primitiveCount = 16;
-				stride = primitiveCount * sizeof(std::int32_t);
+            nativeType = GL_FLOAT;
+            primitiveCount = 16;
+            stride = primitiveCount * sizeof(std::int32_t);
 
-				break;
-			}
-			default: {
+            break;
+        }
+        default: {
 
-				STARTRACKER_ERROR("Unkown ShaderDataType {} for {}", static_cast<int>(dataType), name);
-				ASSERT(false && "Unknown ShaderDataType!");
-				break;
-			}
-		}
-	}
+            STARTRACKER_ERROR("Unkown ShaderDataType {} for {}", static_cast<int>(dataType), name);
+            ASSERT(false && "Unknown ShaderDataType!");
+            break;
+        }
+        }
+    }
 
-	std::string_view BufferElement::GetName() const noexcept {
+    std::string_view BufferElement::GetName() const noexcept {
 
-		return name;
-	}
+        return name;
+    }
 
-	std::uint32_t BufferElement::GetStride() const noexcept {
+    std::uint32_t BufferElement::GetStride() const noexcept {
 
-		return stride;
-	}
+        return stride;
+    }
 
-	std::uint32_t BufferElement::GetPrimitiveCount() const noexcept {
+    std::uint32_t BufferElement::GetPrimitiveCount() const noexcept {
 
-		return primitiveCount;
-	}
+        return primitiveCount;
+    }
 
-	std::uint32_t BufferElement::GetNativeType() const noexcept {
+    std::uint32_t BufferElement::GetNativeType() const noexcept {
 
-		return nativeType;
-	}
+        return nativeType;
+    }
 
-	bool BufferElement::IsNormalized() const noexcept {
+    bool BufferElement::IsNormalized() const noexcept {
 
-		return normalized;
-	}
+        return normalized;
+    }
 
-	BufferLayout::BufferLayout(const std::vector<BufferElement>& bufferElements) noexcept : bufferElements{ bufferElements } {
-	
-	}
+    BufferLayout::BufferLayout(const std::vector<BufferElement>& bufferElements) noexcept : bufferElements{ bufferElements } {
 
-	std::vector<BufferElement> BufferLayout::GetElements() const noexcept {
+    }
 
-		return bufferElements;
-	}
+    std::vector<BufferElement> BufferLayout::GetElements() const noexcept {
 
-	std::uint32_t BufferLayout::GetTotalStride() const noexcept {
+        return bufferElements;
+    }
 
-		std::uint32_t totalStride{};
+    std::uint32_t BufferLayout::GetTotalStride() const noexcept {
 
-		for (const auto& currentElement : bufferElements) {
+        std::uint32_t totalStride{};
 
-			totalStride += currentElement.GetStride();
-		}
+        for (const auto& currentElement : bufferElements) {
 
-		return totalStride;
-	}
+            totalStride += currentElement.GetStride();
+        }
+
+        return totalStride;
+    }
 }

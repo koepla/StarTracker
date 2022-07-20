@@ -6,13 +6,13 @@
 
 namespace StarTracker::Core::Events {
 
-	class Event {
+    class Event {
 
-	public:
-		[[nodiscard]] virtual std::string_view GetName() const noexcept = 0;
-	};
+    public:
+        [[nodiscard]] virtual std::string_view GetName() const noexcept = 0;
+    };
 
-	using EventHandler = std::function<void(const Event&)>;
+    using EventHandler = std::function<void(const Event&)>;
 }
 
 #endif // STARTRACKER_CORE_EVENTS_EVENT_H

@@ -3,16 +3,16 @@
 
 namespace StarTracker::Ephemeris::Coordinates {
 
-	struct Terrestrial {
+    struct Terrestrial {
 
-		// latitude positive in north, negative in south
-		double Latitude;
+        // latitude positive in north, negative in south
+        double Latitude;
 
-		// longitude positive in east, negative in west
-		double Longitude;
-	};
+        // longitude positive in east, negative in west
+        double Longitude;
+    };
 
-	using Observer = Terrestrial;
+    using Observer = Terrestrial;
 }
 
 #endif // STARENGINE_EPHEMERIS_COORDINATES_TERRESTRIAL_H

@@ -8,26 +8,26 @@
 
 namespace StarTracker::Core::OpenGL {
 
-	class VertexArray {
+    class VertexArray {
 
-	private:
-		std::uint32_t nativeHandle;
-		std::shared_ptr<IndexBuffer> indexBuffer;
-		std::shared_ptr<VertexBuffer> vertexBuffer;
+    private:
+        std::uint32_t nativeHandle;
+        std::shared_ptr<IndexBuffer> indexBuffer;
+        std::shared_ptr<VertexBuffer> vertexBuffer;
 
-	public:
-		VertexArray() noexcept;
-		~VertexArray() noexcept;
+    public:
+        VertexArray() noexcept;
+        ~VertexArray() noexcept;
 
-		void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) noexcept;
-		void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) noexcept;
+        void SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer) noexcept;
+        void SetVertexBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer) noexcept;
 
-		[[nodiscard]] std::shared_ptr<IndexBuffer> GetIndexBuffer() const noexcept;
-		[[nodiscard]] std::shared_ptr<VertexBuffer> GetVertexBuffer() const noexcept;
+        [[nodiscard]] std::shared_ptr<IndexBuffer> GetIndexBuffer() const noexcept;
+        [[nodiscard]] std::shared_ptr<VertexBuffer> GetVertexBuffer() const noexcept;
 
-		void Bind() const noexcept;
-		void Unbind() const noexcept;
-	};
+        void Bind() const noexcept;
+        void Unbind() const noexcept;
+    };
 }
 
 #endif // STARTRACKER_CORE_OPENGL_VERTEXARRAY_H

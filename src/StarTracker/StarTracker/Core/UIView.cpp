@@ -1,136 +1,140 @@
 #include "UIView.hpp"
 
 namespace StarTracker::Core {
-	
-	UIView::UIView(void* nativeWindowHandle, bool enableDockSpace) noexcept : View{nativeWindowHandle }, enableDockSpace{enableDockSpace } {
-	
-	}
 
-	void UIView::UIBegin() const noexcept {
+    UIView::UIView(void* nativeWindowHandle, bool enableDockSpace) noexcept : View{ nativeWindowHandle }, enableDockSpace{ enableDockSpace } {
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+    }
 
-		if (enableDockSpace) {
+    void UIView::UIBegin() const noexcept {
 
-			static bool optFullscreenPersistant = true;
-			static bool dockspaceOpen = true;
-			bool optFullscreen = optFullscreenPersistant;
-			static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
 
-			ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-			if (optFullscreen) {
+        if (enableDockSpace) {
 
-				ImGuiViewport* viewport = ImGui::GetMainViewport();
-				ImGui::SetNextWindowPos(viewport->Pos);
-				ImGui::SetNextWindowSize(viewport->Size);
-				ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-				ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-				windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-				windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-			}
+            static bool optFullscreenPersistant = true;
+            static bool dockspaceOpen = true;
+            bool optFullscreen = optFullscreenPersistant;
+            static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None;
 
-			if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
+            ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+            if (optFullscreen) {
 
-				windowFlags |= ImGuiWindowFlags_NoBackground;
-			}
+                ImGuiViewport* viewport = ImGui::GetMainViewport();
+                ImGui::SetNextWindowPos(viewport->Pos);
+                ImGui::SetNextWindowSize(viewport->Size);
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+                windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+                windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+            }
 
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-			ImGui::Begin("MainDockSpaceId", &dockspaceOpen, windowFlags);
-			ImGui::PopStyleVar();
+            if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) {
 
-			if (optFullscreen) {
-			
-				ImGui::PopStyleVar(2);
-			}
+                windowFlags |= ImGuiWindowFlags_NoBackground;
+            }
 
-			ImGuiIO& io = ImGui::GetIO();
-			ImGuiStyle& style = ImGui::GetStyle();
-			float minWinSizeX = style.WindowMinSize.x;
-			style.WindowMinSize.x = 200.0f;
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+            ImGui::Begin("MainDockSpaceId", &dockspaceOpen, windowFlags);
+            ImGui::PopStyleVar();
 
-			if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-			{
-				ImGuiID dockspaceId = ImGui::GetID("MainDockSpaceId");
-				ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
-			}
+            if (optFullscreen) {
 
-			style.WindowMinSize.x = minWinSizeX;
-		}
-	}
+                ImGui::PopStyleVar(2);
+            }
 
-	void UIView::UIEnd() const noexcept {
+            ImGuiIO& io = ImGui::GetIO();
+            ImGuiStyle& style = ImGui::GetStyle();
+            float minWinSizeX = style.WindowMinSize.x;
+            style.WindowMinSize.x = 200.0f;
 
-		if (enableDockSpace) {
+            if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+            {
+                ImGuiID dockspaceId = ImGui::GetID("MainDockSpaceId");
+                ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
+            }
 
-			ImGui::End();
-		}
+            style.WindowMinSize.x = minWinSizeX;
+        }
+    }
 
-		ImGuiIO& io = ImGui::GetIO();
+    void UIView::UIEnd() const noexcept {
 
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        if (enableDockSpace) {
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			GLFWwindow* backupCurrentContext = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backupCurrentContext);
-		}
-	}
-	
-	void UIView::OnInit() noexcept {
+            ImGui::End();
+        }
 
-		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO();
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;     
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+        ImGuiIO& io = ImGui::GetIO();
 
-		ImGuiStyle& style = ImGui::GetStyle();
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		UI::Theme::SetStyle(UI::ThemeStyle::Dark);
-		style.FrameRounding = 4.0f;
-		style.ChildRounding = 4.0f;
-		style.GrabRounding = 4.0f;
-		style.PopupRounding = 4.0f;
-		style.ScrollbarRounding = 4.0f;
-		style.TabRounding = 4.0f;
-		style.WindowRounding = 4.0f;
-		style.WindowBorderSize = 0.0f;
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backupCurrentContext = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backupCurrentContext);
+        }
+    }
 
-		const auto fontSize = 18.0f;
-		UI::Font::Light = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Light.ttf", fontSize);
-		UI::Font::Regular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Regular.ttf", fontSize);
-		UI::Font::Medium = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Medium.ttf", fontSize);
-		UI::Font::SemiBold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-SemiBold.ttf", fontSize);
-		UI::Font::Bold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Bold.ttf", fontSize);
-		UI::Font::Heavy = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Heavy.ttf", fontSize);
-		UI::Font::Italic = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSText-RegularItalic.ttf", fontSize);
-		io.FontDefault = UI::Font::Regular;
+    void UIView::OnInit() noexcept {
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImPlot::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-		ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<GLFWwindow*>(nativeWindowHandle), true);
-		ImGui_ImplOpenGL3_Init("#version 450");
-	}
+        ImGuiStyle& style = ImGui::GetStyle();
 
-	void UIView::OnUpdate(float deltaTime) noexcept {
+        UI::Theme::SetStyle(UI::ThemeStyle::Dark);
+        style.FrameRounding = 4.0f;
+        style.ChildRounding = 4.0f;
+        style.GrabRounding = 4.0f;
+        style.PopupRounding = 4.0f;
+        style.ScrollbarRounding = 4.0f;
+        style.TabRounding = 4.0f;
+        style.WindowRounding = 4.0f;
+        style.WindowBorderSize = 0.0f;
+
+        const auto fontSize = 18.0f;
+        UI::Font::Light = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Light.ttf", fontSize);
+        UI::Font::Regular = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Regular.ttf", fontSize);
+        UI::Font::Medium = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Medium.ttf", fontSize);
+        UI::Font::SemiBold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-SemiBold.ttf", fontSize);
+        UI::Font::Bold = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Bold.ttf", fontSize);
+        UI::Font::Heavy = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSDisplay-Heavy.ttf", fontSize);
+        UI::Font::Italic = io.Fonts->AddFontFromFileTTF("Assets/Fonts/SFNSText-RegularItalic.ttf", fontSize);
+        io.FontDefault = UI::Font::Regular;
+
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+
+        ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<GLFWwindow*>(nativeWindowHandle), true);
+        ImGui_ImplOpenGL3_Init("#version 450");
+
+        ImPlot::GetStyle().AntiAliasedLines = true;
+    }
+
+    void UIView::OnUpdate(float deltaTime) noexcept {
 
 
-	}
+    }
 
-	void UIView::OnDestroy() noexcept {
+    void UIView::OnDestroy() noexcept {
 
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
-	}
+        ImPlot::DestroyContext();
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+    }
 }
