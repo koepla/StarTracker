@@ -1,0 +1,14 @@
+{
+  "Appearance-Theme": "Light",
+  "Tracker-AngularSpeed": 2.0,
+  "Tracker-Duration": 5.0,
+  "Tracker-Altitude": 0.0,
+  "Tracker-Azimuth": 0.0,
+  "Tracker-RmsCurrent": 600.0,
+  "Tracker-GearRatio": 1.0,
+  "Tracker-MicroSteps": 256,
+  "Tracker-Port": "",
+  "Tracker-PackageHistoryLimit": 200,
+  "Catalog-VisibilityThreshold": 18.0,
+  "Output-Verbose": false
+}

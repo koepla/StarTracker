@@ -1,0 +1,112 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 22,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build/${presetName}"
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}",
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/build/${presetName}"
+      }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}",
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE": "${sourceDir}/build/${presetName}"
+      }
+    },
+    {
+      "name": "win",
+      "hidden": true,
+      "inherits": [ "default" ],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
+      "cacheVariables": {
+        "TARGET_BUILD_PLATFORM": "win32"
+      }
+    },
+    {
+      "name": "lin",
+      "hidden": true,
+      "inherits": [ "default" ],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++",
+        "TARGET_BUILD_PLATFORM": "linux"
+      }
+    },
+    {
+      "name": "win-64-debug",
+      "inherits": [
+        "win",
+        "debug"
+      ]
+    },
+    {
+      "name": "win-64-release",
+      "inherits": [
+        "win",
+        "release"
+      ]
+    },
+    {
+      "name": "lin-64-debug",
+      "inherits": [
+        "lin",
+        "debug"
+      ]
+    },
+    {
+      "name": "lin-64-release",
+      "inherits": [
+        "lin",
+        "release"
+      ]
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "jobs": 16
+    },
+    {
+      "name": "win-64-tracker",
+      "configurePreset": "win-64-debug",
+      "inherits": [ "default" ],
+      "targets": [
+        "startracker"
+      ]
+    },
+    {
+      "name": "lin-64-tracker",
+      "configurePreset": "lin-64-debug",
+      "inherits": [ "default" ],
+      "targets": [
+        "startracker"
+      ]
+    }
+  ]
+}
