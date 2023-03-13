@@ -1,0 +1,29 @@
+#ifndef LIBTRACKER_H
+#define LIBTRACKER_H
+
+#include "arch/file.hpp"
+#include "arch/http-request.hpp"
+#include "arch/os.hpp"
+#include "arch/serial.hpp"
+#include "core/application.hpp"
+#include "core/asset-database.hpp"
+#include "core/catalog-manager.hpp"
+#include "core/core.hpp"
+#include "core/events.hpp"
+#include "core/geo-location.hpp"
+#include "core/image-processing.hpp"
+#include "core/input.hpp"
+#include "core/location-manager.hpp"
+#include "core/package.hpp"
+#include "core/settings.hpp"
+#include "core/stopwatch.hpp"
+#include "core/tracker.hpp"
+#include "core/view.hpp"
+#include "core/window.hpp"
+#include "graphics/buffer.hpp"
+#include "graphics/renderer.hpp"
+#include "graphics/shader.hpp"
+#include "graphics/texture.hpp"
+#include "ui.hpp"
+
+#endif// LIBTRACKER_H
