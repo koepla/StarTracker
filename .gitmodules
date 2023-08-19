@@ -1,15 +1,15 @@
-[submodule "src/tracker/submodules/fmt"]
-	path = src/tracker/submodules/fmt
+[submodule "src/tracker/extern/fmt"]
+	path = src/tracker/extern/fmt
 	url = https://github.com/fmtlib/fmt.git
-[submodule "src/tracker/submodules/glm"]
-	path = src/tracker/submodules/glm
+[submodule "src/tracker/extern/glm"]
+	path = src/tracker/extern/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "src/tracker/submodules/glfw"]
-	path = src/tracker/submodules/glfw
+[submodule "src/tracker/extern/glfw"]
+	path = src/tracker/extern/glfw
 	url = https://github.com/glfw/glfw.git
-[submodule "src/tracker/submodules/json"]
-	path = src/tracker/submodules/json
+[submodule "src/tracker/extern/json"]
+	path = src/tracker/extern/json
 	url = https://github.com/nlohmann/json.git
-[submodule "src/tracker/submodules/googletest"]
-	path = src/tracker/submodules/googletest
+[submodule "src/tracker/extern/googletest"]
+	path = src/tracker/extern/googletest
 	url = https://github.com/google/googletest.git
