@@ -105,7 +105,8 @@ bool ImageProcessing::Kernel(std::shared_ptr<graphics::FrameBuffer> target,
     }
 
     kernelShader->SetInt("uTexture", 0);
-    glBindTextureUnit(0, source->GetNativeTextureHandle());
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, source->GetNativeTextureHandle());
 
     target->Bind();
     graphics::Renderer::SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });

@@ -6,8 +6,8 @@
 namespace graphics {
 
     Texture::Texture() noexcept : nativeHandle{}, width{}, height{}, channels{} {
-        glCreateTextures(GL_TEXTURE_2D, 1, &nativeHandle);
-        glBindTextureUnit(0, nativeHandle);
+        glGenTextures(1, &nativeHandle);
+        glBindTexture(GL_TEXTURE_2D, nativeHandle);
     }
 
     Texture::~Texture() noexcept {
@@ -20,13 +20,20 @@ namespace graphics {
         path = filePath;
 
         if (data) {
-            glTextureStorage2D(nativeHandle, 1, GL_RGBA8, width, height);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTextureParameteri(nativeHandle, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTextureSubImage2D(nativeHandle, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glBindTexture(GL_TEXTURE_2D, nativeHandle);
+
+            // Allocate and upload texture data
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+            // Texture parameters
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+            // Generate mipmaps
             glGenerateMipmap(GL_TEXTURE_2D);
+
             stbi_image_free(data);
             return true;
         }
@@ -34,7 +41,8 @@ namespace graphics {
     }
 
     void Texture::Bind(u32 slot) const noexcept {
-        glBindTextureUnit(slot, nativeHandle);
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, nativeHandle);
     }
 
     const std::filesystem::path& Texture::GetFilePath() const noexcept {
@@ -56,4 +64,5 @@ namespace graphics {
     s32 Texture::GetChannels() const noexcept {
         return channels;
     }
-}// namespace graphics
+
+} // namespace graphics

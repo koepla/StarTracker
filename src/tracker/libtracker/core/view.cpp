@@ -116,7 +116,7 @@ void UIView::OnInit() noexcept {
     }
 
     ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow*>(nativeWindowHandle), true);
-    ImGui_ImplOpenGL3_Init("#version 450");
+    ImGui_ImplOpenGL3_Init("#version 410");
 }
 
 void UIView::OnUpdate(f32 deltaTime) noexcept { }

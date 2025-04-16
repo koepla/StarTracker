@@ -7,7 +7,7 @@ Window::Window(const WindowData& windowData) noexcept : nativeHandle{ nullptr },
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_SAMPLES, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -23,7 +23,7 @@ Window::Window(const WindowData& windowData) noexcept : nativeHandle{ nullptr },
 
     glfwMakeContextCurrent(nativeHandle);
 
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+    if (!gladLoadGL(reinterpret_cast<GLADloadfunc>(glfwGetProcAddress))) {
         LIBTRACKER_ASSERT(false, "Couldn't load OpenGL functions");
         glfwDestroyWindow(nativeHandle);
         glfwTerminate();
@@ -103,43 +103,6 @@ Window::Window(const WindowData& windowData) noexcept : nativeHandle{ nullptr },
     });
 
     this->windowData.Running = true;
-    const auto errorCallback = [](GLenum, GLenum type, GLuint, GLenum severity, GLsizei, const GLchar* message,
-                                  const void*) -> void {
-        if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
-            return;
-        }
-
-        const auto severityToString = [](GLenum severity) -> const char* {
-            switch (severity) {
-                case GL_DEBUG_SEVERITY_HIGH: {
-                    return "HIGH_SEVERITY";
-                }
-                case GL_DEBUG_SEVERITY_MEDIUM: {
-                    return "MEDIUM_SEVERITY";
-                }
-                case GL_DEBUG_SEVERITY_LOW: {
-                    return "LOW_SEVERITY";
-                }
-                case GL_DEBUG_SEVERITY_NOTIFICATION: {
-                    return "NOTIFICATION_SEVERITY";
-                }
-                default: {
-                    return "UNKNOWN_SEVERITY";
-                }
-            }
-        };
-
-        if (type == GL_DEBUG_TYPE_ERROR) {
-            LIBTRACKER_ERROR("[OpenGL]: type = {}, severity = {}, message = {}", type, severityToString(severity),
-                             message);
-        } else {
-            LIBTRACKER_WARN("[OpenGL]: type = {}, severity = {}, message = {}", type, severityToString(severity),
-                            message);
-        }
-    };
-
-    glEnable(GL_DEBUG_OUTPUT);
-    glDebugMessageCallback(errorCallback, nullptr);
 
     auto icon = AssetDatabase::LoadIcon("256x256.png");
     glfwSetWindowIcon(nativeHandle, 1, &icon);

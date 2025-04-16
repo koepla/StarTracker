@@ -17,7 +17,7 @@ target_include_directories(libtracker PUBLIC ${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT
 
 if(${TARGET_BUILD_PLATFORM} STREQUAL "win32")
 	target_link_libraries(libtracker PUBLIC "wininet")
-elseif(${TARGET_BUILD_PLATFORM} STREQUAL "linux")
+else()
 	 find_package(CURL REQUIRED)
 	 if (CURL_FOUND)
 		message(STATUS "Found CURL version: ${CURL_VERSION_STRING}")

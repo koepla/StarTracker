@@ -484,7 +484,8 @@ void Processing::showTexture(u32 textureNativeHandle, s32 width, s32 height) con
     renderFrameBuffer->Resize(width, height);
 
     copyShader->SetInt("uTexture", 0);
-    glBindTextureUnit(0, textureNativeHandle);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureNativeHandle);
 
     renderFrameBuffer->Bind();
     graphics::Renderer::Clear();

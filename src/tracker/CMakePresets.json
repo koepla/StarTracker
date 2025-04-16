@@ -17,7 +17,8 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}",
-        "CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/build/${presetName}"
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG": "${sourceDir}/build/${presetName}",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
     {
@@ -26,13 +27,14 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
         "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/${presetName}",
-        "CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE": "${sourceDir}/build/${presetName}"
+        "CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE": "${sourceDir}/build/${presetName}",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       }
     },
     {
       "name": "win",
       "hidden": true,
-      "inherits": [ "default" ],
+      "inherits": ["default"],
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -45,7 +47,7 @@
     {
       "name": "lin",
       "hidden": true,
-      "inherits": [ "default" ],
+      "inherits": ["default"],
       "condition": {
         "type": "equals",
         "lhs": "${hostSystemName}",
@@ -58,32 +60,43 @@
       }
     },
     {
+      "name": "darwin",
+      "hidden": true,
+      "inherits": ["default"],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++",
+        "TARGET_BUILD_PLATFORM": "darwin"
+      }
+    },
+    {
       "name": "win-64-debug",
-      "inherits": [
-        "win",
-        "debug"
-      ]
+      "inherits": ["win", "debug"]
     },
     {
       "name": "win-64-release",
-      "inherits": [
-        "win",
-        "release"
-      ]
+      "inherits": ["win", "release"]
     },
     {
       "name": "lin-64-debug",
-      "inherits": [
-        "lin",
-        "debug"
-      ]
+      "inherits": ["lin", "debug"]
     },
     {
       "name": "lin-64-release",
-      "inherits": [
-        "lin",
-        "release"
-      ]
+      "inherits": ["lin", "release"]
+    },
+    {
+      "name": "darwin-64-debug",
+      "inherits": ["darwin", "debug"]
+    },
+    {
+      "name": "darwin-64-release",
+      "inherits": ["darwin", "release"]
     }
   ],
   "buildPresets": [
@@ -95,18 +108,20 @@
     {
       "name": "win-64-tracker",
       "configurePreset": "win-64-debug",
-      "inherits": [ "default" ],
-      "targets": [
-        "startracker"
-      ]
+      "inherits": ["default"],
+      "targets": ["startracker"]
     },
     {
       "name": "lin-64-tracker",
       "configurePreset": "lin-64-debug",
-      "inherits": [ "default" ],
-      "targets": [
-        "startracker"
-      ]
+      "inherits": ["default"],
+      "targets": ["startracker"]
+    },
+    {
+      "name": "darwin-64-tracker",
+      "configurePreset": "darwin-64-debug",
+      "inherits": ["default"],
+      "targets": ["startracker"]
     }
   ]
 }

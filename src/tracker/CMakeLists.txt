@@ -20,7 +20,7 @@ add_subdirectory(libengine)
 add_subdirectory(libtracker)
 add_subdirectory(utility)
 
-file(GLOB STARTRACKER_SOURCE_LIST 
+file(GLOB STARTRACKER_SOURCE_LIST
 	${CMAKE_CURRENT_LIST_DIR}/*.cpp
 	${CMAKE_CURRENT_LIST_DIR}/*.hpp)
 
@@ -31,6 +31,10 @@ target_link_libraries(startracker PUBLIC "libtracker" "libengine" "utility")
 # Copy Assets to the Output Directory
 file(COPY ${CMAKE_CURRENT_LIST_DIR}/assets DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+# Compile commands for clangd
+if (EXISTS "${CMAKE_INSTALL_PREFIX}/compile_commands.json")
+    file(CREATE_LINK "${CMAKE_INSTALL_PREFIX}/compile_commands.json" "${CMAKE_CURRENT_SOURCE_DIR}/compile_commands.json")
+endif ()
+
 enable_testing()
 add_subdirectory(tests)
-
