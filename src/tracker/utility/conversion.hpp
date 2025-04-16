@@ -9,11 +9,9 @@
 
 #include <charconv>
 #include <optional>
+#include <sstream>
 #include <string>
 #include <string_view>
-#include <vector>
-
-#include "types.hpp"
 
 namespace utility {
 
@@ -24,13 +22,26 @@ namespace utility {
      * @return optional value
      */
     template<typename GenType>
-    std::optional<GenType> FromString(std::string_view view) noexcept {
+    std::enable_if_t<std::is_integral_v<GenType>, std::optional<GenType>> FromString(std::string_view view) noexcept {
         GenType value{};
         const auto conversion = std::from_chars(view.data(), view.data() + view.size(), value);
         if (conversion.ec == std::errc()) {
             return value;
         }
-        return {};
+        return std::nullopt;
+    }
+
+    // For floating-point types (float, double, etc.)
+    template<typename GenType>
+    std::enable_if_t<std::is_floating_point_v<GenType>, std::optional<GenType>> FromString(
+            std::string_view view) noexcept {
+        GenType value{};
+        std::stringstream ss{ std::string{ view } };// construct std::string for stream
+        ss >> value;
+        if (ss.fail()) {
+            return std::nullopt;
+        }
+        return value;
     }
 
     /**
@@ -38,7 +49,7 @@ namespace utility {
      * @tparam ContainerType Type of the target container
      * @tparam StringType Type of the input string
      * @param container Target container
-     * @param string Input
+     * @param input Input
      * @param delimiter Delimiter
      */
     template<typename ContainerType, typename StringType>

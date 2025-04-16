@@ -1,6 +1,7 @@
 #include <curl/curl.h>
 
 #include "arch/http-request.hpp"
+#include "core/core.hpp"
 
 namespace arch {
 

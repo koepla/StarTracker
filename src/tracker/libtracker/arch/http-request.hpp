@@ -3,10 +3,6 @@
 
 #include <string>
 
-#include "arch/os.hpp"
-#include "core/core.hpp"
-#include "utility/types.hpp"
-
 namespace arch {
 
     class HttpRequestException : public std::exception {

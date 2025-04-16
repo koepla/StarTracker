@@ -1,6 +1,8 @@
 #include "geo-location.hpp"
 #include "arch/http-request.hpp"
 
+#include <fmt/format.h>
+
 GeoLocationException::GeoLocationException(std::string_view message) noexcept : message{ message } { }
 
 const char* GeoLocationException::what() const noexcept {
